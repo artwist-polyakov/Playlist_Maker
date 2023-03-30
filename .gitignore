@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+# не надо добавлять в репозиторий
