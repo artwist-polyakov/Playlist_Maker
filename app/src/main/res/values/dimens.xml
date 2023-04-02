@@ -2,4 +2,5 @@
 <resources>
     <dimen mane="medium_padding">8dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="settings_font_weight">300</dimen>
 </resources>

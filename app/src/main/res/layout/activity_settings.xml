@@ -48,7 +48,7 @@
             android:text="Тёмная тема"
             android:textSize="@dimen/settings_text_size"
             android:textColor="#1A1B22"
-            android:textFontWeight="500"
+            android:textFontWeight="@dimen/settings_font_weight"
             android:layout_weight="1"/>
 
         <Switch
@@ -72,7 +72,7 @@
             android:text="Поделиться приложением"
             android:textSize="@dimen/settings_text_size"
             android:textColor="#1A1B22"
-            android:textFontWeight="500"
+            android:textFontWeight="@dimen/settings_font_weight"
             android:layout_weight="1"/>
 
         <ImageView
@@ -123,7 +123,7 @@
             android:text="Пользовательское соглашение"
             android:textSize="@dimen/settings_text_size"
             android:textColor="#1A1B22"
-            android:textFontWeight="500"
+            android:textFontWeight="@dimen/settings_font_weight"
             android:layout_weight="1"/>
 
         <ImageView
