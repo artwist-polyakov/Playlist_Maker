@@ -1,93 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".MainActivity">-->
-
-<!--    <TextView -->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Hello World!"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#1A1B22"
-    android:padding="20dp">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:text="Вопрос:"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"/>
+    android:background="#3772E7"
+    android:paddingTop="14dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="28dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2/10"
-        android:layout_gravity="end"
+        android:text="Playlist maker"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="10dp"
+        android:textSize="22sp"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"/>
-    </FrameLayout>
+        android:textFontWeight="500"/>
 
-    <ImageView
-        android:layout_height="0dp"
+
+    <Button
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
         android:layout_weight="1"
-        android:scaleType="centerCrop"
-        android:src="@drawable/poster" />
-
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="63dp"
-        android:layout_marginTop="33dp"
+        android:backgroundTint="#ffffff"
         android:gravity="center"
-        android:text="Рейтинг этого фильма больше, чем 9?:"
-        android:textColor="#ffffff"
-        android:textSize="@dimen/question_text_size"
-        android:textStyle="bold"/>
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:text="Поиск"
+        android:textSize="22sp"
+        android:textColor="#1A1B22"
+        app:icon="@drawable/search_icon"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:cornerRadius="16dp"
+        app:iconTint="#1A1B22" />
 
-
-    <LinearLayout
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:backgroundTint="#ffffff"
+        android:gravity="center"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:text="Медиатека"
+        android:textSize="22sp"
+        android:textColor="#1A1B22"
+        app:cornerRadius="16dp"
+        app:icon="@drawable/media_icon"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:iconTint="#1A1B22" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="#ffffff"
-            android:text="Нет"
-            android:textColor="#1A1B22"
-            android:layout_height="60dp"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginStart="10dp"
-            android:backgroundTint="#ffffff"
-            android:text="Да"
-            android:textColor="#1A1B22"
-            android:layout_height="60dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:backgroundTint="#ffffff"
+        android:gravity="center"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:text="Настройки"
+        android:textSize="22sp"
+        android:textColor="#1A1B22"
+        app:cornerRadius="16dp"
+        app:icon="@drawable/setting_icon"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:iconTint="#1A1B22" />
 
-    </LinearLayout>
 </LinearLayout>
