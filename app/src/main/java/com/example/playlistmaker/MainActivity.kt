@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         val image = findViewById<ImageView>(R.id.poster)
         val imageClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
-                Toast.makeText(this@MainActivity, "Здесь какой-то текст", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Здесь какой-то текст", Toast.LENGTH_SHORT).show()
             }
         }
         image.setOnClickListener(imageClickListener)
