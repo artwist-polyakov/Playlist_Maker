@@ -51,11 +51,12 @@
             android:textFontWeight="@dimen/settings_font_weight"
             android:layout_weight="1"/>
 
-        <Switch
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:thumbTint="#AEAFB4"
-            android:trackTint="#E6E8EB"/>
+            android:gravity="left"
+            android:src="@drawable/switch_icon"
+            app:tint="#AEAFB4" />
     </LinearLayout>
 
 
@@ -79,8 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:src="@drawable/share_icon"
-            app:tint="#AEAFB4" />
+            android:src="@drawable/share_icon" />
     </LinearLayout>
 
     <LinearLayout
@@ -105,9 +105,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity_horizontal="left"
-            android:src="@drawable/support_icon"
-            app:tint="#AEAFB4" />
+            android:gravity="right"
+            android:src="@drawable/support_icon"/>
     </LinearLayout>
 
     <LinearLayout
@@ -129,9 +128,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity_horizontal="left"
-            android:src="@drawable/arrow_icon"
-            app:tint="#AEAFB4" />
+            android:gravity="right"
+            android:src="@drawable/arrow_icon"/>
     </LinearLayout>
 
 </LinearLayout>

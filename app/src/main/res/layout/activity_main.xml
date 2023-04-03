@@ -23,6 +23,7 @@
 
 
     <Button
+        android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="40dp"
@@ -38,9 +39,11 @@
         app:iconGravity="textStart"
         app:iconPadding="10dp"
         app:cornerRadius="16dp"
-        app:iconTint="#1A1B22" />
+        app:iconTint="#1A1B22"
+        android:foreground="?attr/selectableItemBackground"/>
 
     <Button
+        android:id="@+id/media"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
@@ -56,9 +59,11 @@
         app:icon="@drawable/media_icon"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
-        app:iconTint="#1A1B22" />
+        app:iconTint="#1A1B22"
+        android:foreground="?attr/selectableItemBackground"/>
 
     <Button
+        android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
@@ -74,6 +79,7 @@
         app:icon="@drawable/setting_icon"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
-        app:iconTint="#1A1B22" />
+        app:iconTint="#1A1B22"
+        android:foreground="?attr/selectableItemBackground"/>
 
 </LinearLayout>
