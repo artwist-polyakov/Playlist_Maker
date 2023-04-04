@@ -33,7 +33,7 @@
             android:textSize="22sp"
             android:textColor="#1A1B22"
             android:textFontWeight="500"/>
-
+        
     </LinearLayout>
 
     <LinearLayout
@@ -56,10 +56,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="start"
             android:src="@drawable/switch_icon"
             app:tint="#AEAFB4" />
-
+        
     </LinearLayout>
 
 
@@ -82,7 +82,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="start"
             android:src="@drawable/share_icon" />
     </LinearLayout>
 
@@ -102,13 +102,13 @@
             android:text="Написать в поддержку"
             android:textSize="@dimen/settings_text_size"
             android:textColor="#1A1B22"
-            android:textFontWeight="500"
+            android:textFontWeight="@dimen/settings_font_weight"
             android:layout_weight="1"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
             android:src="@drawable/support_icon"/>
     </LinearLayout>
 
@@ -131,7 +131,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
             android:src="@drawable/arrow_icon"/>
     </LinearLayout>
 
