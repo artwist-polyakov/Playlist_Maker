@@ -28,29 +28,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="Настройки"
+            android:text="@string/settings_str"
             android:layout_marginLeft="28dp"
             android:textStyle="bold"
             android:textFontWeight="500"
             android:textSize="22sp"
-            android:textColor="#1A1B22"/>
+            android:textColor="@color/text_color"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/settings_element_height"
         android:orientation="horizontal"
         android:layout_marginTop="40dp"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Тёмная тема"
+            android:text="@string/dark_theme_str"
             android:textSize="@dimen/settings_text_size"
-            android:textColor="#1A1B22"
+            android:textColor="@color/text_color"
             android:textFontWeight="@dimen/settings_font_weight"
             android:layout_weight="1"/>
 
@@ -59,80 +59,83 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:src="@drawable/switch_icon"
-            app:tint="#AEAFB4" />
+            app:tint="@color/icon_tint_color" />
 
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/settings_element_height"
         android:orientation="horizontal"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Поделиться приложением"
+            android:text="@string/share_str"
             android:textFontWeight="@dimen/settings_font_weight"
             android:textSize="@dimen/settings_text_size"
-            android:textColor="#1A1B22"
+            android:textColor="@color/text_color"
             android:layout_weight="1"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:src="@drawable/share_icon" />
+            android:src="@drawable/share_icon"
+            app:tint="@color/icon_tint_color" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/settings_element_height"
         android:orientation="horizontal"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Написать в поддержку"
+            android:text="@string/support_message_str"
             android:textSize="@dimen/settings_text_size"
             android:textFontWeight="@dimen/settings_font_weight"
-            android:textColor="#1A1B22"
+            android:textColor="@color/text_color"
             android:layout_weight="1"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:src="@drawable/support_icon"/>
+            android:src="@drawable/support_icon"
+            app:tint="@color/icon_tint_color" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/settings_element_height"
         android:orientation="horizontal"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Пользовательское соглашение"
+            android:text="@string/agreement_str"
             android:textSize="@dimen/settings_text_size"
-            android:textColor="#1A1B22"
+            android:textColor="@color/text_color"
             android:layout_weight="1"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:src="@drawable/arrow_icon"/>
+            android:src="@drawable/arrow_icon"
+            app:tint="@color/icon_tint_color" />
     </LinearLayout>
 
 </LinearLayout>
