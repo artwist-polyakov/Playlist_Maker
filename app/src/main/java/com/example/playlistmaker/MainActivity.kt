@@ -30,23 +30,23 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        //через анонимный класс
-//        val mediaButtonClickListener: View.OnClickListener = object : View.OnClickListener {
-//            override fun onClick(v: View?) {
-////                Toast.makeText(this@MainActivity, "Нажали на кнопку МЕДИА 🎶", Toast.LENGTH_SHORT)
-////                    .show()
-//                val intent = Intent(this@MainActivity, MediaActivity::class.java)
-//                startActivity(intent)
-//            }
-//        }
-//        mediaButton.setOnClickListener(mediaButtonClickListener)
+        //через анонимный класс
+        val settingsButtonClickListener: View.OnClickListener = object : View.OnClickListener {
+            override fun onClick(v: View?) {
+//                Toast.makeText(this@MainActivity, "Нажали на кнопку МЕДИА 🎶", Toast.LENGTH_SHORT)
+//                    .show()
+                val intent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        settingsButton.setOnClickListener(settingsButtonClickListener)
 
 
         //через лямбду
-        settingsButton.setOnClickListener {
-//            Toast.makeText(this@MainActivity, "Нажали на кнопку НАСТРОЙКИ ⚙️ ", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this@MainActivity, SettingsActivity::class.java)
-            startActivity(intent)
-        }
+//        settingsButton.setOnClickListener {
+////            Toast.makeText(this@MainActivity, "Нажали на кнопку НАСТРОЙКИ ⚙️ ", Toast.LENGTH_SHORT).show()
+//            val intent = Intent(this@MainActivity, SettingsActivity::class.java)
+//            startActivity(intent)
+//        }
     }
 }

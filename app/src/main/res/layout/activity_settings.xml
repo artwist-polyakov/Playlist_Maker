@@ -57,7 +57,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="end"
             android:src="@drawable/switch_icon"
             app:tint="#AEAFB4" />
 
@@ -83,7 +83,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="start"
             android:src="@drawable/share_icon" />
     </LinearLayout>
 
@@ -109,7 +109,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
             android:src="@drawable/support_icon"/>
     </LinearLayout>
 
@@ -131,7 +131,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
             android:src="@drawable/arrow_icon"/>
     </LinearLayout>
 
