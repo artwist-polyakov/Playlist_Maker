@@ -4,19 +4,19 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/main_screen_background_color"
-    android:paddingTop="14dp"
+    android:orientation="vertical"
     android:paddingHorizontal="16dp"
+    android:paddingTop="14dp"
     android:paddingBottom="28dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/main_screen_title"
         android:layout_marginTop="10dp"
-        android:textSize="@dimen/main_screen_title_text_size"
-        android:textColor="@color/white" />
+        android:text="@string/main_screen_title"
+        android:textColor="@color/white"
+        android:textSize="@dimen/main_screen_title_text_size" />
 
 
     <Button
@@ -26,17 +26,17 @@
         android:layout_marginTop="40dp"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
+        android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:text="@string/search_button_text"
         android:textAllCaps="false"
-        android:textSize="@dimen/main_screen_button_text_size"
         android:textColor="@color/text_color"
+        android:textSize="@dimen/main_screen_button_text_size"
+        app:cornerRadius="@dimen/main_screen_button_corner_radius"
         app:icon="@drawable/search_icon"
         app:iconGravity="textStart"
         app:iconPadding="@dimen/main_screen_button_icon_padding"
-        app:cornerRadius="@dimen/main_screen_button_corner_radius"
-        app:iconTint="@color/main_screen_icon_tint_color"
-        android:foreground="?attr/selectableItemBackground"/>
+        app:iconTint="@color/main_screen_icon_tint_color" />
 
     <Button
         android:id="@+id/media"
@@ -45,17 +45,17 @@
         android:layout_marginTop="@dimen/main_screen_button_margin_top"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
+        android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:text="@string/media_button_text"
         android:textAllCaps="false"
-        android:textSize="@dimen/main_screen_button_text_size"
         android:textColor="@color/text_color"
+        android:textSize="@dimen/main_screen_button_text_size"
         app:cornerRadius="@dimen/main_screen_button_corner_radius"
         app:icon="@drawable/media_icon"
         app:iconGravity="textStart"
         app:iconPadding="@dimen/main_screen_button_icon_padding"
-        app:iconTint="@color/main_screen_icon_tint_color"
-        android:foreground="?attr/selectableItemBackground"/>
+        app:iconTint="@color/main_screen_icon_tint_color" />
 
     <Button
         android:id="@+id/settings"
@@ -64,16 +64,16 @@
         android:layout_marginTop="@dimen/main_screen_button_margin_top"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
+        android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:text="@string/settings_button_text"
         android:textAllCaps="false"
-        android:textSize="@dimen/main_screen_button_text_size"
         android:textColor="@color/text_color"
+        android:textSize="@dimen/main_screen_button_text_size"
         app:cornerRadius="@dimen/main_screen_button_corner_radius"
         app:icon="@drawable/setting_icon"
         app:iconGravity="textStart"
         app:iconPadding="@dimen/main_screen_button_icon_padding"
-        app:iconTint="@color/icon_tint_color"
-        android:foreground="?attr/selectableItemBackground"/>
+        app:iconTint="@color/main_screen_icon_tint_color" />
 
 </LinearLayout>
