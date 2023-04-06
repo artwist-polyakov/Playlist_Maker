@@ -52,12 +52,11 @@
             android:textColor="@color/text_color"
             android:layout_weight="1"/>
 
-        <ImageView
+        <Switch
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:src="@drawable/switch_icon"
-            app:tint="@color/icon_tint_color" />
+            android:layout_height="18dp"
+            android:thumbTint="@color/switch_thumb_tint"
+            android:trackTint="@color/switch_track_tint"/>
 
     </LinearLayout>
 

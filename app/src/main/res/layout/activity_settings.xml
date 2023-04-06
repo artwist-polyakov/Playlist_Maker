@@ -6,10 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="@color/white"
     android:paddingTop="14dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:paddingHorizontal="16dp"
     android:paddingBottom="0dp">
 
     <LinearLayout
@@ -54,12 +53,11 @@
             android:textFontWeight="@dimen/settings_font_weight"
             android:layout_weight="1"/>
 
-        <ImageView
+        <Switch
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:src="@drawable/switch_icon"
-            app:tint="@color/icon_tint_color" />
+            android:layout_height="18dp"
+            android:thumbTint="@color/switch_thumb_tint"
+            android:trackTint="@color/switch_track_tint"/>
 
     </LinearLayout>
 
@@ -92,9 +90,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_element_height"
         android:orientation="horizontal"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
         android:background="@color/white"
         android:gravity="center">
 

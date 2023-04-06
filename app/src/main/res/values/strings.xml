@@ -5,4 +5,8 @@
     <string name="share_str">Поделиться приложением</string>
     <string name="support_message_str">Написать в поддержку</string>
     <string name="agreement_str">Пользовательское соглашение</string>
+    <string name="main_screen_title">Playlist maker</string>
+    <string name="search_button_text">Поиск</string>
+    <string name="media_button_text">Медиатека</string>
+    <string name="settings_button_text">Настройки</string>
 </resources>
