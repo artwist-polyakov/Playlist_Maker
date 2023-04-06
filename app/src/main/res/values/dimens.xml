@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="medium_padding">8dp</dimen>
+    <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="settings_font_weight">300</dimen>
+    <dimen name="settings_element_height">61dp</dimen>
+    <dimen name="main_screen_title_text_size">22sp</dimen>
+    <dimen name="main_screen_button_text_size">22sp</dimen>
+    <dimen name="main_screen_button_corner_radius">16dp</dimen>
+    <dimen name="main_screen_button_icon_padding">10dp</dimen>
+    <dimen name="main_screen_button_margin_top">16dp</dimen>
+</resources>
