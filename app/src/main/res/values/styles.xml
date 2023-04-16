@@ -37,4 +37,19 @@
         <item name="android:letterSpacing">0.02</item>
     </style>
 
+    <style name="settings_icon_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="tint">@color/icon_tint_color</item>
+        <item name="android:layout_gravity">end</item>
+    </style>
+
+    <style name="settings_linear_layout_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_element_height</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
 </resources>

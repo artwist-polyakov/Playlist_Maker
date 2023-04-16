@@ -40,82 +40,48 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_element_height"
         android:layout_marginTop="40dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
-
+        style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"
             android:text="@string/dark_theme_str" />
-
         <Switch
             android:layout_width="wrap_content"
             android:thumbTint="@color/switch_thumb_tint"
             android:trackTint="@color/switch_track_tint"
             tools:ignore="UseSwitchCompatOrMaterialXml"
             style="@style/switchStyle"/>
-
     </LinearLayout>
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_element_height"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
-
+        style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"
             android:text="@string/share_str"/>
-
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:src="@drawable/share_icon"
-            app:tint="@color/icon_tint_color" />
+            style="@style/settings_icon_style"
+            android:src="@drawable/share_icon"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_element_height"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
-
+        style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"
             android:text="@string/support_message_str" />
-
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:src="@drawable/support_icon"
-            app:tint="@color/icon_tint_color" />
+            style="@style/settings_icon_style"
+            android:src="@drawable/support_icon" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_element_height"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
-
+        style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"
             android:text="@string/agreement_str"/>
-
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:src="@drawable/arrow_icon"
-            app:tint="@color/icon_tint_color" />
+            style="@style/settings_icon_style"
+            android:src="@drawable/arrow_icon" />
     </LinearLayout>
 
 </LinearLayout>
