@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="settings_menu_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/settings_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:fontWeight">@dimen/settings_font_weight</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+</resources>

@@ -31,7 +31,9 @@
             android:layout_marginLeft="28dp"
             android:text="@string/settings_str"
             android:textColor="@color/text_color"
+            android:fontFamily="@font/ys_display_medium"
             android:textFontWeight="500"
+            android:letterSpacing="0"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -46,13 +48,8 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dark_theme_str"
-            android:textColor="@color/text_color"
-            android:textFontWeight="@dimen/settings_font_weight"
-            android:textSize="@dimen/settings_text_size" />
+            style="@style/settings_menu_style"
+            android:text="@string/dark_theme_str" />
 
         <Switch
             android:layout_width="wrap_content"
@@ -72,13 +69,8 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/share_str"
-            android:textColor="@color/text_color"
-            android:textFontWeight="@dimen/settings_font_weight"
-            android:textSize="@dimen/settings_text_size" />
+            style="@style/settings_menu_style"
+            android:text="@string/share_str"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -96,13 +88,8 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/support_message_str"
-            android:textColor="@color/text_color"
-            android:textFontWeight="@dimen/settings_font_weight"
-            android:textSize="@dimen/settings_text_size" />
+            style="@style/settings_menu_style"
+            android:text="@string/support_message_str" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -120,12 +107,8 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/agreement_str"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/settings_text_size" />
+            style="@style/settings_menu_style"
+            android:text="@string/agreement_str"/>
 
         <ImageView
             android:layout_width="wrap_content"
