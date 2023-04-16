@@ -56,11 +56,10 @@
 
         <Switch
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:minWidth="48dp"
             android:thumbTint="@color/switch_thumb_tint"
             android:trackTint="@color/switch_track_tint"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            tools:ignore="UseSwitchCompatOrMaterialXml"
+            style="@style/switchStyle"/>
 
     </LinearLayout>
 
