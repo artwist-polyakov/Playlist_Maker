@@ -10,9 +10,10 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/text_color</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
     </style>
 
 
@@ -26,8 +27,10 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/text_color</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">?attr/colorSecondary</item>
+        <item name="android:background">?attr/colorSecondary</item>
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorSecondary</item>
     </style>
 </resources>
