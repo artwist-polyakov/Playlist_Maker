@@ -4,6 +4,7 @@
     <style name="switchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
         <item name="android:switchMinWidth">32dp</item>
         <item name="android:layout_height">48dp</item>
+<!--        <item name="android:checked">true</item>-->
     </style>
 
     <style name="main_activity_buttons_style">
@@ -30,7 +31,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/settings_text_size</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:fontWeight">@dimen/settings_font_weight</item>
@@ -40,14 +41,14 @@
     <style name="settings_icon_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="tint">@color/icon_tint_color</item>
+        <item name="tint">?attr/colorOnSecondary</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
     <style name="settings_linear_layout_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/settings_element_height</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:gravity">center</item>
         <item name="android:orientation">horizontal</item>
     </style>

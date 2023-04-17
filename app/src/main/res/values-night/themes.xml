@@ -1,16 +1,39 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/dark_app_color</item>
+        <item name="colorPrimaryVariant">@color/grey_color</item>
+        <item name="colorOnPrimary">@color/dark_text_color</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/main_screen_background_color</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/colorOnSecondaryNight</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:checked">true</item>
+        <item name="android:trackTint">@color/switch_track_tint_night</item>
+        <item name="android:thumbTint">@color/switch_thumb_tint_night</item>
+    </style>
+
+
+    <style name="Theme.PlaylistMakerMainScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/grey_color</item>
+        <item name="colorOnPrimary">@color/text_color</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/main_screen_background_color</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/text_color</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorSecondary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:background">?attr/colorSecondary</item>
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorSecondary</item>
     </style>
 </resources>

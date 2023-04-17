@@ -16,10 +16,8 @@
         android:orientation="horizontal">
 
         <ImageView
+            style="@style/settings_icon_style"
             android:id="@+id/return_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
             android:src="@drawable/arrow_back_icon" />
 
@@ -29,7 +27,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="28dp"
             android:text="@string/settings_str"
-            android:textColor="@color/text_color"
+            android:textColor="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_medium"
             android:textFontWeight="500"
             android:letterSpacing="0"
@@ -46,8 +44,6 @@
             android:text="@string/dark_theme_str" />
         <Switch
             android:layout_width="wrap_content"
-            android:thumbTint="@color/switch_thumb_tint"
-            android:trackTint="@color/switch_track_tint"
             tools:ignore="UseSwitchCompatOrMaterialXml"
             style="@style/switchStyle"/>
     </LinearLayout>
