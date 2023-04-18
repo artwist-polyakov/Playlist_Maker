@@ -1,9 +1,9 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -14,10 +14,19 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         val backButton = findViewById<ImageView>(R.id.return_button)
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
+        val supportLayout = findViewById<LinearLayout>(R.id.support_layout)
         val sharingAction = {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/android-developer/")
+            startActivity(intent)
+        }
+        val supportAction = {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.setData(Uri.parse("mailto:"))
+            intent.putExtra(Intent.EXTRA_EMAIL, "master@artwist.ru")
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение разработчикам и разработчицам приложения Playlist Maker")
+            intent.putExtra(Intent.EXTRA_TEXT, "Спасибо разработчикам и разработчицам за крутое приложение!")
             startActivity(intent)
         }
 
@@ -31,6 +40,10 @@ class SettingsActivity : AppCompatActivity() {
         }
         sharingLayout.setOnClickListener {
             sharingAction()
+        }
+
+        supportLayout.setOnClickListener {
+            supportAction()
         }
     }
 
