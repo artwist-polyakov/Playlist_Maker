@@ -72,6 +72,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/agreement_layout"
         style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"

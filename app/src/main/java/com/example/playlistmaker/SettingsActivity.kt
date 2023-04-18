@@ -15,6 +15,7 @@ class SettingsActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.return_button)
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
         val supportLayout = findViewById<LinearLayout>(R.id.support_layout)
+        val agreementLayout = findViewById<LinearLayout>(R.id.agreement_layout)
         val sharingAction = {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
@@ -27,6 +28,12 @@ class SettingsActivity : AppCompatActivity() {
             intent.putExtra(Intent.EXTRA_EMAIL, "master@artwist.ru")
             intent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение разработчикам и разработчицам приложения Playlist Maker")
             intent.putExtra(Intent.EXTRA_TEXT, "Спасибо разработчикам и разработчицам за крутое приложение!")
+            startActivity(intent)
+        }
+
+        val agreementAction = {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse("https://yandex.ru/legal/practicum_offer/"))
             startActivity(intent)
         }
 
@@ -44,6 +51,10 @@ class SettingsActivity : AppCompatActivity() {
 
         supportLayout.setOnClickListener {
             supportAction()
+        }
+
+        agreementLayout.setOnClickListener {
+            agreementAction()
         }
     }
 
