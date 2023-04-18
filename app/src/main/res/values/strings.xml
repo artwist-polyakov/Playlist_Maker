@@ -9,4 +9,5 @@
     <string name="search_button_text">Поиск</string>
     <string name="media_button_text">Медиатека</string>
     <string name="settings_button_text">Настройки</string>
+    <string name="share_link">https://practicum.yandex.ru/android-developer/</string>
 </resources>
