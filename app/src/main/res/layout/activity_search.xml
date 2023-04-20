@@ -71,7 +71,7 @@
             android:layout_gravity="center"
             android:src="@drawable/clear_icon"
             android:visibility="gone" />
-    </LinearLayout>>
+    </LinearLayout>
 
 
 </LinearLayout>

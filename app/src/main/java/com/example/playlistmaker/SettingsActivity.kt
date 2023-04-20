@@ -12,7 +12,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        val backButton = findViewById<ImageView>(R.id.return_button)
+            val backButton = findViewById<ImageView>(R.id.return_button)
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
         val supportLayout = findViewById<LinearLayout>(R.id.support_layout)
         val agreementLayout = findViewById<LinearLayout>(R.id.agreement_layout)
