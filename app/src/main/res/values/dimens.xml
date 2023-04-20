@@ -4,6 +4,7 @@
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="settings_font_weight">400</dimen>
     <dimen name="settings_element_height">61dp</dimen>
+    <dimen name="search_element_height">61dp</dimen>
     <dimen name="main_screen_title_text_size">22sp</dimen>
     <dimen name="main_screen_button_text_size">22sp</dimen>
     <dimen name="main_screen_button_corner_radius">16dp</dimen>
