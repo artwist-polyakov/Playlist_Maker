@@ -47,6 +47,11 @@ class SearchActivity : AppCompatActivity() {
         if (savedInstanceState != null) {
             searchEditText.setText(savedInstanceState.getString(SEARCH_QUERY,""))
         }
+
+        val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+        val searchQuery = sharedPref.getString("searchQuery", "")
+        searchEditText.setText(searchQuery)
+
         searchEditText.addTextChangedListener(simpleTextWatcher)
 
         // прослушиватель нажатия на кнопку "очистить"
@@ -59,6 +64,10 @@ class SearchActivity : AppCompatActivity() {
 
         // прослушиватель нажатия на кнопку "назад"
         backButton.setOnClickListener {
+            val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+            val editor = sharedPref.edit()
+            editor.putString("searchQuery", searchEditText.text.toString())
+            editor.apply()
             this.finish()
         }
     }
