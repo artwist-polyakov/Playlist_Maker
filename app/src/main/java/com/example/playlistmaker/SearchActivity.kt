@@ -1,10 +1,10 @@
 package com.example.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -12,18 +12,23 @@ import android.widget.EditText
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
+
+    companion object {
+        const val SEARCH_QUERY = "SEARCH_QUERY"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         val backButton = findViewById<ImageView>(R.id.return_button)
         val searchEditText = findViewById<EditText>(R.id.searchEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
-
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
             }
 
+            @SuppressLint("UseCompatLoadingForDrawables")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     clearButton.visibility = View.GONE
@@ -39,8 +44,9 @@ class SearchActivity : AppCompatActivity() {
                 // тут надо будет совершить поиск
             }
         }
-
-
+        if (savedInstanceState != null) {
+            searchEditText.setText(savedInstanceState.getString(SEARCH_QUERY,"").toString())
+        }
         searchEditText.addTextChangedListener(simpleTextWatcher)
 
         // прослушиватель нажатия на кнопку "очистить"
@@ -49,14 +55,25 @@ class SearchActivity : AppCompatActivity() {
             val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
             searchEditText.clearFocus()
-
-
         }
 
         // прослушиватель нажатия на кнопку "назад"
         backButton.setOnClickListener {
             this.finish()
         }
-        
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_QUERY, findViewById<EditText>(R.id.searchEditText).text.toString())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Вторым параметром мы передаём значение по умолчанию
+        val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
+        findViewById<EditText>(R.id.searchEditText).setText(searchQuery)
+    }
+
+
 }
