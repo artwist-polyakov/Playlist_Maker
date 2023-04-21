@@ -31,12 +31,10 @@ class SearchActivity : AppCompatActivity() {
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
-                    clearButton.visibility = View.GONE
-                    searchEditText.background = getDrawable(R.drawable.rounded_edittext)
+                    makeClearButtonInvisible()
+
                 } else {
-                    clearButton.visibility = View.VISIBLE
-                    clearButton.background = getDrawable(R.drawable.right_rounded_edittext)
-                    searchEditText.background = getDrawable(R.drawable.left_rounded_edittext)
+                    makeClearButtonVisible()
                 }
             }
 
@@ -50,6 +48,11 @@ class SearchActivity : AppCompatActivity() {
 
         val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
         val searchQuery = sharedPref.getString("searchQuery", "")
+        if (searchQuery.isNullOrEmpty()) {
+            makeClearButtonInvisible()
+        } else {
+            makeClearButtonVisible()
+        }
         searchEditText.setText(searchQuery)
 
         searchEditText.addTextChangedListener(simpleTextWatcher)
@@ -70,6 +73,17 @@ class SearchActivity : AppCompatActivity() {
             editor.apply()
             this.finish()
         }
+    }
+
+    private fun makeClearButtonInvisible() {
+        findViewById<ImageView>(R.id.clearIcon).visibility = View.GONE
+        findViewById<EditText>(R.id.searchEditText).background = getDrawable(R.drawable.rounded_edittext)
+    }
+
+    private fun makeClearButtonVisible() {
+        findViewById<ImageView>(R.id.clearIcon).visibility = View.VISIBLE
+        findViewById<ImageView>(R.id.clearIcon).background = getDrawable(R.drawable.right_rounded_edittext)
+        findViewById<EditText>(R.id.searchEditText).background = getDrawable(R.drawable.left_rounded_edittext)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

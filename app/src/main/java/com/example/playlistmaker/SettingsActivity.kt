@@ -4,11 +4,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.provider.Settings.Global.getString
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 
 class SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -19,21 +22,21 @@ class SettingsActivity : AppCompatActivity() {
         val sharingAction = {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/android-developer/")
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))
             startActivity(intent)
         }
         val supportAction = {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.setData(Uri.parse("mailto:"))
-            intent.putExtra(Intent.EXTRA_EMAIL, "master@artwist.ru")
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение разработчикам и разработчицам приложения Playlist Maker")
-            intent.putExtra(Intent.EXTRA_TEXT, "Спасибо разработчикам и разработчицам за крутое приложение!")
+            intent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.support_email))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))
             startActivity(intent)
         }
 
         val agreementAction = {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData(Uri.parse("https://yandex.ru/legal/practicum_offer/"))
+            intent.setData(Uri.parse(getString(R.string.agreement_link)))
             startActivity(intent)
         }
 
