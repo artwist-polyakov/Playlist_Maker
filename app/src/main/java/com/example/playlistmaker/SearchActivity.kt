@@ -45,7 +45,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         if (savedInstanceState != null) {
-            searchEditText.setText(savedInstanceState.getString(SEARCH_QUERY,"").toString())
+            searchEditText.setText(savedInstanceState.getString(SEARCH_QUERY,""))
         }
         searchEditText.addTextChangedListener(simpleTextWatcher)
 
