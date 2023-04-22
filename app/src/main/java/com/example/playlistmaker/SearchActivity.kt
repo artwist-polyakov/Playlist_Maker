@@ -12,7 +12,8 @@ import android.widget.EditText
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
-
+    private lateinit var searchEditText: EditText
+    private lateinit var clearButton: ImageView
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
     }
