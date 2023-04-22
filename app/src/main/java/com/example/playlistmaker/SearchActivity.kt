@@ -22,8 +22,8 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         val backButton = findViewById<ImageView>(R.id.return_button)
-        val searchEditText = findViewById<EditText>(R.id.searchEditText)
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        searchEditText = findViewById(R.id.searchEditText)
+        clearButton = findViewById(R.id.clearIcon)
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
@@ -77,26 +77,26 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun makeClearButtonInvisible() {
-        findViewById<ImageView>(R.id.clearIcon).visibility = View.GONE
-        findViewById<EditText>(R.id.searchEditText).background = getDrawable(R.drawable.rounded_edittext)
+        clearButton.visibility = View.GONE
+        searchEditText.background = getDrawable(R.drawable.rounded_edittext)
     }
 
     private fun makeClearButtonVisible() {
-        findViewById<ImageView>(R.id.clearIcon).visibility = View.VISIBLE
-        findViewById<ImageView>(R.id.clearIcon).background = getDrawable(R.drawable.right_rounded_edittext)
-        findViewById<EditText>(R.id.searchEditText).background = getDrawable(R.drawable.left_rounded_edittext)
+        clearButton.visibility = View.VISIBLE
+        clearButton.background = getDrawable(R.drawable.right_rounded_edittext)
+        searchEditText.background = getDrawable(R.drawable.left_rounded_edittext)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_QUERY, findViewById<EditText>(R.id.searchEditText).text.toString())
+        outState.putString(SEARCH_QUERY, searchEditText.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         // Вторым параметром мы передаём значение по умолчанию
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
-        findViewById<EditText>(R.id.searchEditText).setText(searchQuery)
+        searchEditText.setText(searchQuery)
     }
 
 
