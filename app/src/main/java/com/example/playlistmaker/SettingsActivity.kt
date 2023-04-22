@@ -24,23 +24,6 @@ class SettingsActivity : AppCompatActivity() {
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))
             startActivity(intent)
         }
-        val supportAction = {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.setData(Uri.parse("mailto:"))
-            intent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.support_email))
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))
-            startActivity(intent)
-        }
-
-        val agreementAction = {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData(Uri.parse(getString(R.string.agreement_link)))
-            startActivity(intent)
-        }
-
-
-
 
         backButton.setOnClickListener {
 //            val intent = Intent(this@SettingsActivity, MainActivity::class.java)
@@ -48,15 +31,25 @@ class SettingsActivity : AppCompatActivity() {
             this.finish()
         }
         sharingLayout.setOnClickListener {
-            sharingAction()
-        }
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))}
+            startActivity(intent)
+            }
 
         supportLayout.setOnClickListener {
-            supportAction()
+            val intent = Intent(Intent.ACTION_SENDTO).apply{
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, getString(R.string.support_email))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))}
+            startActivity(intent)
         }
 
         agreementLayout.setOnClickListener {
-            agreementAction()
+            val intent = Intent(Intent.ACTION_VIEW).apply{
+                data = Uri.parse(getString(R.string.agreement_link))}
+            startActivity(intent)
         }
     }
 
