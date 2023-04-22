@@ -22,18 +22,18 @@
 
     <style name="Theme.PlaylistMakerMainScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/dark_app_color</item>
         <item name="colorPrimaryVariant">@color/grey_color</item>
         <item name="colorOnPrimary">@color/text_color</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/main_screen_background_color</item>
+        <item name="colorSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/text_color</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
-        <item name="android:background">?attr/colorSecondary</item>
-        <item name="android:textColorPrimary">?attr/colorPrimary</item>
-        <item name="android:navigationBarColor">?attr/colorSecondary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
     </style>
 </resources>
