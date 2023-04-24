@@ -9,4 +9,11 @@
     <string name="search_button_text">Поиск</string>
     <string name="media_button_text">Медиатека</string>
     <string name="settings_button_text">Настройки</string>
+    <string name="search_str">Поиск</string>
+    <string name="share_link">https://practicum.yandex.ru/android-developer/</string>
+    <string name="input_hint">Поиск</string>
+    <string name="support_email">master@artwist.ru</string>
+    <string name="agreement_link">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="support_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="support_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
 </resources>
