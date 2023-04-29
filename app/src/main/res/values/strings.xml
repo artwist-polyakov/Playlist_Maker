@@ -16,4 +16,7 @@
     <string name="agreement_link">https://yandex.ru/legal/practicum_offer/</string>
     <string name="support_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="track_title">Название трека</string>
+    <string name="track_artist">Исполнитель</string>
+    <string name="track_time">14:88</string>
 </resources>
