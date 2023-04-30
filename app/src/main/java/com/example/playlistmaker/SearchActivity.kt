@@ -21,7 +21,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        val backButton = findViewById<ImageView>(R.id.return_button)
+//        val backButton = findViewById<ImageView>(R.id.return_button)
         searchEditText = findViewById(R.id.searchEditText)
         clearButton = findViewById(R.id.clearIcon)
         val simpleTextWatcher = object : TextWatcher {
@@ -67,13 +67,13 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // прослушиватель нажатия на кнопку "назад"
-        backButton.setOnClickListener {
-            val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-            val editor = sharedPref.edit()
-            editor.putString("searchQuery", searchEditText.text.toString())
-            editor.apply()
-            this.finish()
-        }
+//        backButton.setOnClickListener {
+//            val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+//            val editor = sharedPref.edit()
+//            editor.putString("searchQuery", searchEditText.text.toString())
+//            editor.apply()
+//            this.finish()
+//        }
     }
 
     private fun makeClearButtonInvisible() {

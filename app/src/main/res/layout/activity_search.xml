@@ -5,28 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="16dp"
     android:paddingTop="20dp"
     android:paddingBottom="0dp"
     tools:context=".SearchActivity">
-
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:orientation="horizontal">
 
-    <ImageView
-        style="@style/search_icon_style"
-        android:id="@+id/return_button"
-        android:layout_marginStart="4dp"
-        android:src="@drawable/arrow_back_icon" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="28dp"
+        android:layout_marginStart="16dp"
         android:text="@string/search_str"
         android:textColor="?attr/colorOnPrimary"
         android:fontFamily="@font/ys_display_medium"
@@ -34,13 +27,15 @@
         android:letterSpacing="0"
         android:textSize="22sp"
         android:textStyle="bold" />
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
         style="@style/search_linear_layout_style">
 
 
@@ -72,6 +67,13 @@
             android:src="@drawable/clear_icon"
             android:visibility="gone" />
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_results_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
 </LinearLayout>
