@@ -8,6 +8,7 @@
 <!--    MARK: Search Screen-->
     <dimen name="search_element_height">61dp</dimen>
 <!--    MARK: - Search Screen Element-->
+    <dimen name="search_screen_element_height">61dp</dimen>
     <dimen name="search_screen_song_text_size">16sp</dimen>
     <dimen name="search_screen_element_font_weight">400</dimen>
     <dimen name="search_screen_artist_text_size">11sp</dimen>
