@@ -74,6 +74,34 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <!--    MARL: - Search Element-->
+
+    <style name="search_element_main_layout_style">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">@dimen/search_screen_element_layout_padding</item>
+    </style>
+
+    <style name="search_element_song_title_style">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/search_screen_song_text_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="search_element_artist_name_style">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/search_screen_artist_text_size</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 
 
 </resources>
