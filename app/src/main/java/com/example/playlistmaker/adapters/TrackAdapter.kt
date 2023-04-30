@@ -11,24 +11,25 @@ import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-class TrackAdapter (
+class TrackAdapter(
     private val tracks: ArrayList<Track>
-        ): RecyclerView.Adapter<TrackViewHolder>() {
+) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.search_result_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.search_result_item, parent, false)
         return TrackViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-            holder.bind(tracks[position])
-        }
+        holder.bind(tracks[position])
+    }
 
     override fun getItemCount(): Int = tracks.size
 
 
-
 }
+
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
     private val trackArtist: TextView = itemView.findViewById(R.id.track_artist)
