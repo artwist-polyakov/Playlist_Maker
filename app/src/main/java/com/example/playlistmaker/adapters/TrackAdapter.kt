@@ -36,11 +36,11 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackCover: ImageView = itemView.findViewById(R.id.track_cover)
 
     fun bind(track: Track) {
-        trackName.text = track.artworkUrl100
+        trackName.text = track.trackName
         trackArtist.text = track.artistName
         trackTime.text = track.trackTime
         Glide.with(trackCover.context)
-            .load("https://static.platforma-it.ru/iblock/e70/e70dfaa9a0fdc2d56918a366471cf28a.png")
+            .load(track.artworkUrl100)
             .centerCrop()
             .placeholder(R.drawable.song_cover_placeholder)
             .transform(RoundedCorners(2))
