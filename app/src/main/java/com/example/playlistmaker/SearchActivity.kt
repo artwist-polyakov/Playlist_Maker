@@ -10,6 +10,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.adapters.TrackAdapter
+import com.example.playlistmaker.model.tracks
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
@@ -21,7 +25,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        val backButton = findViewById<ImageView>(R.id.return_button)
+//        val backButton = findViewById<ImageView>(R.id.return_button)
+        val recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val trackAdapter = TrackAdapter(tracks)
+        recyclerView.adapter = trackAdapter
         searchEditText = findViewById(R.id.searchEditText)
         clearButton = findViewById(R.id.clearIcon)
         val simpleTextWatcher = object : TextWatcher {
@@ -67,13 +75,13 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // прослушиватель нажатия на кнопку "назад"
-        backButton.setOnClickListener {
-            val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-            val editor = sharedPref.edit()
-            editor.putString("searchQuery", searchEditText.text.toString())
-            editor.apply()
-            this.finish()
-        }
+//        backButton.setOnClickListener {
+//            val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+//            val editor = sharedPref.edit()
+//            editor.putString("searchQuery", searchEditText.text.toString())
+//            editor.apply()
+//            this.finish()
+//        }
     }
 
     private fun makeClearButtonInvisible() {

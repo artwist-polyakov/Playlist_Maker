@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="switchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
-        <item name="android:switchMinWidth">32dp</item>
-        <item name="android:layout_height">48dp</item>
-<!--        <item name="android:checked">true</item>-->
-    </style>
 
+<!--    MARK: - Main Screen-->
     <style name="main_activity_buttons_style" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_marginTop">@dimen/main_screen_button_margin_top</item>
         <item name="android:layout_weight">1</item>
@@ -26,7 +22,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
-
+<!--    MARK: - Settings Screen-->
     <style name="settings_menu_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -37,6 +33,12 @@
         <item name="android:fontWeight">@dimen/settings_font_weight</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:clickable">false</item>
+    </style>
+
+    <style name="switchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="android:switchMinWidth">32dp</item>
+        <item name="android:layout_height">48dp</item>
+        <!--        <item name="android:checked">true</item>-->
     </style>
 
     <style name="settings_icon_style">
@@ -56,6 +58,7 @@
         <item name="android:clickable">true</item>
     </style>
 
+<!--    MARL: - Search Screen-->
     <style name="search_icon_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -68,8 +71,37 @@
         <item name="android:layout_height">@dimen/settings_element_height</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:gravity">center</item>
-        <item name="android:orientation">horizontal</item>
         <item name="android:clickable">true</item>
     </style>
+
+    <!--    MARL: - Search Element-->
+
+    <style name="search_element_main_layout_style">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">@dimen/search_screen_element_layout_padding</item>
+    </style>
+
+    <style name="search_element_song_title_style">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/search_screen_song_text_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="search_element_artist_name_style">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/search_screen_artist_text_size</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 
 </resources>

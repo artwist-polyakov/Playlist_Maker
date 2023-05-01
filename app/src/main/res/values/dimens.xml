@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="medium_padding">8dp</dimen>
+<!--    MARK: - Settings Screen-->
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="settings_font_weight">400</dimen>
     <dimen name="settings_element_height">61dp</dimen>
+<!--    MARK: Search Screen-->
     <dimen name="search_element_height">61dp</dimen>
+<!--    MARK: - Search Screen Element-->
+    <dimen name="search_screen_element_height">61dp</dimen>
+    <dimen name="search_screen_song_text_size">16sp</dimen>
+    <dimen name="search_screen_element_font_weight">400</dimen>
+    <dimen name="search_screen_artist_text_size">11sp</dimen>
+    <dimen name="search_screen_element_layout_padding">8dp</dimen>
+    <dimen name="search_screen_cover_size">45dp</dimen>
+    <dimen name="search_screen_cover_margin_start">5dp</dimen>
+    <dimen name="search_screen_title_padding_start">8dp</dimen>
+    <dimen name="search_screen_element_letter_spacing">0</dimen>
+    <dimen name="search_screen_one_string">1</dimen>
+    <dimen name="search_screen_dot_padding">5dp</dimen>
+    <dimen name="search_screen_arrow_margin_end">12dp</dimen>
+
+<!--    MARK: Main Screen-->
     <dimen name="main_screen_title_text_size">22sp</dimen>
     <dimen name="main_screen_button_text_size">22sp</dimen>
     <dimen name="main_screen_button_corner_radius">16dp</dimen>
