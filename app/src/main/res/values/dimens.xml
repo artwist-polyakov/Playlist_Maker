@@ -20,6 +20,7 @@
     <dimen name="search_screen_one_string">1</dimen>
     <dimen name="search_screen_dot_padding">5dp</dimen>
     <dimen name="search_screen_arrow_margin_end">12dp</dimen>
+    <dimen name="album_cover_corner_radius">2dp</dimen>
 
 <!--    MARK: Main Screen-->
     <dimen name="main_screen_title_text_size">22sp</dimen>

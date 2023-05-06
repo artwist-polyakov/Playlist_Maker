@@ -10,6 +10,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.resources.MaterialResources.getDimensionPixelSize
 
 class TrackAdapter(
     private val tracks: ArrayList<Track>
@@ -40,11 +41,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackName.text = track.trackName
         trackArtist.text = track.artistName
         trackTime.text = track.trackTime
+        val corner_pixel_size = itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
         Glide.with(trackCover.context)
             .load(track.artworkUrl100)
             .centerCrop()
             .placeholder(R.drawable.song_cover_placeholder)
-            .transform(RoundedCorners(2))
+            .transform(RoundedCorners(corner_pixel_size))
             .into(trackCover)
     }
 }
