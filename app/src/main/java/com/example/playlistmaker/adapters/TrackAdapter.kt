@@ -25,10 +25,7 @@ class TrackAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
     }
-
     override fun getItemCount(): Int = tracks.size
-
-
 }
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,7 +38,8 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackName.text = track.trackName
         trackArtist.text = track.artistName
         trackTime.text = track.trackTime
-        val corner_pixel_size = itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
+        val corner_pixel_size =
+            itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
         Glide.with(trackCover.context)
             .load(track.artworkUrl100)
             .centerCrop()
