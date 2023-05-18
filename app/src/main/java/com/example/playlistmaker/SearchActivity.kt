@@ -25,7 +25,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-//        val backButton = findViewById<ImageView>(R.id.return_button)
+        val backButton = findViewById<ImageView>(R.id.return_button)
         val recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val trackAdapter = TrackAdapter(tracks)
@@ -74,14 +74,14 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.clearFocus()
         }
 
-        // прослушиватель нажатия на кнопку "назад"
-//        backButton.setOnClickListener {
-//            val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-//            val editor = sharedPref.edit()
-//            editor.putString("searchQuery", searchEditText.text.toString())
-//            editor.apply()
-//            this.finish()
-//        }
+//         прослушиватель нажатия на кнопку "назад"
+        backButton.setOnClickListener {
+            val sharedPreferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString("searchQuery", searchEditText.text.toString())
+            editor.apply()
+            this.finish()
+        }
     }
 
     private fun makeClearButtonInvisible() {

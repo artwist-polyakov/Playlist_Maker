@@ -58,7 +58,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-<!--    MARL: - Search Screen-->
+<!--    MARK: - Search Screen-->
     <style name="search_icon_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -74,7 +74,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <!--    MARL: - Search Element-->
+    <!--    MARK: - Search Element-->
 
     <style name="search_element_main_layout_style">
         <item name="android:background">?attr/colorPrimary</item>
