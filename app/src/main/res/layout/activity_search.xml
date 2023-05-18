@@ -61,7 +61,7 @@
             android:maxLines="1"
             android:inputType="text"
             android:textColor="@color/dark_app_color"
-            android:textColorHint="@color/dark_app_color" />
+            android:textColorHint="?attr/colorSecondaryVariant" />
 
         <ImageView
             android:id="@+id/clearIcon"
