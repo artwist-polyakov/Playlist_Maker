@@ -46,6 +46,8 @@
 
         <EditText
             android:id="@+id/searchEditText"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:layout_width="0dp"
             android:drawableLeft="@drawable/search_icon"
             android:drawablePadding="9dp"
