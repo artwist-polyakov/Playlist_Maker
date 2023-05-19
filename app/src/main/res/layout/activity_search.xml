@@ -14,56 +14,55 @@
         android:layout_height="48dp"
         android:orientation="horizontal">
 
-    <ImageView
-        style="@style/search_icon_style"
-        android:id="@+id/return_button"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/arrow_back_icon" />
+        <ImageView
+            android:id="@+id/return_button"
+            style="@style/search_icon_style"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/arrow_back_icon" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="16dp"
-        android:text="@string/search_str"
-        android:textColor="?attr/colorOnPrimary"
-        android:fontFamily="@font/ys_display_medium"
-        android:textFontWeight="500"
-        android:letterSpacing="0"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/ys_display_medium"
+            android:letterSpacing="0"
+            android:text="@string/search_str"
+            android:textColor="?attr/colorOnPrimary"
+            android:textFontWeight="500"
+            android:textSize="22sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
+        style="@style/search_linear_layout_style"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        style="@style/search_linear_layout_style">
-
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/searchEditText"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
             android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_edittext"
             android:drawableLeft="@drawable/search_icon"
             android:drawablePadding="9dp"
             android:drawableTint="?attr/colorSecondaryVariant"
-            android:layout_height="36dp"
-            android:layout_weight="1"
-            android:hint="@string/input_hint"
-            android:background="@drawable/rounded_edittext"
-            android:maxLength="64"
-            app:cornerRadius="18dp"
             android:fontFamily="@font/ys_display_regular"
-            android:paddingStart="13dp"
-            android:maxLines="1"
+            android:hint="@string/input_hint"
+            android:imeOptions="actionDone"
             android:inputType="text"
+            android:maxLength="64"
+            android:maxLines="1"
+            android:paddingStart="13dp"
+            android:singleLine="true"
             android:textColor="@color/dark_app_color"
-            android:textColorHint="?attr/colorSecondaryVariant" />
+            android:textColorHint="?attr/colorSecondaryVariant"
+            app:cornerRadius="18dp" />
 
         <ImageView
             android:id="@+id/clearIcon"
@@ -88,15 +87,14 @@
         android:layout_height="match_parent"
         android:layout_marginTop="24dp"
         android:visibility="visible"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <LinearLayout
         android:id="@+id/problems_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        android:layout_marginTop="210dp"
-        android:gravity="center_horizontal"
         android:visibility="gone">
 
         <ImageView
@@ -107,32 +105,16 @@
 
         <TextView
             android:id="@+id/search_placeholder_text"
+            style="@style/search_error_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/ys_display_medium"
-            android:text="@string/nothing_found"
-            android:textSize="19sp"
-            android:textColor="?attr/colorOnPrimary"
-            android:textAlignment="center"
-            android:gravity="center"/>
+            android:text="@string/nothing_found" />
 
-        <Button style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        <Button
             android:id="@+id/refresh_button"
-            android:layout_width="100dp"
-            android:textSize="12sp"
-            android:layout_height="50dp"
-            android:layout_marginTop="34dp"
-            app:textAllCaps="false"
-            app:backgroundTint="?attr/colorOnPrimary"
-            app:cornerRadius="54dp"
-            android:textColor="?attr/colorPrimary"
-            android:fontFamily="@font/ys_display_regular"
-            android:text="Обновить"
-            android:visibility="gone"/>
-
+            style="@style/search_activity_refresh_button"
+            android:text="@string/refresh_button_text"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

@@ -21,4 +21,5 @@
     <string name="track_time">14:88</string>
     <string name="nothing_found">Ничего не нашлось</string>
     <string name="no_internet">Проблемы со связью<br/>Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="refresh_button_text">Обновить</string>
 </resources>

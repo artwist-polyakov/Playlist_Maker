@@ -204,6 +204,7 @@ class SearchActivity : AppCompatActivity() {
         problemsLayout.visibility = View.VISIBLE
         when (state) {
             "error" -> {
+                recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
                 problemsText.text = SearchActivity.NO_INTERNET_CONNECTION
                 problemsIcon.setImageResource(R.drawable.no_internet)
@@ -214,6 +215,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
             "nothing_found" -> {
+                recyclerView.visibility = View.GONE
+                loadingIndicator.visibility = View.GONE
                 problemsText.text = getString(R.string.nothing_found)
                 problemsIcon.setImageResource(R.drawable.nothing_found)
                 refreshButton.visibility = View.GONE
