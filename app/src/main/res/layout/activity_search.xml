@@ -74,6 +74,14 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_recycler_view"
         android:layout_width="match_parent"
@@ -89,7 +97,7 @@
         android:orientation="vertical"
         android:layout_marginTop="210dp"
         android:gravity="center_horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/problems_image"
@@ -101,14 +109,18 @@
             android:id="@+id/search_placeholder_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/ys_display_medium"
             android:text="@string/nothing_found"
             android:textSize="19sp"
             android:textColor="?attr/colorOnPrimary"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:gravity="center"/>
 
         <Button style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:id="@+id/refresh_button"
             android:layout_width="100dp"
             android:textSize="12sp"
             android:layout_height="50dp"

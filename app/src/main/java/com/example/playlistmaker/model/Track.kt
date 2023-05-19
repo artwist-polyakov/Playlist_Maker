@@ -2,7 +2,7 @@ package com.example.playlistmaker.model
 
 class Track (val trackName: String,
              val artistName: String,
-             val trackTimeMills: Int,
+             val trackTimeMillis: Int,
              val artworkUrl100: String)
 
 val tracks: ArrayList<Track> = arrayListOf(
