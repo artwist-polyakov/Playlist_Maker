@@ -11,6 +11,8 @@ import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.resources.MaterialResources.getDimensionPixelSize
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackAdapter(
     private val tracks: ArrayList<Track>
@@ -37,7 +39,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(track: Track) {
         trackName.text = track.trackName
         trackArtist.text = track.artistName
-        trackTime.text = track.trackTime
+        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMills)
         val corner_pixel_size =
             itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
         Glide.with(trackCover.context)
