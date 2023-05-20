@@ -164,6 +164,7 @@ class SearchActivity : AppCompatActivity() {
         // Вторым параметром мы передаём значение по умолчанию
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
+        // TODO когда метод getParcelableArrayList уберут, надо будет использвать сериализацию в json и восстоновление из json
         val restoredTracks = savedInstanceState.getParcelableArrayList<Track>("TRACKS_LIST")
         if (restoredTracks != null) {
             tracks.clear()
