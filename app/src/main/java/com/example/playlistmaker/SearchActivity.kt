@@ -45,6 +45,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: TrackAdapter
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
+        const val TRACKS = "TRACKS"
         const val API_URL = "https://itunes.apple.com"
         const val NO_INTERNET_CONNECTION = """Проблемы со связью
 
@@ -155,6 +156,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, searchEditText.text.toString())
+        outState.putParcelableArrayList("TRACKS_LIST", tracks)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -162,6 +164,12 @@ class SearchActivity : AppCompatActivity() {
         // Вторым параметром мы передаём значение по умолчанию
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
+        val restoredTracks = savedInstanceState.getParcelableArrayList<Track>("TRACKS_LIST")
+        if (restoredTracks != null) {
+            tracks.clear()
+            tracks.addAll(restoredTracks)
+            trackAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun search(searchQuery: String) {
