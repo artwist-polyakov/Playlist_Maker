@@ -26,12 +26,14 @@ import com.example.playlistmaker.model.Track
 import com.example.playlistmaker.model.tracks
 import com.example.playlistmaker.networkClient.ITunesApi
 import com.example.playlistmaker.networkClient.SongsSearchResponse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
+typealias TrackList = ArrayList<Track>
 class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
@@ -107,6 +109,8 @@ class SearchActivity : AppCompatActivity() {
 
         val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
         val searchQuery = sharedPref.getString("searchQuery", "")
+        val json = sharedPref.getString("TRACKS_LIST", "")
+
         if (searchQuery.isNullOrEmpty()) {
             makeClearButtonInvisible()
         } else {
@@ -114,6 +118,17 @@ class SearchActivity : AppCompatActivity() {
         }
         searchEditText.setText(searchQuery)
 
+        if (json.isNullOrEmpty()) {
+            hideProblemsLayout()
+        } else {
+            val gson = Gson()
+            val type = object: TypeToken<TrackList>() {}.type
+            val restoredTracks: TrackList = gson.fromJson(json, type)
+            tracks.clear()
+            tracks.addAll(restoredTracks)
+            trackAdapter.notifyDataSetChanged()
+            hideProblemsLayout()
+        }
         searchEditText.addTextChangedListener(simpleTextWatcher)
 
         // прослушиватель нажатия на кнопку "очистить"
@@ -132,6 +147,9 @@ class SearchActivity : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putString("searchQuery", searchEditText.text.toString())
+            val gson = Gson()
+            val json = gson.toJson(tracks)
+            editor.putString("TRACKS_LIST", json)
             editor.apply()
             this.finish()
         }
@@ -156,7 +174,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, searchEditText.text.toString())
-        outState.putParcelableArrayList("TRACKS_LIST", tracks)
+        outState.putParcelableArrayList(TRACKS, tracks)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -165,7 +183,7 @@ class SearchActivity : AppCompatActivity() {
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
         // TODO когда метод getParcelableArrayList уберут, надо будет использвать сериализацию в json и восстоновление из json
-        val restoredTracks = savedInstanceState.getParcelableArrayList<Track>("TRACKS_LIST")
+        val restoredTracks = savedInstanceState.getParcelableArrayList<Track>(TRACKS)
         if (restoredTracks != null) {
             tracks.clear()
             tracks.addAll(restoredTracks)
