@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackAdapter(
-    private val tracks: ArrayList<Track>
+    private val tracks: MutableList<Track> = mutableListOf<Track>()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -28,6 +28,14 @@ class TrackAdapter(
         holder.bind(tracks[position])
     }
     override fun getItemCount(): Int = tracks.size
+
+    fun setTracks(newTracks: List<Track>?) {
+        tracks.clear()
+        if (!newTracks.isNullOrEmpty()) {
+            tracks.addAll(newTracks)
+        }
+        notifyDataSetChanged()
+    }
 }
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

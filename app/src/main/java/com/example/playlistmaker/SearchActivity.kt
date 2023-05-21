@@ -126,9 +126,7 @@ class SearchActivity : AppCompatActivity() {
             val gson = Gson()
             val type = object : TypeToken<TrackList>() {}.type
             val restoredTracks: TrackList = gson.fromJson(json, type)
-            tracks.clear()
-            tracks.addAll(restoredTracks)
-            trackAdapter.notifyDataSetChanged()
+            trackAdapter.setTracks(restoredTracks)
             hideProblemsLayout()
         }
         searchEditText.addTextChangedListener(simpleTextWatcher)
@@ -139,14 +137,13 @@ class SearchActivity : AppCompatActivity() {
             val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
             searchEditText.clearFocus()
+            trackAdapter.setTracks(null)
             hideProblemsLayout()
-            tracks.clear()
-            trackAdapter.notifyDataSetChanged()
         }
 
 //         прослушиватель нажатия на кнопку "назад"
         backButton.setOnClickListener {
-            val sharedPreferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+            val sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putString(QUERY, searchEditText.text.toString())
             val gson = Gson()
@@ -187,15 +184,12 @@ class SearchActivity : AppCompatActivity() {
         // TODO когда метод getParcelableArrayList уберут, надо будет использвать сериализацию в json и восстоновление из json
         val restoredTracks = savedInstanceState.getParcelableArrayList<Track>(TRACKS)
         if (restoredTracks != null) {
-            tracks.clear()
-            tracks.addAll(restoredTracks)
-            trackAdapter.notifyDataSetChanged()
+            trackAdapter.setTracks(restoredTracks)
         }
     }
 
     private fun search(searchQuery: String) {
-        tracks.clear()
-        trackAdapter.notifyDataSetChanged()
+        trackAdapter.setTracks(null)
         loadingIndicator.visibility = View.VISIBLE
         hideProblemsLayout()
         recyclerView.visibility = View.GONE
@@ -210,7 +204,11 @@ class SearchActivity : AppCompatActivity() {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             loadingIndicator.visibility = View.GONE
                             recyclerView.visibility = View.VISIBLE
-                            tracks.addAll(response.body()?.results!!)
+                            val sharedPreferences =
+                                getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString(TRACKS_LIST, response.body()?.results!!.toString())
+                            trackAdapter.setTracks(response.body()?.results!!)
                         } else {
                             showProblemsLayout("nothing_found")
                         }
