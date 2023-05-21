@@ -55,6 +55,7 @@ class SearchActivity : AppCompatActivity() {
         const val PREFS = "my_prefs"
         const val QUERY = "searchQuery"
         const val TRACKS_LIST = "TRACKS_LIST"
+        const val RESPONSE_STATE = "responseState"
     }
 
     private val retrofit = Retrofit.Builder()
@@ -110,7 +111,8 @@ class SearchActivity : AppCompatActivity() {
 
         val sharedPref = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val searchQuery = sharedPref.getString(QUERY, "")
-        val json = sharedPref.getString(TRACKS_LIST, "")
+        val json = sharedPref.getString(TRACKS_LIST,  ResponseState.SUCCESS.name)
+        val state = ResponseState.valueOf(sharedPref.getString(RESPONSE_STATE, ResponseState.SUCCESS.name) ?: ResponseState.SUCCESS.name)
 
         if (searchQuery.isNullOrEmpty()) {
             makeClearButtonInvisible()
@@ -128,6 +130,13 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.setTracks(restoredTracks)
             hideProblemsLayout()
         }
+
+        if (state != ResponseState.SUCCESS) {
+            showProblemsLayout(state)
+        } else {
+            hideProblemsLayout()
+        }
+
         searchEditText.addTextChangedListener(simpleTextWatcher)
 
         // прослушиватель нажатия на кнопку "очистить"
@@ -137,6 +146,10 @@ class SearchActivity : AppCompatActivity() {
             keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
             searchEditText.clearFocus()
             trackAdapter.setTracks(null)
+            val sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString(RESPONSE_STATE, ResponseState.SUCCESS.name)
+            editor.apply()
             hideProblemsLayout()
         }
 
@@ -204,6 +217,10 @@ class SearchActivity : AppCompatActivity() {
                     response.isSuccessful -> ResponseState.NOTHING_FOUND
                     else -> ResponseState.ERROR
                 }
+                val sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString(RESPONSE_STATE, responseState.name)
+                editor.apply()
                 when (responseState) {
                     ResponseState.SUCCESS -> {
                         loadingIndicator.visibility = View.GONE
