@@ -31,6 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 typealias TrackList = ArrayList<Track>
 
+enum class ResponseState {
+    SUCCESS, NOTHING_FOUND, ERROR
+}
+
 class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
@@ -191,23 +195,24 @@ class SearchActivity : AppCompatActivity() {
                 call: Call<SongsSearchResponse>,
                 response: Response<SongsSearchResponse>
             ) {
-                when (response.code()) {
-                    200 -> {
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            loadingIndicator.visibility = View.GONE
-                            recyclerView.visibility = View.VISIBLE
-                            val sharedPreferences =
-                                getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                            val editor = sharedPreferences.edit()
-                            editor.putString(TRACKS_LIST, response.body()?.results!!.toString())
-                            trackAdapter.setTracks(response.body()?.results!!)
-                        } else {
-                            showProblemsLayout("nothing_found")
-                        }
+                val responseState = when {
+                    response.isSuccessful && response.body()?.results?.isNotEmpty() == true -> ResponseState.SUCCESS
+                    response.isSuccessful -> ResponseState.NOTHING_FOUND
+                    else -> ResponseState.ERROR
+                }
+                when (responseState) {
+                    ResponseState.SUCCESS -> {
+                        loadingIndicator.visibility = View.GONE
+                        recyclerView.visibility = View.VISIBLE
+                        val sharedPreferences =
+                            getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString(TRACKS_LIST, response.body()?.results!!.toString())
+                        trackAdapter.setTracks(response.body()?.results!!)
                     }
-                    else -> {
-                        showProblemsLayout("error")
-                    }
+
+                    ResponseState.NOTHING_FOUND -> showProblemsLayout("nothing_found")
+                    ResponseState.ERROR -> showProblemsLayout("error")
                 }
             }
 
@@ -231,6 +236,7 @@ class SearchActivity : AppCompatActivity() {
                     search(searchEditText.text.toString())
                 }
             }
+
             "nothing_found" -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
