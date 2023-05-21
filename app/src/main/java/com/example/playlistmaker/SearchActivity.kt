@@ -5,9 +5,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -17,13 +15,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.adapters.TrackAdapter
 import com.example.playlistmaker.model.Track
-import com.example.playlistmaker.model.tracks
 import com.example.playlistmaker.networkClient.ITunesApi
 import com.example.playlistmaker.networkClient.SongsSearchResponse
 import com.google.gson.Gson
@@ -95,7 +90,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     makeClearButtonInvisible()
-
                 } else {
                     makeClearButtonVisible()
                 }
@@ -158,7 +152,6 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-
     private fun makeClearButtonInvisible() {
         clearButton.visibility = View.GONE
         searchEditText.background = getDrawable(R.drawable.rounded_edittext)
@@ -213,7 +206,6 @@ class SearchActivity : AppCompatActivity() {
                             showProblemsLayout("nothing_found")
                         }
                     }
-
                     else -> {
                         showProblemsLayout("error")
                     }
@@ -240,7 +232,6 @@ class SearchActivity : AppCompatActivity() {
                     search(searchEditText.text.toString())
                 }
             }
-
             "nothing_found" -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
