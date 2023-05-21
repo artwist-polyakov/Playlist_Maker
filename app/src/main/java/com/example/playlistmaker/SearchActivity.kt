@@ -31,8 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 typealias TrackList = ArrayList<Track>
 
-enum class ResponseState {
-    SUCCESS, NOTHING_FOUND, ERROR
+enum class ResponseState (val value: String) {
+    SUCCESS ("success"),
+    NOTHING_FOUND ("nothing_found"),
+    ERROR ("error")
 }
 
 class SearchActivity : AppCompatActivity() {
@@ -168,12 +170,14 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        // TODO сохранять еще и errorState
         outState.putString(SEARCH_QUERY, searchEditText.text.toString())
         outState.putParcelableArrayList(TRACKS, trackAdapter.getTracks())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+        // TODO восстанавливать еще и errorState
         // Вторым параметром мы передаём значение по умолчанию
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
@@ -211,21 +215,22 @@ class SearchActivity : AppCompatActivity() {
                         trackAdapter.setTracks(response.body()?.results!!)
                     }
 
-                    ResponseState.NOTHING_FOUND -> showProblemsLayout("nothing_found")
-                    ResponseState.ERROR -> showProblemsLayout("error")
+                    ResponseState.NOTHING_FOUND -> showProblemsLayout(responseState)
+                    ResponseState.ERROR -> showProblemsLayout(responseState)
                 }
             }
 
             override fun onFailure(call: Call<SongsSearchResponse>, t: Throwable) {
-                showProblemsLayout()
+                val responseState = ResponseState.ERROR
+                showProblemsLayout(responseState)
             }
         })
     }
 
-    private fun showProblemsLayout(state: String = "error") {
+    private fun showProblemsLayout(responseState: ResponseState) {
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.VISIBLE
-        when (state) {
+        when (responseState.value) {
             "error" -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
@@ -236,7 +241,6 @@ class SearchActivity : AppCompatActivity() {
                     search(searchEditText.text.toString())
                 }
             }
-
             "nothing_found" -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
