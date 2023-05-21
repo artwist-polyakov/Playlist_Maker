@@ -33,7 +33,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 typealias TrackList = ArrayList<Track>
+
 class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
@@ -45,10 +47,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var loadingIndicator: ProgressBar
     private lateinit var trackAdapter: TrackAdapter
+
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val TRACKS = "TRACKS"
         const val API_URL = "https://itunes.apple.com"
+        const val PREFS = "my_prefs"
+        const val QUERY = "searchQuery"
+        const val TRACKS_LIST = "TRACKS_LIST"
     }
 
     private val retrofit = Retrofit.Builder()
@@ -103,9 +109,9 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.setText(savedInstanceState.getString(SEARCH_QUERY, ""))
         }
 
-        val sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-        val searchQuery = sharedPref.getString("searchQuery", "")
-        val json = sharedPref.getString("TRACKS_LIST", "")
+        val sharedPref = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val searchQuery = sharedPref.getString(QUERY, "")
+        val json = sharedPref.getString(TRACKS_LIST, "")
 
         if (searchQuery.isNullOrEmpty()) {
             makeClearButtonInvisible()
@@ -118,7 +124,7 @@ class SearchActivity : AppCompatActivity() {
             hideProblemsLayout()
         } else {
             val gson = Gson()
-            val type = object: TypeToken<TrackList>() {}.type
+            val type = object : TypeToken<TrackList>() {}.type
             val restoredTracks: TrackList = gson.fromJson(json, type)
             tracks.clear()
             tracks.addAll(restoredTracks)
@@ -142,10 +148,10 @@ class SearchActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             val sharedPreferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
-            editor.putString("searchQuery", searchEditText.text.toString())
+            editor.putString(QUERY, searchEditText.text.toString())
             val gson = Gson()
             val json = gson.toJson(tracks)
-            editor.putString("TRACKS_LIST", json)
+            editor.putString(TRACKS_LIST, json)
             editor.apply()
             this.finish()
         }
