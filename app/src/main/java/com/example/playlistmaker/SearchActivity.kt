@@ -49,10 +49,6 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val TRACKS = "TRACKS"
         const val API_URL = "https://itunes.apple.com"
-        const val NO_INTERNET_CONNECTION = """Проблемы со связью
-
-Загрузка не удалась. Проверьте подключение к интернету
-"""
     }
 
     private val retrofit = Retrofit.Builder()
@@ -233,7 +229,7 @@ class SearchActivity : AppCompatActivity() {
             "error" -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
-                problemsText.text = SearchActivity.NO_INTERNET_CONNECTION
+                problemsText.text = getString(R.string.no_internet)
                 problemsIcon.setImageResource(R.drawable.no_internet)
                 refreshButton.visibility = View.VISIBLE
                 refreshButton.setOnClickListener {
