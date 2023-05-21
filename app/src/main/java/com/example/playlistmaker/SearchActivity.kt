@@ -37,7 +37,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var problemsLayout: LinearLayout
     private lateinit var problemsText: TextView
     private lateinit var problemsIcon: ImageView
-    private val tracks = ArrayList<Track>()
     private lateinit var refreshButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var loadingIndicator: ProgressBar
@@ -63,7 +62,7 @@ class SearchActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.return_button)
         recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        trackAdapter = TrackAdapter(tracks)
+        trackAdapter = TrackAdapter()
         recyclerView.adapter = trackAdapter
         searchEditText = findViewById(R.id.searchEditText)
         clearButton = findViewById(R.id.clearIcon)
@@ -141,7 +140,7 @@ class SearchActivity : AppCompatActivity() {
             val editor = sharedPreferences.edit()
             editor.putString(QUERY, searchEditText.text.toString())
             val gson = Gson()
-            val json = gson.toJson(tracks)
+            val json = gson.toJson(trackAdapter.getTracks())
             editor.putString(TRACKS_LIST, json)
             editor.apply()
             this.finish()
@@ -166,7 +165,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, searchEditText.text.toString())
-        outState.putParcelableArrayList(TRACKS, tracks)
+        outState.putParcelableArrayList(TRACKS, trackAdapter.getTracks())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

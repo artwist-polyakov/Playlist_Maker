@@ -36,6 +36,10 @@ class TrackAdapter(
         }
         notifyDataSetChanged()
     }
+
+    fun getTracks(): ArrayList<Track> {
+        return ArrayList(tracks)
+    }
 }
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
