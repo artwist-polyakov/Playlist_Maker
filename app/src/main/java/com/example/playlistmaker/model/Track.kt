@@ -1,43 +1,15 @@
 package com.example.playlistmaker.model
 
-import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-class Track(
+@Parcelize
+data class Track(
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,
     val artworkUrl100: String
-) : Parcelable {
-
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readInt()?: 0,
-        parcel.readString() ?: ""
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(trackName)
-        parcel.writeString(artistName)
-        parcel.writeInt(trackTimeMillis)
-        parcel.writeString(artworkUrl100)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Track> {
-        override fun createFromParcel(parcel: Parcel): Track {
-            return Track(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Track?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+) : Parcelable
 
 
 val tracks: ArrayList<Track> = arrayListOf(
