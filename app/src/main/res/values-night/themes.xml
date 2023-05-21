@@ -7,7 +7,7 @@
         <item name="colorOnPrimary">@color/dark_text_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/main_screen_background_color</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/dark_app_color</item>
         <item name="colorOnSecondary">@color/colorOnSecondaryNight</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>

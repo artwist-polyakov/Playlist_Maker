@@ -11,9 +11,11 @@ import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.resources.MaterialResources.getDimensionPixelSize
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackAdapter(
-    private val tracks: ArrayList<Track>
+    private val tracks: MutableList<Track> = mutableListOf<Track>()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -25,10 +27,19 @@ class TrackAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
     }
-
     override fun getItemCount(): Int = tracks.size
 
+    fun setTracks(newTracks: List<Track>?) {
+        tracks.clear()
+        if (!newTracks.isNullOrEmpty()) {
+            tracks.addAll(newTracks)
+        }
+        notifyDataSetChanged()
+    }
 
+    fun getTracks(): ArrayList<Track> {
+        return ArrayList(tracks)
+    }
 }
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,8 +51,9 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(track: Track) {
         trackName.text = track.trackName
         trackArtist.text = track.artistName
-        trackTime.text = track.trackTime
-        val corner_pixel_size = itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
+        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        val corner_pixel_size =
+            itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
         Glide.with(trackCover.context)
             .load(track.artworkUrl100)
             .centerCrop()
