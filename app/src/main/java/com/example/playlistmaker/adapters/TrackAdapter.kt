@@ -60,6 +60,9 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .placeholder(R.drawable.song_cover_placeholder)
             .transform(RoundedCorners(corner_pixel_size))
             .into(trackCover)
+//        trackArtist.requestLayout()
+//        trackTime.requestLayout()
+
     }
 }
 
