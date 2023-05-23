@@ -31,10 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 typealias TrackList = ArrayList<Track>
 
-enum class ResponseState (val value: String) {
-    SUCCESS ("success"),
-    NOTHING_FOUND ("nothing_found"),
-    ERROR ("error")
+enum class ResponseState{
+    SUCCESS,
+    NOTHING_FOUND,
+    ERROR
 }
 
 class SearchActivity : AppCompatActivity() {
@@ -252,8 +252,8 @@ class SearchActivity : AppCompatActivity() {
     private fun showProblemsLayout(responseState: ResponseState) {
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.VISIBLE
-        when (responseState.value) {
-            "error" -> {
+        when (responseState.name) {
+            ResponseState.ERROR.name -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
                 problemsText.text = getString(R.string.no_internet)
@@ -263,7 +263,7 @@ class SearchActivity : AppCompatActivity() {
                     search(searchEditText.text.toString())
                 }
             }
-            "nothing_found" -> {
+            ResponseState.NOTHING_FOUND.name-> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
                 problemsText.text = getString(R.string.nothing_found)
