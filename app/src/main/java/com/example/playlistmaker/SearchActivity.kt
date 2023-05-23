@@ -126,9 +126,14 @@ class SearchActivity : AppCompatActivity() {
         } else {
             val gson = Gson()
             val type = object : TypeToken<TrackList>() {}.type
-            val restoredTracks: TrackList = gson.fromJson(json, type)
-            trackAdapter.setTracks(restoredTracks)
-            hideProblemsLayout()
+            if (json.startsWith("[")) {
+                val restoredTracks: TrackList = gson.fromJson(json, type)
+                trackAdapter.setTracks(restoredTracks)
+                hideProblemsLayout()
+            } else {
+                // JSON-строка не является массивом
+                showProblemsLayout(responseState = ResponseState.NOTHING_FOUND)
+            }
         }
 
         if (state != ResponseState.SUCCESS) {
