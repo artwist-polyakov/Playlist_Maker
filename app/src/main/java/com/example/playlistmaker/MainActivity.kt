@@ -1,6 +1,8 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,10 +11,18 @@ import android.widget.ImageView
 import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val PREFS = "my_prefs"
+        const val THEME_PREF = "isDarkTheme"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val sharedPref = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isDarkTheme = sharedPref.getBoolean(THEME_PREF, currentNightMode == Configuration.UI_MODE_NIGHT_YES)
+        (applicationContext as App).switchTheme(isDarkTheme)
         val searchButton = findViewById<Button>(R.id.search)
         val mediaButton = findViewById<Button>(R.id.media)
         val settingsButton = findViewById<Button>(R.id.settings)

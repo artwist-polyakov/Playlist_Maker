@@ -35,7 +35,7 @@
         <item name="android:clickable">false</item>
     </style>
 
-    <style name="switchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+    <style name="switchStyle">
         <item name="android:switchMinWidth">32dp</item>
         <item name="android:layout_height">48dp</item>
         <!--        <item name="android:checked">true</item>-->

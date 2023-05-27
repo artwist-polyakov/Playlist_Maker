@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.provider.Settings.Global.getString
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,11 +20,23 @@ class SettingsActivity : AppCompatActivity() {
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
         val supportLayout = findViewById<LinearLayout>(R.id.support_layout)
         val agreementLayout = findViewById<LinearLayout>(R.id.agreement_layout)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
         val sharingAction = {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))
             startActivity(intent)
+        }
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        themeSwitcher.isChecked = currentNightMode == Configuration.UI_MODE_NIGHT_YES
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+
+            with(getSharedPreferences(MainActivity.PREFS, MODE_PRIVATE).edit()) {
+                putBoolean(MainActivity.THEME_PREF, checked)
+                apply()
+            }
         }
 
         backButton.setOnClickListener {
