@@ -27,15 +27,10 @@ class TrackAdapter(
             val track = tracks[pos]
             Log.d("TrackAdapter", "Clicked on track: $track")
             var linkedRepository = LinkedRepository<Track>(SearchActivity.MAX_HISTORY_SIZE)
-//            val sharedPreferences = parent.context.getSharedPreferences("history", 0)
-//            sharedPreferences.getString(SearchActivity.HISTORY, "[]")?.let {
-//                linkedRepository = LinkedRepository(it)
-//            }
             linkedRepository.restoreFromSharedPreferences(SearchActivity.PREFS,SearchActivity.HISTORY, parent.context)
             linkedRepository.add(track)
             linkedRepository.saveToSharedPreferences(SearchActivity.PREFS,SearchActivity.HISTORY, parent.context)
             Log.d("TrackAdapter", "History: $linkedRepository")
-//            sharedPreferences.edit().putString(SearchActivity.HISTORY, linkedRepository.toString()).apply()
         }
     }
 
