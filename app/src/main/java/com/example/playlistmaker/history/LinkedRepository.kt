@@ -5,13 +5,16 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
-class Node<T>(val value: T, var next: Node<T>? = null)
+class Node<T>(val value: T, var next: Node<T>? = null) {
+    override fun toString(): String {
+        return "$value, $next"
+    }
+}
 class LinkedRepository<T>(private val maxSize: Int) {
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
     private var size: Int = 0
-    private var map: MutableMap<T, Node<T>?> = HashMap<T, Node<T>?>()
+    private var map: MutableMap<T, Node<T>?> = HashMap<T, Node<T>?>() // второй параметр - родитель
 
 
     fun add(item: T) {
@@ -29,16 +32,14 @@ class LinkedRepository<T>(private val maxSize: Int) {
             head = this.removeHead()
             tail?.next = Node<T>(item)
             this.tail = tail?.next
-        }
-        if (this.size == 0) {
+        } else if (this.size == 0) {
             head = Node<T>(item)
             tail = head
-            this.size++
         } else {
             tail?.next = Node<T>(item)
             tail = tail?.next
-            this.size++
         }
+        this.size++
     }
     fun removeHead(): Node<T>? {
         if (head?.next == null) {
@@ -96,6 +97,10 @@ class LinkedRepository<T>(private val maxSize: Int) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
         sharedPreferences.edit().remove(key).apply()
+    }
+
+    override fun toString(): String {
+        return "${this.head}, ${this.tail}, ${this.size}"
     }
 
 }

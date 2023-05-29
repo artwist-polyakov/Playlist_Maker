@@ -56,6 +56,8 @@ class SearchActivity : AppCompatActivity() {
         const val QUERY = "searchQuery"
         const val TRACKS_LIST = "TRACKS_LIST"
         const val RESPONSE_STATE = "responseState"
+        const val MAX_HISTORY_SIZE = 10
+        const val HISTORY = "history"
     }
 
     private val retrofit = Retrofit.Builder()
