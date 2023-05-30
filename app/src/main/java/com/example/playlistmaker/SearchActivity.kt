@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -80,8 +81,7 @@ class SearchActivity : AppCompatActivity() {
         // SEARCH RECYCLER VIEW
         recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        trackAdapter =  TrackAdapter()
-        recyclerView.adapter = trackAdapter
+
 
         // SEARCH
         searchEditText = findViewById(R.id.searchEditText)
@@ -98,10 +98,15 @@ class SearchActivity : AppCompatActivity() {
         hideHistoryLayout()
         historyRecyclerView = findViewById(R.id.search_history_recycler_view)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
-        historyAdapter = TrackAdapter()
-        historyRecyclerView.adapter = historyAdapter
+
         var linkedRepository = LinkedRepository<Track>(MAX_HISTORY_SIZE)
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+
+        // ADAPTERS
+        historyAdapter = TrackAdapter(linkedRepository)
+        trackAdapter =  TrackAdapter(linkedRepository)
+        recyclerView.adapter = trackAdapter
+        historyRecyclerView.adapter = historyAdapter
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -145,10 +150,14 @@ class SearchActivity : AppCompatActivity() {
             makeClearButtonVisible()
         }
         searchEditText.setText(searchQuery)
-
         if (json.isNullOrEmpty()) {
             hideProblemsLayout()
         } else {
+            if (searchEditText.text.isNullOrEmpty()) {
+                showHistoryLayuout()
+            } else {
+                hideHistoryLayout()
+            }
             val gson = Gson()
             val type = object : TypeToken<TrackList>() {}.type
             if (json.startsWith("[")) {
@@ -169,23 +178,24 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(simpleTextWatcher)
         searchEditText.addTextChangedListener { text ->
-            if (text.isNullOrEmpty()) {
+            Log.d("SearchActivity", "Linked count: ${linkedRepository.getSize()}")
+            if ((text.isNullOrEmpty()) && (linkedRepository.getSize() > 0)) {
                 showHistoryLayuout()
-                val json = getSharedPreferences(PREFS, Context.MODE_PRIVATE  ).getString(HISTORY, "[]")
+                val json = linkedRepository.toJson()
                 val gson = Gson()
                 val type = object : TypeToken<TrackList>() {}.type
                 val restoredTracks: TrackList = gson.fromJson(json, type)
                 if (restoredTracks != null) {
                     historyAdapter.setTracks(restoredTracks)
                 }
-
             } else {
                 hideHistoryLayout()
+                trackAdapter.setTracks(null)
             }
         }
 
         searchEditText.setOnFocusChangeListener { view, hasFocus ->
-            linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+            Log.d("SearchActivity", "Linked count: ${linkedRepository.getSize()}")
             if ((hasFocus) && (searchEditText.text.isEmpty()) && (linkedRepository.getSize()>0)) {
                 showHistoryLayuout()
 //                val json = getSharedPreferences(PREFS, Context.MODE_PRIVATE  ).getString(HISTORY, "[]")
@@ -230,6 +240,7 @@ class SearchActivity : AppCompatActivity() {
             val json = gson.toJson(trackAdapter.getTracks())
             editor.putString(TRACKS_LIST, json)
             editor.apply()
+            linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
             this.finish()
         }
         refreshButton.setOnClickListener {
@@ -254,6 +265,7 @@ class SearchActivity : AppCompatActivity() {
         // TODO сохранять еще и errorState
         outState.putString(SEARCH_QUERY, searchEditText.text.toString())
         outState.putParcelableArrayList(TRACKS, trackAdapter.getTracks())
+        outState.putParcelableArrayList(HISTORY, historyAdapter.getTracks())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -262,11 +274,23 @@ class SearchActivity : AppCompatActivity() {
         // Вторым параметром мы передаём значение по умолчанию
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
+
+        val linkedRepository = LinkedRepository<Track>(MAX_HISTORY_SIZE)
+        linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+        historyAdapter = TrackAdapter(linkedRepository)
+        trackAdapter = TrackAdapter(linkedRepository)
+
         // TODO когда метод getParcelableArrayList уберут, надо будет использвать сериализацию в json и восстоновление из json
         val restoredTracks = savedInstanceState.getParcelableArrayList<Track>(TRACKS)
         if (restoredTracks != null) {
             trackAdapter.setTracks(restoredTracks)
         }
+        val restoredHistory = savedInstanceState.getParcelableArrayList<Track>(HISTORY)
+        if (restoredHistory != null) {
+            historyAdapter.setTracks(restoredHistory)
+        }
+        historyRecyclerView.adapter = historyAdapter
+        recyclerView.adapter = trackAdapter
     }
 
     private fun search(searchQuery: String) {

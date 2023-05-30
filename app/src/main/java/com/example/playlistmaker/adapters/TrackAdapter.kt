@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackAdapter(
+    private val historyRepository: LinkedRepository<Track>,
     private val tracks: MutableList<Track> = mutableListOf<Track>()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
@@ -30,12 +31,9 @@ class TrackAdapter(
             performVibration(view.context)
             val track = tracks[pos]
             Log.d("TrackAdapter", "Clicked on track: $track")
-            var linkedRepository = LinkedRepository<Track>(SearchActivity.MAX_HISTORY_SIZE)
-            linkedRepository.restoreFromSharedPreferences(SearchActivity.PREFS,SearchActivity.HISTORY, parent.context)
-            linkedRepository.add(track as Track)
-            linkedRepository.saveToSharedPreferences(SearchActivity.PREFS,SearchActivity.HISTORY, parent.context)
-            Log.d("TrackAdapter", "History: $linkedRepository")
-            Log.d("CurrentIds", "CurrentIds: ${linkedRepository.getMapKeys()}")
+            historyRepository.add(track as Track)
+            Log.d("TrackAdapter", "History: $historyRepository")
+            Log.d("CurrentIds", "CurrentIds: ${historyRepository.getMapKeys()}")
         }
     }
 
