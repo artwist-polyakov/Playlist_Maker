@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Track(
-    val trackId: Long,
+    val trackId: String,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,
@@ -14,7 +14,14 @@ data class Track(
 
 {
     override fun hashCode(): Int {
-        return trackId.hashCode()
+
+        return this.trackId.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Track) return false
+        return this.trackId == other.trackId
     }
 }
 

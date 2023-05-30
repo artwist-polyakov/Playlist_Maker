@@ -1,11 +1,16 @@
 package com.example.playlistmaker.adapters
 
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
@@ -28,9 +33,10 @@ class TrackAdapter(
             Log.d("TrackAdapter", "Clicked on track: $track")
             var linkedRepository = LinkedRepository<Track>(SearchActivity.MAX_HISTORY_SIZE)
             linkedRepository.restoreFromSharedPreferences(SearchActivity.PREFS,SearchActivity.HISTORY, parent.context)
-            linkedRepository.add(track)
+            linkedRepository.add(track as Track)
             linkedRepository.saveToSharedPreferences(SearchActivity.PREFS,SearchActivity.HISTORY, parent.context)
             Log.d("TrackAdapter", "History: $linkedRepository")
+            Log.d("CurrentIds", "CurrentIds: ${linkedRepository.getMapKeys()}")
         }
     }
 
@@ -82,4 +88,5 @@ fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> 
     }
     return this
 }
+
 

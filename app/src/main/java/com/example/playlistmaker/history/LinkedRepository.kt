@@ -2,10 +2,11 @@ package com.example.playlistmaker.history
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class Node<T>(val value: T, var next: Node<T>? = null) {
+class Node<T>(val value: T, var prev: Node<T>?=null, var next: Node<T>? = null) {
     override fun toString(): String {
         return "$value, $next"
     }
@@ -16,49 +17,68 @@ class LinkedRepository<T>(private val maxSize: Int) {
     private var size: Int = 0
     private var map: MutableMap<T, Node<T>?> = HashMap<T, Node<T>?>() // второй параметр - родитель
 
-
+    fun getSize(): Int {
+        return this.size
+    }
     fun add(item: T) {
-        if (map.containsKey(item)) {
+        Log.d("CurrentIds", "Добавляем $item")
+        if (item in map) {
+//            Log.d("CurrentIds", "Ключ в мапе, ${this.getSize()}")
+            Log.d("CurrentIds", "Ключ в мапе: ${this.getMapKeys()}")
             if (map[item] == null) { // удаляем head
                 this.removeHead()
-                map.remove(item)
             } else {
                 val parentNode = map[item]
                 parentNode?.next = map[item]?.next
+                parentNode?.next?.prev = parentNode
+                map.remove(item)
             }
             this.size--
         }
+        var newNode = Node<T>(item)
         if (this.size == maxSize) {
-            head = this.removeHead()
-            tail?.next = Node<T>(item)
-            this.tail = tail?.next
+            map.remove(head?.value)
+            var head = this.removeHead()
+            map[head?.value!!] = null
+            var tail = this.tail
+            map.put(item, tail)
+            tail?.next = newNode
+            newNode.prev = tail
+            this.tail = newNode
         } else if (this.size == 0) {
-            head = Node<T>(item)
-            tail = head
+            this.head = newNode
+            this.tail = newNode
+            map.put(item, null)
         } else {
-            tail?.next = Node<T>(item)
-            tail = tail?.next
+            var tail = this.tail
+            tail?.next = newNode
+            newNode.prev = tail
+            map.put(item, tail)
+            this.tail = newNode
         }
         this.size++
+        Log.d("CurrentIds", "Новый размер ${this.getSize()}")
     }
     fun removeHead(): Node<T>? {
         if (head?.next == null) {
             this.map.remove(head?.value)
+            this.tail = null
+            this.head = null
             return null
         } else {
-            val head = head
+            var head = head
             this.map.remove(head?.value)
             this.head = head?.next
-            this.size--
+            this.head?.prev = null
             return this.head
         }
     }
-    fun get(): MutableList<T?> {
-        val list: MutableList<T?> = MutableList(size) { null }
-        var t = this.head
-        for (i in 0 until size) {
-            list[size - 1 - i] = t!!.value
-            t = t?.next
+    fun get(): ArrayList<T>? {
+        val list = ArrayList<T>()
+        var node = tail
+        while (node != null) {
+            list.add(node.value)
+            node = node.prev
         }
         return list
     }
@@ -70,18 +90,24 @@ class LinkedRepository<T>(private val maxSize: Int) {
         this.map = HashMap<T, Node<T>?>()
     }
 
+    fun getMapKeys(): String {
+        return this.map.keys.toString()
+    }
+
     fun restoreFromSharedPreferences(prefs_name: String,key: String, context: Context) {
         val gson = Gson()
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
         this.clear()
         val json = sharedPreferences.getString(key, "[]")
-        if (json != null) {
+        if (json != "null") {
             val type = object : TypeToken<List<T>>() {}.type
             val list: List<T> = gson.fromJson(json, type)
             for (item in list) {
-                add(item)
+                add(item as T)
             }
+        } else {
+            this.clearSharedPreferences(prefs_name,key, context)
         }
     }
 
@@ -101,6 +127,11 @@ class LinkedRepository<T>(private val maxSize: Int) {
 
     override fun toString(): String {
         return "${this.head}, ${this.tail}, ${this.size}"
+    }
+
+    fun toJson(): String {
+        val gson = Gson()
+        return gson.toJson(this.get())
     }
 
 }

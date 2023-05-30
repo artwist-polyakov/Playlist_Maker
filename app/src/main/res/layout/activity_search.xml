@@ -91,9 +91,9 @@
 
     <LinearLayout
         android:id="@+id/history_layout"
-        android:layout_marginTop="32dp"
         android:orientation="vertical"
-        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible">
@@ -102,13 +102,14 @@
             style="@style/search_error_text"
             android:layout_width="match_parent"
             android:layout_height="52dp"
+            android:paddingTop="32dp"
             android:gravity="center"
             android:text="Вы искали"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_history_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
@@ -116,7 +117,10 @@
         <Button
             android:id="@+id/clear_button"
             style="@style/search_activity_refresh_button"
+            android:gravity="center"
+
             android:text="Очистить историю"
+            android:layout_marginBottom="25dp"
             android:visibility="visible" />
     </LinearLayout>
 
