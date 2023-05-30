@@ -100,7 +100,7 @@ class LinkedRepository<T>(private val maxSize: Int) {
             context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
         this.clear()
         val json = sharedPreferences.getString(key, "[]")
-        if (json != "null") {
+        if( (json != "null") || (json != "[]")) {
             val type = object : TypeToken<List<T>>() {}.type
             val list: List<T> = gson.fromJson(json, type)
             for (item in list) {
