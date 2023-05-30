@@ -95,24 +95,31 @@
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="visible">
 
         <TextView
             style="@style/search_error_text"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:paddingTop="32dp"
+            android:paddingTop="24dp"
             android:gravity="center"
             android:text="Вы искали"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_history_recycler_view"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:visibility="visible"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_history_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </androidx.core.widget.NestedScrollView>
 
         <Button
             android:id="@+id/clear_button"

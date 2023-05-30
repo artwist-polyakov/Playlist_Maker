@@ -1,5 +1,4 @@
 package com.example.playlistmaker.adapters
-
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
@@ -29,6 +27,7 @@ class TrackAdapter(
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.search_result_item, parent, false)
         return TrackViewHolder(view).listen() { pos, type ->
+            performVibration(view.context)
             val track = tracks[pos]
             Log.d("TrackAdapter", "Clicked on track: $track")
             var linkedRepository = LinkedRepository<Track>(SearchActivity.MAX_HISTORY_SIZE)
@@ -89,4 +88,19 @@ fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> 
     return this
 }
 
+private fun performVibration(context: Context) {
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    val durationInMilliseconds = 100
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && vibrator.hasVibrator()) {
+        val vibrationEffect = VibrationEffect.createOneShot(durationInMilliseconds.toLong(), VibrationEffect.DEFAULT_AMPLITUDE)
+        vibrator.vibrate(vibrationEffect)
+    } else {
+        @Suppress("DEPRECATION")
+        vibrator.vibrate(durationInMilliseconds)
+    }
+}
+
+private fun Any.vibrate(durationInMilliseconds: Int) {
+
+}
