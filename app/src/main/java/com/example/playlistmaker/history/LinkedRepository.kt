@@ -45,7 +45,7 @@ class LinkedRepository<T>(private val maxSize: Int) {
         if (item in map) { // сначала надо проверить, есть ли элемент в списке
             Log.d("CurrentIds", "Ключ в мапе: ${this.getMapKeys()}")
             if (map[item] == null) { // значит это голова — у головы нет предка, удаляем head
-                this.removeHead()
+                this.head = this.removeHead()
             } else {
                 val parentNode = map[item]
                 parentNode?.next = map[item]?.next?.next
