@@ -31,6 +31,7 @@ class TrackAdapter(
             val track = tracks[pos]
             Log.d("TrackAdapter", "Clicked on track: ${track.trackId}")
             historyRepository.add(track as Track)
+            Log.d("HistorySize", "History size: ${historyRepository.getSize()}")
             Log.d("TrackAdapter", "History: $historyRepository")
         }
     }

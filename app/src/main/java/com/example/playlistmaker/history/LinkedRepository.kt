@@ -59,9 +59,10 @@ class LinkedRepository<T>(private val maxSize: Int) {
             this.size-- // если элемент в списке был, то из первого ифа выходим с уменьшенным размером списка
         }
         var newNode = Node<T>(item)
-        if (this.size == maxSize) { // сценарий когда размер списка превышает maxSize
+        if (this.size == this.maxSize) { // сценарий когда размер списка превышает maxSize
             map.remove(head?.value)
             var head = this.removeHead() // возвращает потомка головы
+            this.size--
             map[head?.value!!] = null
             var tail = this.tail
             map.put(item, tail)
