@@ -75,7 +75,10 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val itunesService = retrofit.create(ITunesApi::class.java)
     // TODO сделать методы onPause и onResume для сохранения состояния приложения
-
+    /*
+    Пока методы не делаем, потому что надо как то переделать работу с активити и реализовать ее
+    презентер что ли. Так как в текущей версии, надо будет тиражировать код, что не есть хорошо.
+    */
     override fun onPause() {
         super.onPause()
         linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
@@ -95,9 +98,6 @@ class SearchActivity : AppCompatActivity() {
         super.onResume()
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
     }
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
