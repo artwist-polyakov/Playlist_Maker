@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 
 class Node<T>(val value: T, var prev: Node<T>?=null, var next: Node<T>? = null) {
     override fun toString(): String {
-        return "$value, $next"
+        return "$value"
     }
 }
 class LinkedRepository<T>(private val maxSize: Int) {
@@ -23,14 +23,17 @@ class LinkedRepository<T>(private val maxSize: Int) {
     fun add(item: T) {
         Log.d("CurrentIds", "Добавляем $item")
         if (item in map) {
-//            Log.d("CurrentIds", "Ключ в мапе, ${this.getSize()}")
             Log.d("CurrentIds", "Ключ в мапе: ${this.getMapKeys()}")
-            if (map[item] == null) { // удаляем head
+            if (map[item] == null) { // значит это голова — у головы нет предка, удаляем head
                 this.removeHead()
             } else {
                 val parentNode = map[item]
-                parentNode?.next = map[item]?.next
-                parentNode?.next?.prev = parentNode
+                parentNode?.next = map[item]?.next?.next
+                if (parentNode?.next != null) {
+                    parentNode.next?.prev = parentNode
+                } else { // значит parentNode - это хвост
+                    this.tail = parentNode
+                }
                 map.remove(item)
             }
             this.size--
@@ -38,7 +41,7 @@ class LinkedRepository<T>(private val maxSize: Int) {
         var newNode = Node<T>(item)
         if (this.size == maxSize) {
             map.remove(head?.value)
-            var head = this.removeHead()
+            var head = this.removeHead() // возвращает потомка головы
             map[head?.value!!] = null
             var tail = this.tail
             map.put(item, tail)
@@ -59,7 +62,8 @@ class LinkedRepository<T>(private val maxSize: Int) {
         this.size++
         Log.d("CurrentIds", "Новый размер ${this.getSize()}")
     }
-    fun removeHead(): Node<T>? {
+    fun removeHead(): Node<T>? { // возвращает потомка удалённой головы
+        head = this.head
         if (head?.next == null) {
             this.map.remove(head?.value)
             this.tail = null
@@ -73,12 +77,12 @@ class LinkedRepository<T>(private val maxSize: Int) {
             return this.head
         }
     }
-    fun get(): ArrayList<T>? {
+    fun get(reversed: Boolean): ArrayList<T>? {
         val list = ArrayList<T>()
-        var node = tail
+        var node = if (reversed) tail else head
         while (node != null) {
             list.add(node.value)
-            node = node.prev
+            node = if (reversed) node.prev else node.next
         }
         return list
     }
@@ -87,7 +91,7 @@ class LinkedRepository<T>(private val maxSize: Int) {
         this.head = null
         this.tail = null
         this.size = 0
-        this.map = HashMap<T, Node<T>?>()
+        this.map = HashMap()
     }
 
     fun getMapKeys(): String {
@@ -113,7 +117,7 @@ class LinkedRepository<T>(private val maxSize: Int) {
 
     fun saveToSharedPreferences(prefs_name: String,key: String, context: Context) {
         val gson = Gson()
-        val json = gson.toJson(get())
+        val json = gson.toJson(this.get(reversed = false))
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
         sharedPreferences.edit().putString(key, json).apply()
@@ -131,7 +135,7 @@ class LinkedRepository<T>(private val maxSize: Int) {
 
     fun toJson(): String {
         val gson = Gson()
-        return gson.toJson(this.get())
+        return gson.toJson(this.get(reversed = true))
     }
 
 }

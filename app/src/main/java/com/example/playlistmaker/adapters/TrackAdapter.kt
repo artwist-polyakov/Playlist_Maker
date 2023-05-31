@@ -30,10 +30,9 @@ class TrackAdapter(
         return TrackViewHolder(view).listen() { pos, type ->
             performVibration(view.context)
             val track = tracks[pos]
-            Log.d("TrackAdapter", "Clicked on track: $track")
+            Log.d("TrackAdapter", "Clicked on track: ${track.trackId}")
             historyRepository.add(track as Track)
             Log.d("TrackAdapter", "History: $historyRepository")
-            Log.d("CurrentIds", "CurrentIds: ${historyRepository.getMapKeys()}")
         }
     }
 
