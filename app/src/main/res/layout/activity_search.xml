@@ -99,9 +99,9 @@
 
         <TextView
             style="@style/search_error_text"
+            android:id="@+id/history_title"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:paddingTop="24dp"
             android:gravity="center"
             android:text="@string/search_history_title"/>
 
