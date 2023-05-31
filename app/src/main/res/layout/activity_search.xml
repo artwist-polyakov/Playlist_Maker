@@ -92,7 +92,6 @@
     <LinearLayout
         android:id="@+id/history_layout"
         android:orientation="vertical"
-        android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
