@@ -86,6 +86,11 @@ class SearchActivity : AppCompatActivity() {
         linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
     }
 
+    override fun onStop() {
+        super.onStop()
+        linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
+    }
+
     override fun onResume() {
         super.onResume()
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
