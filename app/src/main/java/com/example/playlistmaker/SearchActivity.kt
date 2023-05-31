@@ -179,11 +179,11 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(simpleTextWatcher)
         searchEditText.addTextChangedListener { text ->
-            Log.d("SearchActivity", "Linked count: ${linkedRepository.getSize()}")
+//            Log.d("SearchActivity", "Linked count: ${linkedRepository.getSize()}")
             if ((text.isNullOrEmpty()) && (linkedRepository.getSize() > 0)) {
                 showHistoryLayuout()
-                val json = linkedRepository.toJson()
                 val gson = Gson()
+                val json = gson.toJson(linkedRepository.get(reversed = true))
                 val type = object : TypeToken<TrackList>() {}.type
                 val restoredTracks: TrackList = gson.fromJson(json, type)
                 if (restoredTracks != null) {
@@ -200,8 +200,8 @@ class SearchActivity : AppCompatActivity() {
             if ((hasFocus) && (searchEditText.text.isEmpty()) && (linkedRepository.getSize()>0)) {
                 showHistoryLayuout()
 //                val json = getSharedPreferences(PREFS, Context.MODE_PRIVATE  ).getString(HISTORY, "[]")
-                val json = linkedRepository.toJson()
                 val gson = Gson()
+                val json = gson.toJson(linkedRepository.get(reversed = true))
                 val type = object : TypeToken<TrackList>() {}.type
                 val restoredTracks: TrackList = gson.fromJson(json, type)
                 if (restoredTracks != null && (json != "null")) {
