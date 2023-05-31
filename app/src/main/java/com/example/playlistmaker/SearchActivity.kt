@@ -54,6 +54,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyLayout: LinearLayout
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var historyAdapter: TrackAdapter
+    private lateinit var linkedRepository: LinkedRepository<Track>
 
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
@@ -74,6 +75,25 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val itunesService = retrofit.create(ITunesApi::class.java)
     // TODO сделать методы onPause и onResume для сохранения состояния приложения
+
+    override fun onPause() {
+        super.onPause()
+        linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+    }
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -99,7 +119,7 @@ class SearchActivity : AppCompatActivity() {
         hideHistoryLayout()
         historyRecyclerView = findViewById(R.id.search_history_recycler_view)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
-        var linkedRepository = LinkedRepository<Track>(MAX_HISTORY_SIZE)
+        linkedRepository = LinkedRepository(MAX_HISTORY_SIZE)
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
 
         // ADAPTERS
