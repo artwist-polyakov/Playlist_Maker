@@ -104,7 +104,7 @@
             android:layout_height="52dp"
             android:paddingTop="24dp"
             android:gravity="center"
-            android:text="Вы искали"/>
+            android:text="@string/search_history_title"/>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -125,8 +125,7 @@
             android:id="@+id/clear_button"
             style="@style/search_activity_refresh_button"
             android:gravity="center"
-
-            android:text="Очистить историю"
+            android:text="@string/clear_history_button_text"
             android:layout_marginBottom="25dp"
             android:visibility="visible" />
     </LinearLayout>

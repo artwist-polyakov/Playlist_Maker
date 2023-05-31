@@ -14,7 +14,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.SearchActivity
 import com.example.playlistmaker.history.LinkedRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -72,8 +71,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .placeholder(R.drawable.song_cover_placeholder)
             .transform(RoundedCorners(corner_pixel_size))
             .into(trackCover)
-//        trackArtist.requestLayout()
-//        trackTime.requestLayout()
 
     }
 }

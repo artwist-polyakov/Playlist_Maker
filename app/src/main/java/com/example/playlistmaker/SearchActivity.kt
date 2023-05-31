@@ -32,7 +32,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 typealias TrackList = ArrayList<Track>
 
 enum class ResponseState{
@@ -68,11 +67,13 @@ class SearchActivity : AppCompatActivity() {
         const val HISTORY = "history"
     }
 
+    // NETWORK
     private val retrofit = Retrofit.Builder()
         .baseUrl(SearchActivity.API_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ITunesApi::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -98,7 +99,6 @@ class SearchActivity : AppCompatActivity() {
         hideHistoryLayout()
         historyRecyclerView = findViewById(R.id.search_history_recycler_view)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
-
         var linkedRepository = LinkedRepository<Track>(MAX_HISTORY_SIZE)
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
 
@@ -150,6 +150,7 @@ class SearchActivity : AppCompatActivity() {
             makeClearButtonVisible()
         }
         searchEditText.setText(searchQuery)
+
         if (json.isNullOrEmpty()) {
             hideProblemsLayout()
         } else {
@@ -211,6 +212,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+        // прослушиватель нажатия на кнопку "очистить историю"
         cleanHistoryButton.setOnClickListener {
             linkedRepository.clear()
             linkedRepository.clearSharedPreferences(PREFS, HISTORY, this)
