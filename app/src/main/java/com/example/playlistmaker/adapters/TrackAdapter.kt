@@ -1,5 +1,9 @@
 package com.example.playlistmaker.adapters
-
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,18 +14,23 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.android.material.resources.MaterialResources.getDimensionPixelSize
+import com.example.playlistmaker.history.LinkedRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackAdapter(
+    private val historyRepository: LinkedRepository<Track>,
     private val tracks: MutableList<Track> = mutableListOf<Track>()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.search_result_item, parent, false)
-        return TrackViewHolder(view)
+        return TrackViewHolder(view).listen() { pos, type ->
+            performVibration(view.context)
+            val track = tracks[pos]
+            historyRepository.add(track as Track)
+        }
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
@@ -60,9 +69,30 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .placeholder(R.drawable.song_cover_placeholder)
             .transform(RoundedCorners(corner_pixel_size))
             .into(trackCover)
-//        trackArtist.requestLayout()
-//        trackTime.requestLayout()
 
     }
 }
 
+fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> Unit): T {
+    itemView.setOnClickListener {
+        event.invoke(getAdapterPosition(), getItemViewType())
+    }
+    return this
+}
+
+private fun performVibration(context: Context) {
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    val durationInMilliseconds = 100
+
+    if (vibrator.hasVibrator()) {
+        val vibrationEffect = VibrationEffect.createOneShot(durationInMilliseconds.toLong(), VibrationEffect.DEFAULT_AMPLITUDE)
+        vibrator.vibrate(vibrationEffect)
+    } else {
+        @Suppress("DEPRECATION")
+        vibrator.vibrate(durationInMilliseconds)
+    }
+}
+
+private fun Any.vibrate(durationInMilliseconds: Int) {
+
+}

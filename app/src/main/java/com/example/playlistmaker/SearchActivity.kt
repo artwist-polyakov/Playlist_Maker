@@ -15,9 +15,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.adapters.TrackAdapter
+import com.example.playlistmaker.history.LinkedRepository
 import com.example.playlistmaker.model.Track
 import com.example.playlistmaker.networkClient.ITunesApi
 import com.example.playlistmaker.networkClient.SongsSearchResponse
@@ -44,9 +46,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var problemsText: TextView
     private lateinit var problemsIcon: ImageView
     private lateinit var refreshButton: Button
+    private lateinit var cleanHistoryButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var loadingIndicator: ProgressBar
     private lateinit var trackAdapter: TrackAdapter
+    private lateinit var historyLayout: LinearLayout
+    private lateinit var historyRecyclerView: RecyclerView
+    private lateinit var historyAdapter: TrackAdapter
+    private lateinit var linkedRepository: LinkedRepository<Track>
 
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
@@ -56,21 +63,52 @@ class SearchActivity : AppCompatActivity() {
         const val QUERY = "searchQuery"
         const val TRACKS_LIST = "TRACKS_LIST"
         const val RESPONSE_STATE = "responseState"
+        const val MAX_HISTORY_SIZE = 10
+        const val HISTORY = "history"
     }
 
+    // NETWORK
     private val retrofit = Retrofit.Builder()
         .baseUrl(SearchActivity.API_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ITunesApi::class.java)
+    // TODO сделать методы onPause и onResume для сохранения состояния приложения
+    /*
+    Пока методы не делаем, потому что надо как то переделать работу с активити и реализовать ее
+    презентер что ли. Так как в текущей версии, надо будет тиражировать код, что не есть хорошо.
+    */
+    override fun onPause() {
+        super.onPause()
+        linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         val backButton = findViewById<ImageView>(R.id.return_button)
+
+        // SEARCH RECYCLER VIEW
         recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        trackAdapter = TrackAdapter()
-        recyclerView.adapter = trackAdapter
+
+
+        // SEARCH
         searchEditText = findViewById(R.id.searchEditText)
         clearButton = findViewById(R.id.clearIcon)
         problemsLayout = findViewById(R.id.problems_layout)
@@ -78,6 +116,22 @@ class SearchActivity : AppCompatActivity() {
         problemsIcon = findViewById(R.id.problems_image)
         refreshButton = findViewById(R.id.refresh_button)
         loadingIndicator = findViewById(R.id.loading_indicator)
+        cleanHistoryButton = findViewById(R.id.clear_button)
+
+        // HISTORY VIEW
+        historyLayout = findViewById(R.id.history_layout)
+        hideHistoryLayout()
+        historyRecyclerView = findViewById(R.id.search_history_recycler_view)
+        historyRecyclerView.layoutManager = LinearLayoutManager(this)
+        linkedRepository = LinkedRepository(MAX_HISTORY_SIZE)
+        linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+
+        // ADAPTERS
+        historyAdapter = TrackAdapter(linkedRepository)
+        trackAdapter =  TrackAdapter(linkedRepository)
+        recyclerView.adapter = trackAdapter
+        historyRecyclerView.adapter = historyAdapter
+
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (searchEditText.text.isNotEmpty()) {
@@ -124,6 +178,11 @@ class SearchActivity : AppCompatActivity() {
         if (json.isNullOrEmpty()) {
             hideProblemsLayout()
         } else {
+            if (searchEditText.text.isNullOrEmpty()) {
+                showHistoryLayout()
+            } else {
+                hideHistoryLayout()
+            }
             val gson = Gson()
             val type = object : TypeToken<TrackList>() {}.type
             if (json.startsWith("[")) {
@@ -143,19 +202,44 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchEditText.addTextChangedListener(simpleTextWatcher)
+        searchEditText.addTextChangedListener { text ->
+            if ((text.isNullOrEmpty()) && (linkedRepository.getSize() > 0)) {
+                showHistoryLayout()
+            } else {
+                hideHistoryLayout()
+                trackAdapter.setTracks(null)
+            }
+        }
+
+        searchEditText.setOnFocusChangeListener { view, hasFocus ->
+            if ((hasFocus) && (searchEditText.text.isEmpty()) && (linkedRepository.getSize()>0)) {
+                showHistoryLayout()
+            } else {
+                hideHistoryLayout()
+            }
+        }
+
+        // прослушиватель нажатия на кнопку "очистить историю"
+        cleanHistoryButton.setOnClickListener {
+            linkedRepository.clear()
+            linkedRepository.clearSharedPreferences(PREFS, HISTORY, this)
+            hideHistoryLayout()
+        }
 
         // прослушиватель нажатия на кнопку "очистить"
         clearButton.setOnClickListener {
             searchEditText.setText("")
             val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
-            searchEditText.clearFocus()
+//            searchEditText.clearFocus()
             trackAdapter.setTracks(null)
             val sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putString(RESPONSE_STATE, ResponseState.SUCCESS.name)
             editor.apply()
             hideProblemsLayout()
+            searchEditText.requestFocus()
+            showHistoryLayout()
         }
 
 //         прослушиватель нажатия на кнопку "назад"
@@ -167,6 +251,7 @@ class SearchActivity : AppCompatActivity() {
             val json = gson.toJson(trackAdapter.getTracks())
             editor.putString(TRACKS_LIST, json)
             editor.apply()
+            linkedRepository.saveToSharedPreferences(PREFS, HISTORY, this)
             this.finish()
         }
         refreshButton.setOnClickListener {
@@ -191,6 +276,7 @@ class SearchActivity : AppCompatActivity() {
         // TODO сохранять еще и errorState
         outState.putString(SEARCH_QUERY, searchEditText.text.toString())
         outState.putParcelableArrayList(TRACKS, trackAdapter.getTracks())
+        outState.putParcelableArrayList(HISTORY, historyAdapter.getTracks())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -199,16 +285,26 @@ class SearchActivity : AppCompatActivity() {
         // Вторым параметром мы передаём значение по умолчанию
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
+        linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+        historyAdapter = TrackAdapter(linkedRepository)
+        trackAdapter = TrackAdapter(linkedRepository)
         // TODO когда метод getParcelableArrayList уберут, надо будет использвать сериализацию в json и восстоновление из json
         val restoredTracks = savedInstanceState.getParcelableArrayList<Track>(TRACKS)
         if (restoredTracks != null) {
             trackAdapter.setTracks(restoredTracks)
         }
+        val restoredHistory = savedInstanceState.getParcelableArrayList<Track>(HISTORY)
+        if (restoredHistory != null) {
+            historyAdapter.setTracks(restoredHistory)
+        }
+        historyRecyclerView.adapter = historyAdapter
+        recyclerView.adapter = trackAdapter
     }
 
     private fun search(searchQuery: String) {
         trackAdapter.setTracks(null)
         loadingIndicator.visibility = View.VISIBLE
+        hideHistoryLayout()
         hideProblemsLayout()
         recyclerView.visibility = View.GONE
         val call = itunesService.search(searchQuery)
@@ -228,6 +324,7 @@ class SearchActivity : AppCompatActivity() {
                 editor.apply()
                 when (responseState) {
                     ResponseState.SUCCESS -> {
+                        hideHistoryLayout()
                         loadingIndicator.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
                         val sharedPreferences =
@@ -278,5 +375,26 @@ class SearchActivity : AppCompatActivity() {
         problemsLayout.visibility = View.GONE
         refreshButton.visibility = View.GONE
     }
+
+    private fun showHistoryLayout() {
+        historyLayout.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        problemsLayout.visibility = View.GONE
+        cleanHistoryButton.visibility = View.VISIBLE
+        val gson = Gson()
+        val json = gson.toJson(linkedRepository.get(reversed = true))
+        val type = object : TypeToken<TrackList>() {}.type
+        val restoredTracks: TrackList = gson.fromJson(json, type)
+        historyAdapter.setTracks(restoredTracks)
+    }
+
+    private fun hideHistoryLayout() {
+        recyclerView.visibility = View.VISIBLE
+        historyLayout.visibility = View.GONE
+        cleanHistoryButton.visibility = View.VISIBLE
+
+
+    }
+
 
 }

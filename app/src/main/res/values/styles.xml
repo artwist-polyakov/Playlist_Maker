@@ -35,7 +35,7 @@
         <item name="android:clickable">false</item>
     </style>
 
-    <style name="switchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+    <style name="switchStyle">
         <item name="android:switchMinWidth">32dp</item>
         <item name="android:layout_height">48dp</item>
         <!--        <item name="android:checked">true</item>-->
@@ -109,7 +109,7 @@
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="fontWeight">500</item>
         <item name="textAllCaps">false</item>
-        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_marginTop">34dp</item>
         <item name="android:textSize">12sp</item>
