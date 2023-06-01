@@ -29,10 +29,7 @@ class TrackAdapter(
         return TrackViewHolder(view).listen() { pos, type ->
             performVibration(view.context)
             val track = tracks[pos]
-            Log.d("TrackAdapter", "Clicked on track: ${track.trackId}")
             historyRepository.add(track as Track)
-            Log.d("HistorySize", "History size: ${historyRepository.getSize()}")
-            Log.d("TrackAdapter", "History: $historyRepository")
         }
     }
 
@@ -87,7 +84,7 @@ private fun performVibration(context: Context) {
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     val durationInMilliseconds = 100
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && vibrator.hasVibrator()) {
+    if (vibrator.hasVibrator()) {
         val vibrationEffect = VibrationEffect.createOneShot(durationInMilliseconds.toLong(), VibrationEffect.DEFAULT_AMPLITUDE)
         vibrator.vibrate(vibrationEffect)
     } else {

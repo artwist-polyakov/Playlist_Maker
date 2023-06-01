@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -180,7 +179,7 @@ class SearchActivity : AppCompatActivity() {
             hideProblemsLayout()
         } else {
             if (searchEditText.text.isNullOrEmpty()) {
-                showHistoryLayuout()
+                showHistoryLayout()
             } else {
                 hideHistoryLayout()
             }
@@ -204,16 +203,8 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(simpleTextWatcher)
         searchEditText.addTextChangedListener { text ->
-//            Log.d("SearchActivity", "Linked count: ${linkedRepository.getSize()}")
             if ((text.isNullOrEmpty()) && (linkedRepository.getSize() > 0)) {
-                showHistoryLayuout()
-                val gson = Gson()
-                val json = gson.toJson(linkedRepository.get(reversed = true))
-                val type = object : TypeToken<TrackList>() {}.type
-                val restoredTracks: TrackList = gson.fromJson(json, type)
-                if (restoredTracks != null) {
-                    historyAdapter.setTracks(restoredTracks)
-                }
+                showHistoryLayout()
             } else {
                 hideHistoryLayout()
                 trackAdapter.setTracks(null)
@@ -221,17 +212,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchEditText.setOnFocusChangeListener { view, hasFocus ->
-            Log.d("SearchActivity", "Linked count: ${linkedRepository.getSize()}")
             if ((hasFocus) && (searchEditText.text.isEmpty()) && (linkedRepository.getSize()>0)) {
-                showHistoryLayuout()
-//                val json = getSharedPreferences(PREFS, Context.MODE_PRIVATE  ).getString(HISTORY, "[]")
-                val gson = Gson()
-                val json = gson.toJson(linkedRepository.get(reversed = true))
-                val type = object : TypeToken<TrackList>() {}.type
-                val restoredTracks: TrackList = gson.fromJson(json, type)
-                if (restoredTracks != null && (json != "null")) {
-                    historyAdapter.setTracks(restoredTracks)
-                }
+                showHistoryLayout()
             } else {
                 hideHistoryLayout()
             }
@@ -249,13 +231,15 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.setText("")
             val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
-            searchEditText.clearFocus()
+//            searchEditText.clearFocus()
             trackAdapter.setTracks(null)
             val sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putString(RESPONSE_STATE, ResponseState.SUCCESS.name)
             editor.apply()
             hideProblemsLayout()
+            searchEditText.requestFocus()
+            showHistoryLayout()
         }
 
 //         прослушиватель нажатия на кнопку "назад"
@@ -301,12 +285,9 @@ class SearchActivity : AppCompatActivity() {
         // Вторым параметром мы передаём значение по умолчанию
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
-
-        val linkedRepository = LinkedRepository<Track>(MAX_HISTORY_SIZE)
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
         historyAdapter = TrackAdapter(linkedRepository)
         trackAdapter = TrackAdapter(linkedRepository)
-
         // TODO когда метод getParcelableArrayList уберут, надо будет использвать сериализацию в json и восстоновление из json
         val restoredTracks = savedInstanceState.getParcelableArrayList<Track>(TRACKS)
         if (restoredTracks != null) {
@@ -395,11 +376,16 @@ class SearchActivity : AppCompatActivity() {
         refreshButton.visibility = View.GONE
     }
 
-    private fun showHistoryLayuout() {
+    private fun showHistoryLayout() {
         historyLayout.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.GONE
         cleanHistoryButton.visibility = View.VISIBLE
+        val gson = Gson()
+        val json = gson.toJson(linkedRepository.get(reversed = true))
+        val type = object : TypeToken<TrackList>() {}.type
+        val restoredTracks: TrackList = gson.fromJson(json, type)
+        historyAdapter.setTracks(restoredTracks)
     }
 
     private fun hideHistoryLayout() {
