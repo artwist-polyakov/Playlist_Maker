@@ -32,21 +32,16 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="24dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/interface_top_border"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="82dp" />
-
     <ImageView
         android:id="@+id/return_button"
+        android:contentDescription="Вернуться назад"
         style="@style/search_icon_style"
         android:layout_width="16dp"
         android:layout_height="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="20dp"
+        app:layout_constraintVertical_chainStyle="packed"
         android:src="@drawable/arrow_back_icon" />
 
     <ImageView
@@ -55,11 +50,11 @@
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintTop_toTopOf="@id/interface_top_border"
+        app:layout_constraintTop_toBottomOf="@id/return_button"
         app:layout_constraintStart_toStartOf="@id/interface_left_border"
         app:layout_constraintEnd_toStartOf="@id/interface_right_border"
+        android:layout_marginTop="46dp"
         app:layout_constraintBottom_toTopOf="@id/song_title"
-        app:layout_constraintVertical_chainStyle="packed"
         android:src="@drawable/song_cover_placeholder_with_padding" />
 
     <TextView
@@ -88,6 +83,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_to_collection"
+        android:contentDescription="Добавить в коллекцию"
         android:backgroundTint="?attr/colorPrimary"
         app:borderWidth="0dp"
         app:tintMode="@null"
@@ -107,6 +103,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/play_button"
+        android:contentDescription="Воспроизвести"
         app:backgroundTint="?attr/colorPrimary"
         app:srcCompat="@drawable/play_button"
         app:tintMode="multiply"
@@ -122,6 +119,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/like_button"
+        android:contentDescription="Поставить отметку нравится"
         android:backgroundTint="?attr/colorPrimary"
         app:srcCompat="@drawable/like_b"
         app:tintMode="@null"
@@ -218,9 +216,7 @@
         android:gravity="center"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/album"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:text="Год"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -232,8 +228,58 @@
         android:gravity="center"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/album_name"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:text="1985"
+        android:layout_marginTop="9dp"/>
+
+    <TextView
+        android:id="@+id/genre"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/track_info_left_border"
+        app:layout_constraintTop_toBottomOf="@id/year"
+        android:text="Жанр"
+        android:layout_marginTop="9dp"/>
+
+    <TextView
+        android:id="@+id/genre_value"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
+        app:layout_constraintTop_toBottomOf="@id/year_value"
+        android:text="Rock"
+        android:layout_marginTop="9dp"/>
+
+    <TextView
+        android:id="@+id/сcountry"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/track_info_left_border"
+        app:layout_constraintTop_toBottomOf="@id/genre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:text="Страна"
+        android:layout_marginTop="9dp"/>
+
+    <TextView
+        android:id="@+id/country_value"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
+        app:layout_constraintTop_toBottomOf="@id/genre_value"
+        android:text="Великобритания"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="9dp"/>
 
