@@ -55,8 +55,6 @@
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintWidth_default="spread"
-        app:layout_constraintHeight_default="spread"
         app:layout_constraintTop_toTopOf="@id/interface_top_border"
         app:layout_constraintStart_toStartOf="@id/interface_left_border"
         app:layout_constraintEnd_toStartOf="@id/interface_right_border"
@@ -134,10 +132,106 @@
         android:layout_height="51dp"
         android:layout_marginTop="54dp"
         app:layout_constraintTop_toBottomOf="@id/artist_name"
-        app:layout_constraintBottom_toBottomOf="@+id/add_to_collection"
+        app:layout_constraintBottom_toBottomOf="@id/add_to_collection"
         app:layout_constraintEnd_toEndOf="@id/interface_right_border"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/play_button" />
+
+    <TextView
+        android:id="@+id/time"
+        style="@style/search_element_song_title_style"
+        android:textSize="14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/interface_left_border"
+        app:layout_constraintEnd_toEndOf="@id/interface_right_border"
+        app:layout_constraintTop_toBottomOf="@id/play_button"
+        android:text="0:30"
+        android:layout_marginTop="12sp"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        app:constraint_referenced_ids="duration,duration_time, album, album_name" />
+
+    <TextView
+        android:id="@+id/duration"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/track_info_left_border"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        android:text="Длительность"
+        android:layout_marginTop="39dp"/>
+
+
+
+    <TextView
+        android:id="@+id/duration_time"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        android:text="5:39"
+        android:layout_marginTop="39dp"/>
+
+    <TextView
+        android:id="@+id/album"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/track_info_left_border"
+        app:layout_constraintTop_toBottomOf="@id/duration"
+        android:text="Альбом"
+        android:layout_marginTop="9dp"/>
+
+    <TextView
+        android:id="@+id/album_name"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
+        app:layout_constraintTop_toBottomOf="@id/duration_time"
+        android:text="Естердай (2009) Реммкс"
+        android:layout_marginTop="9dp"/>
+
+    <TextView
+        android:id="@+id/year"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/track_info_left_border"
+        app:layout_constraintTop_toBottomOf="@id/album"
+        android:text="Альбом"
+        android:layout_marginTop="9dp"/>
+
+    <TextView
+        android:id="@+id/year_value"
+        android:textSize="14sp"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
+        app:layout_constraintTop_toBottomOf="@id/album_name"
+        android:text="Естердай (2009) Реммкс"
+        android:layout_marginTop="9dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
