@@ -34,7 +34,7 @@
 
     <ImageView
         android:id="@+id/return_button"
-        android:contentDescription="Вернуться назад"
+        android:contentDescription="@string/back_description"
         style="@style/search_icon_style"
         android:layout_width="16dp"
         android:layout_height="16dp"
@@ -46,6 +46,7 @@
 
     <ImageView
         android:id="@+id/track_cover"
+        android:contentDescription="@string/track_cover_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -66,7 +67,7 @@
         app:layout_constraintStart_toStartOf="@id/interface_left_border"
         app:layout_constraintEnd_toEndOf="@id/interface_right_border"
         app:layout_constraintTop_toBottomOf="@id/track_cover"
-        android:text="Yesterday (Remastered 2009)"
+        android:text="@string/track_title_placeholder"
         android:layout_marginTop="24dp"/>
 
     <TextView
@@ -78,20 +79,15 @@
         app:layout_constraintStart_toStartOf="@id/interface_left_border"
         app:layout_constraintEnd_toEndOf="@id/interface_right_border"
         app:layout_constraintTop_toBottomOf="@id/song_title"
-        android:text="The Beatles"
+        android:text="@string/track_artist_placeholder"
         android:layout_marginTop="12sp"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/add_to_collection"
-        android:contentDescription="Добавить в коллекцию"
-        android:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="0dp"
-        app:tintMode="@null"
-        app:srcCompat="@drawable/add_to_col"
-        app:elevation="0dp"
-        app:fabCustomSize="51dp"
-        app:maxImageSize="51dp"
-        android:clickable="true"
+        android:contentDescription="@string/add_to_col_description"
+        android:background="@drawable/round_button_background"
+        android:src="@drawable/add_to_col"
+        android:padding="8dp"
         android:layout_width="51dp"
         android:layout_height="51dp"
         android:layout_marginTop="54dp"
@@ -103,7 +99,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/play_button"
-        android:contentDescription="Воспроизвести"
+        android:contentDescription="@string/play_button_description"
         app:backgroundTint="?attr/colorPrimary"
         app:srcCompat="@drawable/play_button"
         app:tintMode="multiply"
@@ -117,17 +113,12 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/add_to_collection" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/like_button"
-        android:contentDescription="Поставить отметку нравится"
-        android:backgroundTint="?attr/colorPrimary"
-        app:srcCompat="@drawable/like_b"
-        app:tintMode="@null"
-        app:elevation="0dp"
-        app:borderWidth="0dp"
-        app:fabCustomSize="51dp"
-        app:maxImageSize="51dp"
-        android:clickable="true"
+        android:contentDescription="@string/like_button_description"
+        android:background="@drawable/round_button_background"
+        android:src="@drawable/like_b"
+        android:padding="8dp"
         android:layout_width="51dp"
         android:layout_height="51dp"
         android:layout_marginTop="54dp"
@@ -147,7 +138,7 @@
         app:layout_constraintStart_toStartOf="@id/interface_left_border"
         app:layout_constraintEnd_toEndOf="@id/interface_right_border"
         app:layout_constraintTop_toBottomOf="@id/play_button"
-        android:text="0:30"
+        android:text="@string/time_placeholder"
         android:layout_marginTop="12sp"/>
 
     <androidx.constraintlayout.widget.Group
@@ -167,7 +158,7 @@
         android:textColor="@color/icon_tint_color"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/time"
-        android:text="Длительность"
+        android:text="@string/track_time_description"
         android:layout_marginTop="39dp"/>
 
 
@@ -182,7 +173,7 @@
         android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/time"
-        android:text="5:39"
+        android:text="@string/track_time_placeholder"
         android:layout_marginTop="39dp"/>
 
     <TextView
@@ -195,7 +186,7 @@
         android:textColor="@color/icon_tint_color"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/duration"
-        android:text="Альбом"
+        android:text="@string/track_album_description"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -208,7 +199,7 @@
         android:gravity="center"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/duration_time"
-        android:text="Естердай (2009) Реммкс"
+        android:text="@string/track_album_placeholder"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -221,7 +212,7 @@
         android:textColor="@color/icon_tint_color"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/album"
-        android:text="Год"
+        android:text="@string/track_year_description"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -234,7 +225,7 @@
         android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/album_name"
-        android:text="1985"
+        android:text="@string/track_year_placeholder"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -247,7 +238,7 @@
         android:textColor="@color/icon_tint_color"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/year"
-        android:text="Жанр"
+        android:text="@string/track_genre_description"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -260,7 +251,7 @@
         android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/year_value"
-        android:text="Rock"
+        android:text="@string/track_genre_placeholder"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -275,7 +266,7 @@
         app:layout_constraintTop_toBottomOf="@id/genre"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="20dp"
-        android:text="Страна"
+        android:text="@string/track_country_description"
         android:layout_marginTop="9dp"/>
 
     <TextView
@@ -288,7 +279,7 @@
         android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/genre_value"
-        android:text="Великобритания"
+        android:text="@string/track_country_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="9dp"/>
