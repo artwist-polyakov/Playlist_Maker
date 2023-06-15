@@ -117,7 +117,7 @@
         android:id="@+id/like_button"
         android:contentDescription="@string/like_button_description"
         android:background="@drawable/round_button_background"
-        android:src="@drawable/like_b"
+        android:src="@drawable/like_button"
         android:padding="8dp"
         android:layout_width="51dp"
         android:layout_height="51dp"
