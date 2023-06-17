@@ -3,18 +3,22 @@ package com.example.playlistmaker
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
+import com.bumptech.glide.Glide
 import com.example.playlistmaker.model.Track
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
-class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
+class PlayerActivity: AppCompatActivity() {
     private lateinit var backButton: ImageView
     private lateinit var playButton: FloatingActionButton
     private lateinit var addToCollectionButton: ImageButton
@@ -30,6 +34,8 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
     private lateinit var trackCountry: TextView
     private lateinit var trackInfoGroup: Group
     private lateinit var trackCountryInfoGroup: Group
+
+    private lateinit var currentTrack: Track
 
     companion object {
         const val API_URL = "https://itunes.apple.com"
@@ -49,10 +55,15 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         currentTrack = getStateFromPrefs(PREFS, TRACK, this)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("PlayerActivity", "onCreate")
+        currentTrack = intent.extras?.getParcelable(TRACK)!!
+        Log.d("PlayerActivity", currentTrack.toString())
+
         setContentView(R.layout.activity_song_page)
 
         // BACK BUTTON
@@ -67,6 +78,7 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
         trackTime = findViewById(R.id.time)
 
         // TRACK INFO
+
         trackCover = findViewById(R.id.track_cover)
         trackName = findViewById(R.id.song_title)
         artistName = findViewById(R.id.artist_name)
@@ -95,8 +107,8 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
         val gson = Gson()
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
-        val json = sharedPreferences.getString(key, "[]")
-        if (json != "null") {
+        val json = sharedPreferences.getString(key, null)
+        if (json != null) {
             val type = object : TypeToken<Track>() {}.type
             currentTrack = gson.fromJson(json, type)
         } else {
@@ -115,6 +127,13 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
         return currentTrack
     }
 
+
+
+
+
+
+
+
     fun clearSharedPreferences(prefs_name: String, key: String, context: Context) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
@@ -122,6 +141,32 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
     }
 
     fun bindTrackInfo (track:Track) {
+
+        // Страна не пустая?
+        if (track.country == null) {
+            trackCountryInfoGroup.visibility = Group.GONE
+        } else {
+            trackCountryInfoGroup.visibility = Group.VISIBLE
+            trackCountry.text = track.country
+        }
+
+        // Трек не пустой?
+        if (track.trackName == "") {
+            trackInfoGroup.visibility = Group.GONE
+        } else {
+            trackInfoGroup.visibility = Group.VISIBLE
+            trackName.text = track.trackName
+            artistName.text = track.artistName
+            trackDuration.text =  SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            trackAlbumName.text = track.collectionName
+            trackReleaseYear.text = track.releaseDate
+            trackGenre.text = track.primaryGenreName
+
+            Glide.with(this)
+                .load(track.artworkUrl100)
+                .into(trackCover)
+
+        }
 
     }
 
