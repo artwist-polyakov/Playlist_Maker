@@ -43,23 +43,13 @@ class PlayerActivity: AppCompatActivity() {
 
     companion object {
         const val API_URL = "https://itunes.apple.com"
-        const val PREFS = "my_prefs"
         const val TRACK = "current_track"
-    }
-    override fun onPause() {
-        super.onPause()
-        saveStateToPrefs(PREFS, TRACK, this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        saveStateToPrefs(PREFS, TRACK, this)
     }
 
     override fun onResume() {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-
+        bindTrackInfo(currentTrack)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,51 +86,6 @@ class PlayerActivity: AppCompatActivity() {
         //BINDING
         bindTrackInfo(currentTrack)
 
-    }
-
-    private fun saveStateToPrefs(prefs_name: String, key: String, context: Context) {
-        val gson = Gson()
-        val json = gson.toJson(currentTrack)
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString(key, json).apply()
-    }
-
-    private fun getStateFromPrefs(prefs_name: String, key: String, context: Context): Track {
-        val gson = Gson()
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
-        val json = sharedPreferences.getString(key, null)
-        if (json != null) {
-            val type = object : TypeToken<Track>() {}.type
-            currentTrack = gson.fromJson(json, type)
-        } else {
-            currentTrack = Track(
-                0,
-                "",
-                "",
-                0,
-                "",
-                "",
-                "",
-                "",
-                ""
-            )
-        }
-        return currentTrack
-    }
-
-
-
-
-
-
-
-
-    fun clearSharedPreferences(prefs_name: String, key: String, context: Context) {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
-        sharedPreferences.edit().remove(key).apply()
     }
 
     fun bindTrackInfo (track:Track) {
