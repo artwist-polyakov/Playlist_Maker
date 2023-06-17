@@ -159,7 +159,7 @@ class PlayerActivity: AppCompatActivity() {
             artistName.text = track.artistName
             trackDuration.text =  SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
             trackAlbumName.text = track.collectionName
-            trackReleaseYear.text = track.releaseDate
+            trackReleaseYear.text = SimpleDateFormat("yyyy", Locale.getDefault()).format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()).parse(track.releaseDate))
             trackGenre.text = track.primaryGenreName
 
             Glide.with(this)
