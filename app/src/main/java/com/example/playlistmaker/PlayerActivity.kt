@@ -163,9 +163,8 @@ class PlayerActivity: AppCompatActivity() {
                                     .format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
                                     .parse(track.releaseDate))
             trackGenre.text = track.primaryGenreName
-
             Glide.with(this)
-                .load(track.artworkUrl100)
+                .load(track.get512URL())
                 .into(trackCover)
 
         }

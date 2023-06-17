@@ -16,6 +16,10 @@ data class Track(
 ) : Parcelable
 
 {
+    fun get512URL(): String {
+        return this.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    }
+
     override fun hashCode(): Int {
 
         return this.trackId.hashCode()
