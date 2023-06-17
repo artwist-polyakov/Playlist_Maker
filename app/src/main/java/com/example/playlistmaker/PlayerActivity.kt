@@ -58,7 +58,7 @@ class PlayerActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        currentTrack = getStateFromPrefs(PREFS, TRACK, this)
+        currentTrack = intent.extras?.getParcelable(TRACK)!!
 
     }
 
