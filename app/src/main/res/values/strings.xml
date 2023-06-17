@@ -24,4 +24,22 @@
     <string name="refresh_button_text">Обновить</string>
     <string name="clear_history_button_text">Очистить историю</string>
     <string name="search_history_title">Вы искали</string>
+    <string name="back_description">Вернуться назад</string>
+    <string name="track_cover_description">Обложка трека</string>
+    <string name="track_title_placeholder">Yesterday (Remastered 2009)</string>
+    <string name="track_artist_placeholder">The Beatles</string>
+    <string name="add_to_col_description">Добавить в коллекцию</string>
+    <string name="play_button_description">Воспроизвести</string>
+    <string name="like_button_description">Поставить отметку нравится</string>
+    <string name="time_placeholder">0:30</string>
+    <string name="track_time_description">Длительность</string>
+    <string name="track_time_placeholder">5:39</string>
+    <string name="track_album_description">Альбом</string>
+    <string name="track_album_placeholder">Естердай (2009) Реммкс</string>
+    <string name="track_year_description">Год</string>
+    <string name="track_year_placeholder">1985</string>
+    <string name="track_genre_description">Жанр</string>
+    <string name="track_genre_placeholder">Rock</string>
+    <string name="track_country_description">Страна</string>
+    <string name="track_country_placeholder">Великобритания</string>
 </resources>
