@@ -78,7 +78,7 @@
         style="@style/search_element_song_title_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12sp"
+        android:layout_marginTop="12dp"
         android:text="@string/track_artist_placeholder"
         android:lines="1"
         android:textSize="12sp"
@@ -137,7 +137,7 @@
         style="@style/search_element_song_title_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12sp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="@string/time_placeholder"
         android:textSize="14sp"
@@ -182,7 +182,6 @@
     <TextView
         android:id="@+id/album"
         style="@style/song_feature_name_style"
-        android:layout_marginTop="9dp"
         android:text="@string/track_album_description"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/duration" />
@@ -190,7 +189,6 @@
     <TextView
         android:id="@+id/album_name"
         style="@style/song_feature_value_style"
-        android:layout_marginTop="9dp"
         android:text="@string/track_album_placeholder"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/duration_time" />
@@ -198,7 +196,6 @@
     <TextView
         android:id="@+id/year"
         style="@style/song_feature_name_style"
-        android:layout_marginTop="9dp"
         android:text="@string/track_year_description"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/album" />
@@ -206,7 +203,6 @@
     <TextView
         android:id="@+id/year_value"
         style="@style/song_feature_value_style"
-        android:layout_marginTop="9dp"
         android:text="@string/track_year_placeholder"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/album_name" />
@@ -214,7 +210,6 @@
     <TextView
         android:id="@+id/genre"
         style="@style/song_feature_name_style"
-        android:layout_marginTop="9dp"
         android:text="@string/track_genre_description"
         app:layout_constraintStart_toStartOf="@id/track_info_left_border"
         app:layout_constraintTop_toBottomOf="@id/year" />
@@ -222,7 +217,6 @@
     <TextView
         android:id="@+id/genre_value"
         style="@style/song_feature_value_style"
-        android:layout_marginTop="9dp"
         android:text="@string/track_genre_placeholder"
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/year_value" />
@@ -237,7 +231,6 @@
     <TextView
         android:id="@+id/country"
         style="@style/song_feature_name_style"
-        android:layout_marginTop="9dp"
         android:layout_marginBottom="20dp"
         android:text="@string/track_country_description"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -247,7 +240,6 @@
     <TextView
         android:id="@+id/country_value"
         style="@style/song_feature_value_style"
-        android:layout_marginTop="9dp"
         android:layout_marginBottom="20dp"
         android:text="@string/track_country_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
