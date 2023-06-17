@@ -144,11 +144,13 @@
         app:layout_constraintTop_toBottomOf="@id/play_button" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/info"
+        android:id="@+id/track_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="duration,duration_time, album, album_name" />
+        app:constraint_referenced_ids="duration,duration_time, album,
+        album_name, year, year_value, genre, genre_value,
+        country, country_value" />
 
     <TextView
         android:id="@+id/duration"
@@ -214,8 +216,15 @@
         app:layout_constraintEnd_toStartOf="@id/track_info_right_border"
         app:layout_constraintTop_toBottomOf="@id/year_value" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/track_country_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="country, country_value" />
+
     <TextView
-        android:id="@+id/сcountry"
+        android:id="@+id/country"
         style="@style/song_feature_name_style"
         android:layout_marginTop="9dp"
         android:layout_marginBottom="20dp"
