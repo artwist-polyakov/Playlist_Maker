@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="medium_padding">8dp</dimen>
+    <dimen name="max_width_value">200dp</dimen>
 <!--    MARK: - Settings Screen-->
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="settings_font_weight">400</dimen>

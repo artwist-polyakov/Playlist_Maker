@@ -3,12 +3,14 @@ package com.example.playlistmaker
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
+import android.util.TypedValue
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.Group
+import androidx.constraintlayout.widget.Guideline
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.model.Track
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,6 +18,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.Locale
+
 
 
 class PlayerActivity: AppCompatActivity() {
@@ -34,8 +37,9 @@ class PlayerActivity: AppCompatActivity() {
     private lateinit var trackCountry: TextView
     private lateinit var trackInfoGroup: Group
     private lateinit var trackCountryInfoGroup: Group
-
     private lateinit var currentTrack: Track
+    private lateinit var barrier: Barrier
+    private lateinit var rightGuidline: Guideline
 
     companion object {
         const val API_URL = "https://itunes.apple.com"
@@ -60,9 +64,8 @@ class PlayerActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("PlayerActivity", "onCreate")
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-        Log.d("PlayerActivity", currentTrack.toString())
+
 
         setContentView(R.layout.activity_song_page)
 
@@ -157,14 +160,12 @@ class PlayerActivity: AppCompatActivity() {
             trackInfoGroup.visibility = Group.VISIBLE
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackDuration.text =  SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            trackDuration.text =  track.minssecs
             trackAlbumName.text = track.collectionName
-            trackReleaseYear.text = SimpleDateFormat("yyyy", Locale.getDefault())
-                                    .format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                                    .parse(track.releaseDate))
+            trackReleaseYear.text = track.relizeYear
             trackGenre.text = track.primaryGenreName
             Glide.with(this)
-                .load(track.get512URL())
+                .load(track.artworkUrl512)
                 .into(trackCover)
 
         }
