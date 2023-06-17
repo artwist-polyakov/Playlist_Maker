@@ -78,11 +78,10 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
         trackInfoGroup = findViewById(R.id.track_info)
         trackCountryInfoGroup = findViewById(R.id.track_country_info)
 
+        //BINDING
+        bindTrackInfo(currentTrack)
 
     }
-
-
-
 
     private fun saveStateToPrefs(prefs_name: String, key: String, context: Context) {
         val gson = Gson()
@@ -97,7 +96,7 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(prefs_name, Context.MODE_PRIVATE)
         val json = sharedPreferences.getString(key, "[]")
-        if ((json != "null") || (json != "[]")) {
+        if (json != "null") {
             val type = object : TypeToken<Track>() {}.type
             currentTrack = gson.fromJson(json, type)
         } else {
@@ -124,6 +123,17 @@ class PlayerActivity(private var currentTrack: Track): AppCompatActivity() {
 
     fun bindTrackInfo (track:Track) {
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(TRACK, currentTrack)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        currentTrack = savedInstanceState.getParcelable(TRACK)!!
+        bindTrackInfo(currentTrack)
     }
 
 }
