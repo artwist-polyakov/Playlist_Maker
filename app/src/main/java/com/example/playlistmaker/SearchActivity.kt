@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -54,6 +56,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var historyAdapter: TrackAdapter
     private lateinit var linkedRepository: LinkedRepository<Track>
+    private lateinit var handler: Handler
+    private lateinit var searchRunnable: Runnable
 
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
@@ -65,6 +69,7 @@ class SearchActivity : AppCompatActivity() {
         const val RESPONSE_STATE = "responseState"
         const val MAX_HISTORY_SIZE = 10
         const val HISTORY = "history"
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 
     // NETWORK
@@ -73,6 +78,7 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ITunesApi::class.java)
+
     // TODO сделать методы onPause и onResume для сохранения состояния приложения
     /*
     Пока методы не делаем, потому что надо как то переделать работу с активити и реализовать ее
@@ -117,6 +123,8 @@ class SearchActivity : AppCompatActivity() {
         refreshButton = findViewById(R.id.refresh_button)
         loadingIndicator = findViewById(R.id.loading_indicator)
         cleanHistoryButton = findViewById(R.id.clear_button)
+        handler = Handler(Looper.getMainLooper())
+        searchRunnable = Runnable { search() }
 
         // HISTORY VIEW
         historyLayout = findViewById(R.id.history_layout)
@@ -128,14 +136,14 @@ class SearchActivity : AppCompatActivity() {
 
         // ADAPTERS
         historyAdapter = TrackAdapter(linkedRepository)
-        trackAdapter =  TrackAdapter(linkedRepository)
+        trackAdapter = TrackAdapter(linkedRepository)
         recyclerView.adapter = trackAdapter
         historyRecyclerView.adapter = historyAdapter
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (searchEditText.text.isNotEmpty()) {
-                    search(searchEditText.text.toString())
+                    search()
                 }
             }
             false
@@ -148,11 +156,12 @@ class SearchActivity : AppCompatActivity() {
 
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty()) {
-                    makeClearButtonInvisible()
-                } else {
-                    makeClearButtonVisible()
-                }
+//                if (s.isNullOrEmpty()) {
+//                    makeClearButtonInvisible()
+//                } else {
+//                    makeClearButtonVisible()
+//                }
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -165,8 +174,11 @@ class SearchActivity : AppCompatActivity() {
 
         val sharedPref = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val searchQuery = sharedPref.getString(QUERY, "")
-        val json = sharedPref.getString(TRACKS_LIST,  ResponseState.SUCCESS.name)
-        val state = ResponseState.valueOf(sharedPref.getString(RESPONSE_STATE, ResponseState.SUCCESS.name) ?: ResponseState.SUCCESS.name)
+        val json = sharedPref.getString(TRACKS_LIST, ResponseState.SUCCESS.name)
+        val state = ResponseState.valueOf(
+            sharedPref.getString(RESPONSE_STATE, ResponseState.SUCCESS.name)
+                ?: ResponseState.SUCCESS.name
+        )
 
         if (searchQuery.isNullOrEmpty()) {
             makeClearButtonInvisible()
@@ -202,17 +214,19 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchEditText.addTextChangedListener(simpleTextWatcher)
-        searchEditText.addTextChangedListener { text ->
-            if ((text.isNullOrEmpty()) && (linkedRepository.getSize() > 0)) {
-                showHistoryLayout()
-            } else {
-                hideHistoryLayout()
-                trackAdapter.setTracks(null)
-            }
-        }
+//        searchEditText.addTextChangedListener { text ->
+//
+//
+//            if ((text.isNullOrEmpty()) && (linkedRepository.getSize() > 0)) {
+//                showHistoryLayout()
+//            } else {
+//                hideHistoryLayout()
+//                trackAdapter.setTracks(null)
+//            }
+//        }
 
         searchEditText.setOnFocusChangeListener { view, hasFocus ->
-            if ((hasFocus) && (searchEditText.text.isEmpty()) && (linkedRepository.getSize()>0)) {
+            if ((hasFocus) && (searchEditText.text.isEmpty()) && (linkedRepository.getSize() > 0)) {
                 showHistoryLayout()
             } else {
                 hideHistoryLayout()
@@ -255,7 +269,7 @@ class SearchActivity : AppCompatActivity() {
             this.finish()
         }
         refreshButton.setOnClickListener {
-            search(searchEditText.text.toString())
+            search()
         }
 
     }
@@ -301,7 +315,8 @@ class SearchActivity : AppCompatActivity() {
         recyclerView.adapter = trackAdapter
     }
 
-    private fun search(searchQuery: String) {
+    private fun search() {
+        val searchQuery = searchEditText.text.toString()
         trackAdapter.setTracks(null)
         loadingIndicator.visibility = View.VISIBLE
         hideHistoryLayout()
@@ -346,6 +361,7 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
+
     private fun showProblemsLayout(responseState: ResponseState) {
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.VISIBLE
@@ -357,10 +373,11 @@ class SearchActivity : AppCompatActivity() {
                 problemsIcon.setImageResource(R.drawable.no_internet)
                 refreshButton.visibility = View.VISIBLE
                 refreshButton.setOnClickListener {
-                    search(searchEditText.text.toString())
+                    search()
                 }
             }
-            ResponseState.NOTHING_FOUND.name-> {
+
+            ResponseState.NOTHING_FOUND.name -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
                 problemsText.text = getString(R.string.nothing_found)
@@ -369,7 +386,13 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
+    private fun searchDebounce() {
 
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+
+
+    }
     private fun hideProblemsLayout() {
         recyclerView.visibility = View.VISIBLE
         problemsLayout.visibility = View.GONE
@@ -395,6 +418,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     }
+
 
 
 }
