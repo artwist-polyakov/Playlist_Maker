@@ -156,12 +156,12 @@ class SearchActivity : AppCompatActivity() {
 
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                if (s.isNullOrEmpty()) {
-//                    makeClearButtonInvisible()
-//                } else {
-//                    makeClearButtonVisible()
-//                }
-                searchDebounce()
+                if (s.isNullOrEmpty()) {
+                    makeClearButtonInvisible()
+                } else {
+                    searchDebounce()
+                    makeClearButtonVisible()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
