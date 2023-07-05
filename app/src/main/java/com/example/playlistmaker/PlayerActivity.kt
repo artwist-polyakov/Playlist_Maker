@@ -36,8 +36,8 @@ class PlayerActivity: AppCompatActivity() {
     private lateinit var currentTrack: Track
     private lateinit var barrier: Barrier
     private lateinit var rightGuidline: Guideline
-    private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
+
+
 
     companion object {
         const val API_URL = "https://itunes.apple.com"
@@ -47,6 +47,8 @@ class PlayerActivity: AppCompatActivity() {
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
     }
+    private var playerState = STATE_DEFAULT
+    private var mediaPlayer = MediaPlayer()
 
     override fun onResume() {
         super.onResume()
@@ -54,12 +56,24 @@ class PlayerActivity: AppCompatActivity() {
         bindTrackInfo(currentTrack)
     }
 
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        currentTrack = intent.extras?.getParcelable(TRACK)!!
-        preparePlayer()
+
 
         setContentView(R.layout.activity_song_page)
+
+        currentTrack = intent.extras?.getParcelable(TRACK)!!
+
 
         // BACK BUTTON
         backButton = findViewById(R.id.return_button)
@@ -87,7 +101,7 @@ class PlayerActivity: AppCompatActivity() {
 
         //BINDING
         bindTrackInfo(currentTrack)
-
+        preparePlayer()
     }
 
     fun bindTrackInfo (track:Track) {
