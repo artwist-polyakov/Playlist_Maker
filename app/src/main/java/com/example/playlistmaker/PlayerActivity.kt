@@ -60,11 +60,6 @@ class PlayerActivity: AppCompatActivity() {
         bindTrackInfo(currentTrack)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.finish()
-    }
-
     override fun onPause() {
         super.onPause()
         pausePlayer()
@@ -88,7 +83,7 @@ class PlayerActivity: AppCompatActivity() {
         // BACK BUTTON
         backButton = findViewById(R.id.return_button)
         backButton.setOnClickListener {
-            this.finish()
+            onBackPressed()
         }
         // PLAYER INTERFACE
         playButton = findViewById(R.id.play_button)
