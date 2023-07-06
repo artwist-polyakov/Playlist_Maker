@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -14,7 +16,8 @@ import androidx.constraintlayout.widget.Guideline
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.model.Track
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class PlayerActivity: AppCompatActivity() {
@@ -36,7 +39,8 @@ class PlayerActivity: AppCompatActivity() {
     private lateinit var currentTrack: Track
     private lateinit var barrier: Barrier
     private lateinit var rightGuidline: Guideline
-
+    private lateinit var handler: Handler
+    private lateinit var updateTimeRunnable: Runnable
 
 
     companion object {
@@ -101,6 +105,8 @@ class PlayerActivity: AppCompatActivity() {
 
         //BINDING
         bindTrackInfo(currentTrack)
+        handler = Handler(Looper.getMainLooper())
+
         preparePlayer()
     }
 
@@ -179,12 +185,21 @@ class PlayerActivity: AppCompatActivity() {
         mediaPlayer.start()
         playButton.setImageResource(R.drawable.pause_button)
         playerState = STATE_PLAYING
+        updateTimeRunnable = Runnable { updateTime() }
+        handler.postDelayed(updateTimeRunnable, 400)
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         playButton.setImageResource(R.drawable.play_button)
         playerState = STATE_PAUSED
+        handler.removeCallbacks(updateTimeRunnable)
+    }
+
+    private fun updateTime() {
+
+        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+
     }
 
 
