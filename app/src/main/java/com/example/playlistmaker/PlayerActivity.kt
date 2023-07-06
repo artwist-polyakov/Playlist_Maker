@@ -61,7 +61,8 @@ class PlayerActivity: AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finish()
+        super.onBackPressed()
+        this.finish()
     }
 
     override fun onPause() {
