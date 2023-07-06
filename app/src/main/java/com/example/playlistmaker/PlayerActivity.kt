@@ -42,7 +42,6 @@ class PlayerActivity: AppCompatActivity() {
     private lateinit var handler: Handler
     private var updateTimeRunnable: Runnable = Runnable {  }
 
-
     companion object {
         const val API_URL = "https://itunes.apple.com"
         const val TRACK = "current_track"
