@@ -40,7 +40,7 @@ class PlayerActivity: AppCompatActivity() {
     private lateinit var barrier: Barrier
     private lateinit var rightGuidline: Guideline
     private lateinit var handler: Handler
-    private lateinit var updateTimeRunnable: Runnable
+    private var updateTimeRunnable: Runnable = Runnable {  }
 
 
     companion object {
@@ -62,13 +62,17 @@ class PlayerActivity: AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        if (playerState == 2) {
+            pausePlayer()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        handler.removeCallbacks(updateTimeRunnable)
+        if (playerState != 0) {
+            mediaPlayer.release()
+            handler.removeCallbacks(updateTimeRunnable)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
