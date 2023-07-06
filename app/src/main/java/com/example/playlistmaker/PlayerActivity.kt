@@ -60,6 +60,10 @@ class PlayerActivity: AppCompatActivity() {
         bindTrackInfo(currentTrack)
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     override fun onPause() {
         super.onPause()
         pausePlayer()

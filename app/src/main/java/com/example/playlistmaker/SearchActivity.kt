@@ -59,6 +59,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var handler: Handler
     private lateinit var searchRunnable: Runnable
 
+
     companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val TRACKS = "TRACKS"
@@ -112,6 +113,7 @@ class SearchActivity : AppCompatActivity() {
         // SEARCH RECYCLER VIEW
         recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
+
 
 
         // SEARCH
@@ -418,6 +420,8 @@ class SearchActivity : AppCompatActivity() {
 
 
     }
+
+
 
 
 
