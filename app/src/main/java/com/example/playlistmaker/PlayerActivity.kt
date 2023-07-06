@@ -68,6 +68,7 @@ class PlayerActivity: AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+        handler.removeCallbacks(updateTimeRunnable)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -161,6 +162,8 @@ class PlayerActivity: AppCompatActivity() {
             mediaPlayer.setOnCompletionListener {
                 playButton.setImageResource(R.drawable.play_button)
                 playerState = STATE_PREPARED
+                trackTime.text = resources.getString(R.string.time_placeholder)
+                handler.removeCallbacks(updateTimeRunnable)
             }
             playButton.setOnClickListener {
                 playbackControl()
@@ -185,8 +188,7 @@ class PlayerActivity: AppCompatActivity() {
         mediaPlayer.start()
         playButton.setImageResource(R.drawable.pause_button)
         playerState = STATE_PLAYING
-        updateTimeRunnable = Runnable { updateTime() }
-        handler.postDelayed(updateTimeRunnable, 400)
+        updateTime()
     }
 
     private fun pausePlayer() {
@@ -197,9 +199,10 @@ class PlayerActivity: AppCompatActivity() {
     }
 
     private fun updateTime() {
-
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-
+        val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        trackTime.text = text
+        updateTimeRunnable = Runnable { updateTime() }
+        handler.postDelayed(updateTimeRunnable, 400)
     }
 
 
