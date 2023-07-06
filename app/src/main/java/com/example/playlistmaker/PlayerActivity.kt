@@ -83,7 +83,7 @@ class PlayerActivity: AppCompatActivity() {
         // BACK BUTTON
         backButton = findViewById(R.id.return_button)
         backButton.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
         // PLAYER INTERFACE
         playButton = findViewById(R.id.play_button)
