@@ -216,16 +216,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchEditText.addTextChangedListener(simpleTextWatcher)
-//        searchEditText.addTextChangedListener { text ->
-//
-//
-//            if ((text.isNullOrEmpty()) && (linkedRepository.getSize() > 0)) {
-//                showHistoryLayout()
-//            } else {
-//                hideHistoryLayout()
-//                trackAdapter.setTracks(null)
-//            }
-//        }
 
         searchEditText.setOnFocusChangeListener { view, hasFocus ->
             if ((hasFocus) && (searchEditText.text.isEmpty()) && (linkedRepository.getSize() > 0)) {
