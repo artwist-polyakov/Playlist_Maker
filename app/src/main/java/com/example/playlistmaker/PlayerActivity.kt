@@ -156,11 +156,13 @@ class PlayerActivity: AppCompatActivity() {
 
     private fun preparePlayer() {
         if (currentTrack.previewUrl != null) {
-            mediaPlayer.setDataSource(currentTrack.previewUrl)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                playButton.isEnabled = true
-                playerState = STATE_PREPARED
+            mediaPlayer.apply {
+                setDataSource(currentTrack.previewUrl)
+                prepareAsync()
+                setOnPreparedListener {
+                    playButton.isEnabled = true
+                    playerState = STATE_PREPARED
+                }
             }
             mediaPlayer.setOnCompletionListener {
                 playButton.setImageResource(R.drawable.play_button)
