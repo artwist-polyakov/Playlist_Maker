@@ -1,7 +1,10 @@
 package com.example.playlistmaker.adapters
+
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
@@ -27,6 +30,8 @@ class TrackAdapter(
     private val tracks: MutableList<Track> = mutableListOf<Track>()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
+    private var isClickAllowed: Boolean = true
+    var handler = Handler(Looper.getMainLooper())
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.search_result_item, parent, false)
@@ -34,16 +39,18 @@ class TrackAdapter(
             performVibration(view.context)
             val track = tracks[pos]
             historyRepository.add(track as Track)
-
-            val intent = Intent(parent.context, PlayerActivity::class.java)
-            intent.putExtra(PlayerActivity.TRACK, track)
-            parent.context.startActivity(intent)
+            if (clickDebounce()) {
+                val intent = Intent(parent.context, PlayerActivity::class.java)
+                intent.putExtra(PlayerActivity.TRACK, track)
+                parent.context.startActivity(intent)
+            }
         }
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
     }
+
     override fun getItemCount(): Int = tracks.size
 
     fun setTracks(newTracks: List<Track>?) {
@@ -56,6 +63,20 @@ class TrackAdapter(
 
     fun getTracks(): ArrayList<Track> {
         return ArrayList(tracks)
+    }
+
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 
@@ -79,6 +100,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(trackCover)
 
     }
+
 }
 
 fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> Unit): T {
@@ -93,7 +115,10 @@ private fun performVibration(context: Context) {
     val durationInMilliseconds = 100
 
     if (vibrator.hasVibrator()) {
-        val vibrationEffect = VibrationEffect.createOneShot(durationInMilliseconds.toLong(), VibrationEffect.DEFAULT_AMPLITUDE)
+        val vibrationEffect = VibrationEffect.createOneShot(
+            durationInMilliseconds.toLong(),
+            VibrationEffect.DEFAULT_AMPLITUDE
+        )
         vibrator.vibrate(vibrationEffect)
     } else {
         @Suppress("DEPRECATION")
