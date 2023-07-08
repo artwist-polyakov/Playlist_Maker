@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 typealias TrackList = ArrayList<Track>
 
-enum class ResponseState{
+enum class ResponseState {
     SUCCESS,
     NOTHING_FOUND,
     ERROR
@@ -113,7 +113,6 @@ class SearchActivity : AppCompatActivity() {
         // SEARCH RECYCLER VIEW
         recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
 
 
         // SEARCH
@@ -378,6 +377,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun searchDebounce() {
 
         handler.removeCallbacks(searchRunnable)
@@ -385,6 +385,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     }
+
     private fun hideProblemsLayout() {
         recyclerView.visibility = View.VISIBLE
         problemsLayout.visibility = View.GONE
@@ -410,9 +411,6 @@ class SearchActivity : AppCompatActivity() {
 
 
     }
-
-
-
 
 
 }

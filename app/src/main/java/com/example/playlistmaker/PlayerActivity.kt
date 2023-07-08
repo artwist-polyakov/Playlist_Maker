@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class PlayerActivity: AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
     private lateinit var backButton: ImageView
     private lateinit var playButton: FloatingActionButton
     private lateinit var addToCollectionButton: ImageButton
@@ -40,7 +40,7 @@ class PlayerActivity: AppCompatActivity() {
     private lateinit var barrier: Barrier
     private lateinit var rightGuidline: Guideline
     private lateinit var handler: Handler
-    private var updateTimeRunnable: Runnable = Runnable {  }
+    private var updateTimeRunnable: Runnable = Runnable { }
 
     companion object {
         const val API_URL = "https://itunes.apple.com"
@@ -50,6 +50,7 @@ class PlayerActivity: AppCompatActivity() {
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
     }
+
     private var playerState = STATE_DEFAULT
     private var mediaPlayer = MediaPlayer()
 
@@ -114,7 +115,7 @@ class PlayerActivity: AppCompatActivity() {
         preparePlayer()
     }
 
-    fun bindTrackInfo (track:Track) {
+    fun bindTrackInfo(track: Track) {
 
         // Страна не пустая?
         if (track.country == null) {
@@ -131,7 +132,7 @@ class PlayerActivity: AppCompatActivity() {
             trackInfoGroup.visibility = Group.VISIBLE
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackDuration.text =  track.minssecs
+            trackDuration.text = track.minssecs
             trackAlbumName.text = track.collectionName
             trackReleaseYear.text = track.relizeYear
             trackGenre.text = track.primaryGenreName
@@ -179,10 +180,11 @@ class PlayerActivity: AppCompatActivity() {
     }
 
     private fun playbackControl() {
-        when(playerState) {
+        when (playerState) {
             STATE_PLAYING -> {
                 pausePlayer()
             }
+
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
@@ -204,12 +206,12 @@ class PlayerActivity: AppCompatActivity() {
     }
 
     private fun updateTime() {
-        val text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        val text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
         trackTime.text = text
         updateTimeRunnable = Runnable { updateTime() }
         handler.postDelayed(updateTimeRunnable, 400)
     }
-
 
 
 }

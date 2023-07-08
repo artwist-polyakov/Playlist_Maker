@@ -1,4 +1,5 @@
 package com.example.playlistmaker.adapters
+
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -49,6 +50,7 @@ class TrackAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
     }
+
     override fun getItemCount(): Int = tracks.size
 
     fun setTracks(newTracks: List<Track>?) {
@@ -64,7 +66,7 @@ class TrackAdapter(
     }
 
 
-    private fun clickDebounce() : Boolean {
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
@@ -113,7 +115,10 @@ private fun performVibration(context: Context) {
     val durationInMilliseconds = 100
 
     if (vibrator.hasVibrator()) {
-        val vibrationEffect = VibrationEffect.createOneShot(durationInMilliseconds.toLong(), VibrationEffect.DEFAULT_AMPLITUDE)
+        val vibrationEffect = VibrationEffect.createOneShot(
+            durationInMilliseconds.toLong(),
+            VibrationEffect.DEFAULT_AMPLITUDE
+        )
         vibrator.vibrate(vibrationEffect)
     } else {
         @Suppress("DEPRECATION")
