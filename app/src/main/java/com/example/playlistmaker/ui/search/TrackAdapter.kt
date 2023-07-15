@@ -13,11 +13,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.data.dto.LinkedRepository
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.player.PlayerActivity
-import com.example.playlistmaker.history.LinkedRepository
 
 class TrackAdapter(
     private val historyRepository: LinkedRepository<Track>,
