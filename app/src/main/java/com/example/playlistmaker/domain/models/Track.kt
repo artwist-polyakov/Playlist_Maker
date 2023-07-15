@@ -30,7 +30,6 @@ data class Track(
                 .parse(releaseDate))
 
     override fun hashCode(): Int {
-
         return this.trackId.hashCode()
     }
 

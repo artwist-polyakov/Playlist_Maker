@@ -8,18 +8,21 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.Group
-import androidx.constraintlayout.widget.Guideline
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.player.PlayerInterface
+import com.example.playlistmaker.presentation.player.PlayerPresenter
+import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity (override var playerPresenter: PlayerPresenterInterface = PlayerPresenter()
+) : AppCompatActivity(), PlayerInterface {
     private lateinit var backButton: ImageView
     private lateinit var playButton: FloatingActionButton
     private lateinit var addToCollectionButton: ImageButton
@@ -34,10 +37,13 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var trackGenre: TextView
     private lateinit var trackCountry: TextView
     private lateinit var trackInfoGroup: Group
-    private lateinit var trackCountryInfoGroup: Group
+    var mediaPlayerPresenter: PlayerPresenterInterface? = null
+    override var trackCountryInfoGroup: Group? = null
+    override fun bindScreen(from: TrackDto) {
+        TODO("Not yet implemented")
+    }
+
     private lateinit var currentTrack: Track
-    private lateinit var barrier: Barrier
-    private lateinit var rightGuidline: Guideline
     private lateinit var handler: Handler
     private var updateTimeRunnable: Runnable = Runnable { }
 
@@ -118,9 +124,9 @@ class PlayerActivity : AppCompatActivity() {
 
         // Страна не пустая?
         if (track.country == null) {
-            trackCountryInfoGroup.visibility = Group.GONE
+            trackCountryInfoGroup!!.visibility = Group.GONE
         } else {
-            trackCountryInfoGroup.visibility = Group.VISIBLE
+            trackCountryInfoGroup!!.visibility = Group.VISIBLE
             trackCountry.text = track.country
         }
 
