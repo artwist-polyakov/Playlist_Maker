@@ -1,8 +1,9 @@
-package com.example.playlistmaker.history
+package com.example.playlistmaker.data.dto
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.playlistmaker.domain.models.TracksRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -30,7 +31,7 @@ class Node<T>(val value: T, var prev: Node<T>? = null, var next: Node<T>? = null
     }
 }
 
-class LinkedRepository<T>(private val maxSize: Int) {
+class LinkedRepository<T>(private val maxSize: Int): TracksRepository {
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
     private var size: Int = 0

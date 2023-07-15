@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,14 +17,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.adapters.TrackAdapter
-import com.example.playlistmaker.history.LinkedRepository
-import com.example.playlistmaker.model.Track
-import com.example.playlistmaker.networkClient.ITunesApi
-import com.example.playlistmaker.networkClient.SongsSearchResponse
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.dto.LinkedRepository
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.data.network.ITunesApi
+import com.example.playlistmaker.data.dto.SongsSearchResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
@@ -75,7 +74,7 @@ class SearchActivity : AppCompatActivity() {
 
     // NETWORK
     private val retrofit = Retrofit.Builder()
-        .baseUrl(SearchActivity.API_URL)
+        .baseUrl(API_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ITunesApi::class.java)

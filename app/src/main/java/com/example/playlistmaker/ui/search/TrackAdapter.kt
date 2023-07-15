@@ -1,29 +1,23 @@
-package com.example.playlistmaker.adapters
+package com.example.playlistmaker.ui.search
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.PlayerActivity
-import com.example.playlistmaker.SearchActivity
+import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.history.LinkedRepository
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class TrackAdapter(
     private val historyRepository: LinkedRepository<Track>,

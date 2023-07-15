@@ -1,20 +1,19 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.player
 
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.Group
 import androidx.constraintlayout.widget.Guideline
 import com.bumptech.glide.Glide
-import com.example.playlistmaker.model.Track
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale

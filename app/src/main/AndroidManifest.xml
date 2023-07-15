@@ -22,13 +22,13 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".SearchActivity"
+            android:name=".ui.search.SearchActivity"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
-            android:name=".PlayerActivity"
+            android:name=".ui.player.PlayerActivity"
             android:label="PlayerActivity"
-            android:parentActivityName=".SearchActivity"
+            android:parentActivityName=".ui.search.SearchActivity"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity

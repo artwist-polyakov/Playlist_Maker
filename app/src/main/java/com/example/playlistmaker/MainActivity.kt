@@ -7,8 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
+import com.example.playlistmaker.ui.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
 
