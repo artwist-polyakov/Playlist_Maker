@@ -6,4 +6,11 @@ interface PlayerPresenterInterface {
     fun play()
     fun pause()
 
+    fun bindScreen()
+
+    fun setTime()
+
+    fun changePlayButton()
+
+    fun resetPlayer()
 }

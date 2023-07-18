@@ -9,10 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
-import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.player.PlayerInterface
 import com.example.playlistmaker.presentation.player.PlayerPresenter
 import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
@@ -20,31 +18,28 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
-class PlayerActivity: AppCompatActivity(), PlayerInterface {
+class PlayerActivity : AppCompatActivity(), PlayerInterface {
     override var playerPresenter: PlayerPresenterInterface? = null
     private lateinit var backButton: ImageView
-    private lateinit var playButton: FloatingActionButton
+    override var playButton: FloatingActionButton? = null
     private lateinit var addToCollectionButton: ImageButton
     private lateinit var likeButton: ImageButton
-    private lateinit var trackCover: ImageView
-    private lateinit var trackName: TextView
-    private lateinit var artistName: TextView
+    override var trackCover: ImageView? = null
+    override var trackName: TextView? = null
+    override var artistName: TextView? = null
     private lateinit var trackTime: TextView
-    private lateinit var trackDuration: TextView
-    private lateinit var trackAlbumName: TextView
-    private lateinit var trackReleaseYear: TextView
-    private lateinit var trackGenre: TextView
-    private lateinit var trackCountry: TextView
-    private lateinit var trackInfoGroup: Group
+    override var trackDuration: TextView? = null
+    override var trackAlbumName: TextView? = null
+    override var trackReleaseYear: TextView? = null
+    override var trackGenre: TextView? = null
+    override var trackCountry: TextView? = null
+    override var trackInfoGroup: Group? = null
     var mediaPlayerPresenter: PlayerPresenterInterface? = null
     override var trackCountryInfoGroup: Group? = null
 
 
     override var currentTrack: TrackDto? = null
-    override fun bindScreen() {
-        TODO("Not yet implemented")
-    }
+
 
     override fun play() {
         TODO("Not yet implemented")
@@ -72,7 +67,9 @@ class PlayerActivity: AppCompatActivity(), PlayerInterface {
     override fun onResume() {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-        bindTrackInfo(currentTrack!!)
+        playerPresenter = PlayerPresenter(this)
+        playerPresenter!!.bindScreen()
+
     }
 
     override fun onPause() {
@@ -84,6 +81,7 @@ class PlayerActivity: AppCompatActivity(), PlayerInterface {
 
     override fun onDestroy() {
         super.onDestroy()
+        playerPresenter!!.resetPlayer()
         if (playerState != 0) {
             mediaPlayer.release()
             handler.removeCallbacks(updateTimeRunnable)
@@ -92,12 +90,8 @@ class PlayerActivity: AppCompatActivity(), PlayerInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         setContentView(R.layout.activity_song_page)
-
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-
 
         // BACK BUTTON
         backButton = findViewById(R.id.return_button)
@@ -124,39 +118,10 @@ class PlayerActivity: AppCompatActivity(), PlayerInterface {
         trackCountryInfoGroup = findViewById(R.id.track_country_info)
 
         //BINDING
-        bindTrackInfo(currentTrack!!)
+        playerPresenter = PlayerPresenter(this)
+        playerPresenter!!.bindScreen()
         handler = Handler(Looper.getMainLooper())
-
         preparePlayer()
-    }
-
-    fun bindTrackInfo(track: TrackDto) {
-
-        // Страна не пустая?
-        if (track.country == null) {
-            trackCountryInfoGroup!!.visibility = Group.GONE
-        } else {
-            trackCountryInfoGroup!!.visibility = Group.VISIBLE
-            trackCountry.text = track.country
-        }
-
-        // Трек не пустой?
-        if (track.trackName == "") {
-            trackInfoGroup.visibility = Group.GONE
-        } else {
-            trackInfoGroup.visibility = Group.VISIBLE
-            trackName.text = track.trackName
-            artistName.text = track.artistName
-            trackDuration.text = track.trackTime
-            trackAlbumName.text = track.collectionName
-            trackReleaseYear.text = track.relizeYear
-            trackGenre.text = track.primaryGenreName
-            Glide.with(this)
-                .load(track.artworkUrl512)
-                .into(trackCover)
-
-        }
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -167,7 +132,8 @@ class PlayerActivity: AppCompatActivity(), PlayerInterface {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
-        bindTrackInfo(currentTrack!!)
+        playerPresenter = PlayerPresenter(this)
+        playerPresenter!!.bindScreen()
     }
 
     private fun preparePlayer() {
@@ -176,21 +142,21 @@ class PlayerActivity: AppCompatActivity(), PlayerInterface {
                 setDataSource(currentTrack!!.previewUrl)
                 prepareAsync()
                 setOnPreparedListener {
-                    playButton.isEnabled = true
+                    playButton!!.isEnabled = true
                     playerState = STATE_PREPARED
                 }
             }
             mediaPlayer.setOnCompletionListener {
-                playButton.setImageResource(R.drawable.play_button)
+                playerPresenter!!.resetPlayer()
                 playerState = STATE_PREPARED
                 trackTime.text = resources.getString(R.string.time_placeholder)
                 handler.removeCallbacks(updateTimeRunnable)
             }
-            playButton.setOnClickListener {
+            playButton!!.setOnClickListener {
                 playbackControl()
             }
         } else {
-            playButton.isEnabled = false
+            playButton!!.isEnabled = false
         }
     }
 
@@ -208,14 +174,14 @@ class PlayerActivity: AppCompatActivity(), PlayerInterface {
 
     private fun startPlayer() {
         mediaPlayer.start()
-        playButton.setImageResource(R.drawable.pause_button)
+        playerPresenter!!.changePlayButton()
         playerState = STATE_PLAYING
         updateTime()
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
-        playButton.setImageResource(R.drawable.play_button)
+        playerPresenter!!.changePlayButton()
         playerState = STATE_PAUSED
         handler.removeCallbacks(updateTimeRunnable)
     }
