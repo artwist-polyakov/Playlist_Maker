@@ -101,7 +101,7 @@ class LinkedRepository<T>(private val maxSize: Int): TracksRepository {
         }
     }
 
-    fun get(reversed: Boolean): ArrayList<T>? {
+    fun get(reversed: Boolean = false): ArrayList<T>? {
         val list = ArrayList<T>()
         var node = if (reversed) tail else head
         while (node != null) {

@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class PlayerActivity (override var playerPresenter: PlayerPresenterInterface = PlayerPresenter()
-) : AppCompatActivity(), PlayerInterface {
+class PlayerActivity: AppCompatActivity(), PlayerInterface {
+    override var playerPresenter: PlayerPresenterInterface? = null
     private lateinit var backButton: ImageView
     private lateinit var playButton: FloatingActionButton
     private lateinit var addToCollectionButton: ImageButton
@@ -39,11 +39,21 @@ class PlayerActivity (override var playerPresenter: PlayerPresenterInterface = P
     private lateinit var trackInfoGroup: Group
     var mediaPlayerPresenter: PlayerPresenterInterface? = null
     override var trackCountryInfoGroup: Group? = null
-    override fun bindScreen(from: TrackDto) {
+
+
+    override var currentTrack: TrackDto? = null
+    override fun bindScreen() {
         TODO("Not yet implemented")
     }
 
-    private lateinit var currentTrack: Track
+    override fun play() {
+        TODO("Not yet implemented")
+    }
+
+    override fun pause() {
+        TODO("Not yet implemented")
+    }
+
     private lateinit var handler: Handler
     private var updateTimeRunnable: Runnable = Runnable { }
 
@@ -62,7 +72,7 @@ class PlayerActivity (override var playerPresenter: PlayerPresenterInterface = P
     override fun onResume() {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-        bindTrackInfo(currentTrack)
+        bindTrackInfo(currentTrack!!)
     }
 
     override fun onPause() {
@@ -114,13 +124,13 @@ class PlayerActivity (override var playerPresenter: PlayerPresenterInterface = P
         trackCountryInfoGroup = findViewById(R.id.track_country_info)
 
         //BINDING
-        bindTrackInfo(currentTrack)
+        bindTrackInfo(currentTrack!!)
         handler = Handler(Looper.getMainLooper())
 
         preparePlayer()
     }
 
-    fun bindTrackInfo(track: Track) {
+    fun bindTrackInfo(track: TrackDto) {
 
         // Страна не пустая?
         if (track.country == null) {
@@ -137,7 +147,7 @@ class PlayerActivity (override var playerPresenter: PlayerPresenterInterface = P
             trackInfoGroup.visibility = Group.VISIBLE
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackDuration.text = track.minssecs
+            trackDuration.text = track.trackTime
             trackAlbumName.text = track.collectionName
             trackReleaseYear.text = track.relizeYear
             trackGenre.text = track.primaryGenreName
@@ -157,13 +167,13 @@ class PlayerActivity (override var playerPresenter: PlayerPresenterInterface = P
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
-        bindTrackInfo(currentTrack)
+        bindTrackInfo(currentTrack!!)
     }
 
     private fun preparePlayer() {
-        if (currentTrack.previewUrl != null) {
+        if (currentTrack?.previewUrl != null) {
             mediaPlayer.apply {
-                setDataSource(currentTrack.previewUrl)
+                setDataSource(currentTrack!!.previewUrl)
                 prepareAsync()
                 setOnPreparedListener {
                     playButton.isEnabled = true

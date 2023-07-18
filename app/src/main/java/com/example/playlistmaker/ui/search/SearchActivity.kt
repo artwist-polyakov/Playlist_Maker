@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -24,6 +25,8 @@ import com.example.playlistmaker.data.dto.LinkedRepository
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.data.network.ITunesApi
 import com.example.playlistmaker.data.dto.SongsSearchResponse
+import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
@@ -57,6 +60,18 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var linkedRepository: LinkedRepository<Track>
     private lateinit var handler: Handler
     private lateinit var searchRunnable: Runnable
+    var currentTracks: MutableList<Track> = mutableListOf<Track>()
+    val listenerForTrackAdapter = object : ClickListener {
+        override fun onClick(pos: Int, type: Int) {
+            val track = currentTracks[pos]
+            if (currentTracks.size > 0) {
+                linkedRepository.add(track)
+                val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+                intent.putExtra(PlayerActivity.TRACK, TrackDto(track))
+                startActivity(intent)
+            }
+        }
+    }
 
 
     companion object {
@@ -102,6 +117,16 @@ class SearchActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
+        if (searchEditText.text.isEmpty()) {
+            showHistoryLayout()
+        } else {
+            hideHistoryLayout()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // TODO убить clicklistener
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,8 +160,9 @@ class SearchActivity : AppCompatActivity() {
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
 
         // ADAPTERS
-        historyAdapter = TrackAdapter(linkedRepository)
-        trackAdapter = TrackAdapter(linkedRepository)
+        historyAdapter = TrackAdapter(listener = listenerForTrackAdapter)
+        trackAdapter = TrackAdapter(listener = listenerForTrackAdapter)
+
         recyclerView.adapter = trackAdapter
         historyRecyclerView.adapter = historyAdapter
 
@@ -199,7 +225,8 @@ class SearchActivity : AppCompatActivity() {
             val type = object : TypeToken<TrackList>() {}.type
             if (json.startsWith("[")) {
                 val restoredTracks: TrackList = gson.fromJson(json, type)
-                trackAdapter.setTracks(restoredTracks)
+                currentTracks = restoredTracks
+                trackAdapter.setTracks(currentTracks)
                 hideProblemsLayout()
             } else {
                 // JSON-строка не является массивом
@@ -290,16 +317,18 @@ class SearchActivity : AppCompatActivity() {
         val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
         searchEditText.setText(searchQuery)
         linkedRepository.restoreFromSharedPreferences(PREFS, HISTORY, this)
-        historyAdapter = TrackAdapter(linkedRepository)
-        trackAdapter = TrackAdapter(linkedRepository)
+        historyAdapter = TrackAdapter(listener = listenerForTrackAdapter)
+        trackAdapter = TrackAdapter(listener = listenerForTrackAdapter)
         // TODO когда метод getParcelableArrayList уберут, надо будет использвать сериализацию в json и восстоновление из json
         val restoredTracks = savedInstanceState.getParcelableArrayList<Track>(TRACKS)
         if (restoredTracks != null) {
-            trackAdapter.setTracks(restoredTracks)
+            currentTracks = restoredTracks
+            trackAdapter.setTracks(currentTracks)
         }
         val restoredHistory = savedInstanceState.getParcelableArrayList<Track>(HISTORY)
         if (restoredHistory != null) {
-            historyAdapter.setTracks(restoredHistory)
+            currentTracks = restoredHistory
+            historyAdapter.setTracks(currentTracks)
         }
         historyRecyclerView.adapter = historyAdapter
         recyclerView.adapter = trackAdapter
@@ -336,7 +365,9 @@ class SearchActivity : AppCompatActivity() {
                             getSharedPreferences(PREFS, Context.MODE_PRIVATE)
                         val editor = sharedPreferences.edit()
                         editor.putString(TRACKS_LIST, response.body()?.results!!.toString())
-                        trackAdapter.setTracks(response.body()?.results!!)
+
+                        currentTracks = response.body()?.results!!
+                        trackAdapter.setTracks(currentTracks)
                     }
 
                     ResponseState.NOTHING_FOUND -> showProblemsLayout(responseState)
@@ -400,7 +431,8 @@ class SearchActivity : AppCompatActivity() {
         val json = gson.toJson(linkedRepository.get(reversed = true))
         val type = object : TypeToken<TrackList>() {}.type
         val restoredTracks: TrackList = gson.fromJson(json, type)
-        historyAdapter.setTracks(restoredTracks)
+        currentTracks = restoredTracks
+        historyAdapter.setTracks(currentTracks)
     }
 
     private fun hideHistoryLayout() {

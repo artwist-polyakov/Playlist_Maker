@@ -18,9 +18,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.data.dto.LinkedRepository
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.player.PlayerActivity
-
+interface ClickListener {
+    fun onClick(pos: Int, type: Int)
+}
 class TrackAdapter(
-    private val historyRepository: LinkedRepository<Track>,
+    private val listener: ClickListener,
     private val tracks: MutableList<Track> = mutableListOf<Track>()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
@@ -31,12 +33,11 @@ class TrackAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.search_result_item, parent, false)
         return TrackViewHolder(view).listen() { pos, type ->
             performVibration(view.context)
-            val track = tracks[pos]
-            historyRepository.add(track as Track)
             if (clickDebounce()) {
-                val intent = Intent(parent.context, PlayerActivity::class.java)
-                intent.putExtra(PlayerActivity.TRACK, track)
-                parent.context.startActivity(intent)
+                listener.onClick(pos, type) // call the interface method
+//                val intent = Intent(parent.context, PlayerActivity::class.java)
+//                intent.putExtra(PlayerActivity.TRACK, track)
+//                parent.context.startActivity(intent)
             }
         }
     }
