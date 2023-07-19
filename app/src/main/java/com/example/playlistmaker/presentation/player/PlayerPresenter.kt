@@ -22,32 +22,34 @@ class PlayerPresenter(
     }
 
     override fun bindScreen() {
-        if (view != null) {
-            val track = view!!.currentTrack
+        view?.let {
+            val track = it.currentTrack
             // Страна не пустая?
-            if (track!!.country == null) {
-                view!!.trackCountryInfoGroup!!.visibility = Group.GONE
+            if (track?.country == null) {
+                it.trackCountryInfoGroup?.visibility = Group.GONE
             } else {
-                view!!.trackCountryInfoGroup!!.visibility = Group.VISIBLE
-                view!!.trackCountry!!.text = track!!.country
+                it.trackCountryInfoGroup?.visibility = Group.VISIBLE
+                it.trackCountry?.text = track?.country
             }
 
             // Трек не пустой?
-            if (view!!.currentTrack!!.trackName == "") {
-                view!!.trackInfoGroup!!.visibility = Group.GONE
+            if (it.currentTrack?.trackName == "") {
+                it.trackInfoGroup?.visibility = Group.GONE
             } else {
-                view!!.trackInfoGroup!!.visibility = Group.VISIBLE
-                view!!.trackName!!.text = view!!.currentTrack!!.trackName
-                view!!.artistName!!.text = view!!.currentTrack!!.artistName
-                view!!.trackDuration!!.text = view!!.currentTrack!!.trackTime
-                view!!.trackAlbumName!!.text = view!!.currentTrack!!.collectionName
-                view!!.trackReleaseYear!!.text = view!!.currentTrack!!.relizeYear
-                view!!.trackGenre!!.text = view!!.currentTrack!!.primaryGenreName
-                Glide.with(view as PlayerActivity)
-                    .load(view!!.currentTrack!!.artworkUrl512)
-                    .into(view!!.trackCover!!)
-            }
+                it.trackInfoGroup?.visibility = Group.VISIBLE
+                it.trackName?.text = it.currentTrack?.trackName
+                it.artistName?.text = it.currentTrack?.artistName
+                it.trackDuration?.text = it.currentTrack?.trackTime
+                it.trackAlbumName?.text = it.currentTrack?.collectionName
+                it.trackReleaseYear?.text = it.currentTrack?.relizeYear
+                it.trackGenre?.text = it.currentTrack?.primaryGenreName
+                (it as? PlayerActivity)?.let{unwrapView ->
+                    Glide.with(unwrapView)
+                        .load(unwrapView.currentTrack!!.artworkUrl512)
+                        .into(unwrapView.trackCover!!)
+                }
 
+            }
         }
     }
 
