@@ -48,7 +48,6 @@ class PlayerPresenter(
                         .load(unwrapView.currentTrack!!.artworkUrl512)
                         .into(unwrapView.trackCover!!)
                 }
-
             }
         }
     }

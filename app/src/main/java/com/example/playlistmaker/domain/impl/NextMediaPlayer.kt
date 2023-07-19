@@ -1,7 +1,7 @@
-package com.example.playlistmaker.data.dto
+package com.example.playlistmaker.domain.impl
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.domain.impl.MediaPlayerInterface
+import com.example.playlistmaker.domain.api.MediaPlayerInterface
 
 class NextMediaPlayer: MediaPlayer(), MediaPlayerInterface {
     private var state = STATE_DEFAULT
