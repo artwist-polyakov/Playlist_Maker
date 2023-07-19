@@ -6,6 +6,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.ui.player.PlayerActivity
 
+
 class PlayerPresenter(
     override var view: PlayerInterface?,
     private val playInteractor: PlayInteractor = PlayInteractor()
