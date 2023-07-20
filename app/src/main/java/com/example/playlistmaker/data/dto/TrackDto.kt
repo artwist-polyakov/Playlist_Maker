@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Parcelize
+// TODO переменовать TrackDTO в Track через промежуточное значение и поменять местами с новым треком
 data class TrackDto(val trackId: Long,
                     val trackName: String,
                     val artistName: String,

@@ -31,7 +31,7 @@ class Node<T>(val value: T, var prev: Node<T>? = null, var next: Node<T>? = null
     }
 }
 
-class LinkedRepository<T>(private val maxSize: Int): TracksRepository {
+open class LinkedRepository<T>(private val maxSize: Int) {
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
     private var size: Int = 0

@@ -4,10 +4,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.domain.models.Track
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-interface PlayerInterface {
+interface PlayerActivityInterface {
 
     // FiELDS
     var trackCountryInfoGroup: Group?

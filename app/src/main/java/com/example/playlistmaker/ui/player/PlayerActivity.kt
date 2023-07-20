@@ -11,14 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.presentation.player.PlayerInterface
+import com.example.playlistmaker.presentation.player.PlayerActivityInterface
 import com.example.playlistmaker.presentation.player.PlayerPresenter
 import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerActivity : AppCompatActivity(), PlayerInterface {
+class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override var playerPresenter: PlayerPresenterInterface? = null
     private lateinit var backButton: ImageView
     override var playButton: FloatingActionButton? = null

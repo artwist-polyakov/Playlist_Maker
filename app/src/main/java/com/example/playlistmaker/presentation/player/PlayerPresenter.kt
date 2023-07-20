@@ -3,12 +3,11 @@ package com.example.playlistmaker.presentation.player
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.ui.player.PlayerActivity
 
 
 class PlayerPresenter(
-    override var view: PlayerInterface?,
+    override var view: PlayerActivityInterface?,
     private val playInteractor: PlayInteractor = PlayInteractor()
 ) : PlayerPresenterInterface {
 
