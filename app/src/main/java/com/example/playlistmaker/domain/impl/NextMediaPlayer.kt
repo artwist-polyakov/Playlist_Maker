@@ -2,6 +2,7 @@ package com.example.playlistmaker.domain.impl
 
 import android.media.MediaPlayer
 import android.os.Handler
+import android.os.Looper
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
@@ -11,7 +12,7 @@ import javax.security.auth.callback.Callback
 class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
                       override var withTrack: TrackDto?) : MediaPlayer(), MediaPlayerInterface {
     private var state = STATE_DEFAULT
-    private lateinit var handler: Handler
+    private var handler = Handler(Looper.getMainLooper())
     private var updateProgressRunnable: Runnable = Runnable { }
     companion object {
         private const val STATE_DEFAULT = 0
@@ -39,11 +40,14 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
     }
 
     override fun playPauseSwitcher() {
-        TODO("Not yet implemented")
+        playbackControl()
     }
 
     override fun destroyPlayer() {
-        TODO("Not yet implemented")
+        if (state != 0) {
+            this.release()
+        }
+        state = STATE_DEFAULT
     }
 
     override fun updateProgress(callback: Callback) {
@@ -57,7 +61,7 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
     private fun playbackControl() {
         when (state) {
             STATE_PLAYING -> {
-                this.pausePlayer()
+                pausePlayer()
             }
 
             STATE_PREPARED, STATE_PAUSED -> {
@@ -66,7 +70,7 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
         }
     }
 
-    private fun startPlayer() {
+    override fun startPlayer() {
         this.start()
         callback?.changePlayButton()
         state = STATE_PLAYING
@@ -74,7 +78,7 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
         handler.postDelayed(updateProgressRunnable, 400)
     }
 
-    private fun pausePlayer() {
+    override fun pausePlayer() {
         this.pause()
         callback?.changePlayButton()
         state = STATE_PAUSED

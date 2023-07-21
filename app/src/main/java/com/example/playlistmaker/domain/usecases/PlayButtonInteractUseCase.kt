@@ -1,7 +1,9 @@
 package com.example.playlistmaker.domain.usecases
 
-class PlayButtonInteractUseCase {
+import com.example.playlistmaker.domain.api.MediaPlayerInterface
+
+class PlayButtonInteractUseCase (val player: MediaPlayerInterface) {
     fun execute() {
-        print("sdf")
+        player.playPauseSwitcher()
     }
 }

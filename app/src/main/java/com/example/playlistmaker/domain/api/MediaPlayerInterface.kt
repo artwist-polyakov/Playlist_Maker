@@ -14,6 +14,10 @@ interface MediaPlayerInterface {
 
     fun updateProgress(callback: Callback)
 
+    fun startPlayer()
+
+    fun pausePlayer()
+
 
 
 }

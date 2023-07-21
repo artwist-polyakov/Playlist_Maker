@@ -34,50 +34,28 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override var trackGenre: TextView? = null
     override var trackCountry: TextView? = null
     override var trackInfoGroup: Group? = null
-    var mediaPlayerPresenter: PlayerPresenterInterface? = null
     override var trackCountryInfoGroup: Group? = null
-
-
     override var currentTrack: TrackDto? = null
 
-
-    private lateinit var handler: Handler
-    private var updateTimeRunnable: Runnable = Runnable { }
-
     companion object {
-        const val API_URL = "https://itunes.apple.com"
         const val TRACK = "current_track"
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
     }
-
-    private var playerState = STATE_DEFAULT
-    private var mediaPlayer = MediaPlayer()
 
     override fun onResume() {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
         playerPresenter = PlayerPresenter(this)
         playerPresenter!!.bindScreen()
-
     }
 
     override fun onPause() {
         super.onPause()
-        if (playerState == 2) {
-            pausePlayer()
-        }
+        playerPresenter?.pausePresenter()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerPresenter!!.resetPlayer()
-        if (playerState != 0) {
-            mediaPlayer.release()
-            handler.removeCallbacks(updateTimeRunnable)
-        }
+        playerPresenter?.resetPlayer()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,9 +89,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
         //BINDING
         playerPresenter = PlayerPresenter(this)
-        playerPresenter!!.bindScreen()
-        handler = Handler(Looper.getMainLooper())
-        preparePlayer()
+        playerPresenter?.bindScreen()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -125,66 +101,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
         playerPresenter = PlayerPresenter(this)
-        playerPresenter!!.bindScreen()
+        playerPresenter?.bindScreen()
     }
-
-    private fun preparePlayer() {
-        if (currentTrack?.previewUrl != null) {
-            mediaPlayer.apply {
-                setDataSource(currentTrack!!.previewUrl)
-                prepareAsync()
-                setOnPreparedListener {
-                    playButton!!.isEnabled = true
-                    playerState = STATE_PREPARED
-                }
-            }
-            mediaPlayer.setOnCompletionListener {
-                playerPresenter!!.resetPlayer()
-                playerState = STATE_PREPARED
-                trackTime?.text = resources.getString(R.string.time_placeholder)
-                handler.removeCallbacks(updateTimeRunnable)
-            }
-            playButton!!.setOnClickListener {
-                playbackControl()
-            }
-        } else {
-            playButton!!.isEnabled = false
-        }
-    }
-
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        playerPresenter!!.changePlayButton()
-        playerState = STATE_PLAYING
-        updateTime()
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        playerPresenter!!.changePlayButton()
-        playerState = STATE_PAUSED
-        handler.removeCallbacks(updateTimeRunnable)
-    }
-
-    private fun updateTime() {
-        val text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        trackTime?.text = text
-        updateTimeRunnable = Runnable { updateTime() }
-        handler.postDelayed(updateTimeRunnable, 400)
-    }
-
-
 }
