@@ -105,7 +105,6 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
         customCurrentPosition = 0
         state = STATE_PREPARED
         callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
-        callback?.changePlayButton()
         handler.removeCallbacks(updateProgressRunnable)
     }
 
