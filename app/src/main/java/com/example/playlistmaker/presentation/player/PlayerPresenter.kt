@@ -3,13 +3,14 @@ package com.example.playlistmaker.presentation.player
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.ui.player.PlayerActivity
 
 
 class PlayerPresenter(
     override var view: PlayerActivityInterface?,
     private val playInteractor: PlayInteractor = PlayInteractor()
-) : PlayerPresenterInterface {
+) : PlayerPresenterInterface, MediaPlayerCallback {
 
     private var currentButtonState = READY_TO_PLAY
 
@@ -31,10 +32,11 @@ class PlayerPresenter(
                 it.trackCountryInfoGroup?.visibility = Group.VISIBLE
                 it.trackCountry?.text = track?.country
             }
-
+            it.playButton?.isEnabled = false
             // Трек не пустой?
             if (it.currentTrack?.trackName == "") {
                 it.trackInfoGroup?.visibility = Group.GONE
+
             } else {
                 it.trackInfoGroup?.visibility = Group.VISIBLE
                 it.trackName?.text = it.currentTrack?.trackName
@@ -79,6 +81,14 @@ class PlayerPresenter(
     companion object {
         private const val READY_TO_PLAY = 0
         private const val READY_TO_PAUSE = 1
+    }
+
+    override fun onMediaPlayerReady() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
+        TODO("Not yet implemented")
     }
 }
 
