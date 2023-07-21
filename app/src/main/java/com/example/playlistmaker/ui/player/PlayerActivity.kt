@@ -41,14 +41,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override var currentTrack: TrackDto? = null
 
 
-    override fun play() {
-        TODO("Not yet implemented")
-    }
-
-    override fun pause() {
-        TODO("Not yet implemented")
-    }
-
     private lateinit var handler: Handler
     private var updateTimeRunnable: Runnable = Runnable { }
 

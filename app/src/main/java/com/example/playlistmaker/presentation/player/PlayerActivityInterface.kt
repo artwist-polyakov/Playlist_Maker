@@ -8,7 +8,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 interface PlayerActivityInterface {
 
-
     // FiELDS
     var trackCountryInfoGroup: Group?
     var trackCountry: TextView?
@@ -24,9 +23,7 @@ interface PlayerActivityInterface {
     var trackCover: ImageView?
     var trackTime: TextView?
 
-    // IMTERFACE
+    // INTERACTION
     var playButton: FloatingActionButton?
-    fun play()
 
-    fun pause()
 }

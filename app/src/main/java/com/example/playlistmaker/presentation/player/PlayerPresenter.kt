@@ -3,18 +3,15 @@ package com.example.playlistmaker.presentation.player
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.models.TrackDurationTime
+import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.ui.player.PlayerActivity
 
 
 class PlayerPresenter(
     override var view: PlayerActivityInterface?,
 ) : PlayerPresenterInterface, MediaPlayerCallback {
-
     private var currentButtonState = READY_TO_PLAY
-
-
-
+    private val playButtonUseCase = PlayButtonInteractUseCase()
     override fun bindScreen() {
         view?.let {
             val track = it.currentTrack
@@ -47,17 +44,17 @@ class PlayerPresenter(
         }
     }
 
-    override fun setTime() {
+    override fun setProgressTime() {
         TODO("Not yet implemented")
     }
 
     override fun changePlayButton() {
-        if (view != null) {
+        view?.let{
             if (currentButtonState == 0) {
-                view!!.playButton!!.setImageResource(R.drawable.pause_button)
+                it.playButton?.setImageResource(R.drawable.pause_button)
                 currentButtonState = READY_TO_PAUSE
             } else {
-                view!!.playButton!!.setImageResource(R.drawable.play_button)
+                it.playButton?.setImageResource(R.drawable.play_button)
                 currentButtonState = READY_TO_PLAY
             }
         }
@@ -67,6 +64,9 @@ class PlayerPresenter(
         if (currentButtonState == 1) {
             changePlayButton()
         }
+        view?.let {
+            it.trackTime?.text = START_TIME
+        }
 
 
     }
@@ -74,16 +74,21 @@ class PlayerPresenter(
     companion object {
         private const val READY_TO_PLAY = 0
         private const val READY_TO_PAUSE = 1
+        private const val START_TIME = "00:00"
     }
 
     override fun onMediaPlayerReady() {
         view?.let {
             it.playButton?.isEnabled = true
-            // TODO повесить на кнопку юзкейс
+            view?.let {
+                it.playButton?.setOnClickListener{
+                    playButtonUseCase.execute()
+                }
+            }
         }
     }
 
-    override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
+    override fun onMediaPlayerTimeUpdate(time: Int) {
         view?.let {
             it.trackTime?.text = time.toString()
         }
