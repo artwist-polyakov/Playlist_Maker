@@ -27,7 +27,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override var trackCover: ImageView? = null
     override var trackName: TextView? = null
     override var artistName: TextView? = null
-    private lateinit var trackTime: TextView
+    override var trackTime: TextView? = null
     override var trackDuration: TextView? = null
     override var trackAlbumName: TextView? = null
     override var trackReleaseYear: TextView? = null
@@ -149,7 +149,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             mediaPlayer.setOnCompletionListener {
                 playerPresenter!!.resetPlayer()
                 playerState = STATE_PREPARED
-                trackTime.text = resources.getString(R.string.time_placeholder)
+                trackTime?.text = resources.getString(R.string.time_placeholder)
                 handler.removeCallbacks(updateTimeRunnable)
             }
             playButton!!.setOnClickListener {
@@ -189,7 +189,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     private fun updateTime() {
         val text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        trackTime.text = text
+        trackTime?.text = text
         updateTimeRunnable = Runnable { updateTime() }
         handler.postDelayed(updateTimeRunnable, 400)
     }

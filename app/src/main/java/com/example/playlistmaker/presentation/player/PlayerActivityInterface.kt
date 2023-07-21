@@ -8,6 +8,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 interface PlayerActivityInterface {
 
+
     // FiELDS
     var trackCountryInfoGroup: Group?
     var trackCountry: TextView?
@@ -21,6 +22,7 @@ interface PlayerActivityInterface {
     var trackReleaseYear: TextView?
     var trackGenre: TextView?
     var trackCover: ImageView?
+    var trackTime: TextView?
 
     // IMTERFACE
     var playButton: FloatingActionButton?

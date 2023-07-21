@@ -9,18 +9,11 @@ import com.example.playlistmaker.ui.player.PlayerActivity
 
 class PlayerPresenter(
     override var view: PlayerActivityInterface?,
-    private val playInteractor: PlayInteractor = PlayInteractor()
 ) : PlayerPresenterInterface, MediaPlayerCallback {
 
     private var currentButtonState = READY_TO_PLAY
 
-    override fun play() {
-        playInteractor.play()
-    }
 
-    override fun pause() {
-        playInteractor.play()
-    }
 
     override fun bindScreen() {
         view?.let {
@@ -84,29 +77,15 @@ class PlayerPresenter(
     }
 
     override fun onMediaPlayerReady() {
-        TODO("Not yet implemented")
+        view?.let {
+            it.playButton?.isEnabled = true
+            // TODO повесить на кнопку юзкейс
+        }
     }
 
     override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
-        TODO("Not yet implemented")
+        view?.let {
+            it.trackTime?.text = time.toString()
+        }
     }
-}
-
-
-class PlayUseCase {
-    fun execute() {}
-}
-
-class PauseUseCase {
-    fun execute() {}
-}
-
-class PlayInteractor {
-    fun play() {}
-    fun pause() {}
-}
-
-
-class musicRepository {
-
 }
