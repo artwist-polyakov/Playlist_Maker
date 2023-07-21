@@ -1,10 +1,12 @@
 package com.example.playlistmaker.presentation.player
 
+import android.util.Log
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.domain.impl.NextMediaPlayer
+import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.ui.player.PlayerActivity
 
@@ -14,7 +16,7 @@ class PlayerPresenter(
 ) : PlayerPresenterInterface, MediaPlayerCallback {
     private var currentButtonState = READY_TO_PLAY
     private lateinit var playButtonUseCase: PlayButtonInteractUseCase
-    private lateinit var mediaPlayer: MediaPlayerInterface
+    private var mediaPlayer: MediaPlayerInterface? = null
     override fun bindScreen() {
         view?.let {
             val track = it.currentTrack
@@ -30,9 +32,10 @@ class PlayerPresenter(
             if (it.currentTrack?.trackName == "") {
                 it.trackInfoGroup?.visibility = Group.GONE
             } else {
-                Thread {
+                if (mediaPlayer == null) {
+                    // Создаем новый MediaPlayer, если он еще не был создан
                     mediaPlayer = NextMediaPlayer(this, withTrack = track)
-                }.start()
+                }
                 it.trackInfoGroup?.visibility = Group.VISIBLE
                 it.trackName?.text = it.currentTrack?.trackName
                 it.artistName?.text = it.currentTrack?.artistName
@@ -45,24 +48,24 @@ class PlayerPresenter(
                         .load(unwrapView.currentTrack!!.artworkUrl512)
                         .into(unwrapView.trackCover!!)
                 }
+                it.playButton?.setOnClickListener{
+                    playButtonUseCase = PlayButtonInteractUseCase(player = this.mediaPlayer)
+                    playButtonUseCase.execute()
+                }
             }
         }
-    }
-
-    override fun setProgressTime() {
-        TODO("Not yet implemented")
     }
 
     override fun changePlayButton() {
         view?.let{
             if (currentButtonState == 0) {
                 it.playButton?.setImageResource(R.drawable.pause_button)
-                mediaPlayer.startPlayer()
                 currentButtonState = READY_TO_PAUSE
+                Log.d("PlayerPresenterButtonEnvoque", "changePlayButton: $currentButtonState")
             } else {
                 it.playButton?.setImageResource(R.drawable.play_button)
-                mediaPlayer.pausePlayer()
                 currentButtonState = READY_TO_PLAY
+                Log.d("PlayerPresenterButtonEnvoque", "changePlayButton: $currentButtonState")
             }
         }
     }
@@ -70,13 +73,14 @@ class PlayerPresenter(
     override fun pausePresenter() {
         if (currentButtonState == 1) {
             changePlayButton()
-            mediaPlayer.pausePlayer()
+            mediaPlayer?.pausePlayer()
         }
     }
 
     override fun resetPlayer() {
         if (currentButtonState == 1) {
             changePlayButton()
+            mediaPlayer?.destroyPlayer()
         }
         view?.let {
             it.trackTime?.text = START_TIME
@@ -91,17 +95,12 @@ class PlayerPresenter(
 
     override fun onMediaPlayerReady() {
         view?.let {
-            playButtonUseCase = PlayButtonInteractUseCase(mediaPlayer)
+
             it.playButton?.isEnabled = true
-            view?.let {
-                it.playButton?.setOnClickListener{
-                    playButtonUseCase.execute()
-                }
-            }
         }
     }
 
-    override fun onMediaPlayerTimeUpdate(time: Int) {
+    override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
         view?.let {
             it.trackTime?.text = time.toString()
         }

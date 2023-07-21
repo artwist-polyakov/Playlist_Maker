@@ -3,8 +3,11 @@ package com.example.playlistmaker.domain.impl
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import android.widget.Toast
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
+import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 import com.example.playlistmaker.ui.player.PlayerActivity
 import javax.security.auth.callback.Callback
@@ -13,7 +16,24 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
                       override var withTrack: TrackDto?) : MediaPlayer(), MediaPlayerInterface {
     private var state = STATE_DEFAULT
     private var handler = Handler(Looper.getMainLooper())
-    private var updateProgressRunnable: Runnable = Runnable { }
+    private var customCurrentPosition = 0
+    private var duration = 0
+
+    private val updateProgressRunnable: Runnable = object : Runnable {
+        override fun run() {
+            if (state == STATE_PLAYING) {
+                customCurrentPosition += 400
+                val time = TrackDurationTime(customCurrentPosition)
+//                Log.d("UPDATE PROGRESS", "updateProgress: ${time.toString()}")
+                callback?.onMediaPlayerTimeUpdate(time)
+                if (customCurrentPosition >= duration) {
+                    finishPlay()
+                }
+                handler.postDelayed(this, 400)
+            }
+        }
+    }
+
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
@@ -27,38 +47,21 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
                 setDataSource(it?.previewUrl)
                 prepareAsync()
                 setOnPreparedListener{
+                    duration = it.duration
                     state = STATE_PREPARED
                     callback?.onMediaPlayerReady()
                 }
-                setOnCompletionListener {
-                    callback?.resetPlayer()
-                    state = STATE_PREPARED
-                    handler.removeCallbacks(updateProgressRunnable)
-                }
+//                setOnCompletionListener {
+//                    if (state == STATE_PLAYING) {
+//                        finishPlay()
+//                    }
+//                }
+
             }
         }
     }
 
     override fun playPauseSwitcher() {
-        playbackControl()
-    }
-
-    override fun destroyPlayer() {
-        if (state != 0) {
-            this.release()
-        }
-        state = STATE_DEFAULT
-    }
-
-    override fun updateProgress(callback: Callback) {
-        val time = this.currentPosition
-        updateProgressRunnable = Runnable { updateProgress(callback) }
-        handler.postDelayed(updateProgressRunnable, 400)
-
-    }
-
-
-    private fun playbackControl() {
         when (state) {
             STATE_PLAYING -> {
                 pausePlayer()
@@ -70,18 +73,39 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
         }
     }
 
+    override fun destroyPlayer() {
+        if (state != 0) {
+            this.release()
+        }
+        state = STATE_DEFAULT
+    }
+
+    override fun updateProgress(callback: MediaPlayerCallback) {
+        handler.postDelayed(updateProgressRunnable, 400)
+    }
+
+
     override fun startPlayer() {
         this.start()
         callback?.changePlayButton()
         state = STATE_PLAYING
-        updateProgressRunnable = Runnable { callback?.onMediaPlayerTimeUpdate(this.currentPosition) }
-        handler.postDelayed(updateProgressRunnable, 400)
+        callback?.let { updateProgress(it) }
     }
+
 
     override fun pausePlayer() {
         this.pause()
         callback?.changePlayButton()
         state = STATE_PAUSED
+        handler.removeCallbacks(updateProgressRunnable)
+    }
+
+    private fun finishPlay() {
+        this.pausePlayer()
+        customCurrentPosition = 0
+        state = STATE_PREPARED
+        callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
+        callback?.changePlayButton()
         handler.removeCallbacks(updateProgressRunnable)
     }
 

@@ -100,7 +100,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
-        playerPresenter = PlayerPresenter(this)
-        playerPresenter?.bindScreen()
+
     }
 }

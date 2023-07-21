@@ -5,7 +5,6 @@ interface PlayerPresenterInterface {
 
     fun bindScreen()
 
-    fun setProgressTime()
 
     fun changePlayButton()
 

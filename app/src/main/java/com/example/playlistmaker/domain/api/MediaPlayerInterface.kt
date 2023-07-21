@@ -12,7 +12,7 @@ interface MediaPlayerInterface {
 
     fun destroyPlayer()
 
-    fun updateProgress(callback: Callback)
+    fun updateProgress(callback: MediaPlayerCallback)
 
     fun startPlayer()
 

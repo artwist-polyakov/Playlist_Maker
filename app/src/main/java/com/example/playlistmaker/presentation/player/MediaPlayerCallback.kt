@@ -4,7 +4,7 @@ import com.example.playlistmaker.domain.models.TrackDurationTime
 
 interface MediaPlayerCallback {
     fun onMediaPlayerReady()
-    fun onMediaPlayerTimeUpdate(time: Int)
+    fun onMediaPlayerTimeUpdate(time: TrackDurationTime)
 
     fun resetPlayer()
 
