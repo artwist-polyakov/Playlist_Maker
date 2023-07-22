@@ -117,5 +117,18 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
         this.seekTo(customCurrentPosition)
     }
 
+    override fun changeTrack(track: TrackDto) {
+        this.apply {
+            reset()
+            setDataSource(track.previewUrl)
+            prepareAsync()
+            setOnPreparedListener{
+                duration = it.duration
+                state = STATE_PREPARED
+                callback?.onMediaPlayerReady()
+            }
+        }
+    }
+
 
 }

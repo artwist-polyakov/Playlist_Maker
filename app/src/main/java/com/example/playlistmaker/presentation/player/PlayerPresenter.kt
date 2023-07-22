@@ -80,6 +80,15 @@ class PlayerPresenter(
         }
     }
 
+    override fun changeView(newView: PlayerActivityInterface) {
+        this.view = newView
+    }
+
+    override fun changeTrack(track: TrackDto) {
+        view?.playButton?.isEnabled = false
+        this.track = track
+        mediaPlayer?.changeTrack(track)
+    }
     override fun resetPlayer() {
         if (currentButtonState == 1) {
             changePlayButton()

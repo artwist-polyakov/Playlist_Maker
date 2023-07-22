@@ -14,6 +14,7 @@ import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.presentation.player.PlayerActivityInterface
 import com.example.playlistmaker.presentation.player.PlayerPresenter
 import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
+import com.example.playlistmaker.presentation.player.PresenterCreator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -45,7 +46,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
         currentTrack?.let{
-            playerPresenter = PlayerPresenter(this, track= it)
+            playerPresenter = PresenterCreator.giveMeMyPresenter(this, it)
             playerPresenter?.bindScreen()
         }
     }
@@ -90,7 +91,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
         //BINDING
         currentTrack.let {
-            playerPresenter = PlayerPresenter(this, track= it!! )
+            playerPresenter = PresenterCreator.giveMeMyPresenter(this, it!!)
             playerPresenter?.bindScreen()
         }
 
