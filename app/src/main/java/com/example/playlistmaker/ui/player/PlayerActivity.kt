@@ -47,6 +47,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     override fun onPause() {
         super.onPause()
+        playerPresenter?.resetPlayer()
     }
 
     override fun onDestroy() {

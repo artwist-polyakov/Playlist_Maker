@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.domain.impl.NextMediaPlayer
+import com.example.playlistmaker.data.repository.NextMediaPlayer
 import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.ui.player.PlayerActivity
@@ -64,11 +64,9 @@ class PlayerPresenter(
             if (currentButtonState == 0) {
                 it.playButton?.setImageResource(R.drawable.pause_button)
                 currentButtonState = READY_TO_PAUSE
-                Log.d("PlayerPresenterButtonEnvoque", "changePlayButton: $currentButtonState")
             } else {
                 it.playButton?.setImageResource(R.drawable.play_button)
                 currentButtonState = READY_TO_PLAY
-                Log.d("PlayerPresenterButtonEnvoque", "changePlayButton: $currentButtonState")
             }
         }
     }
@@ -103,6 +101,7 @@ class PlayerPresenter(
         if (currentButtonState == 1) {
             changePlayButton()
             mediaPlayer?.destroyPlayer()
+            mediaPlayer = null
         }
         view?.let {
             it.trackTime?.text = START_TIME
