@@ -44,13 +44,14 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override fun onResume() {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-        playerPresenter = PlayerPresenter(this)
-        playerPresenter!!.bindScreen()
+        currentTrack?.let{
+            playerPresenter = PlayerPresenter(this, track= it)
+            playerPresenter?.bindScreen()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        playerPresenter?.pausePresenter()
     }
 
     override fun onDestroy() {
@@ -88,8 +89,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         trackCountryInfoGroup = findViewById(R.id.track_country_info)
 
         //BINDING
-        playerPresenter = PlayerPresenter(this)
-        playerPresenter?.bindScreen()
+        currentTrack.let {
+            playerPresenter = PlayerPresenter(this, track= it!! )
+            playerPresenter?.bindScreen()
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

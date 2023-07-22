@@ -103,6 +103,7 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
     private fun finishPlay() {
         this.pausePlayer()
         customCurrentPosition = 0
+        this.seekTo(customCurrentPosition)
         state = STATE_PREPARED
         callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
         handler.removeCallbacks(updateProgressRunnable)
