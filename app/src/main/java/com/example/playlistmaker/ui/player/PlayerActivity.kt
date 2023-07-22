@@ -1,23 +1,17 @@
 package com.example.playlistmaker.ui.player
 
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.player.PlayerActivityInterface
-import com.example.playlistmaker.presentation.player.PlayerPresenter
 import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
 import com.example.playlistmaker.presentation.player.PresenterCreator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override var playerPresenter: PlayerPresenterInterface? = null
@@ -36,7 +30,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override var trackCountry: TextView? = null
     override var trackInfoGroup: Group? = null
     override var trackCountryInfoGroup: Group? = null
-    override var currentTrack: TrackDto? = null
+    override var currentTrack: Track? = null
 
     companion object {
         const val TRACK = "current_track"
@@ -92,6 +86,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         //BINDING
         currentTrack.let {
             playerPresenter = PresenterCreator.giveMeMyPresenter(this, it!!)
+            playerPresenter?.changeTrack(it)
             playerPresenter?.bindScreen()
         }
 

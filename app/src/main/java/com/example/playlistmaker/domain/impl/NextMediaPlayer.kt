@@ -3,16 +3,14 @@ package com.example.playlistmaker.domain.impl
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.Toast
-import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 
 class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
-                      override var withTrack: TrackDto?) : MediaPlayer(), MediaPlayerInterface {
+                      override var withTrack: Track?) : MediaPlayer(), MediaPlayerInterface {
     private var state = STATE_DEFAULT
     private var handler = Handler(Looper.getMainLooper())
     private var customCurrentPosition = 0
@@ -117,9 +115,10 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
         this.seekTo(customCurrentPosition)
     }
 
-    override fun changeTrack(track: TrackDto) {
+    override fun changeTrack(track: Track) {
         this.apply {
-            reset()
+            this.reset()
+            finishPlay()
             setDataSource(track.previewUrl)
             prepareAsync()
             setOnPreparedListener{

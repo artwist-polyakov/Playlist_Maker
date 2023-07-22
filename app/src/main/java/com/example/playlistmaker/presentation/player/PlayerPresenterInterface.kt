@@ -1,10 +1,10 @@
 package com.example.playlistmaker.presentation.player
 
-import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.domain.models.Track
 
 interface PlayerPresenterInterface {
     var view: PlayerActivityInterface?
-    var track: TrackDto
+    var track: Track
 
     fun bindScreen()
 
@@ -17,6 +17,6 @@ interface PlayerPresenterInterface {
 
     fun changeView(newView: PlayerActivityInterface)
 
-    fun changeTrack(track: TrackDto)
+    fun changeTrack(track: Track)
 
 }

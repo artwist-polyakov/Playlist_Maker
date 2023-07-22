@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.domain.impl.NextMediaPlayer
 import com.example.playlistmaker.domain.models.TrackDurationTime
@@ -14,7 +14,7 @@ import com.example.playlistmaker.ui.player.PlayerActivity
 
 class PlayerPresenter(
     override var view: PlayerActivityInterface?,
-    override var track: TrackDto
+    override var track: Track
 ) : PlayerPresenterInterface, MediaPlayerCallback {
     private var currentButtonState = READY_TO_PLAY
     private lateinit var playButtonUseCase: PlayButtonInteractUseCase
@@ -84,10 +84,20 @@ class PlayerPresenter(
         this.view = newView
     }
 
-    override fun changeTrack(track: TrackDto) {
-        view?.playButton?.isEnabled = false
+    private fun setPlayIcon() {
+        view?.let {
+            it.playButton?.setImageResource(R.drawable.play_button)
+        }
+    }
+
+    override fun changeTrack(track: Track) {
+        view?.let {
+            view?.playButton?.isEnabled = false
+        }
         this.track = track
         mediaPlayer?.changeTrack(track)
+        currentButtonState = READY_TO_PLAY
+        setPlayIcon()
     }
     override fun resetPlayer() {
         if (currentButtonState == 1) {
