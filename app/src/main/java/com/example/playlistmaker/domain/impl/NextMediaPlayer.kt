@@ -9,8 +9,7 @@ import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
-import com.example.playlistmaker.ui.player.PlayerActivity
-import javax.security.auth.callback.Callback
+
 
 class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
                       override var withTrack: TrackDto?) : MediaPlayer(), MediaPlayerInterface {
@@ -107,6 +106,15 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
         state = STATE_PREPARED
         callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
         handler.removeCallbacks(updateProgressRunnable)
+    }
+
+    override fun getTrackPosition(): Int {
+        return customCurrentPosition
+    }
+
+    override fun setTrackPosition(position: Int) {
+        customCurrentPosition = position
+        this.seekTo(customCurrentPosition)
     }
 
 

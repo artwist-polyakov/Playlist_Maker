@@ -28,12 +28,14 @@ class PlayerPresenter(
                 it.trackCountryInfoGroup?.visibility = Group.VISIBLE
                 it.trackCountry?.text = track.country
             }
-            it.playButton?.isEnabled = false
+
             // Трек не пустой?
             if (track.trackName == "") {
+                it.playButton?.isEnabled = false
                 it.trackInfoGroup?.visibility = Group.GONE
             } else {
                 if (mediaPlayer == null) {
+                    it.playButton?.isEnabled = false
                     // Создаем новый MediaPlayer, если он еще не был создан
                     mediaPlayer = NextMediaPlayer(this, withTrack = track)
                 }

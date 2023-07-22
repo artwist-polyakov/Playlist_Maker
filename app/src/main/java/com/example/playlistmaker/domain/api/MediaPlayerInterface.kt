@@ -18,6 +18,8 @@ interface MediaPlayerInterface {
 
     fun pausePlayer()
 
+    fun getTrackPosition(): Int
 
+    fun setTrackPosition(position: Int)
 
 }
