@@ -4,6 +4,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.models.TrackInformation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 interface PlayerActivityInterface {
@@ -12,7 +13,7 @@ interface PlayerActivityInterface {
     var trackCountryInfoGroup: Group?
     var trackCountry: TextView?
     var playerPresenter: PlayerPresenterInterface?
-    var currentTrack: Track?
+    var currentTrack: TrackInformation?
     var trackInfoGroup: Group?
     var trackName: TextView?
     var artistName: TextView?

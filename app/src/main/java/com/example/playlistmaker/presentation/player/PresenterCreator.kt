@@ -1,11 +1,12 @@
 package com.example.playlistmaker.presentation.player
 
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.models.TrackInformation
 
 object PresenterCreator {
     var playerPresenter: PlayerPresenterInterface? = null
 
-    fun giveMeMyPresenter(view: PlayerActivityInterface, track: Track): PlayerPresenterInterface {
+    fun giveMeMyPresenter(view: PlayerActivityInterface, track: TrackInformation): PlayerPresenterInterface {
         if (playerPresenter == null) {
             playerPresenter = PlayerPresenter(view, track)
         } else {

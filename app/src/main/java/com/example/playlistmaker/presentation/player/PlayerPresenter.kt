@@ -7,12 +7,13 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.data.repository.MediaPlayerImpl
 import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
+import com.example.playlistmaker.presentation.models.TrackInformation
 import com.example.playlistmaker.ui.player.PlayerActivity
 
 
 class PlayerPresenter(
     override var view: PlayerActivityInterface?,
-    override var track: Track
+    override var track: TrackInformation
 ) : PlayerPresenterInterface, MediaPlayerCallback {
     private var currentButtonState = READY_TO_PLAY
     private lateinit var playButtonUseCase: PlayButtonInteractUseCase
@@ -86,7 +87,7 @@ class PlayerPresenter(
         }
     }
 
-    override fun changeTrack(track: Track) {
+    override fun changeTrack(track: TrackInformation) {
         view?.let {
             view?.playButton?.isEnabled = false
         }

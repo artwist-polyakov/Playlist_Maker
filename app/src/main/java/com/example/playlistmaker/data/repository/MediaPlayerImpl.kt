@@ -5,12 +5,13 @@ import android.os.Handler
 import android.os.Looper
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
+import com.example.playlistmaker.presentation.models.TrackInformation
 import com.example.playlistmaker.presentation.player.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 
 class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
-                      override var withTrack: Track?) : MediaPlayer(), MediaPlayerInterface {
+                      override var withTrack: TrackInformation?) : MediaPlayer(), MediaPlayerInterface {
 
     companion object {
         private const val STATE_DEFAULT = 0
@@ -119,7 +120,7 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
         this.seekTo(customCurrentPosition)
     }
 
-    override fun changeTrack(track: Track) {
+    override fun changeTrack(track: TrackInformation) {
         this.apply {
             this.reset()
             finishPlay()

@@ -1,10 +1,11 @@
 package com.example.playlistmaker.domain.api
 
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.models.TrackInformation
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 interface MediaPlayerInterface {
-    var withTrack: Track?
+    var withTrack: TrackInformation?
     var callback: MediaPlayerCallback?
 
     fun playPauseSwitcher()
@@ -21,6 +22,6 @@ interface MediaPlayerInterface {
 
     fun setTrackPosition(position: Int)
 
-    fun changeTrack(track: Track)
+    fun changeTrack(track: TrackInformation)
 
 }
