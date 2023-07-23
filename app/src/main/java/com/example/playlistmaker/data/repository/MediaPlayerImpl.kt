@@ -9,8 +9,17 @@ import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 
-class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
+class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
                       override var withTrack: Track?) : MediaPlayer(), MediaPlayerInterface {
+
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val UPDATE_STEP_400MS_LONG = 400L
+    }
+
     private var state = STATE_DEFAULT
     private var handler = Handler(Looper.getMainLooper())
     private var customCurrentPosition = 0
@@ -19,24 +28,18 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
     private val updateProgressRunnable: Runnable = object : Runnable {
         override fun run() {
             if (state == STATE_PLAYING) {
-                customCurrentPosition += 400
+                customCurrentPosition += UPDATE_STEP_400MS_LONG.toInt()
                 val time = TrackDurationTime(customCurrentPosition)
-//                Log.d("UPDATE PROGRESS", "updateProgress: ${time.toString()}")
                 callback?.onMediaPlayerTimeUpdate(time)
                 if (customCurrentPosition >= duration) {
                     finishPlay()
                 }
-                handler.postDelayed(this, 400)
+                handler.postDelayed(this, UPDATE_STEP_400MS_LONG)
             }
         }
     }
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
+
 
     init {
         withTrack.let {
@@ -48,6 +51,7 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
                     state = STATE_PREPARED
                     callback?.onMediaPlayerReady()
                 }
+                // TODO сделать через родную реализацию остановку проигрывания
 //                setOnCompletionListener {
 //                    if (state == STATE_PLAYING) {
 //                        finishPlay()
@@ -78,7 +82,7 @@ class NextMediaPlayer(override var callback: MediaPlayerCallback? = null,
     }
 
     override fun updateProgress(callback: MediaPlayerCallback) {
-        handler.postDelayed(updateProgressRunnable, 400)
+        handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
     }
 
 

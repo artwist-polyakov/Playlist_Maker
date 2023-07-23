@@ -1,12 +1,11 @@
 package com.example.playlistmaker.presentation.player
 
-import android.util.Log
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.data.repository.NextMediaPlayer
+import com.example.playlistmaker.data.repository.MediaPlayerImpl
 import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.ui.player.PlayerActivity
@@ -37,7 +36,7 @@ class PlayerPresenter(
                 if (mediaPlayer == null) {
                     it.playButton?.isEnabled = false
                     // Создаем новый MediaPlayer, если он еще не был создан
-                    mediaPlayer = NextMediaPlayer(this, withTrack = track)
+                    mediaPlayer = MediaPlayerImpl(this, withTrack = track)
                 }
                 it.trackInfoGroup?.visibility = Group.VISIBLE
                 it.trackName?.text = track.trackName
@@ -61,7 +60,7 @@ class PlayerPresenter(
 
     override fun changePlayButton() {
         view?.let{
-            if (currentButtonState == 0) {
+            if (currentButtonState == READY_TO_PLAY) {
                 it.playButton?.setImageResource(R.drawable.pause_button)
                 currentButtonState = READY_TO_PAUSE
             } else {
@@ -72,7 +71,7 @@ class PlayerPresenter(
     }
 
     override fun pausePresenter() {
-        if (currentButtonState == 1) {
+        if (currentButtonState == READY_TO_PAUSE) {
             changePlayButton()
             mediaPlayer?.pausePlayer()
         }

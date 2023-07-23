@@ -25,6 +25,7 @@ import com.example.playlistmaker.data.dto.LinkedRepository
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.data.network.ITunesApi
 import com.example.playlistmaker.data.dto.SongsSearchResponse
+import com.example.playlistmaker.data.dto.TrackDtoToTrackMapper
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.gson.Gson
@@ -67,7 +68,7 @@ class SearchActivity : AppCompatActivity() {
             if (currentTrackDtos.size > 0) {
                 linkedRepository.add(track)
                 val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
-                intent.putExtra(PlayerActivity.TRACK, Track(track))
+                intent.putExtra(PlayerActivity.TRACK, TrackDtoToTrackMapper().invoke(track))
                 startActivity(intent)
             }
         }

@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Parcelize
-// TODO переменовать TrackDTO в Track через промежуточное значение и поменять местами с новым треком
 data class Track(val trackId: Long,
                  val trackName: String,
                  val artistName: String,
@@ -19,23 +18,7 @@ data class Track(val trackId: Long,
                  val primaryGenreName: String?,
                  val country: String?,
                  val previewUrl: String?
-                    ) : Parcelable
-
-{
-    constructor(from: TrackDto) : this(
-        trackId = from.trackId,
-        trackName = from.trackName,
-        artistName = from.artistName,
-        trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(from.trackTimeMillis),
-        artworkUrl100 = from.artworkUrl100,
-        artworkUrl512 = from.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"),
-        collectionName = from.collectionName,
-        relizeYear = SimpleDateFormat("yyyy", Locale.getDefault())
-            .format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                .parse(from.releaseDate)),
-        primaryGenreName = from.primaryGenreName,
-        country = from.country,
-        previewUrl = from.previewUrl)
+                    ) : Parcelable {
 
     override fun hashCode(): Int {
         return this.trackId.hashCode()
