@@ -6,7 +6,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.data.repository.MediaPlayerImpl
-import com.example.playlistmaker.domain.models.TrackDurationTime
 import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.ui.player.PlayerActivity
 

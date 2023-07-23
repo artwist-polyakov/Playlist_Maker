@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.domain.models.TrackDurationTime
+import com.example.playlistmaker.presentation.player.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 
