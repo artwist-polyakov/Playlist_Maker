@@ -1,6 +1,5 @@
 package com.example.playlistmaker.domain.api
 
-import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.models.TrackInformation
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 

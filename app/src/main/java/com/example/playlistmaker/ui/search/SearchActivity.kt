@@ -25,7 +25,7 @@ import com.example.playlistmaker.data.dto.LinkedRepository
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.data.network.ITunesApi
 import com.example.playlistmaker.data.dto.SongsSearchResponse
-import com.example.playlistmaker.data.dto.TrackDtoToTrackInformationMapper
+import com.example.playlistmaker.presentation.TrackDtoToTrackInformationMapper
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

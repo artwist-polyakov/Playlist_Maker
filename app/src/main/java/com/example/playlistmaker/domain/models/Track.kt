@@ -3,7 +3,6 @@ package com.example.playlistmaker.domain.models
 import android.os.Parcelable
 import com.example.playlistmaker.data.dto.TrackDto
 import kotlinx.parcelize.Parcelize
-import java.util.Locale
 
 @Parcelize
 data class Track(

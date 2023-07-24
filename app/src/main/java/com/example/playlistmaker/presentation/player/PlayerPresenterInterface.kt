@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.player
 
-import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.presentation.models.TrackInformation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
