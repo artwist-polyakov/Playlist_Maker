@@ -9,9 +9,14 @@ interface PlayerPresenterInterface {
 
     fun initPlayer()
     fun resetPlayer()
-    fun changeView(view: PlayerActivityInterface)
     fun changeTrack(track: TrackInformation)
     fun onPlayButtonClicked()
     fun setPlayPauseUseCase(button: FloatingActionButton)
     fun showCurrentStage()
+
+    fun attachView(view: PlayerActivityInterface)
+
+    fun detachView()
+
+
 }

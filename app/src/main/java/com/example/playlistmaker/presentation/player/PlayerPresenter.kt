@@ -7,7 +7,6 @@ import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.presentation.models.TrackInformation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-
 class PlayerPresenter(
     override var view: PlayerActivityInterface?,
     override var track: TrackInformation
@@ -20,7 +19,6 @@ class PlayerPresenter(
         private const val READY_TO_PLAY_SHOW_PAUSE = 0
         private const val READY_TO_PAUSE_SHOW_PLAY = 1
     }
-
 
     override fun changeTrack(track: TrackInformation) {
         Log.d(
@@ -38,7 +36,6 @@ class PlayerPresenter(
             "currentButtonState",
             "after changeTrack invokation currentButtonState = $currentButtonState"
         )
-
     }
 
     override fun onPlayButtonClicked() {
@@ -80,7 +77,6 @@ class PlayerPresenter(
             "currentButtonState",
             "initPlayer invokation currentButtonState = $currentButtonState"
         )
-
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayerImpl(this, track)
         } else {
@@ -115,12 +111,14 @@ class PlayerPresenter(
             "currentButtonState",
             "after resetPlayer invokation currentButtonState = $currentButtonState"
         )
-
-
     }
 
-    override fun changeView(view: PlayerActivityInterface) {
+    override fun attachView(view: PlayerActivityInterface) {
         this.view = view
+    }
+
+    override fun detachView() {
+        this.view = null
     }
 
     override fun onMediaPlayerReady() {

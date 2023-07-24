@@ -13,7 +13,10 @@ object PresenterCreator {
         if (playerPresenter == null) {
             playerPresenter = presenterFactory(view, track)
         } else {
-            playerPresenter!!.changeView(view)
+            if (playerPresenter!!.view != null) {
+                playerPresenter!!.detachView()
+            }
+            playerPresenter!!.attachView(view)
             if (playerPresenter!!.track != track) {
                 playerPresenter!!.changeTrack(track)
             }
