@@ -1,5 +1,6 @@
 package com.example.playlistmaker.presentation.player
 
+import android.util.Log
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
@@ -24,7 +25,6 @@ class PlayerPresenter(
     companion object {
         private const val READY_TO_PLAY = 0
         private const val READY_TO_PAUSE = 1
-        private const val START_TIME = "10:00"
     }
 
     override fun pausePresenter() {
@@ -54,6 +54,18 @@ class PlayerPresenter(
     }
 
     override fun onPlayButtonClicked() {
+        Log.d("PLAYPAUSE", "currentButtonState = $currentButtonState")
+        showCurrentStage()
+    }
+
+    override fun setPlayPauseUseCase(fab: FloatingActionButton) {
+        playButtonUseCase = PlayButtonInteractUseCase()
+        fab.setOnClickListener {
+            playButtonUseCase.execute(mediaPlayer)
+        }
+    }
+
+    override fun showCurrentStage() {
         view?.let{
             if (currentButtonState == READY_TO_PLAY) {
                 it.showPauseState()
@@ -65,18 +77,19 @@ class PlayerPresenter(
         }
     }
 
-    override fun setPlayPauseUseCase(fab: FloatingActionButton) {
-        playButtonUseCase = PlayButtonInteractUseCase()
-        fab.setOnClickListener {
-            playButtonUseCase.execute(mediaPlayer)
-        }
-    }
-
     override fun initPlayer() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayerImpl(this, track)
         } else {
-            mediaPlayer?.changeTrack(track)
+            mediaPlayer?.let{ mp ->
+                mp.changeTrack(track)
+                val currentPosition = TrackDurationTime(mp.getTrackPosition())
+                view?.let {
+                    it.setTime(currentPosition.toString())
+                    showCurrentStage()
+                }
+
+            }
         }
     }
 

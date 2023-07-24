@@ -22,4 +22,6 @@ interface PlayerPresenterInterface {
 
     fun setPlayPauseUseCase(button: FloatingActionButton)
 
+    fun showCurrentStage()
+
 }

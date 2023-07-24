@@ -68,6 +68,8 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 }
         playerPresenter?.setPlayPauseUseCase(playButton)
         setTime(START_TIME)
+
+
     }
 
     override fun showPlayState() {
@@ -146,6 +148,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         playerPresenter = PresenterCreator.giveMeMyPresenter(this, currentTrack) { view, track ->
             PlayerPresenter(view, track)
         }
+        playerPresenter?.showCurrentStage()
 
     }
 
@@ -157,7 +160,9 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
-
+        playerPresenter = PresenterCreator.giveMeMyPresenter(this, currentTrack) { view, track ->
+            PlayerPresenter(view, track)
+        }
     }
 }
 
