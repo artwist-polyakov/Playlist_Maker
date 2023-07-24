@@ -5,6 +5,6 @@ interface MediaPlayerCallback {
     fun onMediaPlayerTimeUpdate(time: TrackDurationTime)
 
     fun resetPlayer()
+    fun onPlayButtonClicked()
 
-    fun changePlayButton()
 }

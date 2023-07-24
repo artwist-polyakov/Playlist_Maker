@@ -7,8 +7,10 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.data.repository.MediaPlayerImpl
 import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
+import com.example.playlistmaker.domain.usecases.UseCaseInterface
 import com.example.playlistmaker.presentation.models.TrackInformation
 import com.example.playlistmaker.ui.player.PlayerActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class PlayerPresenter(
@@ -18,61 +20,15 @@ class PlayerPresenter(
     private var currentButtonState = READY_TO_PLAY
     private lateinit var playButtonUseCase: PlayButtonInteractUseCase
     private var mediaPlayer: MediaPlayerInterface? = null
-    override fun bindScreen() {
-        view?.let {
-            // Страна не пустая?
-            if (track.country == null) {
-                it.trackCountryInfoGroup?.visibility = Group.GONE
-            } else {
-                it.trackCountryInfoGroup?.visibility = Group.VISIBLE
-                it.trackCountry?.text = track.country
-            }
 
-            // Трек не пустой?
-            if (track.trackName == "") {
-                it.playButton?.isEnabled = false
-                it.trackInfoGroup?.visibility = Group.GONE
-            } else {
-                if (mediaPlayer == null) {
-                    it.playButton?.isEnabled = false
-                    // Создаем новый MediaPlayer, если он еще не был создан
-                    mediaPlayer = MediaPlayerImpl(this, withTrack = track)
-                }
-                it.trackInfoGroup?.visibility = Group.VISIBLE
-                it.trackName?.text = track.trackName
-                it.artistName?.text = track.artistName
-                it.trackDuration?.text = track.trackTime
-                it.trackAlbumName?.text = track.collectionName
-                it.trackReleaseYear?.text = track.relizeYear
-                it.trackGenre?.text = track.primaryGenreName
-                (it as? PlayerActivity)?.let{unwrapView ->
-                    Glide.with(unwrapView)
-                        .load(track.artworkUrl512)
-                        .into(unwrapView.trackCover!!)
-                }
-                it.playButton?.setOnClickListener{
-                    playButtonUseCase = PlayButtonInteractUseCase(player = this.mediaPlayer)
-                    playButtonUseCase.execute()
-                }
-            }
-        }
-    }
-
-    override fun changePlayButton() {
-        view?.let{
-            if (currentButtonState == READY_TO_PLAY) {
-                it.playButton?.setImageResource(R.drawable.pause_button)
-                currentButtonState = READY_TO_PAUSE
-            } else {
-                it.playButton?.setImageResource(R.drawable.play_button)
-                currentButtonState = READY_TO_PLAY
-            }
-        }
+    companion object {
+        private const val READY_TO_PLAY = 0
+        private const val READY_TO_PAUSE = 1
+        private const val START_TIME = "10:00"
     }
 
     override fun pausePresenter() {
         if (currentButtonState == READY_TO_PAUSE) {
-            changePlayButton()
             mediaPlayer?.pausePlayer()
         }
     }
@@ -83,45 +39,66 @@ class PlayerPresenter(
 
     private fun setPlayIcon() {
         view?.let {
-            it.playButton?.setImageResource(R.drawable.play_button)
+            it.showPauseState()
         }
     }
 
     override fun changeTrack(track: TrackInformation) {
         view?.let {
-            view?.playButton?.isEnabled = false
+            it.showPreparationState()
         }
         this.track = track
         mediaPlayer?.changeTrack(track)
         currentButtonState = READY_TO_PLAY
         setPlayIcon()
     }
+
+    override fun onPlayButtonClicked() {
+        view?.let{
+            if (currentButtonState == READY_TO_PLAY) {
+                it.showPauseState()
+                currentButtonState = READY_TO_PAUSE
+            } else {
+                it.showPlayState()
+                currentButtonState = READY_TO_PLAY
+            }
+        }
+    }
+
+    override fun setPlayPauseUseCase(fab: FloatingActionButton) {
+        playButtonUseCase = PlayButtonInteractUseCase()
+        fab.setOnClickListener {
+            playButtonUseCase.execute(mediaPlayer)
+        }
+    }
+
+    override fun initPlayer() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayerImpl(this, track)
+        } else {
+            mediaPlayer?.changeTrack(track)
+        }
+    }
+
     override fun resetPlayer() {
-        if (currentButtonState == 1) {
-            changePlayButton()
+        if (currentButtonState == READY_TO_PAUSE) {
             mediaPlayer?.destroyPlayer()
             mediaPlayer = null
         }
         view?.let {
-            it.trackTime?.text = START_TIME
+            it.setTime("10:00")
         }
-    }
-
-    companion object {
-        private const val READY_TO_PLAY = 0
-        private const val READY_TO_PAUSE = 1
-        private const val START_TIME = "00:00"
     }
 
     override fun onMediaPlayerReady() {
         view?.let {
-            it.playButton?.isEnabled = true
+            it.showReadyState()
         }
     }
 
     override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
         view?.let {
-            it.trackTime?.text = time.toString()
+            it.setTime(time.toString())
         }
     }
 }

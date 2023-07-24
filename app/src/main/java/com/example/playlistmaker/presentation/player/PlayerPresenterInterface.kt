@@ -1,16 +1,14 @@
 package com.example.playlistmaker.presentation.player
 
-import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.presentation.models.TrackInformation
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 interface PlayerPresenterInterface {
     var view: PlayerActivityInterface?
     var track: TrackInformation
 
-    fun bindScreen()
-
-
-    fun changePlayButton()
+    fun initPlayer()
 
     fun resetPlayer()
 
@@ -19,5 +17,9 @@ interface PlayerPresenterInterface {
     fun changeView(newView: PlayerActivityInterface)
 
     fun changeTrack(track: TrackInformation)
+
+    fun onPlayButtonClicked()
+
+    fun setPlayPauseUseCase(button: FloatingActionButton)
 
 }

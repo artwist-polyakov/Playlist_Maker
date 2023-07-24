@@ -6,43 +6,98 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
+import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.data.repository.MediaPlayerImpl
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
 import com.example.playlistmaker.presentation.models.TrackInformation
 import com.example.playlistmaker.presentation.player.PlayerActivityInterface
+import com.example.playlistmaker.presentation.player.PlayerPresenter
 import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
 import com.example.playlistmaker.presentation.player.PresenterCreator
+import com.example.playlistmaker.presentation.player.TrackDurationTime
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
-    override var playerPresenter: PlayerPresenterInterface? = null
+    var playerPresenter: PlayerPresenterInterface? = null
     private lateinit var backButton: ImageView
-    override var playButton: FloatingActionButton? = null
+    private lateinit var playButton: FloatingActionButton
     private lateinit var addToCollectionButton: ImageButton
     private lateinit var likeButton: ImageButton
-    override var trackCover: ImageView? = null
-    override var trackName: TextView? = null
-    override var artistName: TextView? = null
-    override var trackTime: TextView? = null
-    override var trackDuration: TextView? = null
-    override var trackAlbumName: TextView? = null
-    override var trackReleaseYear: TextView? = null
-    override var trackGenre: TextView? = null
-    override var trackCountry: TextView? = null
-    override var trackInfoGroup: Group? = null
-    override var trackCountryInfoGroup: Group? = null
-    override var currentTrack: TrackInformation? = null
+    private lateinit var trackCover: ImageView
+    private lateinit var trackName: TextView
+    private lateinit var artistName: TextView
+    private lateinit var trackTime: TextView
+    private lateinit var trackDuration: TextView
+    private lateinit var trackAlbumName: TextView
+    private lateinit var trackReleaseYear: TextView
+    private lateinit var trackGenre: TextView
+    private lateinit var trackCountry: TextView
+    private lateinit var trackInfoGroup: Group
+    private lateinit var trackCountryInfoGroup: Group
+    private lateinit var currentTrack: TrackInformation
 
     companion object {
         const val TRACK = "current_track"
+        const val START_TIME = "00:00"
+    }
+
+    override fun showTrackInfo(trackInfo: TrackInformation) {
+        showPreparationState()
+        if (trackInfo.country == null) {
+            trackCountryInfoGroup.visibility = Group.GONE
+        } else {
+            trackCountryInfoGroup.visibility = Group.VISIBLE
+            trackCountry.text = trackInfo.country
+        }
+        // Трек не пустой?
+        if (trackInfo.trackName == "") {
+            trackInfoGroup.visibility = Group.GONE
+        } else {
+            trackInfoGroup.visibility = Group.VISIBLE
+            trackName.text = trackInfo.trackName
+            artistName.text = trackInfo.artistName
+            trackDuration.text = trackInfo.trackTime
+            trackAlbumName.text = trackInfo.collectionName
+            trackReleaseYear.text = trackInfo.relizeYear
+            trackGenre.text = trackInfo.primaryGenreName
+            Glide.with(this)
+                .load(trackInfo.artworkUrl512)
+                .into(this.trackCover)
+                }
+        playerPresenter?.setPlayPauseUseCase(playButton)
+        setTime(START_TIME)
+    }
+
+    override fun showPlayState() {
+        playButton.setImageResource(R.drawable.pause_button)
+    }
+
+    override fun showPauseState() {
+        playButton.setImageResource(R.drawable.play_button)
+    }
+
+    override fun showPreparationState() {
+        playButton.isEnabled = false
+    }
+
+    override fun showReadyState() {
+        playButton.isEnabled = true
+    }
+
+    override fun setTime(time: String) {
+        trackTime.text = time
     }
 
     override fun onResume() {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
         currentTrack?.let{
-            playerPresenter = PresenterCreator.giveMeMyPresenter(this, it)
-            playerPresenter?.bindScreen()
+            playerPresenter = PresenterCreator.giveMeMyPresenter(this, it) { view, track ->
+                PlayerPresenter(view, track)
+            }
+            showTrackInfo(it)
         }
     }
 
@@ -60,6 +115,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_page)
         currentTrack = intent.extras?.getParcelable(TRACK)!!
+
 
         // BACK BUTTON
         backButton = findViewById(R.id.return_button)
@@ -86,10 +142,9 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         trackCountryInfoGroup = findViewById(R.id.track_country_info)
 
         //BINDING
-        currentTrack.let {
-            playerPresenter = PresenterCreator.giveMeMyPresenter(this, it!!)
-            playerPresenter?.changeTrack(it)
-            playerPresenter?.bindScreen()
+        showTrackInfo(currentTrack)
+        playerPresenter = PresenterCreator.giveMeMyPresenter(this, currentTrack) { view, track ->
+            PlayerPresenter(view, track)
         }
 
     }
@@ -105,3 +160,4 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     }
 }
+

@@ -8,23 +8,14 @@ import com.example.playlistmaker.presentation.models.TrackInformation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 interface PlayerActivityInterface {
+    fun showTrackInfo(trackInfo: TrackInformation)
+    fun showPlayState()
+    fun showPauseState()
 
-    // FiELDS
-    var trackCountryInfoGroup: Group?
-    var trackCountry: TextView?
-    var playerPresenter: PlayerPresenterInterface?
-    var currentTrack: TrackInformation?
-    var trackInfoGroup: Group?
-    var trackName: TextView?
-    var artistName: TextView?
-    var trackDuration: TextView?
-    var trackAlbumName: TextView?
-    var trackReleaseYear: TextView?
-    var trackGenre: TextView?
-    var trackCover: ImageView?
-    var trackTime: TextView?
+    fun showPreparationState()
 
-    // INTERACTION
-    var playButton: FloatingActionButton?
+    fun showReadyState()
+
+    fun setTime(time: String)
 
 }

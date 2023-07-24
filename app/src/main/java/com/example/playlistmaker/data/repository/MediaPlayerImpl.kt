@@ -89,15 +89,17 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
 
     override fun startPlayer() {
         this.start()
-        callback?.changePlayButton()
+        callback?.onPlayButtonClicked()
         state = STATE_PLAYING
-        callback?.let { updateProgress(it) }
+        callback?.let {
+            it.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
+            updateProgress(it)}
     }
 
 
     override fun pausePlayer() {
         this.pause()
-        callback?.changePlayButton()
+        callback?.onPlayButtonClicked()
         state = STATE_PAUSED
         handler.removeCallbacks(updateProgressRunnable)
     }
