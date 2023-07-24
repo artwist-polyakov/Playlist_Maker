@@ -1,16 +1,10 @@
 package com.example.playlistmaker.presentation.player
 
 import android.util.Log
-import androidx.constraintlayout.widget.Group
-import com.bumptech.glide.Glide
-import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.data.repository.MediaPlayerImpl
 import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
-import com.example.playlistmaker.domain.usecases.UseCaseInterface
 import com.example.playlistmaker.presentation.models.TrackInformation
-import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -18,43 +12,36 @@ class PlayerPresenter(
     override var view: PlayerActivityInterface?,
     override var track: TrackInformation
 ) : PlayerPresenterInterface, MediaPlayerCallback {
-    private var currentButtonState = READY_TO_PLAY
+    private var currentButtonState = READY_TO_PLAY_SHOW_PAUSE
     private lateinit var playButtonUseCase: PlayButtonInteractUseCase
     private var mediaPlayer: MediaPlayerInterface? = null
 
     companion object {
-        private const val READY_TO_PLAY = 0
-        private const val READY_TO_PAUSE = 1
+        private const val READY_TO_PLAY_SHOW_PAUSE = 0
+        private const val READY_TO_PAUSE_SHOW_PLAY = 1
     }
 
-    override fun pausePresenter() {
-        if (currentButtonState == READY_TO_PAUSE) {
-            mediaPlayer?.pausePlayer()
-        }
-    }
-
-    override fun changeView(newView: PlayerActivityInterface) {
-        this.view = newView
-    }
-
-    private fun setPlayIcon() {
-        view?.let {
-            it.showPauseState()
-        }
-    }
 
     override fun changeTrack(track: TrackInformation) {
+        Log.d("currentButtonState", "changeTrack invokation currentButtonState = $currentButtonState")
         view?.let {
             it.showPreparationState()
         }
         this.track = track
-        mediaPlayer?.changeTrack(track)
-        currentButtonState = READY_TO_PLAY
-        setPlayIcon()
+        mediaPlayer?.destroyPlayer()
+        mediaPlayer = MediaPlayerImpl(this, track)
+        currentButtonState = READY_TO_PLAY_SHOW_PAUSE
+        Log.d("currentButtonState", "after changeTrack invokation currentButtonState = $currentButtonState")
+
     }
 
     override fun onPlayButtonClicked() {
-        Log.d("PLAYPAUSE", "currentButtonState = $currentButtonState")
+        Log.d("currentButtonState", "onPlayButtonClicked invokation currentButtonState = $currentButtonState")
+        if (currentButtonState == READY_TO_PLAY_SHOW_PAUSE) {
+            currentButtonState = READY_TO_PAUSE_SHOW_PLAY
+        } else {
+            currentButtonState = READY_TO_PLAY_SHOW_PAUSE
+        }
         showCurrentStage()
     }
 
@@ -66,23 +53,26 @@ class PlayerPresenter(
     }
 
     override fun showCurrentStage() {
+        Log.d("currentButtonState", "showCurrentStage invokation currentButtonState = $currentButtonState")
         view?.let{
-            if (currentButtonState == READY_TO_PLAY) {
+            if (currentButtonState == READY_TO_PLAY_SHOW_PAUSE) {
                 it.showPauseState()
-                currentButtonState = READY_TO_PAUSE
             } else {
                 it.showPlayState()
-                currentButtonState = READY_TO_PLAY
             }
         }
     }
 
     override fun initPlayer() {
+        Log.d("currentButtonState", "initPlayer invokation currentButtonState = $currentButtonState")
+
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayerImpl(this, track)
         } else {
             mediaPlayer?.let{ mp ->
-                mp.changeTrack(track)
+                if (mp.withTrack != track) {
+                    changeTrack(track)
+                }
                 val currentPosition = TrackDurationTime(mp.getTrackPosition())
                 view?.let {
                     it.setTime(currentPosition.toString())
@@ -94,13 +84,22 @@ class PlayerPresenter(
     }
 
     override fun resetPlayer() {
-        if (currentButtonState == READY_TO_PAUSE) {
-            mediaPlayer?.destroyPlayer()
-            mediaPlayer = null
+        Log.d("currentButtonState", "resetPlayer invokation currentButtonState = $currentButtonState")
+
+        mediaPlayer?.let {
+            it.destroyPlayer()
         }
-        view?.let {
-            it.setTime("10:00")
+        currentButtonState = READY_TO_PLAY_SHOW_PAUSE
+        view?.let{
+            it.showPreparationState()
         }
+        Log.d("currentButtonState", "after resetPlayer invokation currentButtonState = $currentButtonState")
+
+
+    }
+
+    override fun changeView(view: PlayerActivityInterface) {
+        this.view = view
     }
 
     override fun onMediaPlayerReady() {

@@ -3,6 +3,7 @@ package com.example.playlistmaker.data.repository
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.presentation.models.TrackInformation
@@ -43,12 +44,12 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
 
 
     init {
-        withTrack.let {
-            this.apply {
-                setDataSource(it?.previewUrl)
-                prepareAsync()
-                setOnPreparedListener{
-                    duration = it.duration
+        withTrack.let { tr->
+            let{ mp ->
+                mp.setDataSource(tr?.previewUrl)
+                mp.prepareAsync()
+                mp.setOnPreparedListener{
+                    this.duration = mp.getDuration()
                     state = STATE_PREPARED
                     callback?.onMediaPlayerReady()
                 }
@@ -58,7 +59,6 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
 //                        finishPlay()
 //                    }
 //                }
-
             }
         }
     }
@@ -68,11 +68,11 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
             STATE_PLAYING -> {
                 pausePlayer()
             }
-
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
         }
+        callback?.onPlayButtonClicked()
     }
 
     override fun destroyPlayer() {
@@ -83,34 +83,38 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
     }
 
     override fun updateProgress(callback: MediaPlayerCallback) {
+        callback.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
         handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
     }
 
 
     override fun startPlayer() {
+        Log.d("currentButtonState", "startPlayer: $state, $customCurrentPosition, $duration")
         this.start()
-        callback?.onPlayButtonClicked()
         state = STATE_PLAYING
         callback?.let {
-            it.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
             updateProgress(it)}
     }
 
-
     override fun pausePlayer() {
-        this.pause()
-        callback?.onPlayButtonClicked()
-        state = STATE_PAUSED
-        handler.removeCallbacks(updateProgressRunnable)
+        if (state == STATE_PLAYING) {
+            this.pause()
+            state = STATE_PAUSED
+            handler.removeCallbacks(updateProgressRunnable)
+        }
     }
 
     private fun finishPlay() {
+        Log.d("currentButtonState", "finishPlay: $state, $customCurrentPosition, $duration")
         this.pausePlayer()
+        Log.d("currentButtonState", "finishPlay после pausePlayer")
         customCurrentPosition = 0
-        this.seekTo(customCurrentPosition)
+//        this.seekTo(customCurrentPosition)
+        Log.d("currentButtonState", "finishPlay после seekTo")
         state = STATE_PREPARED
         callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
-        handler.removeCallbacks(updateProgressRunnable)
+//        this.release()
+//        Log.d("currentButtonState", "finishPlay после release")
     }
 
     override fun getTrackPosition(): Int {
@@ -122,19 +126,6 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
         this.seekTo(customCurrentPosition)
     }
 
-    override fun changeTrack(track: TrackInformation) {
-        this.apply {
-            this.reset()
-            finishPlay()
-            setDataSource(track.previewUrl)
-            prepareAsync()
-            setOnPreparedListener{
-                duration = it.duration
-                state = STATE_PREPARED
-                callback?.onMediaPlayerReady()
-            }
-        }
-    }
 
 
 }

@@ -101,11 +101,13 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             }
             showTrackInfo(it)
         }
+        playerPresenter?.setPlayPauseUseCase(playButton)
+
     }
 
     override fun onPause() {
         super.onPause()
-        playerPresenter?.resetPlayer()
+//        playerPresenter?.resetPlayer()
     }
 
     override fun onDestroy() {
@@ -148,7 +150,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         playerPresenter = PresenterCreator.giveMeMyPresenter(this, currentTrack) { view, track ->
             PlayerPresenter(view, track)
         }
-        playerPresenter?.showCurrentStage()
+        playerPresenter?.setPlayPauseUseCase(playButton)
 
     }
 

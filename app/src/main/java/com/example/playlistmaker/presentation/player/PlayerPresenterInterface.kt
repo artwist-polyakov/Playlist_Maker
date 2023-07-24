@@ -12,9 +12,7 @@ interface PlayerPresenterInterface {
 
     fun resetPlayer()
 
-    fun pausePresenter()
-
-    fun changeView(newView: PlayerActivityInterface)
+    fun changeView(view: PlayerActivityInterface)
 
     fun changeTrack(track: TrackInformation)
 

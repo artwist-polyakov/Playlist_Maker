@@ -22,6 +22,5 @@ interface MediaPlayerInterface {
 
     fun setTrackPosition(position: Int)
 
-    fun changeTrack(track: TrackInformation)
 
 }
