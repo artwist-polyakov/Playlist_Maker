@@ -19,6 +19,7 @@ import com.example.playlistmaker.data.dto.TrackDto
 interface ClickListener {
     fun onClick(pos: Int, type: Int)
 }
+
 class TrackAdapter(
     private val listener: ClickListener,
     private val trackDtos: MutableList<TrackDto> = mutableListOf<TrackDto>()

@@ -61,7 +61,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             Glide.with(this)
                 .load(trackInfo.artworkUrl512)
                 .into(this.trackCover)
-                }
+        }
         playerPresenter?.setPlayPauseUseCase(playButton)
         setTime(START_TIME)
 
@@ -91,7 +91,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override fun onResume() {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-        currentTrack?.let{
+        currentTrack?.let {
             playerPresenter = PresenterCreator.giveMeMyPresenter(this, it) { view, track ->
                 PlayerPresenter(view, track)
             }

@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-            val backButton = findViewById<ImageView>(R.id.return_button)
+        val backButton = findViewById<ImageView>(R.id.return_button)
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
         val supportLayout = findViewById<LinearLayout>(R.id.support_layout)
         val agreementLayout = findViewById<LinearLayout>(R.id.agreement_layout)
@@ -47,24 +47,27 @@ class SettingsActivity : AppCompatActivity() {
         sharingLayout.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))}
-            startActivity(intent)
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))
             }
+            startActivity(intent)
+        }
 
         supportLayout.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO).apply{
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, getString(R.string.support_email))
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))}
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))
+            }
             startActivity(intent)
         }
 
         agreementLayout.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW).apply{
-                data = Uri.parse(getString(R.string.agreement_link))}
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(getString(R.string.agreement_link))
+            }
             startActivity(intent)
         }
     }
 
-    }
+}

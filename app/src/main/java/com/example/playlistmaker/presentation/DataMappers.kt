@@ -35,10 +35,12 @@ class TrackDtoToTrackInformationMapper : (TrackDto) -> TrackInformation {
             relizeYear = SimpleDateFormat("yyyy", Locale.getDefault())
                 .format(
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                        .parse(dto.releaseDate)),
+                        .parse(dto.releaseDate)
+                ),
             primaryGenreName = dto.primaryGenreName,
             country = dto.country,
-            previewUrl = dto.previewUrl)
+            previewUrl = dto.previewUrl
+        )
         return result
     }
 }

@@ -6,11 +6,7 @@ interface PlayerActivityInterface {
     fun showTrackInfo(trackInfo: TrackInformation)
     fun showPlayState()
     fun showPauseState()
-
     fun showPreparationState()
-
     fun showReadyState()
-
     fun setTime(time: String)
-
 }

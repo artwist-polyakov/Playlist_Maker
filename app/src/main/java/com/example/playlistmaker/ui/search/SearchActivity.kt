@@ -67,7 +67,10 @@ class SearchActivity : AppCompatActivity() {
             if (currentTrackDtos.size > 0) {
                 linkedRepository.add(track)
                 val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
-                intent.putExtra(PlayerActivity.TRACK, TrackDtoToTrackInformationMapper().invoke(track))
+                intent.putExtra(
+                    PlayerActivity.TRACK,
+                    TrackDtoToTrackInformationMapper().invoke(track)
+                )
                 startActivity(intent)
             }
         }

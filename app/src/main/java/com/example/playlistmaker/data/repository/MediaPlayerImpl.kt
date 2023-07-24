@@ -10,8 +10,10 @@ import com.example.playlistmaker.presentation.player.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 
-class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
-                      override var withTrack: TrackInformation?) : MediaPlayer(), MediaPlayerInterface {
+class MediaPlayerImpl(
+    override var callback: MediaPlayerCallback? = null,
+    override var withTrack: TrackInformation?
+) : MediaPlayer(), MediaPlayerInterface {
 
     companion object {
         private const val STATE_DEFAULT = 0
@@ -41,13 +43,12 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
     }
 
 
-
     init {
-        withTrack.let { tr->
-            let{ mp ->
+        withTrack.let { tr ->
+            let { mp ->
                 mp.setDataSource(tr?.previewUrl)
                 mp.prepareAsync()
-                mp.setOnPreparedListener{
+                mp.setOnPreparedListener {
                     this.duration = mp.getDuration()
                     state = STATE_PREPARED
                     callback?.onMediaPlayerReady()
@@ -67,6 +68,7 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
             STATE_PLAYING -> {
                 pausePlayer()
             }
+
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
@@ -92,7 +94,8 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
         this.start()
         state = STATE_PLAYING
         callback?.let {
-            updateProgress(it)}
+            updateProgress(it)
+        }
     }
 
     override fun pausePlayer() {
@@ -124,7 +127,6 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
         customCurrentPosition = position
         this.seekTo(customCurrentPosition)
     }
-
 
 
 }

@@ -1,4 +1,5 @@
 package com.example.playlistmaker.data.dto
+
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
@@ -16,9 +17,7 @@ data class TrackDto(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?
-) : Parcelable
-
-{
+) : Parcelable {
     val artworkUrl512
         get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
     val minssecs
@@ -26,8 +25,10 @@ data class TrackDto(
 
     val relizeYear
         get() = SimpleDateFormat("yyyy", Locale.getDefault())
-            .format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                .parse(releaseDate))
+            .format(
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                    .parse(releaseDate)
+            )
 
     override fun hashCode(): Int {
         return this.trackId.hashCode()

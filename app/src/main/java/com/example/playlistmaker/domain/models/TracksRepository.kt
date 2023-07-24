@@ -10,6 +10,6 @@ interface TracksRepository {
 
     fun saveToSharedPreferences(prefs_name: String, key: String, context: Context)
 
-    fun clearSharedPreferences (prefs_name: String, key: String, context: Context)
+    fun clearSharedPreferences(prefs_name: String, key: String, context: Context)
 
 }
