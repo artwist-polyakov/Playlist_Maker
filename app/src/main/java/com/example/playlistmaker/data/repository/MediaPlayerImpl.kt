@@ -76,7 +76,7 @@ class MediaPlayerImpl(override var callback: MediaPlayerCallback? = null,
     }
 
     override fun destroyPlayer() {
-        if (state != 0) {
+        if (state != STATE_DEFAULT) {
             this.release()
         }
         state = STATE_DEFAULT
