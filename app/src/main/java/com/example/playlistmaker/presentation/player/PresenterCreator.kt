@@ -10,16 +10,16 @@ object PresenterCreator {
         track: TrackInformation,
         presenterFactory: (PlayerActivityInterface, TrackInformation) -> PlayerPresenterInterface
     ): PlayerPresenterInterface {
-        if (playerPresenter == null) {
+        playerPresenter?.let{
+            if (it.view != null) {
+                it.detachView()
+            }
+            it.attachView(view)
+            if (it.track != track) {
+                it.changeTrack(track)
+            }
+        } ?: run {
             playerPresenter = presenterFactory(view, track)
-        } else {
-            if (playerPresenter!!.view != null) {
-                playerPresenter!!.detachView()
-            }
-            playerPresenter!!.attachView(view)
-            if (playerPresenter!!.track != track) {
-                playerPresenter!!.changeTrack(track)
-            }
         }
         playerPresenter!!.initPlayer()
         return playerPresenter!!
