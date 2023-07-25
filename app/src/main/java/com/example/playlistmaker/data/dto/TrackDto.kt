@@ -1,11 +1,12 @@
-package com.example.playlistmaker.model
+package com.example.playlistmaker.data.dto
+
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Parcelize
-data class Track(
+data class TrackDto(
     val trackId: Long,
     val trackName: String,
     val artistName: String,
@@ -16,9 +17,7 @@ data class Track(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?
-) : Parcelable
-
-{
+) : Parcelable {
     val artworkUrl512
         get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
     val minssecs
@@ -26,17 +25,18 @@ data class Track(
 
     val relizeYear
         get() = SimpleDateFormat("yyyy", Locale.getDefault())
-            .format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                .parse(releaseDate))
+            .format(
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                    .parse(releaseDate)
+            )
 
     override fun hashCode(): Int {
-
         return this.trackId.hashCode()
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Track) return false
+        if (other !is TrackDto) return false
         return this.trackId == other.trackId
     }
 }

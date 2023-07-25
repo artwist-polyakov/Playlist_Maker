@@ -1,33 +1,28 @@
-package com.example.playlistmaker.adapters
+package com.example.playlistmaker.ui.search
 
 import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.model.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.PlayerActivity
-import com.example.playlistmaker.SearchActivity
-import com.example.playlistmaker.history.LinkedRepository
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.playlistmaker.data.dto.TrackDto
+
+interface ClickListener {
+    fun onClick(pos: Int, type: Int)
+}
 
 class TrackAdapter(
-    private val historyRepository: LinkedRepository<Track>,
-    private val tracks: MutableList<Track> = mutableListOf<Track>()
+    private val listener: ClickListener,
+    private val trackDtos: MutableList<TrackDto> = mutableListOf<TrackDto>()
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var isClickAllowed: Boolean = true
@@ -37,32 +32,31 @@ class TrackAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.search_result_item, parent, false)
         return TrackViewHolder(view).listen() { pos, type ->
             performVibration(view.context)
-            val track = tracks[pos]
-            historyRepository.add(track as Track)
             if (clickDebounce()) {
-                val intent = Intent(parent.context, PlayerActivity::class.java)
-                intent.putExtra(PlayerActivity.TRACK, track)
-                parent.context.startActivity(intent)
+                listener.onClick(pos, type) // call the interface method
+//                val intent = Intent(parent.context, PlayerActivity::class.java)
+//                intent.putExtra(PlayerActivity.TRACK, track)
+//                parent.context.startActivity(intent)
             }
         }
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position])
+        holder.bind(trackDtos[position])
     }
 
-    override fun getItemCount(): Int = tracks.size
+    override fun getItemCount(): Int = trackDtos.size
 
-    fun setTracks(newTracks: List<Track>?) {
-        tracks.clear()
-        if (!newTracks.isNullOrEmpty()) {
-            tracks.addAll(newTracks)
+    fun setTracks(newTrackDtos: List<TrackDto>?) {
+        trackDtos.clear()
+        if (!newTrackDtos.isNullOrEmpty()) {
+            trackDtos.addAll(newTrackDtos)
         }
         notifyDataSetChanged()
     }
 
-    fun getTracks(): ArrayList<Track> {
-        return ArrayList(tracks)
+    fun getTracks(): ArrayList<TrackDto> {
+        return ArrayList(trackDtos)
     }
 
 
@@ -86,14 +80,14 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackTime: TextView = itemView.findViewById(R.id.track_time)
     private val trackCover: ImageView = itemView.findViewById(R.id.track_cover)
 
-    fun bind(track: Track) {
-        trackName.text = track.trackName
-        trackArtist.text = track.artistName
-        trackTime.text = track.minssecs
+    fun bind(trackDto: TrackDto) {
+        trackName.text = trackDto.trackName
+        trackArtist.text = trackDto.artistName
+        trackTime.text = trackDto.minssecs
         val corner_pixel_size =
             itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
         Glide.with(trackCover.context)
-            .load(track.artworkUrl100)
+            .load(trackDto.artworkUrl100)
             .centerCrop()
             .placeholder(R.drawable.song_cover_placeholder)
             .transform(RoundedCorners(corner_pixel_size))

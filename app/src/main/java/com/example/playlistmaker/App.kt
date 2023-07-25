@@ -8,6 +8,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
     }
+
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(

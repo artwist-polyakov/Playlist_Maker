@@ -1,4 +1,4 @@
-package com.example.playlistmaker.history
+package com.example.playlistmaker.data.dto
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -30,7 +30,7 @@ class Node<T>(val value: T, var prev: Node<T>? = null, var next: Node<T>? = null
     }
 }
 
-class LinkedRepository<T>(private val maxSize: Int) {
+open class LinkedRepository<T>(private val maxSize: Int) {
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
     private var size: Int = 0
@@ -100,7 +100,7 @@ class LinkedRepository<T>(private val maxSize: Int) {
         }
     }
 
-    fun get(reversed: Boolean): ArrayList<T>? {
+    fun get(reversed: Boolean = false): ArrayList<T>? {
         val list = ArrayList<T>()
         var node = if (reversed) tail else head
         while (node != null) {
