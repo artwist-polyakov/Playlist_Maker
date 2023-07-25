@@ -106,10 +106,14 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 //        playerPresenter?.resetPlayer()
     }
 
+    override fun onStop() {
+        super.onStop()
+        playerPresenter?.detachView()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         playerPresenter?.resetPlayer()
-        playerPresenter?.detachView()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
