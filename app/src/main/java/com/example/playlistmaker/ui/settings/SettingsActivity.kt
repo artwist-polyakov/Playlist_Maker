@@ -1,11 +1,11 @@
 package com.example.playlistmaker.ui.settings
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.content.Intent
 import android.widget.LinearLayout
 import com.example.playlistmaker.App
 import com.example.playlistmaker.ui.mainscreen.MainActivity

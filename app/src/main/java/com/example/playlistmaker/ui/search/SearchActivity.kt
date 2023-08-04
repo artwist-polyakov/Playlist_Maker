@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.search
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -183,7 +182,6 @@ class SearchActivity : AppCompatActivity() {
                 // empty
             }
 
-            @SuppressLint("UseCompatLoadingForDrawables")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     makeClearButtonInvisible()
