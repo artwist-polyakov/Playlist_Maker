@@ -2,6 +2,7 @@ package com.example.playlistmaker.common.data
 
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 
 
 class ThemeRepository(private val context: Context) {
@@ -22,5 +23,6 @@ class ThemeRepository(private val context: Context) {
             putBoolean(THEME_PREF, isDark)
             apply()
         }
+        Log.d("ThemeRepository", "Theme switched to: ${if (isDark) "Dark" else "Light"}")
     }
 }

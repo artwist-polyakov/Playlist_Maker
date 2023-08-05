@@ -1,6 +1,7 @@
 package com.example.playlistmaker.main.ui.view_model
 
 import android.app.Application
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -27,8 +28,8 @@ class MainViewModel(
     }
 
 
-    private val _navigateTo = MutableLiveData<Class<*>>()
-    val navigateTo: LiveData<Class<*>> get() = _navigateTo
+    private val _navigateTo = MutableLiveData<Intent>()
+    val navigateTo: LiveData<Intent> get() = _navigateTo
 
     private val _themeSwitch = MutableLiveData<Boolean>()
     val themeSwitch: LiveData<Boolean> get() = _themeSwitch
@@ -39,15 +40,21 @@ class MainViewModel(
     }
 
     fun onSearchClicked() {
-        _navigateTo.value = SearchActivity::class.java
+        val intent = Intent(getApplication(), SearchActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        _navigateTo.value = intent
     }
 
     fun onMediaClicked() {
-        _navigateTo.value = MediaActivity::class.java
+        val intent = Intent(getApplication(), MediaActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        _navigateTo.value = intent
     }
 
     fun onSettingsClicked() {
-        _navigateTo.value = SettingsActivity::class.java
+        val intent = Intent(getApplication(), SettingsActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        _navigateTo.value = intent
     }
 
     fun switchTheme(isDark: Boolean) {

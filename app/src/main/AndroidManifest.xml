@@ -32,6 +32,7 @@
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
             android:name="com.example.playlistmaker.settings.ui.activity.SettingsActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"
             android:screenOrientation="portrait"/>

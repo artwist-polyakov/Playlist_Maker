@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity() {
             viewModel.onSettingsClicked()
         }
 
-        viewModel.navigateTo.observe(this) { activityClass ->
-            startActivity(Intent(this, activityClass))
+        viewModel.navigateTo.observe(this) { intent ->
+            startActivity(intent)
         }
 
     }
