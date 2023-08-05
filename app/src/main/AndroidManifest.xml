@@ -17,26 +17,26 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".ui.media.MediaActivity"
+            android:name=".media.ui.MediaActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.search.SearchActivity"
+            android:name=".search.ui.SearchActivity"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
-            android:name=".ui.player.PlayerActivity"
+            android:name=".player.ui.PlayerActivity"
             android:label="PlayerActivity"
-            android:parentActivityName=".ui.search.SearchActivity"
+            android:parentActivityName=".search.ui.SearchActivity"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name="com.example.playlistmaker.settings.ui.activity.SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.mainscreen.MainActivity"
+            android:name=".main.ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.PlaylistMakerMainScreen">
