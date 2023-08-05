@@ -81,15 +81,19 @@ class SettingsViewModel(
     }
 
     fun onShareClicked() {
-        shareLink.value = "link_to_share"
+        shareLink.value = settingsInteractor.getShareLink()
     }
 
     fun onSupportClicked() {
-        val emailData = EmailData("support_email", "support_subject", "support_text")
+        val emailData = EmailData(
+            settingsInteractor.getSupportEmail(),
+            settingsInteractor.getSupportSubject(),
+            ""
+        )
         sendEmail.value = emailData
     }
 
     fun onAgreementClicked() {
-        openLink.value = "link_to_agreement"
+        openLink.value = settingsInteractor.getAgreementLink()
     }
 }

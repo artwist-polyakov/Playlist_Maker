@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val themeRepository = ThemeRepository(applicationContext)
         val settingsRepository = SettingsRepositoryImpl(themeRepository)
-        val settingsInteractor = SettingsInteractorImpl(settingsRepository)
+        val settingsInteractor = SettingsInteractorImpl(settingsRepository, this)
         val externalNavigator = ExternalNavigatorImpl(this)
         val factory = SettingsViewModel.getViewModelFactory(settingsInteractor, externalNavigator)
         viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
@@ -65,15 +65,16 @@ class SettingsActivity : AppCompatActivity() {
         })
 
         viewModel.shareLink.observe(this, Observer { link ->
-            // действие по отправке ссылки
+            externalNavigator.shareLink(link)
         })
 
         viewModel.openLink.observe(this, Observer { link ->
-            // действие по открытию ссылки
+
+            externalNavigator.openLink(link)
         })
 
         viewModel.sendEmail.observe(this, Observer { email ->
-            // действие по отправке письма
+            externalNavigator.openEmail(email)
         })
 
         viewModel.isDarkTheme.observe(this, Observer { isDark ->
