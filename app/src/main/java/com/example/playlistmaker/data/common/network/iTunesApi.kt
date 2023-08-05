@@ -1,6 +1,6 @@
-package com.example.playlistmaker.data.network
+package com.example.playlistmaker.data.common.network
 
-import com.example.playlistmaker.data.dto.SongsSearchResponse
+import com.example.playlistmaker.data.common.dto.SongsSearchResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

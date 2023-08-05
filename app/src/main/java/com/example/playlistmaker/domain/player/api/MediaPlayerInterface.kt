@@ -1,6 +1,6 @@
-package com.example.playlistmaker.domain.api
+package com.example.playlistmaker.domain.player.api
 
-import com.example.playlistmaker.presentation.models.TrackInformation
+import com.example.playlistmaker.presentation.common.models.TrackInformation
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 interface MediaPlayerInterface {

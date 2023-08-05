@@ -1,12 +1,12 @@
-package com.example.playlistmaker.data.repository
+package com.example.playlistmaker.data.player
 
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.playlistmaker.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.presentation.models.TrackInformation
-import com.example.playlistmaker.presentation.player.TrackDurationTime
+import com.example.playlistmaker.domain.player.api.MediaPlayerInterface
+import com.example.playlistmaker.presentation.common.models.TrackInformation
+import com.example.playlistmaker.presentation.common.models.TrackDurationTime
 import com.example.playlistmaker.presentation.player.MediaPlayerCallback
 
 

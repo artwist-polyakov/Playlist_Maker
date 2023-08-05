@@ -1,7 +1,8 @@
-package com.example.playlistmaker.domain.usecases
+package com.example.playlistmaker.domain.player.usecases
 
 import android.util.Log
-import com.example.playlistmaker.domain.api.MediaPlayerInterface
+import com.example.playlistmaker.domain.player.api.MediaPlayerInterface
+import com.example.playlistmaker.domain.common.usecases.UseCaseInterface
 
 class PlayButtonInteractUseCase : UseCaseInterface<MediaPlayerInterface> {
     override fun execute(engine: MediaPlayerInterface?) {

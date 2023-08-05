@@ -1,10 +1,11 @@
 package com.example.playlistmaker.presentation.player
 
 import android.util.Log
-import com.example.playlistmaker.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.data.repository.MediaPlayerImpl
-import com.example.playlistmaker.domain.usecases.PlayButtonInteractUseCase
-import com.example.playlistmaker.presentation.models.TrackInformation
+import com.example.playlistmaker.domain.player.api.MediaPlayerInterface
+import com.example.playlistmaker.data.player.MediaPlayerImpl
+import com.example.playlistmaker.domain.player.usecases.PlayButtonInteractUseCase
+import com.example.playlistmaker.presentation.common.models.TrackDurationTime
+import com.example.playlistmaker.presentation.common.models.TrackInformation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PlayerPresenter(

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data.dto
+package com.example.playlistmaker.data.common.dto
 
 import android.content.Context
 import android.content.SharedPreferences

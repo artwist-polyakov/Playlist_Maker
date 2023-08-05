@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.player
+package com.example.playlistmaker.presentation.common.models
 
 import java.text.SimpleDateFormat
 import java.util.Locale

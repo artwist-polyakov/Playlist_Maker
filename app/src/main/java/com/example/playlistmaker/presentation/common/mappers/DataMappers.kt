@@ -1,7 +1,7 @@
-package com.example.playlistmaker.presentation
+package com.example.playlistmaker.presentation.common.mappers
 
-import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.presentation.models.TrackInformation
+import com.example.playlistmaker.data.common.dto.TrackDto
+import com.example.playlistmaker.presentation.common.models.TrackInformation
 import java.text.SimpleDateFormat
 import java.util.Locale
 

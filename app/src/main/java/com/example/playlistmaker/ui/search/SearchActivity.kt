@@ -20,11 +20,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.dto.LinkedRepository
-import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.data.network.ITunesApi
-import com.example.playlistmaker.data.dto.SongsSearchResponse
-import com.example.playlistmaker.presentation.TrackDtoToTrackInformationMapper
+import com.example.playlistmaker.data.common.dto.LinkedRepository
+import com.example.playlistmaker.data.common.dto.TrackDto
+import com.example.playlistmaker.data.common.network.ITunesApi
+import com.example.playlistmaker.data.common.dto.SongsSearchResponse
+import com.example.playlistmaker.presentation.common.mappers.TrackDtoToTrackInformationMapper
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

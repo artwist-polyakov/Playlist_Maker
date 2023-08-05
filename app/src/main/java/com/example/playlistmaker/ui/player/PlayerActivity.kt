@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.models.TrackInformation
+import com.example.playlistmaker.presentation.common.models.TrackInformation
 import com.example.playlistmaker.presentation.player.PlayerActivityInterface
 import com.example.playlistmaker.presentation.player.PlayerPresenter
 import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
-import com.example.playlistmaker.presentation.player.PresenterCreator
+import com.example.playlistmaker.creator.player.PresenterCreator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {

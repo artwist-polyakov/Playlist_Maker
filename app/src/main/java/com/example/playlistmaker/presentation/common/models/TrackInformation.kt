@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.models
+package com.example.playlistmaker.presentation.common.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

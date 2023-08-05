@@ -1,6 +1,6 @@
 package com.example.playlistmaker.presentation.player
 
-import com.example.playlistmaker.presentation.models.TrackInformation
+import com.example.playlistmaker.presentation.common.models.TrackInformation
 
 interface PlayerActivityInterface {
     fun showTrackInfo(trackInfo: TrackInformation)

@@ -1,7 +1,7 @@
-package com.example.playlistmaker.domain.models
+package com.example.playlistmaker.domain.common.models
 
 import android.os.Parcelable
-import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.data.common.dto.TrackDto
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

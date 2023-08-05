@@ -1,6 +1,8 @@
-package com.example.playlistmaker.presentation.player
+package com.example.playlistmaker.creator.player
 
-import com.example.playlistmaker.presentation.models.TrackInformation
+import com.example.playlistmaker.presentation.common.models.TrackInformation
+import com.example.playlistmaker.presentation.player.PlayerActivityInterface
+import com.example.playlistmaker.presentation.player.PlayerPresenterInterface
 
 object PresenterCreator {
     var playerPresenter: PlayerPresenterInterface? = null
