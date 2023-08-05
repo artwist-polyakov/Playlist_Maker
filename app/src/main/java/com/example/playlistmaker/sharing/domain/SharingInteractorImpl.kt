@@ -1,7 +1,7 @@
 package com.example.playlistmaker.sharing.domain
 
 import com.example.playlistmaker.common.domain.models.EmailData
-import com.example.playlistmaker.settings.domain.ExternalNavigator
+import com.example.playlistmaker.settings.data.ExternalNavigator
 
 class SharingInteractorImpl(
     private val externalNavigator: ExternalNavigator,

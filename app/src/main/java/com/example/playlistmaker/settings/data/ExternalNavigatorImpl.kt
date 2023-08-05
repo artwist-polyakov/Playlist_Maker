@@ -1,4 +1,4 @@
-package com.example.playlistmaker.settings.domain
+package com.example.playlistmaker.settings.data
 
 import android.content.Context
 import android.content.Intent

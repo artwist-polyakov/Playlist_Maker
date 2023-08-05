@@ -12,9 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.data.ThemeRepository
-import com.example.playlistmaker.settings.domain.ExternalNavigatorImpl
+import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
-import com.example.playlistmaker.settings.domain.SettingsRepositoryImpl
+import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 

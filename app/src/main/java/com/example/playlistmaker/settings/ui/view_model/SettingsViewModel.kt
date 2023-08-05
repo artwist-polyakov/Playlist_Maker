@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.common.domain.models.EmailData
 import com.example.playlistmaker.common.domain.models.SingleLiveEvent
-import com.example.playlistmaker.settings.domain.ExternalNavigator
+import com.example.playlistmaker.settings.data.ExternalNavigator
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 
 class SettingsViewModel(
