@@ -25,7 +25,7 @@ class SharingInteractorImpl(
 
     private fun getSupportEmailData(): EmailData {
         // Нужно реализовать
-        return EmailData()
+        return EmailData("support_email", "support_subject", "support_text")
     }
 
     private fun getTermsLink(): String {

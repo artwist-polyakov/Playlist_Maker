@@ -7,68 +7,82 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.content.Intent
 import android.widget.LinearLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.App
 import com.example.playlistmaker.main.ui.activity.MainActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.data.ThemeRepository
+import com.example.playlistmaker.settings.data.SettingsRepository
+import com.example.playlistmaker.settings.domain.ExternalNavigator
+import com.example.playlistmaker.settings.domain.ExternalNavigatorImpl
+import com.example.playlistmaker.settings.domain.SettingsInteractor
+import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
+import com.example.playlistmaker.settings.domain.SettingsRepositoryImpl
+import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var viewModel: SettingsViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        val themeRepository = ThemeRepository(applicationContext)
+        val settingsRepository = SettingsRepositoryImpl(themeRepository)
+        val settingsInteractor = SettingsInteractorImpl(settingsRepository)
+        val externalNavigator = ExternalNavigatorImpl(this)
+        val factory = SettingsViewModel.getViewModelFactory(settingsInteractor, externalNavigator)
+        viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
+
+
         val backButton = findViewById<ImageView>(R.id.return_button)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
         val supportLayout = findViewById<LinearLayout>(R.id.support_layout)
         val agreementLayout = findViewById<LinearLayout>(R.id.agreement_layout)
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        val sharingAction = {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))
-            startActivity(intent)
-        }
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        themeSwitcher.isChecked = currentNightMode == Configuration.UI_MODE_NIGHT_YES
-
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            (applicationContext as App).switchTheme(checked)
-
-            with(getSharedPreferences(ThemeRepository.PREFS, MODE_PRIVATE).edit()) {
-                putBoolean(ThemeRepository.THEME_PREF, checked)
-                apply()
-            }
-        }
 
         backButton.setOnClickListener {
-//            val intent = Intent(this@SettingsActivity, MainActivity::class.java)
-//            startActivity(intent)
-            this.finish()
+            viewModel.onBackClicked()
         }
+
+        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.onThemeSwitch(isChecked)
+        }
+
         sharingLayout.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link))
-            }
-            startActivity(intent)
+            viewModel.onShareClicked()
         }
 
         supportLayout.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, getString(R.string.support_email))
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))
-            }
-            startActivity(intent)
+            viewModel.onSupportClicked()
         }
 
         agreementLayout.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(getString(R.string.agreement_link))
-            }
-            startActivity(intent)
+            viewModel.onAgreementClicked()
         }
-    }
 
+        // Обработка событий от ViewModel
+        viewModel.closeScreen.observe(this, Observer {
+            finish()
+        })
+
+        viewModel.shareLink.observe(this, Observer { link ->
+            // действие по отправке ссылки
+        })
+
+        viewModel.openLink.observe(this, Observer { link ->
+            // действие по открытию ссылки
+        })
+
+        viewModel.sendEmail.observe(this, Observer { email ->
+            // действие по отправке письма
+        })
+
+        viewModel.isDarkTheme.observe(this, Observer { isDark ->
+            themeSwitcher.isChecked = isDark
+        })
+    }
 }
+
