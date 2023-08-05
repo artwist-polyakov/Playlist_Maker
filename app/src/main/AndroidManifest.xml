@@ -36,7 +36,7 @@
             android:theme="@style/Theme.PlaylistMaker"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".main.ui.MainActivity"
+            android:name=".main.ui.activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.PlaylistMakerMainScreen">

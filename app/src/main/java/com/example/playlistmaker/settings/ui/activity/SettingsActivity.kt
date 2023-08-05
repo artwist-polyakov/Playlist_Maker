@@ -8,8 +8,9 @@ import android.widget.ImageView
 import android.content.Intent
 import android.widget.LinearLayout
 import com.example.playlistmaker.App
-import com.example.playlistmaker.main.ui.MainActivity
+import com.example.playlistmaker.main.ui.activity.MainActivity
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.data.ThemeRepository
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
@@ -33,8 +34,8 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
 
-            with(getSharedPreferences(MainActivity.PREFS, MODE_PRIVATE).edit()) {
-                putBoolean(MainActivity.THEME_PREF, checked)
+            with(getSharedPreferences(ThemeRepository.PREFS, MODE_PRIVATE).edit()) {
+                putBoolean(ThemeRepository.THEME_PREF, checked)
                 apply()
             }
         }

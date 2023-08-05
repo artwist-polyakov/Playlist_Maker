@@ -1,0 +1,57 @@
+package com.example.playlistmaker.main.ui.view_model
+
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.playlistmaker.common.data.ThemeRepository
+import com.example.playlistmaker.media.ui.MediaActivity
+import com.example.playlistmaker.search.ui.SearchActivity
+import com.example.playlistmaker.settings.ui.activity.SettingsActivity
+
+class MainViewModel(
+    application: Application,
+    private val themeRepository: ThemeRepository
+) : AndroidViewModel(application) {
+
+    companion object {
+        fun getViewModelFactory(application: Application, themeRepository: ThemeRepository): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                MainViewModel(application, themeRepository)
+            }
+        }
+    }
+
+
+    private val _navigateTo = MutableLiveData<Class<*>>()
+    val navigateTo: LiveData<Class<*>> get() = _navigateTo
+
+    private val _themeSwitch = MutableLiveData<Boolean>()
+    val themeSwitch: LiveData<Boolean> get() = _themeSwitch
+    private val _themeRepository: ThemeRepository get() = _themeRepository
+
+    init {
+        _themeSwitch.value = themeRepository.isDarkTheme()
+    }
+
+    fun onSearchClicked() {
+        _navigateTo.value = SearchActivity::class.java
+    }
+
+    fun onMediaClicked() {
+        _navigateTo.value = MediaActivity::class.java
+    }
+
+    fun onSettingsClicked() {
+        _navigateTo.value = SettingsActivity::class.java
+    }
+
+    fun switchTheme(isDark: Boolean) {
+        _themeSwitch.value = isDark
+    }
+
+}
