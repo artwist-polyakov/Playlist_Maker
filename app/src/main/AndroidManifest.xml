@@ -17,7 +17,7 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".media.ui.MediaActivity"
+            android:name=".media.ui.activity.MediaActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity

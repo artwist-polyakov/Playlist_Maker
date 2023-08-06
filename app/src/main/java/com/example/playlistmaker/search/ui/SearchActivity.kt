@@ -20,10 +20,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.data.dto.LinkedRepository
-import com.example.playlistmaker.common.data.dto.TrackDto
-import com.example.playlistmaker.common.data.network.ITunesApi
-import com.example.playlistmaker.common.data.dto.SongsSearchResponse
+import com.example.playlistmaker.search.data.dto.LinkedRepository
+import com.example.playlistmaker.search.data.dto.TrackDto
+import com.example.playlistmaker.search.data.network.ITunesApiService
+import com.example.playlistmaker.search.data.dto.TracksSearchResponse
 import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackInformationMapper
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.google.gson.Gson
@@ -94,7 +94,7 @@ class SearchActivity : AppCompatActivity() {
         .baseUrl(API_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val itunesService = retrofit.create(ITunesApi::class.java)
+    private val itunesService = retrofit.create(ITunesApiService::class.java)
 
     // TODO сделать методы onPause и onResume для сохранения состояния приложения
     /*
@@ -343,10 +343,10 @@ class SearchActivity : AppCompatActivity() {
         hideProblemsLayout()
         recyclerView.visibility = View.GONE
         val call = itunesService.search(searchQuery)
-        call.enqueue(object : Callback<SongsSearchResponse> {
+        call.enqueue(object : Callback<TracksSearchResponse> {
             override fun onResponse(
-                call: Call<SongsSearchResponse>,
-                response: Response<SongsSearchResponse>
+                call: Call<TracksSearchResponse>,
+                response: Response<TracksSearchResponse>
             ) {
                 val responseState = when {
                     response.isSuccessful && response.body()?.results?.isNotEmpty() == true -> ResponseState.SUCCESS
@@ -376,7 +376,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<SongsSearchResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                 val responseState = ResponseState.ERROR
                 showProblemsLayout(responseState)
             }

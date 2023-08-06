@@ -1,4 +1,4 @@
-package com.example.playlistmaker.common.data.dto
+package com.example.playlistmaker.search.data.dto
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
