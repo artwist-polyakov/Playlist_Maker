@@ -9,6 +9,7 @@ data class Track(
     val trackId: Long,
     val trackName: String,
     val trackTime: String,
+    val artistName: String,
     val artworkUrl100: String,
     val artworkUrl512: String,
     val collectionName: String?,
@@ -29,4 +30,3 @@ data class Track(
     }
 
 }
-

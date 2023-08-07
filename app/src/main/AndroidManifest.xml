@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.playlistmaker">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -25,7 +27,7 @@
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
-            android:name=".player.ui.PlayerActivity"
+            android:name=".player.ui.activity.PlayerActivity"
             android:label="PlayerActivity"
             android:parentActivityName=".search.ui.SearchActivity"
             android:exported="false"
