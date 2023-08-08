@@ -8,6 +8,11 @@ import com.example.playlistmaker.search.models.Track
 class TracksStorageImpl (
     private val sharedPreferences: SharedPreferences
 ): LinkedRepository<TrackDto>(maxSize = 10, sharedPreferences = sharedPreferences ), TracksStorage {
+
+//    init {
+//        restoreHistory()
+//    }
+
     override fun pushTrackToHistory(item: TrackDto) {
         super.add(item)
     }

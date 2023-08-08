@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMappers
-import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.search.data.dto.LinkedRepository
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
@@ -101,10 +100,10 @@ class SearchActivity : ComponentActivity() {
         loadingIndicator = findViewById(R.id.loading_indicator)
         cleanHistoryButton = findViewById(R.id.clear_button)
         backButton = findViewById(R.id.return_button)
+        cleanHistoryButton.visibility = View.VISIBLE
 
         // HISTORY VIEW
         historyLayout = findViewById(R.id.history_layout)
-        hideHistoryLayout()
         historyRecyclerView = findViewById(R.id.search_history_recycler_view)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -149,13 +148,13 @@ class SearchActivity : ComponentActivity() {
         })
 
 
-
+        viewModel.loadHistoryTracks()
 
     }
 
     private fun render(state: SearchState) {
         when (state) {
-            is SearchState.Content -> showContent(state.tracks)
+            is SearchState.Content -> showSearchResult(state.tracks)
             is SearchState.Empty -> showEmpty(state.responseState)
             is SearchState.Error -> showError(state.responseState)
             is SearchState.Loading -> showLoading()
@@ -165,13 +164,13 @@ class SearchActivity : ComponentActivity() {
 
     private fun showLoading() {
         recyclerView.visibility = View.GONE
-        historyRecyclerView.visibility = View.GONE
+        historyLayout.visibility = View.GONE
         loadingIndicator.visibility = View.VISIBLE
     }
 
     private fun showError(responseState: ResponseState) {
         recyclerView.visibility = View.GONE
-        historyRecyclerView.visibility = View.GONE
+        historyLayout.visibility = View.GONE
         loadingIndicator.visibility = View.GONE
         showProblemsLayout(responseState)
     }
@@ -180,9 +179,9 @@ class SearchActivity : ComponentActivity() {
         showProblemsLayout(responseState)
     }
 
-    private fun showContent(tracks: List<Track>) {
+    private fun showSearchResult(tracks: List<Track>) {
         recyclerView.visibility = View.VISIBLE
-        historyRecyclerView.visibility = View.GONE
+        historyLayout.visibility = View.GONE
         loadingIndicator.visibility = View.GONE
         hideProblemsLayout()
 
@@ -243,7 +242,6 @@ class SearchActivity : ComponentActivity() {
         historyLayout.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.GONE
-        cleanHistoryButton.visibility = View.VISIBLE
 
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
@@ -253,7 +251,7 @@ class SearchActivity : ComponentActivity() {
     private fun hideHistoryLayout() {
         recyclerView.visibility = View.VISIBLE
         historyLayout.visibility = View.GONE
-        cleanHistoryButton.visibility = View.VISIBLE
+
     }
 
     private fun clickDebounce(): Boolean {

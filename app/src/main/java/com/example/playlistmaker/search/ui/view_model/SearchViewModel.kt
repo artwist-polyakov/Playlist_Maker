@@ -73,6 +73,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun observeState(): LiveData<SearchState> = mediatorStateLiveData
 
     override fun onCleared() {
+        super.onCleared()
+        tracksStorage.saveHistory()
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
@@ -141,13 +143,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun loadHistoryTracks() {
-        val historyTracks = tracksStorage.takeHistory(reverse = true)
+        val historyTracksDto = tracksStorage.takeHistory(reverse = true)
+        val historyTracks = historyTracksDto.map { TrackDtoToTrackMappers().invoke(it) }
         if (historyTracks.isNotEmpty()) {
-            renderState(SearchState.History(
-                historyTracks.map { it ->
-                    TrackDtoToTrackMappers().invoke(it)
-                }
-            ))
+            renderState(SearchState.History(historyTracks))
             Log.d("SearchViewModel", "history tracks $historyTracks")
         } else {
             // Если у вас нет сохраненных треков, вы можете решить, что делать здесь.
@@ -158,6 +157,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun saveTrackToHistory(track: TrackDto) {
         tracksStorage.pushTrackToHistory(track)
+        tracksStorage.saveHistory()
     }
 
     fun clearHistory() {
