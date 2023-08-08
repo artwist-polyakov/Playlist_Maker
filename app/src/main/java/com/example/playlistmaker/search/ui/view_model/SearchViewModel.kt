@@ -17,6 +17,8 @@ import com.example.playlistmaker.common.domain.models.SingleLiveEvent
 import com.example.playlistmaker.creator.search.Creator
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.models.Track
+import com.example.playlistmaker.search.ui.activity.ResponseState
+import com.example.playlistmaker.search.ui.activity.SearchState
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -31,7 +33,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private val moviesInteractor = Creator.provideTracksInteractor(getApplication())
+    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
     private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<SearchState>()
@@ -51,7 +53,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
-    fun observeState(): LiveData<SearchStateState> = mediatorStateLiveData
+    fun observeState(): LiveData<SearchState> = mediatorStateLiveData
 
     override fun onCleared() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
@@ -79,26 +81,26 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         if (newSearchText.isNotEmpty()) {
             renderState(SearchState.Loading)
 
-            TracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
+            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
                 override fun consume(foundMovies: List<Track>?, errorMessage: String?) {
-                    val movies = mutableListOf<Track>()
+                    val tracks = mutableListOf<Track>()
                     if (foundMovies != null) {
-                        movies.addAll(foundMovies)
+                        tracks.addAll(foundMovies)
                     }
 
                     when {
                         errorMessage != null -> {
                             renderState(
                                 SearchState.Error(
-                                    errorMessage = getApplication<Application>().getString(R.string.no_internet),
+                                    responseState = ResponseState.ERROR,
                                 )
                             )
                         }
 
-                        movies.isEmpty() -> {
+                        tracks.isEmpty() -> {
                             renderState(
                                 SearchState.Empty(
-                                    message = getApplication<Application>().getString(R.string.nothing_found),
+                                    responseState = ResponseState.NOTHING_FOUND,
                                 )
                             )
                         }
@@ -106,7 +108,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                         else -> {
                             renderState(
                                 SearchState.Content(
-                                    movies = movies,
+                                    tracks = tracks,
                                 )
                             )
                         }

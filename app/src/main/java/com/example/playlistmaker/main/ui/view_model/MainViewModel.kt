@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.common.data.ThemeRepository
 import com.example.playlistmaker.media.ui.activity.MediaActivity
-import com.example.playlistmaker.search.ui.SearchActivity
+import com.example.playlistmaker.search.ui.activity.SearchActivity
 import com.example.playlistmaker.settings.ui.activity.SettingsActivity
 
 class MainViewModel(

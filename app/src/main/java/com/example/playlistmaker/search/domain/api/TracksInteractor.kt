@@ -1,5 +1,6 @@
 package com.example.playlistmaker.search.domain.api
 
+import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.models.Track
 
 interface TracksInteractor {
@@ -8,5 +9,5 @@ interface TracksInteractor {
     interface TracksConsumer {
         fun consume(foundTracks: List<Track>?, errorMessage: String?)
     }
-    fun addTrackToHistory(track: Track)
+    fun addTrackToHistory(track: TrackDto)
 }

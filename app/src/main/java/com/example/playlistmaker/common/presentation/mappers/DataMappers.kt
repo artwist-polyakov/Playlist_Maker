@@ -2,6 +2,7 @@ package com.example.playlistmaker.common.presentation.mappers
 
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.search.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -37,6 +38,33 @@ class TrackDtoToTrackInformationMapper : (TrackDto) -> TrackInformation {
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
                         .parse(dto.releaseDate)
                 ),
+            primaryGenreName = dto.primaryGenreName,
+            country = dto.country,
+            previewUrl = dto.previewUrl
+        )
+        return result
+    }
+}
+
+class TrackDtoToTrackMappers : (TrackDto) -> Track {
+    override fun invoke(dto: TrackDto): Track {
+        val result = Track(
+            trackId = dto.trackId,
+            trackName = dto.trackName,
+            trackTime =  SimpleDateFormat("mm:ss", Locale.getDefault()).format(dto.trackTimeMillis),
+            artistName = dto.artistName,
+            artworkUrl100 = dto.artworkUrl100,
+            artworkUrl512 = dto.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"),
+            collectionName = dto.collectionName,
+            relizeYear = dto.releaseDate?.let {
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                    .parse(it)?.let {
+                        SimpleDateFormat("yyyy", Locale.getDefault())
+                            .format(
+                                it
+                            )
+                    }
+            },
             primaryGenreName = dto.primaryGenreName,
             country = dto.country,
             previewUrl = dto.previewUrl

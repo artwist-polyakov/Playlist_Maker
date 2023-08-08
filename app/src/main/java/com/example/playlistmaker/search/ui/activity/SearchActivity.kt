@@ -1,6 +1,5 @@
-package com.example.playlistmaker.search.ui
+package com.example.playlistmaker.search.ui.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,8 +7,6 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -23,19 +20,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.data.dto.LinkedRepository
 import com.example.playlistmaker.search.data.dto.TrackDto
-import com.example.playlistmaker.search.data.network.ITunesApiService
-import com.example.playlistmaker.search.data.dto.TracksSearchResponse
-import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackInformationMapper
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 typealias TrackList = ArrayList<TrackDto>
 
@@ -143,8 +130,8 @@ class SearchActivity : ComponentActivity() {
     private fun render(state: SearchState) {
         when (state) {
             is SearchState.Content -> showContent(state.tracks)
-            is SearchState.Empty -> showEmpty(state.message)
-            is SearchState.Error -> showError(state.errorMessage)
+            is SearchState.Empty -> showEmpty(state.responseState)
+            is SearchState.Error -> showError(state.responseState)
             is SearchState.Loading -> showLoading()
         }
     }
@@ -155,15 +142,15 @@ class SearchActivity : ComponentActivity() {
         loadingIndicator.visibility = View.VISIBLE
     }
 
-    private fun showError(errorMessage: String) {
+    private fun showError(responseState: ResponseState) {
         recyclerView.visibility = View.GONE
         historyRecyclerView.visibility = View.GONE
         loadingIndicator.visibility = View.GONE
-        showProblemsLayout(errorMessage)
+        showProblemsLayout(responseState)
     }
 
-    private fun showEmpty(emptyMessage: String) {
-        showProblemsLayout(emptyMessage)
+    private fun showEmpty(responseState: ResponseState) {
+        showProblemsLayout(responseState)
     }
 
     private fun showContent(movies: List<Track>) {

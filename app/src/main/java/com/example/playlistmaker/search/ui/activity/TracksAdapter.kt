@@ -1,21 +1,14 @@
-package com.example.playlistmaker.search.ui
+package com.example.playlistmaker.search.ui.activity
 
-import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.models.Track
 
 
@@ -33,7 +26,7 @@ class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerVie
 
     override fun getItemCount(): Int = tracks.size
 
-    fun setTracks(newTracks: List<Track>?) {
+    fun takeMyTracks(newTracks: List<Track>?) {
         tracks.clear()
         if (!newTracks.isNullOrEmpty()) {
             tracks.addAll(newTracks)
@@ -41,7 +34,7 @@ class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerVie
         notifyDataSetChanged()
     }
 
-    fun getTracks(): ArrayList<Track> {
+    fun giveMeMyTracks(): ArrayList<Track> {
         return ArrayList(tracks)
     }
 

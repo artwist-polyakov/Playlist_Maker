@@ -2,6 +2,7 @@ package com.example.playlistmaker.creator.search
 
 import android.content.Context
 import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.player.presentation.PlayerActivityInterface
 import com.example.playlistmaker.player.presentation.PlayerPresenter
 import com.example.playlistmaker.player.ui.view_model.PlayerView
 import com.example.playlistmaker.search.api.ITunesRepository
@@ -28,7 +29,7 @@ object Creator {
     }
 
     fun providePlayerPresenter(
-        playerView: PlayerView,
+        playerView: PlayerActivityInterface,
         track: TrackInformation
     ): PlayerPresenter {
         return PlayerPresenter(playerView, track)
