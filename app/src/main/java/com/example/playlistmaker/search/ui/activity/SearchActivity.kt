@@ -106,7 +106,7 @@ class SearchActivity : ComponentActivity() {
         historyLayout = findViewById(R.id.history_layout)
         historyRecyclerView = findViewById(R.id.search_history_recycler_view)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
-
+        cleanHistoryButton.visibility = View.VISIBLE
 
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
@@ -242,6 +242,7 @@ class SearchActivity : ComponentActivity() {
         historyLayout.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.GONE
+        cleanHistoryButton.visibility = View.VISIBLE
 
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
