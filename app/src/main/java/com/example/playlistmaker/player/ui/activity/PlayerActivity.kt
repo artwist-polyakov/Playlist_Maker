@@ -35,7 +35,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     private lateinit var currentTrack: TrackInformation
 
     companion object {
-        const val TRACK = "current_track"
+        const val TRACK = "track"
         const val START_TIME = "00:00"
     }
 

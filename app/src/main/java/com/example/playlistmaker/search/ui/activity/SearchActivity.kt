@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMappers
+import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.search.data.dto.LinkedRepository
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
@@ -42,7 +44,7 @@ class SearchActivity : ComponentActivity() {
             override fun onTrackClick(track: Track) {
                 if (clickDebounce()) {
                     val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
-                    intent.putExtra("track", track)
+                    intent.putExtra("track", TrackToTrackInformationMappers().invoke(track))
                     startActivity(intent)
                 }
             }
@@ -112,6 +114,7 @@ class SearchActivity : ComponentActivity() {
                 )
                 if (s.isNullOrEmpty()) {
                     makeClearButtonInvisible()
+                    viewModel.loadHistoryTracks()
                 } else {
                     makeClearButtonVisible()
                 }

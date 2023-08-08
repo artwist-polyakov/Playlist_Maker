@@ -1,6 +1,8 @@
 package com.example.playlistmaker.search.ui.view_model
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -14,7 +16,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.domain.models.SingleLiveEvent
+import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMappers
 import com.example.playlistmaker.creator.search.Creator
+import com.example.playlistmaker.search.data.dto.TrackDto
+import com.example.playlistmaker.search.data.storage.TracksStorage
+import com.example.playlistmaker.search.data.storage.TracksStorageImpl
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.models.Track
 import com.example.playlistmaker.search.ui.activity.ResponseState
@@ -38,7 +44,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     private val stateLiveData = MutableLiveData<SearchState>()
 //    fun observeState(): LiveData<MoviesState> = stateLiveData
+    private val sharedPreferences: SharedPreferences = getApplication<Application>().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
 
+    private val tracksStorage: TracksStorage = TracksStorageImpl(sharedPreferences)
 
     private var latestSearchText: String? = null
 
@@ -122,4 +130,29 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private fun renderState(state: SearchState) {
         stateLiveData.postValue(state)
     }
+
+    fun loadHistoryTracks() {
+        val historyTracks = tracksStorage.takeHistory(reverse = true)
+        if (historyTracks.isNotEmpty()) {
+            renderState(SearchState.Content(
+                historyTracks.map { it ->
+                    TrackDtoToTrackMappers().invoke(it)
+                }
+            ))
+        } else {
+            // Если у вас нет сохраненных треков, вы можете решить, что делать здесь.
+            renderState(SearchState.Empty(ResponseState.NOTHING_FOUND))
+        }
+    }
+
+    fun saveTrackToHistory(track: TrackDto) {
+        tracksStorage.pushTrackToHistory(track)
+    }
+
+    fun clearHistory() {
+        tracksStorage.clearHistory()
+        // Вызовите здесь обновление интерфейса, если это необходимо
+    }
+
+
 }
