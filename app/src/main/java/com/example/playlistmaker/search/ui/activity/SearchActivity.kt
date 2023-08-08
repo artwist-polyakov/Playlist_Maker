@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,7 +37,7 @@ enum class ResponseState {
     ERROR
 }
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
@@ -100,13 +101,12 @@ class SearchActivity : ComponentActivity() {
         loadingIndicator = findViewById(R.id.loading_indicator)
         cleanHistoryButton = findViewById(R.id.clear_button)
         backButton = findViewById(R.id.return_button)
-        cleanHistoryButton.visibility = View.VISIBLE
+
 
         // HISTORY VIEW
         historyLayout = findViewById(R.id.history_layout)
         historyRecyclerView = findViewById(R.id.search_history_recycler_view)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
-        cleanHistoryButton.visibility = View.VISIBLE
 
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
