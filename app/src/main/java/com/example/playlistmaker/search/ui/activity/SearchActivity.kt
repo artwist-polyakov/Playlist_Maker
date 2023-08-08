@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMappers
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.search.data.dto.LinkedRepository
@@ -43,6 +45,11 @@ class SearchActivity : ComponentActivity() {
         object : TracksAdapter.TrackClickListener {
             override fun onTrackClick(track: Track) {
                 if (clickDebounce()) {
+                    try {
+                        viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
+                    } catch (e: Exception) {
+                        Log.e("SearchActivity", "Error saving track to history: ${e.message}", e)
+                    }
                     val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
                     intent.putExtra("track", TrackToTrackInformationMappers().invoke(track))
                     startActivity(intent)

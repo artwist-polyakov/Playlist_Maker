@@ -91,3 +91,32 @@ class TrackToTrackInformationMappers : (Track) -> TrackInformation {
         return result
     }
 }
+
+class TrackToTrackDtoMapper : (Track) -> TrackDto {
+    override fun invoke(track: Track): TrackDto {
+        val result = TrackDto(
+            trackId = track.trackId,
+            trackName = track.trackName,
+            artistName = track.artistName,
+            trackTimeMillis = track.trackTime.let {
+                SimpleDateFormat("mm:ss", Locale.getDefault()).parse(it).time
+            }.toInt(),
+            artworkUrl100 = track.artworkUrl100,
+            collectionName = track.collectionName,
+            releaseDate = track.relizeYear?.let {
+                try {
+                    val sdfInput = SimpleDateFormat("yyyy", Locale.getDefault())
+                    val date = sdfInput.parse(it)
+                    val sdfOutput = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    sdfOutput.format(date)
+                } catch (e: Exception) {
+                    null
+                }
+            },
+            primaryGenreName = track.primaryGenreName,
+            country = track.country,
+            previewUrl = track.previewUrl
+        )
+        return result
+    }
+}
