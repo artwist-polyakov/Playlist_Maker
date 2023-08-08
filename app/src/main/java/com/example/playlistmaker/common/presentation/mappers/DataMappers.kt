@@ -107,7 +107,7 @@ class TrackToTrackDtoMapper : (Track) -> TrackDto {
                 try {
                     val sdfInput = SimpleDateFormat("yyyy", Locale.getDefault())
                     val date = sdfInput.parse(it)
-                    val sdfOutput = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val sdfOutput = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
                     sdfOutput.format(date)
                 } catch (e: Exception) {
                     null

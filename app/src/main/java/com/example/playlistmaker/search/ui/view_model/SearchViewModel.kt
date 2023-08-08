@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -43,7 +44,14 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<SearchState>()
-//    fun observeState(): LiveData<MoviesState> = stateLiveData
+
+    private val _backButtonPressed = MutableLiveData<Unit>()
+    val backButtonPressed: LiveData<Unit> get() = _backButtonPressed
+
+    private val _clearButtonPressed = MutableLiveData<Unit>()
+    val clearButtonPressed: LiveData<Unit> get() = _clearButtonPressed
+
+
     private val sharedPreferences: SharedPreferences = getApplication<Application>().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
 
     private val tracksStorage: TracksStorage = TracksStorageImpl(sharedPreferences)
@@ -58,6 +66,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 is SearchState.Empty -> searchState
                 is SearchState.Error -> searchState
                 is SearchState.Loading -> searchState
+                is SearchState.History -> SearchState.History(searchState.tracks)
             }
         }
     }
@@ -134,13 +143,15 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun loadHistoryTracks() {
         val historyTracks = tracksStorage.takeHistory(reverse = true)
         if (historyTracks.isNotEmpty()) {
-            renderState(SearchState.Content(
+            renderState(SearchState.History(
                 historyTracks.map { it ->
                     TrackDtoToTrackMappers().invoke(it)
                 }
             ))
+            Log.d("SearchViewModel", "history tracks $historyTracks")
         } else {
             // Если у вас нет сохраненных треков, вы можете решить, что делать здесь.
+            Log.d("SearchViewModel", "No history tracks")
             renderState(SearchState.Empty(ResponseState.NOTHING_FOUND))
         }
     }
@@ -152,6 +163,14 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun clearHistory() {
         tracksStorage.clearHistory()
         // Вызовите здесь обновление интерфейса, если это необходимо
+    }
+
+    fun onBackButtonPressed() {
+        _backButtonPressed.value = Unit
+    }
+
+    fun onClearButtonPressed() {
+        _clearButtonPressed.value = Unit
     }
 
 

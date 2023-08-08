@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,6 +78,7 @@ class SearchActivity : ComponentActivity() {
     private lateinit var linkedRepository: LinkedRepository<TrackDto>
     private lateinit var searchRunnable: Runnable
     private lateinit var textWatcher: TextWatcher
+    private lateinit var backButton: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +89,6 @@ class SearchActivity : ComponentActivity() {
 
         // SEARCH RECYCLER VIEW
         recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
 
         // SEARCH
@@ -99,7 +100,7 @@ class SearchActivity : ComponentActivity() {
         refreshButton = findViewById(R.id.refresh_button)
         loadingIndicator = findViewById(R.id.loading_indicator)
         cleanHistoryButton = findViewById(R.id.clear_button)
-
+        backButton = findViewById(R.id.return_button)
 
         // HISTORY VIEW
         historyLayout = findViewById(R.id.history_layout)
@@ -110,7 +111,8 @@ class SearchActivity : ComponentActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
-
+        historyRecyclerView.adapter = adapter
+        setupListeners()
         textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -130,11 +132,25 @@ class SearchActivity : ComponentActivity() {
             override fun afterTextChanged(s: Editable?) {
             }
         }
+
         textWatcher?.let { searchEditText.addTextChangedListener(it) }
 
         viewModel.observeState().observe(this) {
             render(it)
         }
+
+        viewModel.backButtonPressed.observe(this, Observer {
+            this.finish()
+        })
+
+        viewModel.clearButtonPressed.observe(this, Observer {
+            searchEditText.clearFocus()
+            searchEditText.text.clear()
+        })
+
+
+
+
     }
 
     private fun render(state: SearchState) {
@@ -143,6 +159,7 @@ class SearchActivity : ComponentActivity() {
             is SearchState.Empty -> showEmpty(state.responseState)
             is SearchState.Error -> showError(state.responseState)
             is SearchState.Loading -> showLoading()
+            is SearchState.History -> showHistoryLayout(state.tracks)
         }
     }
 
@@ -163,14 +180,14 @@ class SearchActivity : ComponentActivity() {
         showProblemsLayout(responseState)
     }
 
-    private fun showContent(movies: List<Track>) {
+    private fun showContent(tracks: List<Track>) {
         recyclerView.visibility = View.VISIBLE
         historyRecyclerView.visibility = View.GONE
         loadingIndicator.visibility = View.GONE
         hideProblemsLayout()
 
         adapter.tracks.clear()
-        adapter.tracks.addAll(movies)
+        adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
     }
 
@@ -222,11 +239,15 @@ class SearchActivity : ComponentActivity() {
         refreshButton.visibility = View.GONE
     }
 
-    private fun showHistoryLayout() {
+    private fun showHistoryLayout(tracks: List<Track>) {
         historyLayout.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.GONE
         cleanHistoryButton.visibility = View.VISIBLE
+
+        adapter.tracks.clear()
+        adapter.tracks.addAll(tracks)
+        adapter.notifyDataSetChanged()
     }
 
     private fun hideHistoryLayout() {
@@ -242,6 +263,17 @@ class SearchActivity : ComponentActivity() {
             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
+    }
+
+    fun setupListeners() {
+        // Вызовите метод ViewModel при нажатии на кнопку
+        backButton.setOnClickListener {
+            viewModel.onBackButtonPressed()
+        }
+
+        clearButton.setOnClickListener {
+            viewModel.onClearButtonPressed()
+        }
     }
 
 
