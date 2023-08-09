@@ -115,6 +115,7 @@ open class LinkedRepository<T>(
         val gson = Gson()
         this.clear()
         val json = sharedPreferences.getString(key, "[]")
+        Log.d("CurrentIds", "Восстанавливаем из SharedPreferences: $json")
         if ((json != "null") || (json != "[]")) {
             val type = object : TypeToken<List<T>>() {}.type
             val list: List<T> = gson.fromJson(json, type)
