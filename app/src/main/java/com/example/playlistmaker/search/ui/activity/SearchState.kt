@@ -21,4 +21,6 @@ sealed interface SearchState {
         data class Empty(
             val responseState: ResponseState
         ) : SearchState
+
+        object Virgin : SearchState
 }

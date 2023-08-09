@@ -60,13 +60,14 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     private val mediatorStateLiveData = MediatorLiveData<SearchState>().also { liveData ->
         liveData.addSource(stateLiveData) { searchState ->
+            Log.d("SearchViewModelState", "searchState: $searchState")
             liveData.value = when (searchState) {
-                // 2
                 is SearchState.Content -> SearchState.Content(searchState.tracks)
                 is SearchState.Empty -> searchState
                 is SearchState.Error -> searchState
                 is SearchState.Loading -> searchState
                 is SearchState.History -> SearchState.History(searchState.tracks)
+                is SearchState.Virgin -> searchState
             }
         }
     }
@@ -151,7 +152,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         } else {
             // Если у вас нет сохраненных треков, вы можете решить, что делать здесь.
             Log.d("SearchViewModel", "No history tracks")
-            renderState(SearchState.Empty(ResponseState.NOTHING_FOUND))
+            renderState(SearchState.Virgin)
         }
     }
 
@@ -171,6 +172,11 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onClearButtonPressed() {
         _clearButtonPressed.value = Unit
+    }
+
+    fun clearHistoryAndHide() {
+        clearHistory()
+        renderState(SearchState.Virgin) // это будет прятать историю и результаты поиска
     }
 
 

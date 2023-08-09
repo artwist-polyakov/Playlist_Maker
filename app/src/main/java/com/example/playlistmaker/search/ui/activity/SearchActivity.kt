@@ -34,7 +34,8 @@ typealias TrackList = ArrayList<TrackDto>
 enum class ResponseState {
     SUCCESS,
     NOTHING_FOUND,
-    ERROR
+    ERROR,
+    CLEAR
 }
 
 class SearchActivity : AppCompatActivity() {
@@ -150,6 +151,15 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel.loadHistoryTracks()
 
+        cleanHistoryButton.setOnClickListener {
+            viewModel.clearHistoryAndHide()
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadHistoryTracks()
     }
 
     private fun render(state: SearchState) {
@@ -159,7 +169,16 @@ class SearchActivity : AppCompatActivity() {
             is SearchState.Error -> showError(state.responseState)
             is SearchState.Loading -> showLoading()
             is SearchState.History -> showHistoryLayout(state.tracks)
+            is SearchState.Virgin -> clearAll()
         }
+    }
+
+    private fun clearAll() {
+        adapter.tracks.clear()
+        recyclerView.visibility = View.GONE
+        historyLayout.visibility = View.GONE
+        loadingIndicator.visibility = View.GONE
+        hideProblemsLayout()
     }
 
     private fun showLoading() {
