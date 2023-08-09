@@ -59,12 +59,10 @@ class TracksStorageImpl (
         clear()
         val json = sharedPreferences.getString(key, "[]")
         Log.d("SharedPreferences", "Восстанавливаем из SharedPreferences: $json")
-        if ((json != "null") || (json != "[]")) {
+        if (json != null && json != "null" && json != "[]") {
             val type = object : TypeToken<List<TrackDto>>() {}.type
             val list: List<TrackDto> = gson.fromJson(json, type)
-            for (item in list) {
-                addTrack(item)
-            }
+            trackSet.addAll(list)
         } else {
             clearHistory()
         }
