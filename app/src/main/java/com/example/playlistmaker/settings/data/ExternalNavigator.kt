@@ -1,6 +1,6 @@
 package com.example.playlistmaker.settings.data
 
-import com.example.playlistmaker.common.domain.models.EmailData
+import com.example.playlistmaker.settings.models.EmailData
 
 interface ExternalNavigator {
     fun shareLink(link: String)

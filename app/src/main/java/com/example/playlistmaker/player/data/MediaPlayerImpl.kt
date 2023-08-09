@@ -8,10 +8,11 @@ import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.player.presentation.MediaPlayerCallback
+import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 
 
 class MediaPlayerImpl(
-    override var callback: MediaPlayerCallback? = null,
+    override var callback: PlayerViewModel? = null,
     override var withTrack: TrackInformation?
 ) : MediaPlayer(), MediaPlayerInterface {
 
@@ -73,10 +74,10 @@ class MediaPlayerImpl(
                 startPlayer()
             }
         }
-        callback?.onPlayButtonClicked()
     }
 
     override fun destroyPlayer() {
+        Log.d("currentButtonState", "i want to destroyPlayer: $state")
         if (state != STATE_DEFAULT) {
             this.release()
         }
@@ -93,9 +94,7 @@ class MediaPlayerImpl(
         Log.d("currentButtonState", "startPlayer: $state, $customCurrentPosition, $duration")
         this.start()
         state = STATE_PLAYING
-        callback?.let {
-            updateProgress(it)
-        }
+        callback?.onMediaPlayerPlay()
     }
 
     override fun pausePlayer() {
@@ -103,6 +102,7 @@ class MediaPlayerImpl(
             this.pause()
             state = STATE_PAUSED
             handler.removeCallbacks(updateProgressRunnable)
+            callback?.onMediaPlayerPause()
         }
     }
 

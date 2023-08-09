@@ -1,4 +1,4 @@
-package com.example.playlistmaker.player.ui
+package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
 import android.widget.ImageButton
@@ -6,17 +6,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.presentation.PlayerActivityInterface
-import com.example.playlistmaker.player.presentation.PlayerPresenter
-import com.example.playlistmaker.player.presentation.PlayerPresenterInterface
-import com.example.playlistmaker.creator.player.PresenterCreator
+import com.example.playlistmaker.player.ui.view_model.PlayerState
+import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
-    var playerPresenter: PlayerPresenterInterface? = null
+
+    private lateinit var viewModel: PlayerViewModel
+
     private lateinit var backButton: ImageView
     private lateinit var playButton: FloatingActionButton
     private lateinit var addToCollectionButton: ImageButton
@@ -35,7 +38,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     private lateinit var currentTrack: TrackInformation
 
     companion object {
-        const val TRACK = "current_track"
+        const val TRACK = "track"
         const val START_TIME = "00:00"
     }
 
@@ -62,7 +65,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 .load(trackInfo.artworkUrl512)
                 .into(this.trackCover)
         }
-        playerPresenter?.setPlayPauseUseCase(playButton)
         setTime(START_TIME)
 
 
@@ -92,43 +94,40 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onResume()
         currentTrack = intent.extras?.getParcelable(TRACK)!!
         currentTrack?.let {
-            playerPresenter = PresenterCreator.giveMeMyPresenter(this, it) { view, track ->
-                PlayerPresenter(view, track)
-            }
             showTrackInfo(it)
         }
-        playerPresenter?.setPlayPauseUseCase(playButton)
 
     }
 
     override fun onPause() {
         super.onPause()
-//        playerPresenter?.resetPlayer()
     }
 
     override fun onStop() {
         super.onStop()
-        playerPresenter?.detachView()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerPresenter?.resetPlayer()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_page)
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-
+        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(currentTrack)).get(PlayerViewModel::class.java)
 
         // BACK BUTTON
         backButton = findViewById(R.id.return_button)
         backButton.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            viewModel.resetPlayer()
+            finish()
         }
         // PLAYER INTERFACE
         playButton = findViewById(R.id.play_button)
+        playButton.setOnClickListener {
+            viewModel.playPause()
+        }
         addToCollectionButton = findViewById(R.id.add_to_collection)
         likeButton = findViewById(R.id.like_button)
         trackTime = findViewById(R.id.time)
@@ -148,11 +147,30 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
         //BINDING
         showTrackInfo(currentTrack)
-        playerPresenter = PresenterCreator.giveMeMyPresenter(this, currentTrack) { view, track ->
-            PlayerPresenter(view, track)
-        }
-        playerPresenter?.setPlayPauseUseCase(playButton)
 
+
+        viewModel.changeTrack(currentTrack)
+        viewModel.playerState.observe(this, Observer { state ->
+            when(state) {
+                PlayerState.Loading -> {
+                    playButton.isEnabled = false
+                }
+                PlayerState.Ready -> {
+                    playButton.isEnabled = true
+                }
+                PlayerState.Play -> {
+                    playButton.setImageResource(R.drawable.pause_button)
+                }
+                PlayerState.Pause -> {
+                    playButton.setImageResource(R.drawable.play_button)
+                }
+
+                is PlayerState.TimeUpdate -> {
+                    trackTime.text = state.time.toString()
+                }
+
+            }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -163,9 +181,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
-        playerPresenter = PresenterCreator.giveMeMyPresenter(this, currentTrack) { view, track ->
-            PlayerPresenter(view, track)
-        }
+
+    }
+    override fun onBackPressed() {
+        viewModel.resetPlayer() // Остановка и уничтожение плеера
+        super.onBackPressed()  // Закрыть текущую активность
     }
 }
 
