@@ -159,7 +159,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadHistoryTracks()
+        viewModel.restoreLastState()
     }
 
     private fun render(state: SearchState) {

@@ -58,6 +58,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     private var latestSearchText: String? = null
 
+    private var lastState: SearchState? = null
+
     private val mediatorStateLiveData = MediatorLiveData<SearchState>().also { liveData ->
         liveData.addSource(stateLiveData) { searchState ->
             Log.d("SearchViewModelState", "searchState: $searchState")
@@ -141,6 +143,15 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun renderState(state: SearchState) {
         stateLiveData.postValue(state)
+        lastState = state
+    }
+
+    fun restoreLastState() {
+        if (lastState != null) {
+            renderState(lastState!!)
+        } else {
+            loadHistoryTracks()
+        }
     }
 
     fun loadHistoryTracks() {
