@@ -95,6 +95,7 @@ class MediaPlayerImpl(
         this.start()
         state = STATE_PLAYING
         callback?.onMediaPlayerPlay()
+        handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
     }
 
     override fun pausePlayer() {
