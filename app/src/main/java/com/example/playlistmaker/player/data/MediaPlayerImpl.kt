@@ -77,6 +77,7 @@ class MediaPlayerImpl(
     }
 
     override fun destroyPlayer() {
+        Log.d("currentButtonState", "i want to destroyPlayer: $state")
         if (state != STATE_DEFAULT) {
             this.release()
         }
@@ -93,6 +94,7 @@ class MediaPlayerImpl(
         Log.d("currentButtonState", "startPlayer: $state, $customCurrentPosition, $duration")
         this.start()
         state = STATE_PLAYING
+        callback?.onMediaPlayerPlay()
     }
 
     override fun pausePlayer() {
@@ -100,6 +102,7 @@ class MediaPlayerImpl(
             this.pause()
             state = STATE_PAUSED
             handler.removeCallbacks(updateProgressRunnable)
+            callback?.onMediaPlayerPause()
         }
     }
 

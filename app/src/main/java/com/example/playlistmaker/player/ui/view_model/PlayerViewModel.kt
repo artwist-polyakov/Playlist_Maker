@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,7 @@ class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlaye
     }
 
     fun resetPlayer() {
+        Log.d("currentButtonState", "i want to destroy player from view model")
         mediaPlayer.destroyPlayer()
     }
 
@@ -68,7 +70,13 @@ class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlaye
         _playerState.value = PlayerState.TimeUpdate(time)
     }
 
+    override fun onMediaPlayerPause() {
+        _playerState.value = PlayerState.Pause
+    }
 
+    override fun onMediaPlayerPlay() {
+        _playerState.value = PlayerState.Play
+    }
 
 
 }

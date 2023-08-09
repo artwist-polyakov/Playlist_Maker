@@ -115,15 +115,19 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_song_page)
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-
+        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(currentTrack)).get(PlayerViewModel::class.java)
 
         // BACK BUTTON
         backButton = findViewById(R.id.return_button)
         backButton.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            viewModel.resetPlayer()
+            finish()
         }
         // PLAYER INTERFACE
         playButton = findViewById(R.id.play_button)
+        playButton.setOnClickListener {
+            viewModel.playPause()
+        }
         addToCollectionButton = findViewById(R.id.add_to_collection)
         likeButton = findViewById(R.id.like_button)
         trackTime = findViewById(R.id.time)
@@ -144,9 +148,8 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         //BINDING
         showTrackInfo(currentTrack)
 
-        val track: TrackInformation = intent.extras?.getParcelable(TRACK)!!
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track)).get(PlayerViewModel::class.java)
-        viewModel.changeTrack(track)
+
+        viewModel.changeTrack(currentTrack)
         viewModel.playerState.observe(this, Observer { state ->
             when(state) {
                 PlayerState.Loading -> {
@@ -179,6 +182,10 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
 
+    }
+    override fun onBackPressed() {
+        viewModel.resetPlayer() // Остановка и уничтожение плеера
+        super.onBackPressed()  // Закрыть текущую активность
     }
 }
 
