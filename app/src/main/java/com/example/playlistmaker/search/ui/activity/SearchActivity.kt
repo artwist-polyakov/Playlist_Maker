@@ -22,12 +22,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMappers
-import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
-
-typealias TrackList = ArrayList<TrackDto>
 
 enum class ResponseState {
     SUCCESS,
@@ -147,7 +144,6 @@ class SearchActivity : AppCompatActivity() {
         cleanHistoryButton.setOnClickListener {
             viewModel.clearHistoryAndHide()
         }
-
     }
 
     override fun onResume() {
