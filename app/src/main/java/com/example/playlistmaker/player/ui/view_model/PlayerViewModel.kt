@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.data.MediaPlayerImpl
-import com.example.playlistmaker.player.ui.view_model.PlayerState
+import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 
-class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlayerViewModelCallback {
+class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlayerCallbackInterface {
     companion object {
         fun getViewModelFactory(withTrack: TrackInformation): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
