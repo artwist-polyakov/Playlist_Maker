@@ -15,8 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.R
-import com.example.playlistmaker.common.domain.models.SingleLiveEvent
 import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMappers
 import com.example.playlistmaker.creator.search.Creator
 import com.example.playlistmaker.search.data.dto.TrackDto
@@ -157,6 +155,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun loadHistoryTracks() {
         val historyTracksDto = tracksStorage.takeHistory(reverse = true)
         val historyTracks = historyTracksDto.map { TrackDtoToTrackMappers().invoke(it) }
+        renderState(SearchState.Virgin)
         if (historyTracks.isNotEmpty()) {
             renderState(SearchState.History(historyTracks))
             Log.d("SearchViewModel", "history tracks $historyTracks")
@@ -169,6 +168,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun saveTrackToHistory(track: TrackDto) {
         tracksStorage.pushTrackToHistory(track)
         tracksStorage.saveHistory()
+
     }
 
     fun clearHistory() {

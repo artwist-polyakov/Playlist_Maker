@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMappers
-import com.example.playlistmaker.search.data.dto.LinkedRepository
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.models.Track
@@ -62,7 +60,6 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var viewModel: SearchViewModel
-
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
     private lateinit var problemsLayout: LinearLayout
@@ -72,12 +69,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var cleanHistoryButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var loadingIndicator: ProgressBar
-    private lateinit var tracksAdapter: TracksAdapter
     private lateinit var historyLayout: LinearLayout
     private lateinit var historyRecyclerView: RecyclerView
-    private lateinit var historyAdapter: TracksAdapter
-    private lateinit var linkedRepository: LinkedRepository<TrackDto>
-    private lateinit var searchRunnable: Runnable
     private lateinit var textWatcher: TextWatcher
     private lateinit var backButton: ImageView
 
@@ -159,6 +152,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.loadHistoryTracks()
         viewModel.restoreLastState()
     }
 
@@ -227,8 +221,6 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.background = getDrawable(R.drawable.left_rounded_edittext)
     }
 
-
-
     private fun showProblemsLayout(responseState: ResponseState) {
         recyclerView.visibility = View.GONE
         problemsLayout.visibility = View.VISIBLE
@@ -284,7 +276,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun setupListeners() {
-        // Вызовите метод ViewModel при нажатии на кнопку
         backButton.setOnClickListener {
             viewModel.onBackButtonPressed()
         }

@@ -7,5 +7,4 @@ import com.example.playlistmaker.search.models.Track
 interface TracksRepository {
     fun searchTracks(expression: String): Resource<List<TrackDto>>
     fun addTrackToHistory(track: TrackDto)
-
 }

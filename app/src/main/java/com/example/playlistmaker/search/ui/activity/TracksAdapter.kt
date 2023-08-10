@@ -11,8 +11,6 @@ import com.example.playlistmaker.R
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.search.models.Track
 
-
-
 class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var isClickAllowed: Boolean = true
@@ -79,7 +77,6 @@ class TrackViewHolder(
         artist.text = track.artistName
         duration.text = track.trackTime
 
-        // 2
         itemView.setOnClickListener { clickListener.onTrackClick(track) }
 
 

@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val themeRepository = ThemeRepository(applicationContext)
         val factory = MainViewModel.getViewModelFactory(application, themeRepository)
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)

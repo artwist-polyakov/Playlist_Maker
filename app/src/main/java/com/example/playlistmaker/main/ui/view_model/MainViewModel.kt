@@ -26,7 +26,6 @@ class MainViewModel(
         }
     }
 
-
     private val _activityTarget = MutableLiveData<Intent>()
     val activityTarget: LiveData<Intent> get() = _activityTarget
 
