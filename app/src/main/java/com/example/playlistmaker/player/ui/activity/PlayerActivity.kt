@@ -17,9 +17,7 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
-
     private lateinit var viewModel: PlayerViewModel
-
     private lateinit var backButton: ImageView
     private lateinit var playButton: FloatingActionButton
     private lateinit var addToCollectionButton: ImageButton
@@ -66,8 +64,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 .into(this.trackCover)
         }
         setTime(START_TIME)
-
-
     }
 
     override fun showPlayState() {
@@ -96,7 +92,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         currentTrack?.let {
             showTrackInfo(it)
         }
-
     }
 
     override fun onPause() {

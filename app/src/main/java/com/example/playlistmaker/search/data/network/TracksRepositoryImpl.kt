@@ -6,7 +6,6 @@ import com.example.playlistmaker.search.data.dto.TracksSearchRequest
 import com.example.playlistmaker.search.data.dto.TracksSearchResponse
 import com.example.playlistmaker.search.data.storage.TracksStorage
 import com.example.playlistmaker.search.domain.api.TracksRepository
-import com.example.playlistmaker.search.models.Track
 
 class TracksRepositoryImpl (
     private val networkClient: NetworkClient,
@@ -25,18 +24,6 @@ class TracksRepositoryImpl (
 
                 Resource.Success((response as TracksSearchResponse).results.map {
                     TrackDto(
-
-//                        val trackId: Long,
-//                    val trackName: String,
-//                    val artistName: String,
-//                    val trackTimeMillis: Int,
-//                    val artworkUrl100: String,
-//                    val collectionName: String?,
-//                    val releaseDate: String?,
-//                    val primaryGenreName: String?,
-//                    val country: String?,
-//                    val previewUrl: String?
-//
                         trackId = it.trackId,
                         trackName = it.trackName,
                         artistName = it.artistName,

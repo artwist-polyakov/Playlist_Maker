@@ -7,7 +7,6 @@ import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 
 class App : Application() {
-//    var darkTheme = false
 
     override fun onCreate() {
         super.onCreate()
@@ -23,7 +22,6 @@ class App : Application() {
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
-//        darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES

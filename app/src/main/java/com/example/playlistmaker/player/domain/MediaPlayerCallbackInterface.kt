@@ -1,11 +1,10 @@
-package com.example.playlistmaker.player.presentation
+package com.example.playlistmaker.player.domain
 
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 
-interface MediaPlayerCallback {
+interface MediaPlayerCallbackInterface {
     fun onMediaPlayerReady()
     fun onMediaPlayerTimeUpdate(time: TrackDurationTime)
-    fun resetPlayer()
-    fun onPlayButtonClicked()
-
+    fun onMediaPlayerPause()
+    fun onMediaPlayerPlay()
 }

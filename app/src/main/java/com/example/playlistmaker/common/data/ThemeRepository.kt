@@ -3,9 +3,10 @@ package com.example.playlistmaker.common.data
 import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
+import com.example.playlistmaker.main.domain.ThemeUseCase
 
 
-class ThemeRepository(private val context: Context) {
+class ThemeRepository(private val context: Context) : ThemeUseCase {
     companion object {
         const val PREFS = "my_prefs"
         const val THEME_PREF = "isDarkTheme"
@@ -13,7 +14,7 @@ class ThemeRepository(private val context: Context) {
 
     private val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
-    fun isDarkTheme(): Boolean {
+    override fun isDarkTheme(): Boolean {
         val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return prefs.getBoolean(THEME_PREF, currentNightMode == Configuration.UI_MODE_NIGHT_YES)
     }

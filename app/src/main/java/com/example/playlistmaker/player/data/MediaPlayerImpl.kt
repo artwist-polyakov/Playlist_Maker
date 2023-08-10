@@ -7,12 +7,11 @@ import android.util.Log
 import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
-import com.example.playlistmaker.player.presentation.MediaPlayerCallback
-import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
+import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 
 
 class MediaPlayerImpl(
-    override var callback: PlayerViewModel? = null,
+    override var callback: MediaPlayerCallbackInterface? = null,
     override var withTrack: TrackInformation?
 ) : MediaPlayer(), MediaPlayerInterface {
 
@@ -84,7 +83,7 @@ class MediaPlayerImpl(
         state = STATE_DEFAULT
     }
 
-    override fun updateProgress(callback: MediaPlayerCallback) {
+    override fun updateProgress(callback: MediaPlayerCallbackInterface) {
         callback.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
         handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
     }
@@ -95,6 +94,7 @@ class MediaPlayerImpl(
         this.start()
         state = STATE_PLAYING
         callback?.onMediaPlayerPlay()
+        handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
     }
 
     override fun pausePlayer() {
@@ -111,12 +111,10 @@ class MediaPlayerImpl(
         this.pausePlayer()
         Log.d("currentButtonState", "finishPlay после pausePlayer")
         customCurrentPosition = 0
-//        this.seekTo(customCurrentPosition)
         Log.d("currentButtonState", "finishPlay после seekTo")
         state = STATE_PREPARED
         callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
-//        this.release()
-//        Log.d("currentButtonState", "finishPlay после release")
+
     }
 
     override fun getTrackPosition(): Int {
