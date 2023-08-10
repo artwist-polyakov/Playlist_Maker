@@ -27,10 +27,11 @@ class MainViewModel(
     }
 
 
-    private val _navigateTo = MutableLiveData<Intent>()
-    val navigateTo: LiveData<Intent> get() = _navigateTo
+    private val _activityTarget = MutableLiveData<Intent>()
+    val activityTarget: LiveData<Intent> get() = _activityTarget
 
     private val _themeSwitch = MutableLiveData<Boolean>()
+
     val themeSwitch: LiveData<Boolean> get() = _themeSwitch
     private val _themeRepository: ThemeRepository get() = _themeRepository
 
@@ -41,19 +42,19 @@ class MainViewModel(
     fun onSearchClicked() {
         val intent = Intent(getApplication(), SearchActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        _navigateTo.value = intent
+        _activityTarget.value = intent
     }
 
     fun onMediaClicked() {
         val intent = Intent(getApplication(), MediaActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        _navigateTo.value = intent
+        _activityTarget.value = intent
     }
 
     fun onSettingsClicked() {
         val intent = Intent(getApplication(), SettingsActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        _navigateTo.value = intent
+        _activityTarget.value = intent
     }
 
     fun switchTheme(isDark: Boolean) {

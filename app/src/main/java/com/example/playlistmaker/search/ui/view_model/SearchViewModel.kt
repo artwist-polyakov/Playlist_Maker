@@ -161,7 +161,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             renderState(SearchState.History(historyTracks))
             Log.d("SearchViewModel", "history tracks $historyTracks")
         } else {
-            // Если у вас нет сохраненных треков, вы можете решить, что делать здесь.
             Log.d("SearchViewModel", "No history tracks")
             renderState(SearchState.Virgin)
         }
@@ -174,7 +173,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun clearHistory() {
         tracksStorage.clearHistory()
-        // Вызовите здесь обновление интерфейса, если это необходимо
     }
 
     fun onBackButtonPressed() {
