@@ -8,20 +8,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.common.data.ThemeRepository
+import com.example.playlistmaker.main.domain.ThemeUseCase
 import com.example.playlistmaker.media.ui.activity.MediaActivity
 import com.example.playlistmaker.search.ui.activity.SearchActivity
 import com.example.playlistmaker.settings.ui.activity.SettingsActivity
 
 class MainViewModel(
     application: Application,
-    private val themeRepository: ThemeRepository
+    private val themeUseCase: ThemeUseCase
 ) : AndroidViewModel(application) {
 
     companion object {
-        fun getViewModelFactory(application: Application, themeRepository: ThemeRepository): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(application: Application, themeUseCase: ThemeUseCase): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                MainViewModel(application, themeRepository)
+                MainViewModel(application, themeUseCase)
             }
         }
     }
@@ -33,10 +33,10 @@ class MainViewModel(
     private val _themeSwitch = MutableLiveData<Boolean>()
 
     val themeSwitch: LiveData<Boolean> get() = _themeSwitch
-    private val _themeRepository: ThemeRepository get() = _themeRepository
+    private val _themeUseCase: ThemeUseCase get() = _themeUseCase
 
     init {
-        _themeSwitch.value = themeRepository.isDarkTheme()
+        _themeSwitch.value = themeUseCase.isDarkTheme()
     }
 
     fun onSearchClicked() {
