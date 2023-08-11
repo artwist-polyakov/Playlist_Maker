@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMappers
-import com.example.playlistmaker.creator.search.Creator
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.storage.TracksStorage
 import com.example.playlistmaker.search.data.storage.TracksStorageImpl
