@@ -1,7 +1,7 @@
 package com.example.playlistmaker.search.domain.api
 
 import com.example.playlistmaker.search.data.dto.TrackDto
-import com.example.playlistmaker.search.models.Track
+import com.example.playlistmaker.search.domain.Track
 
 interface TracksInteractor {
     fun searchTracks(expression: String, consumer: TracksConsumer)

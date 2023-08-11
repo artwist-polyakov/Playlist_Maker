@@ -1,6 +1,6 @@
 package com.example.playlistmaker.settings.data
 
-import com.example.playlistmaker.settings.models.EmailData
+import com.example.playlistmaker.settings.domain.EmailData
 import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.domain.SharingInteractor
 

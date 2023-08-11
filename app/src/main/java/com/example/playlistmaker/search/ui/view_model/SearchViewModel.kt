@@ -21,7 +21,7 @@ import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.storage.TracksStorage
 import com.example.playlistmaker.search.data.storage.TracksStorageImpl
 import com.example.playlistmaker.search.domain.api.TracksInteractor
-import com.example.playlistmaker.search.models.Track
+import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.search.ui.activity.ResponseState
 import com.example.playlistmaker.search.ui.activity.SearchState
 

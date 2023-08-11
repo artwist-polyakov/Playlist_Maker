@@ -15,10 +15,19 @@ import com.example.playlistmaker.search.ui.activity.SearchActivity
 import com.example.playlistmaker.settings.ui.activity.SettingsActivity
 
 class MainViewModel(
-    application: Application
+    application: Application,
+    themeUseCase: ThemeUseCase
 ) : AndroidViewModel(application) {
 
-    private val themeUseCase = Creator.provideThemeUseCase(application)
+    companion object {
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+                val themeUseCase = Creator.provideThemeUseCase(application)
+                MainViewModel(application, themeUseCase)
+            }
+        }
+    }
     private val _activityTarget = MutableLiveData<Intent>()
     val activityTarget: LiveData<Intent> get() = _activityTarget
 

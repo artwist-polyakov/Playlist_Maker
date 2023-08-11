@@ -23,7 +23,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMappers
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
-import com.example.playlistmaker.search.models.Track
+import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 
 enum class ResponseState {

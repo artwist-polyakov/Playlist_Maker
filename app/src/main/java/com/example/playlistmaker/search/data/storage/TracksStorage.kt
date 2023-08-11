@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search.data.storage
 
 import com.example.playlistmaker.search.data.dto.TrackDto
-import com.example.playlistmaker.search.models.Track
 
 interface TracksStorage {
     fun pushTrackToHistory(item: TrackDto)

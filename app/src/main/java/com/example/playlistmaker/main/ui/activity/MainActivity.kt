@@ -15,8 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
+        viewModel = ViewModelProvider(this, factory = MainViewModel.getViewModelFactory()).get(MainViewModel::class.java)
         findViewById<Button>(R.id.search).setOnClickListener {
             viewModel.onSearchClicked()
         }
