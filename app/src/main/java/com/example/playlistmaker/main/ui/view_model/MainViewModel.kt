@@ -18,13 +18,6 @@ class MainViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    companion object {
-        fun getViewModelFactory(application: Application): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                MainViewModel(application)
-            }
-        }
-    }
     private val themeUseCase = Creator.provideThemeUseCase(application)
     private val _activityTarget = MutableLiveData<Intent>()
     val activityTarget: LiveData<Intent> get() = _activityTarget
