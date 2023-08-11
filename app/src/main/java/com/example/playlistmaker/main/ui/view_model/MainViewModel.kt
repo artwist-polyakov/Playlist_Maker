@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.playlistmaker.common.domain.models.SingleLiveEvent
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.main.domain.ThemeUseCase
 
@@ -29,7 +30,7 @@ class MainViewModel(
         SEARCH, MEDIA, SETTINGS
     }
 
-    private val _navigationEvent = MutableLiveData<NavigationEvent>()
+    private val _navigationEvent = SingleLiveEvent<NavigationEvent>()
     val navigationEvent: LiveData<NavigationEvent> get() = _navigationEvent
     private val _themeSwitch = MutableLiveData<Boolean>()
     val themeSwitch: LiveData<Boolean> get() = _themeSwitch

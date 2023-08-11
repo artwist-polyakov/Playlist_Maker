@@ -31,19 +31,13 @@ class MainActivity : AppCompatActivity() {
         viewModel.navigationEvent.observe(this) { event ->
             val intent = when (event) {
                 MainViewModel.NavigationEvent.SEARCH -> {
-                    Intent(this, SearchActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    }
+                    Intent(this, SearchActivity::class.java)
                 }
                 MainViewModel.NavigationEvent.MEDIA -> {
-                    Intent(this, MediaActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    }
+                    Intent(this, MediaActivity::class.java)
                 }
                 MainViewModel.NavigationEvent.SETTINGS -> {
-                    Intent(this, SettingsActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    }
+                    Intent(this, SettingsActivity::class.java)
                 }
             }
             startActivity(intent)
