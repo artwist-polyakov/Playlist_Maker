@@ -21,7 +21,6 @@ class MainViewModel(
     companion object {
         fun getViewModelFactory(application: Application): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val themeUseCase = Creator.provideThemeUseCase(application)
                 MainViewModel(application)
             }
         }
