@@ -3,6 +3,7 @@ package com.example.playlistmaker
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.common.data.ThemeRepository
+import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 
@@ -10,7 +11,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val themeRepository = ThemeRepository(applicationContext)
+        val themeRepository = ThemeRepositoryImpl(applicationContext)
         val settingsRepositoryImpl = SettingsRepositoryImpl(themeRepository)
         val currentTheme = settingsRepositoryImpl.getThemeSettings()
 

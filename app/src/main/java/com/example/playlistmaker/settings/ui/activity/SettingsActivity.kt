@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.data.ThemeRepository
+import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
@@ -25,7 +26,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val themeRepository = ThemeRepository(applicationContext)
+        val themeRepository = ThemeRepositoryImpl(applicationContext)
         val settingsRepository = SettingsRepositoryImpl(themeRepository)
         val settingsInteractor = SettingsInteractorImpl(settingsRepository, this)
         val externalNavigator = ExternalNavigatorImpl(this)

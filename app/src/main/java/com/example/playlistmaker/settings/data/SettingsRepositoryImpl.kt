@@ -14,8 +14,8 @@ class SettingsRepositoryImpl(private val themeRepository: ThemeRepository) : Set
 
     override fun updateThemeSetting(settings: ThemeSettings) {
         when (settings) {
-            is ThemeSettings.Dark -> themeRepository.switchTheme(true)
-            is ThemeSettings.Light -> themeRepository.switchTheme(false)
+            is ThemeSettings.Dark -> themeRepository.saveTheme(true)
+            is ThemeSettings.Light -> themeRepository.saveTheme(false)
             else -> throw IllegalArgumentException("Unsupported theme setting")
         }
     }
