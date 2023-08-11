@@ -3,6 +3,7 @@ package com.example.playlistmaker.creator
 import android.content.Context
 import com.example.playlistmaker.common.domain.api.ThemeRepository
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
+import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.main.domain.ThemeUseCase
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.data.network.TracksRepositoryImpl
@@ -48,6 +49,10 @@ object Creator {
 
     fun provideExternalNavigator(context: Context): ExternalNavigator {
         return ExternalNavigatorImpl(context)
+    }
+
+    fun provideCurrentTheme(context: Context): ThemeSettings {
+        return getSettingsRepository(context).getThemeSettings()
     }
 
 }

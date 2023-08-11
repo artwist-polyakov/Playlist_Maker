@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 MainViewModel.NavigationEvent.SETTINGS -> {
                     Intent(this, SettingsActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
                     }
                 }
             }
