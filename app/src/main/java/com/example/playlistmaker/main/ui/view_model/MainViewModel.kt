@@ -1,36 +1,36 @@
 package com.example.playlistmaker.main.ui.view_model
 
 import android.app.Application
-import android.content.Intent
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.main.domain.ThemeUseCase
-import com.example.playlistmaker.media.ui.activity.MediaActivity
-import com.example.playlistmaker.search.ui.activity.SearchActivity
-import com.example.playlistmaker.settings.ui.activity.SettingsActivity
+
 
 class MainViewModel(
-    application: Application,
     themeUseCase: ThemeUseCase
-) : AndroidViewModel(application) {
+): ViewModel()   {
 
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as Application
                 val themeUseCase = Creator.provideThemeUseCase(application)
-                MainViewModel(application, themeUseCase)
+                MainViewModel(themeUseCase)
             }
         }
     }
-    private val _activityTarget = MutableLiveData<Intent>()
-    val activityTarget: LiveData<Intent> get() = _activityTarget
+
+    enum class NavigationEvent {
+        SEARCH, MEDIA, SETTINGS
+    }
+    private val _navigationEvent = MutableLiveData<NavigationEvent>()
+    val navigationEvent: LiveData<NavigationEvent> get() = _navigationEvent
 
     private val _themeSwitch = MutableLiveData<Boolean>()
     val themeSwitch: LiveData<Boolean> get() = _themeSwitch
@@ -40,20 +40,14 @@ class MainViewModel(
     }
 
     fun onSearchClicked() {
-        val intent = Intent(getApplication(), SearchActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        _activityTarget.value = intent
+        _navigationEvent.value = NavigationEvent.SEARCH
     }
 
     fun onMediaClicked() {
-        val intent = Intent(getApplication(), MediaActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        _activityTarget.value = intent
+        _navigationEvent.value = NavigationEvent.MEDIA
     }
 
     fun onSettingsClicked() {
-        val intent = Intent(getApplication(), SettingsActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        _activityTarget.value = intent
+        _navigationEvent.value = NavigationEvent.SETTINGS
     }
 }
