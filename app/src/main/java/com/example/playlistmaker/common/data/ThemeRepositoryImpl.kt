@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.util.Log
 import com.example.playlistmaker.common.domain.api.ThemeRepository
 
-
 class ThemeRepositoryImpl(private val context: Context): ThemeRepository {
     companion object {
         const val PREFS = "my_prefs"

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.domain.impl
 
-import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMappers
+import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMapper
 import com.example.playlistmaker.search.api.Resource
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.api.TracksInteractor
@@ -15,7 +15,7 @@ class TracksInteractorImpl(private val repository: TracksRepository) : TracksInt
             when(val resource = repository.searchTracks(expression)) {
                 is Resource.Success -> {
                     consumer.consume(resource.data?.map { dto ->
-                        TrackDtoToTrackMappers().invoke(dto)}
+                        TrackDtoToTrackMapper().invoke(dto)}
                         , null)
                 }
                 is Resource.Error -> { consumer.consume(null, resource.message) }

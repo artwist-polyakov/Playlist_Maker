@@ -1,6 +1,5 @@
 package com.example.playlistmaker.settings.ui.activity
 
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView

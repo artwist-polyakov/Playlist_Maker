@@ -3,7 +3,6 @@ package com.example.playlistmaker.settings.data
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.core.content.ContextCompat.startActivity
 import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.domain.EmailData
 

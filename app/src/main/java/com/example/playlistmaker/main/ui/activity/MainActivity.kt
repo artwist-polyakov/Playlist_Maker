@@ -6,7 +6,6 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.main.ui.view_model.MainViewModel
 import com.example.playlistmaker.media.ui.activity.MediaActivity
 import com.example.playlistmaker.search.ui.activity.SearchActivity

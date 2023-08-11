@@ -16,12 +16,10 @@ import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.settings.domain.EmailData
 import com.example.playlistmaker.common.domain.models.SingleLiveEvent
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.main.ui.view_model.MainViewModel
 import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel.ExternalEvent.*
 
-// TODO попробовать сделать через STATE (THEME, LINK, EMAIL, SHARE)
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
     private val externalNavigator: ExternalNavigator,

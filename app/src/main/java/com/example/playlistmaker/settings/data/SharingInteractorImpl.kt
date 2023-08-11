@@ -20,17 +20,14 @@ class SharingInteractorImpl(
     }
 
     private fun getShareAppLink(): String {
-        // Нужно реализовать
         return ""
     }
 
     private fun getSupportEmailData(): EmailData {
-        // Нужно реализовать
         return EmailData("support_email", "support_subject", "support_text")
     }
 
     private fun getTermsLink(): String {
-        // Нужно реализовать
         return ""
     }
 }

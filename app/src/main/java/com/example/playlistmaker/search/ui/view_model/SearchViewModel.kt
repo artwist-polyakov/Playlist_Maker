@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMappers
+import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMapper
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.storage.TracksStorage
@@ -51,11 +51,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
 
     private val sharedPreferences: SharedPreferences = getApplication<Application>().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-
     private val tracksStorage: TracksStorage = TracksStorageImpl(sharedPreferences)
-
     private var latestSearchText: String? = null
-
     private var lastState: SearchState? = null
 
     private val mediatorStateLiveData = MediatorLiveData<SearchState>().also { liveData ->
@@ -154,7 +151,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun loadHistoryTracks() {
         val historyTracksDto = tracksStorage.takeHistory(reverse = true)
-        val historyTracks = historyTracksDto.map { TrackDtoToTrackMappers().invoke(it) }
+        val historyTracks = historyTracksDto.map { TrackDtoToTrackMapper().invoke(it) }
         renderState(SearchState.Virgin)
         if (historyTracks.isNotEmpty()) {
             renderState(SearchState.History(historyTracks))

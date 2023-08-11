@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
-import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMappers
+import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMapper
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
@@ -38,6 +38,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
     private val adapter = TracksAdapter(
         object : TracksAdapter.TrackClickListener {
             override fun onTrackClick(track: Track) {
@@ -48,12 +49,13 @@ class SearchActivity : AppCompatActivity() {
                         Log.e("SearchActivity", "Error saving track to history: ${e.message}", e)
                     }
                     val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
-                    intent.putExtra("track", TrackToTrackInformationMappers().invoke(track))
+                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
                     startActivity(intent)
                 }
             }
         }
     )
+
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var viewModel: SearchViewModel
@@ -91,7 +93,6 @@ class SearchActivity : AppCompatActivity() {
         loadingIndicator = findViewById(R.id.loading_indicator)
         cleanHistoryButton = findViewById(R.id.clear_button)
         backButton = findViewById(R.id.return_button)
-
 
         // HISTORY VIEW
         historyLayout = findViewById(R.id.history_layout)
@@ -196,7 +197,6 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
