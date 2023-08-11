@@ -94,10 +94,5 @@ class SettingsActivity : AppCompatActivity() {
             }, 500)  // Задержка в 0.5 секунды
         }
     }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        // Вы можете добавить здесь дополнительный код, если это необходимо.
-    }
 }
 
