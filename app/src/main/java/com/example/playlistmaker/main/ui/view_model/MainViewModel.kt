@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
@@ -22,7 +23,7 @@ class MainViewModel(
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+                val application = this[APPLICATION_KEY] as Application
                 val themeUseCase = Creator.provideThemeUseCase(application)
                 MainViewModel(application, themeUseCase)
             }
@@ -32,9 +33,7 @@ class MainViewModel(
     val activityTarget: LiveData<Intent> get() = _activityTarget
 
     private val _themeSwitch = MutableLiveData<Boolean>()
-
     val themeSwitch: LiveData<Boolean> get() = _themeSwitch
-    private val _themeUseCase: ThemeUseCase get() = _themeUseCase
 
     init {
         _themeSwitch.value = themeUseCase.isDarkTheme()
@@ -57,9 +56,4 @@ class MainViewModel(
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         _activityTarget.value = intent
     }
-
-    fun switchTheme(isDark: Boolean) {
-        _themeSwitch.value = isDark
-    }
-
 }
