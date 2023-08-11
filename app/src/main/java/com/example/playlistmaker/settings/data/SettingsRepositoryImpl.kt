@@ -1,6 +1,6 @@
 package com.example.playlistmaker.settings.data
 
-import com.example.playlistmaker.common.data.ThemeRepository
+import com.example.playlistmaker.common.domain.api.ThemeRepository
 import com.example.playlistmaker.common.data.ThemeSettings
 
 class SettingsRepositoryImpl(private val themeRepository: ThemeRepository) : SettingsRepository {

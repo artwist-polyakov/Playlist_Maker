@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.data.ThemeRepository
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl

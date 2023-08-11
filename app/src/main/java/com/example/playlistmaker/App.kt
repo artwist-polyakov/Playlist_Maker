@@ -2,7 +2,6 @@ package com.example.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.common.data.ThemeRepository
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl

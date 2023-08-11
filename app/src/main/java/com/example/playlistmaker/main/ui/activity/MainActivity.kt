@@ -5,11 +5,8 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.data.ThemeRepository
-import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.main.ui.view_model.MainViewModel
-import com.example.playlistmaker.settings.domain.ThemeUseCaseImpl
 
 class MainActivity : AppCompatActivity() {
 
