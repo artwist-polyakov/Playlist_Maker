@@ -128,7 +128,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         trackTime = findViewById(R.id.time)
 
         // TRACK INFO
-
         trackCover = findViewById(R.id.track_cover)
         trackName = findViewById(R.id.song_title)
         artistName = findViewById(R.id.artist_name)
@@ -142,8 +141,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
         //BINDING
         showTrackInfo(currentTrack)
-
-
         viewModel.changeTrack(currentTrack)
         viewModel.playerState.observe(this, Observer { state ->
             when(state) {
@@ -178,6 +175,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
 
     }
+
     override fun onBackPressed() {
         viewModel.resetPlayer() // Остановка и уничтожение плеера
         super.onBackPressed()  // Закрыть текущую активность

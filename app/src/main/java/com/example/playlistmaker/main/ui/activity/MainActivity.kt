@@ -13,7 +13,6 @@ import com.example.playlistmaker.search.ui.activity.SearchActivity
 import com.example.playlistmaker.settings.ui.activity.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,15 +22,12 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.search).setOnClickListener {
             viewModel.onSearchClicked()
         }
-
         findViewById<Button>(R.id.media).setOnClickListener {
             viewModel.onMediaClicked()
         }
-
         findViewById<Button>(R.id.settings).setOnClickListener {
             viewModel.onSettingsClicked()
         }
-
         viewModel.navigationEvent.observe(this) { event ->
             val intent = when (event) {
                 MainViewModel.NavigationEvent.SEARCH -> {
@@ -46,12 +42,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 MainViewModel.NavigationEvent.SETTINGS -> {
                     Intent(this, SettingsActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     }
                 }
             }
             startActivity(intent)
         }
-
     }
 }

@@ -9,7 +9,13 @@ import com.example.playlistmaker.search.data.network.TracksRepositoryImpl
 import com.example.playlistmaker.search.data.storage.TracksStorageImpl
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
+import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
+import com.example.playlistmaker.settings.data.SettingsRepository
+import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.example.playlistmaker.settings.data.ThemeUseCaseImpl
+import com.example.playlistmaker.settings.domain.ExternalNavigator
+import com.example.playlistmaker.settings.domain.SettingsInteractor
+import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 
 object Creator {
 
@@ -30,6 +36,18 @@ object Creator {
 
     fun provideThemeUseCase(context: Context): ThemeUseCase {
         return ThemeUseCaseImpl(getThemeRepository(context))
+    }
+
+    private fun getSettingsRepository(context: Context): SettingsRepository {
+        return SettingsRepositoryImpl(getThemeRepository(context))
+    }
+
+    fun provideSettingsInteractor(context: Context): SettingsInteractor {
+        return SettingsInteractorImpl(getSettingsRepository(context), context)
+    }
+
+    fun provideExternalNavigator(context: Context): ExternalNavigator {
+        return ExternalNavigatorImpl(context)
     }
 
 }

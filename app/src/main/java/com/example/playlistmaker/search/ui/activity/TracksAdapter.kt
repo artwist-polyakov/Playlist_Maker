@@ -36,7 +36,6 @@ class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerVie
         return ArrayList(tracks)
     }
 
-
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
@@ -52,7 +51,6 @@ class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerVie
 
     interface TrackClickListener {
         fun onTrackClick(track: Track)
-
     }
 }
 
@@ -78,9 +76,6 @@ class TrackViewHolder(
         duration.text = track.trackTime
 
         itemView.setOnClickListener { clickListener.onTrackClick(track) }
-
-
-
     }
 }
 

@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
+import com.example.playlistmaker.main.ui.view_model.MainViewModel
 import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
@@ -24,15 +25,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-        val themeRepository = ThemeRepositoryImpl(applicationContext)
-        val settingsRepository = SettingsRepositoryImpl(themeRepository)
-        val settingsInteractor = SettingsInteractorImpl(settingsRepository, this)
-        val externalNavigator = ExternalNavigatorImpl(this)
-        val factory = SettingsViewModel.getViewModelFactory(settingsInteractor, externalNavigator)
-        viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
-
-
+        viewModel = ViewModelProvider(this, factory = SettingsViewModel.getViewModelFactory()).get(
+            SettingsViewModel::class.java)
         val backButton = findViewById<ImageView>(R.id.return_button)
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
@@ -64,17 +58,23 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         })
 
-        viewModel.shareLink.observe(this, Observer { link ->
-            externalNavigator.shareLink(link)
+        viewModel.externalEvent.observe(this, Observer { event ->
+            when (event) {
+                SettingsViewModel.ExternalEvent.SHARE -> {
+                    viewModel.shareLink()
+                }
+                SettingsViewModel.ExternalEvent.LINK -> {
+                    viewModel.openAgreement()
+                }
+                SettingsViewModel.ExternalEvent.EMAIL -> {
+                    viewModel.sendSupport()
+                }
+            }
         })
 
-        viewModel.openLink.observe(this, Observer { link ->
-
-            externalNavigator.openLink(link)
-        })
-
-        viewModel.sendEmail.observe(this, Observer { email ->
-            externalNavigator.openEmail(email)
+        viewModel.navigateTo.observe(this, Observer { event ->
+            val intent = event
+            startActivity(intent)
         })
 
         viewModel.isDarkTheme.observe(this, Observer { isDark ->

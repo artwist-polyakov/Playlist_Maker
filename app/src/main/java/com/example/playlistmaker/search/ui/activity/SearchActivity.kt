@@ -81,7 +81,6 @@ class SearchActivity : AppCompatActivity() {
         // SEARCH RECYCLER VIEW
         recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
 
-
         // SEARCH
         searchEditText = findViewById(R.id.searchEditText)
         clearButton = findViewById(R.id.clearIcon)
@@ -137,7 +136,6 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.clearFocus()
             searchEditText.text.clear()
         })
-
 
         viewModel.loadHistoryTracks()
 
@@ -205,7 +203,6 @@ class SearchActivity : AppCompatActivity() {
         // TODO убить clicklistener
     }
 
-
     private fun makeClearButtonInvisible() {
         clearButton.visibility = View.GONE
         searchEditText.background = getDrawable(R.drawable.rounded_edittext)
@@ -228,7 +225,6 @@ class SearchActivity : AppCompatActivity() {
                 problemsIcon.setImageResource(R.drawable.no_internet)
                 refreshButton.visibility = View.VISIBLE
             }
-
             ResponseState.NOTHING_FOUND.name -> {
                 recyclerView.visibility = View.GONE
                 loadingIndicator.visibility = View.GONE
@@ -275,11 +271,8 @@ class SearchActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             viewModel.onBackButtonPressed()
         }
-
         clearButton.setOnClickListener {
             viewModel.onClearButtonPressed()
         }
     }
-
-
 }
