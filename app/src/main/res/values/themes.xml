@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/colorOnSecondaryDay</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
