@@ -13,7 +13,7 @@ import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
 import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.data.SettingsRepository
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
-import com.example.playlistmaker.settings.data.ThemeUseCaseImpl
+import com.example.playlistmaker.settings.domain.ThemeUseCaseImpl
 import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
