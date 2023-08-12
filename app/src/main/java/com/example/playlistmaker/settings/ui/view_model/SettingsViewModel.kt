@@ -17,12 +17,13 @@ import com.example.playlistmaker.settings.domain.EmailData
 import com.example.playlistmaker.common.domain.models.SingleLiveEvent
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.settings.domain.ExternalNavigator
+import com.example.playlistmaker.settings.domain.NavigationInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel.ExternalEvent.*
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
-    private val externalNavigator: ExternalNavigator,
+    private val navigationInteractor: NavigationInteractor,
 ) : ViewModel() {
     enum class ExternalEvent {
         SHARE, LINK, EMAIL
@@ -34,7 +35,8 @@ class SettingsViewModel(
                 val application = this[APPLICATION_KEY] as Application
                 val settingsInteractor = Creator.provideSettingsInteractor(application)
                 val externalNavigator = Creator.provideExternalNavigator(application)
-                SettingsViewModel(settingsInteractor, externalNavigator)
+                val navigationInteractor = NavigationInteractor(externalNavigator)
+                SettingsViewModel(settingsInteractor, navigationInteractor)
             }
         }
 
@@ -42,8 +44,6 @@ class SettingsViewModel(
     }
     val restartActivity = SingleLiveEvent<Unit>()
     val closeScreen = SingleLiveEvent<Unit>()
-    private val _navigateTo = MutableLiveData<Intent>()
-    val navigateTo: LiveData<Intent> get() = _navigateTo
     private val _externalEvent = MutableLiveData<ExternalEvent>()
     val externalEvent: LiveData<ExternalEvent> get() = _externalEvent
     val isDarkTheme = MutableLiveData<Boolean>()
@@ -87,48 +87,16 @@ class SettingsViewModel(
 
     fun shareLink() {
         val link = settingsInteractor.getShareLink()
-        _navigateTo.value = externalNavigator.shareLink(link)
+        navigationInteractor.navigateToShare(link)
     }
 
     fun sendSupport() {
-        val emailData = EmailData(
-            settingsInteractor.getSupportEmail(),
-            settingsInteractor.getSupportSubject(),
-            ""
-        )
-        _navigateTo.value = externalNavigator.openEmail(emailData)
+        val email = settingsInteractor.getSupportEmailDate()
+        navigationInteractor.navigateToSupport(email)
     }
 
     fun openAgreement() {
         val link = settingsInteractor.getAgreementLink()
-        _navigateTo.value = externalNavigator.openLink(link)
+        navigationInteractor.navigateToAgreement(link)
     }
-
-    fun onNavigationEvent(externalEvent: ExternalEvent) {
-        when (externalEvent) {
-            SHARE -> {
-                _externalEvent.value = SHARE
-            }
-            LINK -> {
-                _externalEvent.value = LINK
-            }
-            EMAIL -> {
-                _externalEvent.value = EMAIL
-            }
-        }
-    }
-
-    fun onShareClicked() {
-        onNavigationEvent(SHARE)
-    }
-
-    fun onSupportClicked() {
-        onNavigationEvent(EMAIL)
-    }
-
-    fun onAgreementClicked() {
-        onNavigationEvent(LINK)
-    }
-
-
 }

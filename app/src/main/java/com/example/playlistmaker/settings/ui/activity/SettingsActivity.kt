@@ -36,15 +36,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         sharingLayout.setOnClickListener {
-            viewModel.onShareClicked()
+            viewModel.shareLink()
         }
 
         supportLayout.setOnClickListener {
-            viewModel.onSupportClicked()
+            viewModel.sendSupport()
         }
 
         agreementLayout.setOnClickListener {
-            viewModel.onAgreementClicked()
+            viewModel.openAgreement()
         }
 
         // Обработка событий от ViewModel
@@ -52,24 +52,7 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         })
 
-        viewModel.externalEvent.observe(this, Observer { event ->
-            when (event) {
-                SettingsViewModel.ExternalEvent.SHARE -> {
-                    viewModel.shareLink()
-                }
-                SettingsViewModel.ExternalEvent.LINK -> {
-                    viewModel.openAgreement()
-                }
-                SettingsViewModel.ExternalEvent.EMAIL -> {
-                    viewModel.sendSupport()
-                }
-            }
-        })
 
-        viewModel.navigateTo.observe(this, Observer { event ->
-            val intent = event
-            startActivity(intent)
-        })
 
         viewModel.isDarkTheme.observe(this, Observer { isDark ->
             themeSwitcher.isChecked = isDark

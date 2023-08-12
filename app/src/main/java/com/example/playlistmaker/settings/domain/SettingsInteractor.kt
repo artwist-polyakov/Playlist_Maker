@@ -5,8 +5,8 @@ import com.example.playlistmaker.common.data.ThemeSettings
 interface SettingsInteractor {
     fun getThemeSettings(): ThemeSettings
     fun updateThemeSetting(settings: ThemeSettings)
+    fun getAgreementLink(): String
     fun getShareLink(): String
     fun getSupportEmail(): String
-    fun getAgreementLink(): String
-    fun getSupportSubject(): String
+    fun getSupportEmailDate(): EmailData
 }

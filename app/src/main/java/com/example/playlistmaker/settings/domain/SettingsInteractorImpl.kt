@@ -29,7 +29,14 @@ class SettingsInteractorImpl(
         return context.getString(R.string.agreement_link)
     }
 
-    override fun getSupportSubject(): String {
+    private fun getSupportSubject(): String {
         return context.getString(R.string.support_subject)
+    }
+
+    override fun getSupportEmailDate(): EmailData {
+        return EmailData(getSupportEmail(),
+            getSupportSubject(),
+            ""
+        )
     }
 }
