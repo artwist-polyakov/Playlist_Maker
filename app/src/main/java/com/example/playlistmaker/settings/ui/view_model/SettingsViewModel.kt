@@ -26,8 +26,7 @@ class SettingsViewModel(
             initializer {
                 val application = this[APPLICATION_KEY] as Application
                 val settingsInteractor = Creator.provideSettingsInteractor(application)
-                val externalNavigator = Creator.provideExternalNavigator(application)
-                val navigationInteractor = NavigationInteractor(externalNavigator)
+                val navigationInteractor = Creator.provideNavigationInteractor(application)
                 SettingsViewModel(settingsInteractor, navigationInteractor)
             }
         }

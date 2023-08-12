@@ -15,6 +15,7 @@ import com.example.playlistmaker.settings.data.SettingsRepository
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.example.playlistmaker.settings.domain.ThemeUseCaseImpl
 import com.example.playlistmaker.settings.domain.ExternalNavigator
+import com.example.playlistmaker.settings.domain.NavigationInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 
@@ -53,6 +54,10 @@ object Creator {
 
     fun provideCurrentTheme(context: Context): ThemeSettings {
         return getSettingsRepository(context).getThemeSettings()
+    }
+
+    fun provideNavigationInteractor(context: Context): NavigationInteractor {
+        return NavigationInteractor(provideExternalNavigator(context))
     }
 
 }
