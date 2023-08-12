@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.domain
+package com.example.playlistmaker.search.domain.models
 
 import android.os.Parcelable
 import com.example.playlistmaker.search.data.dto.TrackDto

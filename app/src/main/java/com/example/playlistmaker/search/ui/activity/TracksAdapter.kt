@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.bumptech.glide.Glide
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.search.domain.models.Track
 
 class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder>() {
 
