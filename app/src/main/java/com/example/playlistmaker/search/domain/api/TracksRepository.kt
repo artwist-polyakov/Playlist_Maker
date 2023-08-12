@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.domain.api
 
-import com.example.playlistmaker.search.api.Resource
+import com.example.playlistmaker.search.data.network.Resource
 import com.example.playlistmaker.search.data.dto.TrackDto
 
 interface TracksRepository {
