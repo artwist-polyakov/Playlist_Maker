@@ -1,14 +1,13 @@
 package com.example.playlistmaker.common.presentation
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.common.domain.ThemeInteractor
 
-class ThemeDelegateImpl(private val context: Context, private val interactor: ThemeInteractor): ThemeDelegate {
+class ThemeDelegateImpl(private val interactor: ThemeInteractor): ThemeDelegate {
 
     override fun updateTheme() {
-        val theme = interactor.getTemeSettings(context)
+        val theme = interactor.getTemeSettings()
         when (theme) {
             ThemeSettings.Light -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             ThemeSettings.Dark -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

@@ -9,5 +9,5 @@ import org.koin.dsl.module
 
 val domainModule = module {
     single<ThemeInteractor> { ThemeInteractorImpl(get()) }
-    single<ThemeDelegate> { ThemeDelegateImpl(get(), get()) }
+    single<ThemeDelegate> { ThemeDelegateImpl(get()) }
 }
