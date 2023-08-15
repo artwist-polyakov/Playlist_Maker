@@ -52,10 +52,6 @@ object Creator {
         return ExternalNavigatorImpl(context)
     }
 
-    fun provideCurrentTheme(context: Context): ThemeSettings {
-        return getSettingsRepository(context).getThemeSettings()
-    }
-
     fun provideNavigationInteractor(context: Context): NavigationInteractor {
         return NavigationInteractor(provideExternalNavigator(context))
     }

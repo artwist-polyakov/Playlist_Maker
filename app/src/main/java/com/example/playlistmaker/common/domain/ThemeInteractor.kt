@@ -1,9 +1,8 @@
 package com.example.playlistmaker.common.domain
 
 import android.content.Context
+import com.example.playlistmaker.common.data.ThemeSettings
 
 interface ThemeInteractor {
-
-    fun updateTheme(context: Context)
-
+    fun getTemeSettings(context: Context): ThemeSettings
 }
