@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.common.domain.models.SingleLiveEvent
 
-class MainViewModel(): ViewModel()   {
+class MainViewModel: ViewModel()   {
     enum class NavigationEvent {
         SEARCH, MEDIA, SETTINGS
     }
