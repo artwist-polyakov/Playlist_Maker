@@ -1,4 +1,4 @@
-package com.example.playlistmaker.main.domain
+package com.example.playlistmaker.settings.domain
 
 interface ThemeUseCase {
     fun isDarkTheme(): Boolean

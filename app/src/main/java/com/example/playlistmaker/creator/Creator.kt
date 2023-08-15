@@ -3,8 +3,7 @@ package com.example.playlistmaker.creator
 import android.content.Context
 import com.example.playlistmaker.common.domain.api.ThemeRepository
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
-import com.example.playlistmaker.common.data.ThemeSettings
-import com.example.playlistmaker.main.domain.ThemeUseCase
+import com.example.playlistmaker.settings.domain.ThemeUseCase
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.data.network.TracksRepositoryImpl
 import com.example.playlistmaker.search.data.storage.TracksStorageImpl
