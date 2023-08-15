@@ -1,8 +1,9 @@
-package com.example.playlistmaker.common
+package com.example.playlistmaker.common.presentation
 
 import android.app.Application
 import com.example.playlistmaker.common.di.domainModule
 import com.example.playlistmaker.common.di.repositoryModule
+import com.example.playlistmaker.common.di.viewModelModule
 import com.example.playlistmaker.common.presentation.ThemeDelegate
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -14,7 +15,7 @@ class App  : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@App)
-            modules(repositoryModule, domainModule)
+            modules(repositoryModule, domainModule, viewModelModule)
         }
         val themeDelegate: ThemeDelegate by inject()
         themeDelegate.updateTheme()
