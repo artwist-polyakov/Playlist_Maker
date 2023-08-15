@@ -1,4 +1,4 @@
-package com.example.playlistmaker.common.presentation.models
+package com.example.playlistmaker.common.presentation
 
 import com.example.playlistmaker.common.data.ThemeSettings
 
