@@ -8,6 +8,5 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<ThemeRepository> { ThemeRepositoryImpl(get()) }
-
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
 }
