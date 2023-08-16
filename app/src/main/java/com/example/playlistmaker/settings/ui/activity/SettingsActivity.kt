@@ -10,17 +10,20 @@ import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
+import com.example.playlistmaker.main.ui.view_model.MainViewModel
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.scope.activityScope
+import org.koin.androidx.scope.currentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        viewModel = ViewModelProvider(this, factory = SettingsViewModel.getViewModelFactory()).get(
-            SettingsViewModel::class.java)
+
         val backButton = findViewById<ImageView>(R.id.return_button)
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
         val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
