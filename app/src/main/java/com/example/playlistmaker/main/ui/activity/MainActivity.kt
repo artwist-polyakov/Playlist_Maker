@@ -13,8 +13,10 @@ import com.example.playlistmaker.settings.ui.activity.SettingsActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+
     private val viewModel: MainViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding.settings.setOnClickListener {
             viewModel.onSettingsClicked()
         }
+
         viewModel.navigationEvent.observe(this) { event ->
             val intent = when (event) {
                 MainViewModel.NavigationEvent.SEARCH -> {
