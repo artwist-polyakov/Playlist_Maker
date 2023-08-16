@@ -4,7 +4,6 @@ import android.app.Application
 import com.example.playlistmaker.common.di.domainModule
 import com.example.playlistmaker.common.di.repositoryModule
 import com.example.playlistmaker.common.di.viewModelModule
-import com.example.playlistmaker.common.presentation.ThemeDelegate
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
