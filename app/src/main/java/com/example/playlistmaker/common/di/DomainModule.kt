@@ -18,4 +18,5 @@ val domainModule = module {
     single<ThemeUseCase> {ThemeUseCaseImpl(get())}
     single<SettingsInteractor> { SettingsInteractorImpl(get(), get()) }
     single<NavigationInteractor> { NavigationInteractor(get()) }
+
 }
