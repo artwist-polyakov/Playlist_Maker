@@ -29,24 +29,7 @@ object Creator {
         return TracksInteractorImpl(getTracksRepository(context))
     }
 
-    private fun getThemeRepository(context: Context): ThemeRepository {
-        return ThemeRepositoryImpl(context)
-    }
 
-    private fun getSettingsRepository(context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(getThemeRepository(context))
-    }
 
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(getSettingsRepository(context), context)
-    }
-
-    fun provideExternalNavigator(context: Context): ExternalNavigator {
-        return ExternalNavigatorImpl(context)
-    }
-
-    fun provideNavigationInteractor(context: Context): NavigationInteractor {
-        return NavigationInteractor(provideExternalNavigator(context))
-    }
 
 }
