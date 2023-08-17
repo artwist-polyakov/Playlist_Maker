@@ -4,32 +4,31 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
+import com.example.playlistmaker.player.domain.TrackStorageInteractor
+import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlayerCallbackInterface {
-    companion object {
-        fun getViewModelFactory(withTrack: TrackInformation): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PlayerViewModel(withTrack) as T
-            }
-        }
-    }
+class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent {
+
     // LiveData для состояния проигрывателя
     private val _playerState = MutableLiveData<PlayerState>()
     val playerState: LiveData<PlayerState> get() = _playerState
 
     // MediaPlayer
-    private val mediaPlayer = MediaPlayerImpl(callback = this, withTrack = withTrack)
+    private val trackStorageInteractor: TrackStorageInteractor by inject()
+    private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
+    private val mediaPlayer: MediaPlayerInterface by inject()
 
-    var currentTrack: TrackInformation? = null
-        set(value) {
-            field = value
-            // Какие-то действия при установке нового трека (если нужны)
-        }
+//    var currentTrack: TrackInformation? = null
+//        set(value) {
+//            field = value
+//            // Какие-то действия при установке нового трека (если нужны)
+//        }
     // Функции для управления проигрыванием
     fun playPause() {
         mediaPlayer.playPauseSwitcher()
@@ -42,8 +41,7 @@ class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlaye
 
     fun changeTrack(track: TrackInformation) {
         mediaPlayer.destroyPlayer()
-        mediaPlayer.withTrack = track
-        currentTrack = track
+//        currentTrack = track
     }
 
     fun startPlayer() {
@@ -63,7 +61,9 @@ class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlaye
     }
 
     override fun onMediaPlayerReady() {
+        Log.d("currentButtonState", "callbackAccepted")
         _playerState.value = PlayerState.Ready
+        Log.d("currentButtonState", "Changing LiveData layerState.Ready")
     }
 
     override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
@@ -76,6 +76,15 @@ class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlaye
 
     override fun onMediaPlayerPlay() {
         _playerState.value = PlayerState.Play
+    }
+
+    fun initializePlayer() {
+        Log.d("currentButtonState", "i want to init player //VIEWMODEL")
+        mediaPlayer.forceInit()
+    }
+
+    fun giveCurrentTrack(): TrackInformation? {
+        return initializedTrack
     }
 
 

@@ -1,9 +1,11 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
@@ -11,28 +13,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.ActivitySongPageBinding
 import com.example.playlistmaker.player.presentation.PlayerActivityInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
-    private lateinit var viewModel: PlayerViewModel
-    private lateinit var backButton: ImageView
-    private lateinit var playButton: FloatingActionButton
-    private lateinit var addToCollectionButton: ImageButton
-    private lateinit var likeButton: ImageButton
-    private lateinit var trackCover: ImageView
-    private lateinit var trackName: TextView
-    private lateinit var artistName: TextView
-    private lateinit var trackTime: TextView
-    private lateinit var trackDuration: TextView
-    private lateinit var trackAlbumName: TextView
-    private lateinit var trackReleaseYear: TextView
-    private lateinit var trackGenre: TextView
-    private lateinit var trackCountry: TextView
-    private lateinit var trackInfoGroup: Group
-    private lateinit var trackCountryInfoGroup: Group
+    private lateinit var binding: ActivitySongPageBinding
+    private val viewModel: PlayerViewModel by viewModels()
     private lateinit var currentTrack: TrackInformation
 
     companion object {
@@ -43,47 +33,47 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override fun showTrackInfo(trackInfo: TrackInformation) {
         showPreparationState()
         if (trackInfo.country == null) {
-            trackCountryInfoGroup.visibility = Group.GONE
+            binding.trackCountryInfo.visibility = Group.GONE
         } else {
-            trackCountryInfoGroup.visibility = Group.VISIBLE
-            trackCountry.text = trackInfo.country
+            binding.trackCountryInfo.visibility = Group.VISIBLE
+            binding.countryValue.text = trackInfo.country
         }
         // Трек не пустой?
         if (trackInfo.trackName == "") {
-            trackInfoGroup.visibility = Group.GONE
+            binding.trackInfo.visibility = Group.GONE
         } else {
-            trackInfoGroup.visibility = Group.VISIBLE
-            trackName.text = trackInfo.trackName
-            artistName.text = trackInfo.artistName
-            trackDuration.text = trackInfo.trackTime
-            trackAlbumName.text = trackInfo.collectionName
-            trackReleaseYear.text = trackInfo.relizeYear
-            trackGenre.text = trackInfo.primaryGenreName
+            binding.trackInfo.visibility = Group.VISIBLE
+            binding.songTitle.text = trackInfo.trackName
+            binding.artistName.text = trackInfo.artistName
+            binding.durationTime.text = trackInfo.trackTime
+            binding.albumName.text = trackInfo.collectionName
+            binding.yearValue.text = trackInfo.relizeYear
+            binding.genreValue.text = trackInfo.primaryGenreName
             Glide.with(this)
                 .load(trackInfo.artworkUrl512)
-                .into(this.trackCover)
+                .into(this.binding.trackCover)
         }
         setTime(START_TIME)
     }
 
     override fun showPlayState() {
-        playButton.setImageResource(R.drawable.pause_button)
+        binding.playButton.setImageResource(R.drawable.pause_button)
     }
 
     override fun showPauseState() {
-        playButton.setImageResource(R.drawable.play_button)
+        binding.playButton.setImageResource(R.drawable.play_button)
     }
 
     override fun showPreparationState() {
-        playButton.isEnabled = false
+        binding.playButton.isEnabled = false
     }
 
     override fun showReadyState() {
-        playButton.isEnabled = true
+        binding.playButton.isEnabled = true
     }
 
     override fun setTime(time: String) {
-        trackTime.text = time
+        binding.time.text = time
     }
 
     override fun onResume() {
@@ -108,61 +98,48 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_song_page)
+        binding = ActivitySongPageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         currentTrack = intent.extras?.getParcelable(TRACK)!!
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(currentTrack)).get(PlayerViewModel::class.java)
 
         // BACK BUTTON
-        backButton = findViewById(R.id.return_button)
-        backButton.setOnClickListener {
+        binding.returnButton.setOnClickListener {
             viewModel.resetPlayer()
             finish()
         }
         // PLAYER INTERFACE
-        playButton = findViewById(R.id.play_button)
-        playButton.setOnClickListener {
+        binding.playButton.setOnClickListener {
             viewModel.playPause()
         }
-        addToCollectionButton = findViewById(R.id.add_to_collection)
-        likeButton = findViewById(R.id.like_button)
-        trackTime = findViewById(R.id.time)
-
-        // TRACK INFO
-        trackCover = findViewById(R.id.track_cover)
-        trackName = findViewById(R.id.song_title)
-        artistName = findViewById(R.id.artist_name)
-        trackDuration = findViewById(R.id.duration_time)
-        trackAlbumName = findViewById(R.id.album_name)
-        trackReleaseYear = findViewById(R.id.year_value)
-        trackGenre = findViewById(R.id.genre_value)
-        trackCountry = findViewById(R.id.country_value)
-        trackInfoGroup = findViewById(R.id.track_info)
-        trackCountryInfoGroup = findViewById(R.id.track_country_info)
 
         //BINDING
-        showTrackInfo(currentTrack)
-        viewModel.changeTrack(currentTrack)
+        viewModel.giveCurrentTrack()?.let { showTrackInfo(it) }
+//        viewModel.changeTrack(currentTrack)
         viewModel.playerState.observe(this, Observer { state ->
+            Log.d("currentButtonState", "ObserverSetted")
             when(state) {
                 PlayerState.Loading -> {
-                    playButton.isEnabled = false
+                    binding.playButton.isEnabled = false
                 }
                 PlayerState.Ready -> {
-                    playButton.isEnabled = true
+                    Log.d("currentButtonState", "Ready")
+                    binding.playButton.isEnabled = true
                 }
                 PlayerState.Play -> {
-                    playButton.setImageResource(R.drawable.pause_button)
+                    binding.playButton.setImageResource(R.drawable.pause_button)
                 }
                 PlayerState.Pause -> {
-                    playButton.setImageResource(R.drawable.play_button)
+                    binding.playButton.setImageResource(R.drawable.play_button)
                 }
 
                 is PlayerState.TimeUpdate -> {
-                    trackTime.text = state.time.toString()
+                    binding.time.text = state.time.toString()
                 }
 
             }
         })
+        viewModel.initializePlayer()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

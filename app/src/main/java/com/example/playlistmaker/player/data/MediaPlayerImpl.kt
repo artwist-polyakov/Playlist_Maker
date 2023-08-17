@@ -8,11 +8,12 @@ import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
+import com.example.playlistmaker.player.domain.TrackStorageInteractor
 
 
 class MediaPlayerImpl(
-    override var callback: MediaPlayerCallbackInterface? = null,
-    override var withTrack: TrackInformation?
+    override var callback: MediaPlayerCallbackInterface,
+    override var trackStorageInteractor: TrackStorageInteractor
 ) : MediaPlayer(), MediaPlayerInterface {
 
     companion object {
@@ -44,23 +45,7 @@ class MediaPlayerImpl(
 
 
     init {
-        withTrack.let { tr ->
-            let { mp ->
-                mp.setDataSource(tr?.previewUrl)
-                mp.prepareAsync()
-                mp.setOnPreparedListener {
-                    this.duration = mp.getDuration()
-                    state = STATE_PREPARED
-                    callback?.onMediaPlayerReady()
-                }
-                // TODO сделать через родную реализацию остановку проигрывания
-//                setOnCompletionListener {
-//                    if (state == STATE_PLAYING) {
-//                        finishPlay()
-//                    }
-//                }
-            }
-        }
+
     }
 
     override fun playPauseSwitcher() {
@@ -80,6 +65,7 @@ class MediaPlayerImpl(
         if (state != STATE_DEFAULT) {
             this.release()
         }
+        Log.d("currentButtonState", "i want to destroyPlayer but not: $state")
         state = STATE_DEFAULT
     }
 
@@ -126,5 +112,28 @@ class MediaPlayerImpl(
         this.seekTo(customCurrentPosition)
     }
 
+    override fun forceInit() {
+        Log.d("currentButtonState", "i want to init player // ACTIVITY")
+        val initialTrack = trackStorageInteractor.giveMeLastTrack()
+        Log.d("currentButtonState", "$initialTrack")
+        initialTrack.let { tr ->
+            let { mp ->
+                mp.setDataSource(tr?.previewUrl)
+                mp.prepareAsync()
+                mp.setOnPreparedListener {
+                    this.duration = mp.getDuration()
+                    state = STATE_PREPARED
+                    callback?.onMediaPlayerReady()
+                    Log.d("currentButtonState", "callbackSended")
+                }
+                // TODO сделать через родную реализацию остановку проигрывания
+//                setOnCompletionListener {
+//                    if (state == STATE_PLAYING) {
+//                        finishPlay()
+//                    }
+//                }
+            }
+        }
+    }
 
 }
