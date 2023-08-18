@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
-import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
 import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
@@ -82,6 +81,7 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
     fun initializePlayer() {
         val hash = this.hashCode()
         Log.d("currentButtonState", "i ($hash)  want to init player //VIEWMODEL")
+        mediaPlayer.setCallback(this)
         mediaPlayer.forceInit()
     }
 

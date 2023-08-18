@@ -27,5 +27,5 @@ val domainModule = module {
     single<NavigationInteractor> { NavigationInteractor(get()) }
     single<TracksInteractor> {TracksInteractorImpl(get())}
     single<TrackStorageInteractor> { TrackStorageInteractorImpl(get()) }
-    single<MediaPlayerCallbackInterface> {get<PlayerViewModel>()}
+//    single<MediaPlayerCallbackInterface> {get<PlayerViewModel>()}
 }

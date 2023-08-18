@@ -12,10 +12,9 @@ import com.example.playlistmaker.player.domain.TrackStorageInteractor
 
 
 class MediaPlayerImpl(
-    override var callback: MediaPlayerCallbackInterface,
     override var trackStorageInteractor: TrackStorageInteractor
 ) : MediaPlayer(), MediaPlayerInterface {
-
+    private var callback: MediaPlayerCallbackInterface? = null
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
@@ -134,6 +133,10 @@ class MediaPlayerImpl(
 //                }
             }
         }
+    }
+
+    override fun setCallback(callback: MediaPlayerCallbackInterface) {
+        this.callback = callback
     }
 
 }

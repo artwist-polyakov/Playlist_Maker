@@ -6,7 +6,6 @@ import com.example.playlistmaker.player.domain.TrackStorageInteractor
 
 interface MediaPlayerInterface {
     var trackStorageInteractor: TrackStorageInteractor
-    var callback: MediaPlayerCallbackInterface
 
     fun playPauseSwitcher()
 
@@ -23,6 +22,8 @@ interface MediaPlayerInterface {
     fun setTrackPosition(position: Int)
 
     fun forceInit()
+
+    fun setCallback(callback: MediaPlayerCallbackInterface)
 
 
 }
