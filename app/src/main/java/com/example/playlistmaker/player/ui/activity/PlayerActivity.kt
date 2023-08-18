@@ -106,7 +106,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 }
             }
         })
-        val hash = viewModel.hashCode()
         renderState()
     }
 

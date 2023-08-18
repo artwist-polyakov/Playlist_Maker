@@ -157,10 +157,6 @@ class SearchActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // TODO убить clicklistener
-    }
 
     private fun makeClearButtonInvisible() {
         binding.clearIcon.visibility = View.GONE
