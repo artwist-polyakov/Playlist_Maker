@@ -1,11 +1,11 @@
-package com.example.playlistmaker.player.domain.api
+package com.example.playlistmaker.player.domain
 
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
+import com.example.playlistmaker.search.data.storage.TracksStorage
 
 interface MediaPlayerInterface {
-    var trackStorageInteractor: TrackStorageInteractor
 
     fun playPauseSwitcher()
 
@@ -21,7 +21,7 @@ interface MediaPlayerInterface {
 
     fun setTrackPosition(position: Int)
 
-    fun forceInit()
+    fun forceInit(track: TrackInformation)
 
     fun setCallback(callback: MediaPlayerCallbackInterface)
 

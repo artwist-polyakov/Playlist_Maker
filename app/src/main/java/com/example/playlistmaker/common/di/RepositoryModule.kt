@@ -1,11 +1,9 @@
 package com.example.playlistmaker.common.di
 
-import android.content.SharedPreferences
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.common.domain.api.ThemeRepository
 import com.example.playlistmaker.player.data.MediaPlayerImpl
-import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
+import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.data.network.TracksRepositoryImpl
@@ -24,8 +22,7 @@ val repositoryModule = module {
     single<TracksRepository> {TracksRepositoryImpl(get(), get())}
     single<TracksStorage>{TracksStorageImpl(get())}
     single<NetworkClient> { RetrofitNetworkClient(get()) }
-    factory<MediaPlayerInterface> {MediaPlayerImpl(get())}
-
+    factory<MediaPlayerInterface> {MediaPlayerImpl()}
 }
 
 val dataModule = module {

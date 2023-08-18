@@ -4,17 +4,17 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
+import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
+import com.example.playlistmaker.search.data.storage.TracksStorage
 
 
-class MediaPlayerImpl(
-    override var trackStorageInteractor: TrackStorageInteractor
-) : MediaPlayer(), MediaPlayerInterface {
+class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     private var callback: MediaPlayerCallbackInterface? = null
+    private var track: TrackInformation? = null
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
@@ -111,13 +111,12 @@ class MediaPlayerImpl(
         this.seekTo(customCurrentPosition)
     }
 
-    override fun forceInit() {
+    override fun forceInit(track: TrackInformation) {
         Log.d("currentButtonState", "i want to init player // ACTIVITY")
-        val initialTrack = trackStorageInteractor.giveMeLastTrack()
-        Log.d("currentButtonState", "$initialTrack")
-        initialTrack.let { tr ->
+        setTrack(track)
+        this.track?.let { tr ->
             let { mp ->
-                mp.setDataSource(tr?.previewUrl)
+                mp.setDataSource(tr.previewUrl)
                 mp.prepareAsync()
                 mp.setOnPreparedListener {
                     this.duration = mp.getDuration()
@@ -125,18 +124,16 @@ class MediaPlayerImpl(
                     callback?.onMediaPlayerReady()
                     Log.d("currentButtonState", "callbackSended")
                 }
-                // TODO сделать через родную реализацию остановку проигрывания
-//                setOnCompletionListener {
-//                    if (state == STATE_PLAYING) {
-//                        finishPlay()
-//                    }
-//                }
             }
         }
     }
 
     override fun setCallback(callback: MediaPlayerCallbackInterface) {
         this.callback = callback
+    }
+
+    private fun setTrack(track: TrackInformation) {
+        this.track = track
     }
 
 }

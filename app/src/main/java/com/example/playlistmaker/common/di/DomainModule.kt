@@ -4,10 +4,10 @@ import com.example.playlistmaker.common.domain.ThemeInteractor
 import com.example.playlistmaker.common.domain.ThemeInteractorImpl
 import com.example.playlistmaker.common.presentation.ThemeDelegateImpl
 import com.example.playlistmaker.common.presentation.ThemeDelegate
+import com.example.playlistmaker.player.data.MediaPlayerInteractorImpl
 import com.example.playlistmaker.player.data.TrackStorageInteractorImpl
-import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
+import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
-import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
 import com.example.playlistmaker.settings.domain.NavigationInteractor
@@ -15,7 +15,6 @@ import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.example.playlistmaker.settings.domain.ThemeUseCase
 import com.example.playlistmaker.settings.domain.ThemeUseCaseImpl
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 
@@ -27,5 +26,5 @@ val domainModule = module {
     single<NavigationInteractor> { NavigationInteractor(get()) }
     single<TracksInteractor> {TracksInteractorImpl(get())}
     single<TrackStorageInteractor> { TrackStorageInteractorImpl(get()) }
-//    single<MediaPlayerCallbackInterface> {get<PlayerViewModel>()}
+    factory<MediaPlayerInteractor>{ MediaPlayerInteractorImpl(get()) }
 }

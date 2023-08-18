@@ -7,8 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
+import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
-import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
+import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -20,43 +21,18 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
 
     // MediaPlayer
     private val trackStorageInteractor: TrackStorageInteractor by inject()
+    private val mediaPlayerInteractor: MediaPlayerInteractor by inject()
     private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
     private val mediaPlayer: MediaPlayerInterface by inject()
 
-//    var currentTrack: TrackInformation? = null
-//        set(value) {
-//            field = value
-//            // Какие-то действия при установке нового трека (если нужны)
-//        }
     // Функции для управления проигрыванием
     fun playPause() {
-        mediaPlayer.playPauseSwitcher()
+        mediaPlayerInteractor.playPauseSwitcher()
     }
 
     fun resetPlayer() {
         Log.d("currentButtonState", "i want to destroy player from view model")
-        mediaPlayer.destroyPlayer()
-    }
-
-    fun changeTrack(track: TrackInformation) {
-        mediaPlayer.destroyPlayer()
-//        currentTrack = track
-    }
-
-    fun startPlayer() {
-        mediaPlayer.startPlayer()
-    }
-
-    fun pausePlayer() {
-        mediaPlayer.pausePlayer()
-    }
-
-    fun getTrackPosition(): Int {
-        return mediaPlayer.getTrackPosition()
-    }
-
-    fun setTrackPosition(position: Int) {
-        mediaPlayer.setTrackPosition(position)
+        mediaPlayerInteractor.destroyPlayer()
     }
 
     override fun onMediaPlayerReady() {
@@ -81,13 +57,14 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
     fun initializePlayer() {
         val hash = this.hashCode()
         Log.d("currentButtonState", "i ($hash)  want to init player //VIEWMODEL")
-        mediaPlayer.setCallback(this)
-        mediaPlayer.forceInit()
+        mediaPlayerInteractor.setCallback(this)
+         giveCurrentTrack()?.let {
+             mediaPlayerInteractor.initialize(it)
+         }
     }
 
     fun giveCurrentTrack(): TrackInformation? {
         return initializedTrack
     }
-
 
 }
