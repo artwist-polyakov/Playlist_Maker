@@ -2,27 +2,21 @@ package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackInformation
-import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.databinding.ActivitySongPageBinding
 import com.example.playlistmaker.player.presentation.PlayerActivityInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     private lateinit var binding: ActivitySongPageBinding
-    private val viewModel: PlayerViewModel by viewModels()
+    private val viewModel: PlayerViewModel by viewModel()
     private lateinit var currentTrack: TrackInformation
 
     companion object {
@@ -100,7 +94,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onCreate(savedInstanceState)
         binding = ActivitySongPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         currentTrack = intent.extras?.getParcelable(TRACK)!!
 
         // BACK BUTTON
@@ -116,10 +109,12 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         //BINDING
         viewModel.giveCurrentTrack()?.let { showTrackInfo(it) }
 //        viewModel.changeTrack(currentTrack)
+        Log.d("currentButtonState", "PRE ObserverSetted")
         viewModel.playerState.observe(this, Observer { state ->
-            Log.d("currentButtonState", "ObserverSetted")
+            Log.d("currentButtonState", "INSIDE OF OBSERVER")
             when(state) {
                 PlayerState.Loading -> {
+                    Log.d("currentButtonState", "Loading")
                     binding.playButton.isEnabled = false
                 }
                 PlayerState.Ready -> {
@@ -127,18 +122,22 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                     binding.playButton.isEnabled = true
                 }
                 PlayerState.Play -> {
+                    Log.d("currentButtonState", "Play")
                     binding.playButton.setImageResource(R.drawable.pause_button)
                 }
                 PlayerState.Pause -> {
+                    Log.d("currentButtonState", "Pause")
                     binding.playButton.setImageResource(R.drawable.play_button)
                 }
 
                 is PlayerState.TimeUpdate -> {
+                    Log.d("currentButtonState", "TimeUpdate")
                     binding.time.text = state.time.toString()
                 }
 
             }
         })
+        Log.d("currentButtonState", "POST ObserverSetted")
         viewModel.initializePlayer()
     }
 
