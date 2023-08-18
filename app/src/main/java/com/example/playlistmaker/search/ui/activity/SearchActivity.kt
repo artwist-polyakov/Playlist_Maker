@@ -157,7 +157,6 @@ class SearchActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-
     private fun makeClearButtonInvisible() {
         binding.clearIcon.visibility = View.GONE
         binding.searchEditText.background = getDrawable(R.drawable.rounded_edittext)
