@@ -21,11 +21,10 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     companion object {
         const val TRACK = "track"
-        const val START_TIME = "00:00"
     }
 
     override fun showTrackInfo(trackInfo: TrackInformation) {
-        showPreparationState()
+        Log.d("currentButtonState", "SHOWTRACK INFO DISABLED")
         if (trackInfo.country == null) {
             binding.trackCountryInfo.visibility = Group.GONE
         } else {
@@ -47,17 +46,14 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 .load(trackInfo.artworkUrl512)
                 .into(this.binding.trackCover)
         }
-        setTime(START_TIME)
     }
 
     override fun showPlayState() {
         binding.playButton.setImageResource(R.drawable.pause_button)
     }
-
     override fun showPauseState() {
         binding.playButton.setImageResource(R.drawable.play_button)
     }
-
     override fun showPreparationState() {
         binding.playButton.isEnabled = false
     }
@@ -139,23 +135,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         })
         val hash = viewModel.hashCode()
         Log.d("currentButtonState", "POST ObserverSetted, $hash")
-        viewModel.restoreState().let {
-            if (it.first == null) {
-                viewModel.initializePlayer()
-            }
-        }
-
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putParcelable(TRACK, currentTrack)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        currentTrack = savedInstanceState.getParcelable(TRACK)!!
+        renderState()
     }
 
     override fun onBackPressed() {
@@ -170,9 +150,16 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             when(it.first) {
                 PlayerState.Play -> showPlayState()
                 PlayerState.Pause -> showPauseState()
-                PlayerState.Loading -> showPreparationState()
+                PlayerState.Loading -> {
+                    Log.d("currentButtonState", "LOADING BRANCH RENDER STATE")
+                    showPreparationState()
+                }
                 PlayerState.Ready -> showReadyState()
-                else -> showPreparationState()
+                else -> {
+                    Log.d("currentButtonState", "ELSE BRANCH RENDER STATE")
+                    showPreparationState()
+                    viewModel.initializePlayer()
+                }
             }
         }
     }
