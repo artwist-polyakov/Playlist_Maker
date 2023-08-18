@@ -137,7 +137,8 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
             }
         })
-        Log.d("currentButtonState", "POST ObserverSetted")
+        val hash = viewModel.hashCode()
+        Log.d("currentButtonState", "POST ObserverSetted, $hash")
         viewModel.initializePlayer()
     }
 

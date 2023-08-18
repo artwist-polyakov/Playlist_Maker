@@ -61,9 +61,10 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
     }
 
     override fun onMediaPlayerReady() {
-        Log.d("currentButtonState", "callbackAccepted")
+        val hash = this.hashCode()
+        Log.d("currentButtonState", "callbackAccepted $hash")
         _playerState.value = PlayerState.Ready
-        Log.d("currentButtonState", "Changing LiveData layerState.Ready")
+        Log.d("currentButtonState", "Changing LiveData layerState.Ready $hash")
     }
 
     override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
@@ -79,7 +80,8 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
     }
 
     fun initializePlayer() {
-        Log.d("currentButtonState", "i want to init player //VIEWMODEL")
+        val hash = this.hashCode()
+        Log.d("currentButtonState", "i ($hash)  want to init player //VIEWMODEL")
         mediaPlayer.forceInit()
     }
 
