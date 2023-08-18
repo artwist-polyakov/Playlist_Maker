@@ -8,10 +8,11 @@ import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent {
+
+class PlayerViewModel (private val trackStorageInteractor: TrackStorageInteractor,
+                       private val mediaPlayerInteractor: MediaPlayerInteractor
+) : ViewModel(), MediaPlayerCallbackInterface {
 
     // LiveData для состояния проигрывателя
     private val _playerState = MutableLiveData<PlayerState>()
@@ -23,8 +24,7 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
     private val lastTimerState: TrackDurationTime = TrackDurationTime(0)
 
     // MediaPlayer
-    private val trackStorageInteractor: TrackStorageInteractor by inject()
-    private val mediaPlayerInteractor: MediaPlayerInteractor by inject()
+
     private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
 
     // Функции для управления проигрыванием

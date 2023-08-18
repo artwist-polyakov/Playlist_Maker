@@ -10,6 +10,6 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel {MainViewModel()}
     viewModel {SettingsViewModel(get(), get(), get())}
-    viewModel{ SearchViewModel(get()) }
-    viewModel { PlayerViewModel() }
+    viewModel{ SearchViewModel(get(), get(), get()) }
+    viewModel { PlayerViewModel(get(), get()) }
 }

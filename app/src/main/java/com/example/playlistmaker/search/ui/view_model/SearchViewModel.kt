@@ -4,7 +4,6 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -16,19 +15,18 @@ import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.activity.ResponseState
 import com.example.playlistmaker.search.ui.activity.SearchState
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
-class SearchViewModel(application: Application) : AndroidViewModel(application), KoinComponent {
+class SearchViewModel(private val application: Application,
+                      private val tracksInteractor: TracksInteractor,
+                      private val tracksStorage: TracksStorage
+) : AndroidViewModel(application) {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
     }
 
-    private val tracksInteractor: TracksInteractor by inject()
-    private val tracksStorage: TracksStorage by inject()
     private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<SearchState>()
