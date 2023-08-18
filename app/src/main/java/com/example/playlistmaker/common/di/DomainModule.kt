@@ -1,8 +1,8 @@
 package com.example.playlistmaker.common.di
 
 import com.example.playlistmaker.common.domain.ThemeInteractor
-import com.example.playlistmaker.common.domain.ThemeInteractorImpl
-import com.example.playlistmaker.common.presentation.ThemeDelegateImpl
+import com.example.playlistmaker.common.data.ThemeInteractorImpl
+import com.example.playlistmaker.common.data.ThemeDelegateImpl
 import com.example.playlistmaker.common.presentation.ThemeDelegate
 import com.example.playlistmaker.player.data.MediaPlayerInteractorImpl
 import com.example.playlistmaker.player.data.TrackStorageInteractorImpl
@@ -16,7 +16,6 @@ import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.example.playlistmaker.settings.domain.ThemeUseCase
 import com.example.playlistmaker.settings.domain.ThemeUseCaseImpl
 import org.koin.dsl.module
-
 
 val domainModule = module {
     single<ThemeInteractor> { ThemeInteractorImpl(get()) }

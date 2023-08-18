@@ -3,7 +3,7 @@ package com.example.playlistmaker.common.data
 import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
-import com.example.playlistmaker.common.domain.api.ThemeRepository
+import com.example.playlistmaker.common.domain.ThemeRepository
 
 class ThemeRepositoryImpl(private val context: Context): ThemeRepository {
     companion object {

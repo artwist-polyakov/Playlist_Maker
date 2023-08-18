@@ -5,7 +5,7 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.common.data.ThemeSettings
-import com.example.playlistmaker.common.domain.models.SingleLiveEvent
+import com.example.playlistmaker.common.domain.SingleLiveEvent
 import com.example.playlistmaker.common.presentation.ThemeDelegate
 import com.example.playlistmaker.settings.domain.NavigationInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractor

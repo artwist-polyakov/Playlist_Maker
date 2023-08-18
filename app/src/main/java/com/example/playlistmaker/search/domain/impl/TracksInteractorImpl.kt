@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.domain.impl
 
-import com.example.playlistmaker.common.presentation.mappers.TrackDtoToTrackMapper
+import com.example.playlistmaker.common.presentation.models.TrackDtoToTrackMapper
 import com.example.playlistmaker.search.data.network.Resource
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.api.TracksInteractor

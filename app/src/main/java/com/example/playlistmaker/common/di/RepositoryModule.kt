@@ -1,7 +1,7 @@
 package com.example.playlistmaker.common.di
 
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
-import com.example.playlistmaker.common.domain.api.ThemeRepository
+import com.example.playlistmaker.common.domain.ThemeRepository
 import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.search.data.network.NetworkClient
@@ -27,5 +27,4 @@ val repositoryModule = module {
 
 val dataModule = module {
     single<ExternalNavigator> { ExternalNavigatorImpl(get()) }
-
 }

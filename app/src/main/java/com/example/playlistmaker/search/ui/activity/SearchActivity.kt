@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
-import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMapper
+import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
+import com.example.playlistmaker.common.presentation.models.TrackToTrackInformationMapper
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track

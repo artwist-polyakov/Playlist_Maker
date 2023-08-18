@@ -2,7 +2,7 @@ package com.example.playlistmaker.main.ui.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.common.domain.models.SingleLiveEvent
+import com.example.playlistmaker.common.domain.SingleLiveEvent
 
 class MainViewModel: ViewModel()   {
     enum class NavigationEvent {

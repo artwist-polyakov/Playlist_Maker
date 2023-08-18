@@ -7,6 +7,5 @@ sealed class PlayerState {
     object Ready : PlayerState()
     object Play : PlayerState()
     object Pause : PlayerState()
-    data class TimeUpdate(val time: TrackDurationTime) : PlayerState()
 
 }

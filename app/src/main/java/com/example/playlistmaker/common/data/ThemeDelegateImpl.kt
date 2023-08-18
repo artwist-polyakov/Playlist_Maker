@@ -1,8 +1,8 @@
-package com.example.playlistmaker.common.presentation
+package com.example.playlistmaker.common.data
 
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.common.data.ThemeSettings
 import com.example.playlistmaker.common.domain.ThemeInteractor
+import com.example.playlistmaker.common.presentation.ThemeDelegate
 
 class ThemeDelegateImpl(private val interactor: ThemeInteractor): ThemeDelegate {
 

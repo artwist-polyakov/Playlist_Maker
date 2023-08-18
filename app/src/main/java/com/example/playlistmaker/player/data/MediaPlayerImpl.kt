@@ -8,8 +8,6 @@ import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
-import com.example.playlistmaker.player.domain.TrackStorageInteractor
-import com.example.playlistmaker.search.data.storage.TracksStorage
 
 
 class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
@@ -42,11 +40,6 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         }
     }
 
-
-    init {
-
-    }
-
     override fun playPauseSwitcher() {
         when (state) {
             STATE_PLAYING -> {
@@ -72,7 +65,6 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         callback.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
         handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
     }
-
 
     override fun startPlayer() {
         Log.d("currentButtonState", "startPlayer: $state, $customCurrentPosition, $duration")

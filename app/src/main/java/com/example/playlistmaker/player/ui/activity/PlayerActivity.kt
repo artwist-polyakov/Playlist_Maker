@@ -72,8 +72,10 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     override fun onResume() {
         super.onResume()
-        currentTrack = intent.extras?.getParcelable(TRACK)!!
-        currentTrack?.let {
+//        renderState()
+
+
+        viewModel.giveCurrentTrack()?.let {
             showTrackInfo(it)
         }
     }
@@ -94,8 +96,9 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         super.onCreate(savedInstanceState)
         binding = ActivitySongPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        currentTrack = intent.extras?.getParcelable(TRACK)!!
-
+        viewModel.giveCurrentTrack()?.let{
+            currentTrack = it
+        }
         // BACK BUTTON
         binding.returnButton.setOnClickListener {
             viewModel.resetPlayer()
@@ -105,8 +108,10 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         binding.playButton.setOnClickListener {
             viewModel.playPause()
         }
-
         //BINDING
+        viewModel.timerState.observe(this, Observer {
+            binding.time.text = it.toString()
+        })
         viewModel.giveCurrentTrack()?.let { showTrackInfo(it) }
 //        viewModel.changeTrack(currentTrack)
         Log.d("currentButtonState", "PRE ObserverSetted")
@@ -119,6 +124,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 }
                 PlayerState.Ready -> {
                     Log.d("currentButtonState", "Ready")
+                    Log.d( "currentButtonState", "Ready ${binding.playButton.hashCode()}")
                     binding.playButton.isEnabled = true
                 }
                 PlayerState.Play -> {
@@ -129,33 +135,47 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                     Log.d("currentButtonState", "Pause")
                     binding.playButton.setImageResource(R.drawable.play_button)
                 }
-
-                is PlayerState.TimeUpdate -> {
-                    Log.d("currentButtonState", "TimeUpdate")
-                    binding.time.text = state.time.toString()
-                }
-
             }
         })
         val hash = viewModel.hashCode()
         Log.d("currentButtonState", "POST ObserverSetted, $hash")
-        viewModel.initializePlayer()
+        viewModel.restoreState().let {
+            if (it.first == null) {
+                viewModel.initializePlayer()
+            }
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
         outState.putParcelable(TRACK, currentTrack)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         currentTrack = savedInstanceState.getParcelable(TRACK)!!
-
     }
 
     override fun onBackPressed() {
         viewModel.resetPlayer() // Остановка и уничтожение плеера
         super.onBackPressed()  // Закрыть текущую активность
     }
+
+    private fun renderState(){
+        viewModel.restoreState().let{
+            Log.d("currentButtonState", "RESTORE STATE $it")
+            binding.time.text = it.second.toString()
+            when(it.first) {
+                PlayerState.Play -> showPlayState()
+                PlayerState.Pause -> showPauseState()
+                PlayerState.Loading -> showPreparationState()
+                PlayerState.Ready -> showReadyState()
+                else -> showPreparationState()
+            }
+        }
+    }
+
 }
 
