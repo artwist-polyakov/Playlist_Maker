@@ -1,7 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
@@ -19,12 +18,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     private val viewModel: PlayerViewModel by viewModel()
     private lateinit var currentTrack: TrackInformation
 
-    companion object {
-        const val TRACK = "track"
-    }
-
     override fun showTrackInfo(trackInfo: TrackInformation) {
-        Log.d("currentButtonState", "SHOWTRACK INFO DISABLED")
         if (trackInfo.country == null) {
             binding.trackCountryInfo.visibility = Group.GONE
         } else {
@@ -51,9 +45,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     override fun showPlayState() {
         binding.playButton.setImageResource(R.drawable.pause_button)
     }
+
     override fun showPauseState() {
         binding.playButton.setImageResource(R.drawable.play_button)
     }
+
     override fun showPreparationState() {
         binding.playButton.isEnabled = false
     }
@@ -68,24 +64,9 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     override fun onResume() {
         super.onResume()
-//        renderState()
-
-
         viewModel.giveCurrentTrack()?.let {
             showTrackInfo(it)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,60 +90,47 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             binding.time.text = it.toString()
         })
         viewModel.giveCurrentTrack()?.let { showTrackInfo(it) }
-//        viewModel.changeTrack(currentTrack)
-        Log.d("currentButtonState", "PRE ObserverSetted")
         viewModel.playerState.observe(this, Observer { state ->
-            Log.d("currentButtonState", "INSIDE OF OBSERVER")
             when(state) {
                 PlayerState.Loading -> {
-                    Log.d("currentButtonState", "Loading")
                     binding.playButton.isEnabled = false
                 }
                 PlayerState.Ready -> {
-                    Log.d("currentButtonState", "Ready")
-                    Log.d( "currentButtonState", "Ready ${binding.playButton.hashCode()}")
                     binding.playButton.isEnabled = true
                 }
                 PlayerState.Play -> {
-                    Log.d("currentButtonState", "Play")
                     binding.playButton.setImageResource(R.drawable.pause_button)
                 }
                 PlayerState.Pause -> {
-                    Log.d("currentButtonState", "Pause")
                     binding.playButton.setImageResource(R.drawable.play_button)
                 }
             }
         })
         val hash = viewModel.hashCode()
-        Log.d("currentButtonState", "POST ObserverSetted, $hash")
         renderState()
     }
 
     override fun onBackPressed() {
-        viewModel.resetPlayer() // Остановка и уничтожение плеера
-        super.onBackPressed()  // Закрыть текущую активность
+        viewModel.resetPlayer()
+        super.onBackPressed()
     }
 
     private fun renderState(){
         viewModel.restoreState().let{
-            Log.d("currentButtonState", "RESTORE STATE $it")
             binding.time.text = it.second.toString()
             when(it.first) {
                 PlayerState.Play -> showPlayState()
                 PlayerState.Pause -> showPauseState()
                 PlayerState.Loading -> {
-                    Log.d("currentButtonState", "LOADING BRANCH RENDER STATE")
                     showPreparationState()
                 }
                 PlayerState.Ready -> showReadyState()
                 else -> {
-                    Log.d("currentButtonState", "ELSE BRANCH RENDER STATE")
                     showPreparationState()
                     viewModel.initializePlayer()
                 }
             }
         }
     }
-
 }
 

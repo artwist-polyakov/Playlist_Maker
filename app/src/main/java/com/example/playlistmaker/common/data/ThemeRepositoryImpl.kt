@@ -23,6 +23,5 @@ class ThemeRepositoryImpl(private val context: Context): ThemeRepository {
             putBoolean(THEME_PREF, isDark)
             apply()
         }
-        Log.d("ThemeRepository", "Theme switched to: ${if (isDark) "Dark" else "Light"}")
     }
 }

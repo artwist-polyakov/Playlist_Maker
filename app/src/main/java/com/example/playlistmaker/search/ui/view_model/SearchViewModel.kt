@@ -44,7 +44,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application),
 
     private val mediatorStateLiveData = MediatorLiveData<SearchState>().also { liveData ->
         liveData.addSource(stateLiveData) { searchState ->
-            Log.d("SearchViewModelState", "searchState: $searchState")
             liveData.value = when (searchState) {
                 is SearchState.Content -> SearchState.Content(searchState.tracks)
                 is SearchState.Empty -> searchState
@@ -142,9 +141,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application),
         renderState(SearchState.Virgin)
         if (historyTracks.isNotEmpty()) {
             renderState(SearchState.History(historyTracks))
-            Log.d("SearchViewModel", "history tracks $historyTracks")
         } else {
-            Log.d("SearchViewModel", "No history tracks")
             renderState(SearchState.Virgin)
         }
     }

@@ -53,11 +53,9 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     }
 
     override fun destroyPlayer() {
-        Log.d("currentButtonState", "i want to destroyPlayer: $state")
         if (state != STATE_DEFAULT) {
             this.release()
         }
-        Log.d("currentButtonState", "i want to destroyPlayer but not: $state")
         state = STATE_DEFAULT
     }
 
@@ -67,7 +65,6 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     }
 
     override fun startPlayer() {
-        Log.d("currentButtonState", "startPlayer: $state, $customCurrentPosition, $duration")
         this.start()
         state = STATE_PLAYING
         callback?.onMediaPlayerPlay()
@@ -84,11 +81,8 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     }
 
     private fun finishPlay() {
-        Log.d("currentButtonState", "finishPlay: $state, $customCurrentPosition, $duration")
         this.pausePlayer()
-        Log.d("currentButtonState", "finishPlay после pausePlayer")
         customCurrentPosition = 0
-        Log.d("currentButtonState", "finishPlay после seekTo")
         state = STATE_PREPARED
         callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
 
@@ -104,7 +98,6 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     }
 
     override fun forceInit(track: TrackInformation) {
-        Log.d("currentButtonState", "i want to init player // ACTIVITY")
         setTrack(track)
         this.track?.let { tr ->
             let { mp ->
@@ -114,7 +107,6 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
                     this.duration = mp.getDuration()
                     state = STATE_PREPARED
                     callback?.onMediaPlayerReady()
-                    Log.d("currentButtonState", "callbackSended")
                 }
             }
         }

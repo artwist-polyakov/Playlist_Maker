@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +8,6 @@ import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
-import com.example.playlistmaker.player.domain.MediaPlayerInterface
-import com.example.playlistmaker.search.ui.activity.SearchState
-import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -37,21 +33,17 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
     }
 
     fun resetPlayer() {
-        Log.d("currentButtonState", "i want to destroy player from view model")
         mediaPlayerInteractor.destroyPlayer()
     }
 
     override fun onMediaPlayerReady() {
         val hash = this.hashCode()
-        Log.d("currentButtonState", "callbackAccepted $hash")
         _playerState.value = PlayerState.Ready
         lastState = PlayerState.Ready
-        Log.d("currentButtonState", "Changing LiveData layerState.Ready $hash")
     }
 
     override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
         _timerState.value = time
-//        lastState = PlayerState.TimeUpdate(time)
     }
 
     override fun onMediaPlayerPause() {
@@ -66,7 +58,6 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
 
     fun initializePlayer() {
         val hash = this.hashCode()
-        Log.d("currentButtonState", "i ($hash)  want to init player //VIEWMODEL")
         mediaPlayerInteractor.setCallback(this)
          giveCurrentTrack()?.let {
              mediaPlayerInteractor.initialize(it)
@@ -85,5 +76,4 @@ class PlayerViewModel : ViewModel(), MediaPlayerCallbackInterface, KoinComponent
     fun restoreState(): Pair<PlayerState?, TrackDurationTime> {
         return Pair(lastState, lastTimerState)
     }
-
 }
