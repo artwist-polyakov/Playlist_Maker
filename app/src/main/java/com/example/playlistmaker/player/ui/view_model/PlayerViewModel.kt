@@ -1,82 +1,79 @@
 package com.example.playlistmaker.player.ui.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
-import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
+import com.example.playlistmaker.player.domain.MediaPlayerInteractor
+import com.example.playlistmaker.player.domain.TrackStorageInteractor
 
-class PlayerViewModel(var withTrack: TrackInformation) : ViewModel(), MediaPlayerCallbackInterface {
-    companion object {
-        fun getViewModelFactory(withTrack: TrackInformation): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PlayerViewModel(withTrack) as T
-            }
-        }
-    }
+
+class PlayerViewModel (private val trackStorageInteractor: TrackStorageInteractor,
+                       private val mediaPlayerInteractor: MediaPlayerInteractor
+) : ViewModel(), MediaPlayerCallbackInterface {
+
     // LiveData для состояния проигрывателя
     private val _playerState = MutableLiveData<PlayerState>()
     val playerState: LiveData<PlayerState> get() = _playerState
+    private var lastState: PlayerState? = null
+
+    private val _timerState = MutableLiveData<TrackDurationTime>()
+    val timerState: LiveData<TrackDurationTime> get() = _timerState
+    private val lastTimerState: TrackDurationTime = TrackDurationTime(0)
 
     // MediaPlayer
-    private val mediaPlayer = MediaPlayerImpl(callback = this, withTrack = withTrack)
 
-    var currentTrack: TrackInformation? = null
-        set(value) {
-            field = value
-            // Какие-то действия при установке нового трека (если нужны)
-        }
+    private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
+
     // Функции для управления проигрыванием
     fun playPause() {
-        mediaPlayer.playPauseSwitcher()
+        mediaPlayerInteractor.playPauseSwitcher()
     }
 
     fun resetPlayer() {
-        Log.d("currentButtonState", "i want to destroy player from view model")
-        mediaPlayer.destroyPlayer()
-    }
-
-    fun changeTrack(track: TrackInformation) {
-        mediaPlayer.destroyPlayer()
-        mediaPlayer.withTrack = track
-        currentTrack = track
-    }
-
-    fun startPlayer() {
-        mediaPlayer.startPlayer()
-    }
-
-    fun pausePlayer() {
-        mediaPlayer.pausePlayer()
-    }
-
-    fun getTrackPosition(): Int {
-        return mediaPlayer.getTrackPosition()
-    }
-
-    fun setTrackPosition(position: Int) {
-        mediaPlayer.setTrackPosition(position)
+        mediaPlayerInteractor.destroyPlayer()
     }
 
     override fun onMediaPlayerReady() {
+        val hash = this.hashCode()
         _playerState.value = PlayerState.Ready
+        lastState = PlayerState.Ready
     }
 
     override fun onMediaPlayerTimeUpdate(time: TrackDurationTime) {
-        _playerState.value = PlayerState.TimeUpdate(time)
+        _timerState.value = time
     }
 
     override fun onMediaPlayerPause() {
         _playerState.value = PlayerState.Pause
+        lastState = PlayerState.Pause
     }
 
     override fun onMediaPlayerPlay() {
         _playerState.value = PlayerState.Play
+        lastState = PlayerState.Play
     }
 
+    fun initializePlayer() {
+        val hash = this.hashCode()
+        mediaPlayerInteractor.setCallback(this)
+         giveCurrentTrack()?.let {
+             mediaPlayerInteractor.initialize(it)
+         }
+    }
 
+    fun giveCurrentTrack(): TrackInformation? {
+        return initializedTrack
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        mediaPlayerInteractor.destroyPlayer()
+    }
+
+    fun restoreState(): Pair<PlayerState?, TrackDurationTime> {
+        return Pair(lastState, lastTimerState)
+    }
 }

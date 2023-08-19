@@ -6,25 +6,18 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.presentation.mappers.TrackToTrackDtoMapper
-import com.example.playlistmaker.common.presentation.mappers.TrackToTrackInformationMapper
+import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
+import com.example.playlistmaker.common.presentation.models.TrackToTrackInformationMapper
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 enum class ResponseState {
     SUCCESS,
@@ -34,7 +27,8 @@ enum class ResponseState {
 }
 
 class SearchActivity : AppCompatActivity() {
-
+    private val viewModel: SearchViewModel by viewModel()
+    private lateinit var binding: ActivitySearchBinding
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
@@ -43,11 +37,7 @@ class SearchActivity : AppCompatActivity() {
         object : TracksAdapter.TrackClickListener {
             override fun onTrackClick(track: Track) {
                 if (clickDebounce()) {
-                    try {
-                        viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-                    } catch (e: Exception) {
-                        Log.e("SearchActivity", "Error saving track to history: ${e.message}", e)
-                    }
+                    viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
                     val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
                     intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
                     startActivity(intent)
@@ -58,50 +48,18 @@ class SearchActivity : AppCompatActivity() {
 
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var viewModel: SearchViewModel
-    private lateinit var searchEditText: EditText
-    private lateinit var clearButton: ImageView
-    private lateinit var problemsLayout: LinearLayout
-    private lateinit var problemsText: TextView
-    private lateinit var problemsIcon: ImageView
-    private lateinit var refreshButton: Button
-    private lateinit var cleanHistoryButton: Button
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var loadingIndicator: ProgressBar
-    private lateinit var historyLayout: LinearLayout
-    private lateinit var historyRecyclerView: RecyclerView
     private lateinit var textWatcher: TextWatcher
-    private lateinit var backButton: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory())[SearchViewModel::class.java]
-
-        // SEARCH RECYCLER VIEW
-        recyclerView = findViewById<RecyclerView>(R.id.search_results_recycler_view)
-
-        // SEARCH
-        searchEditText = findViewById(R.id.searchEditText)
-        clearButton = findViewById(R.id.clearIcon)
-        problemsLayout = findViewById(R.id.problems_layout)
-        problemsText = findViewById(R.id.search_placeholder_text)
-        problemsIcon = findViewById(R.id.problems_image)
-        refreshButton = findViewById(R.id.refresh_button)
-        loadingIndicator = findViewById(R.id.loading_indicator)
-        cleanHistoryButton = findViewById(R.id.clear_button)
-        backButton = findViewById(R.id.return_button)
-
-        // HISTORY VIEW
-        historyLayout = findViewById(R.id.history_layout)
-        historyRecyclerView = findViewById(R.id.search_history_recycler_view)
-        historyRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = adapter
-        historyRecyclerView.adapter = adapter
+        binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.searchResultsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.searchResultsRecyclerView.adapter = adapter
+        binding.searchHistoryRecyclerView.adapter = adapter
         setupListeners()
         textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -123,7 +81,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        textWatcher?.let { searchEditText.addTextChangedListener(it) }
+        textWatcher?.let { binding.searchEditText.addTextChangedListener(it) }
 
         viewModel.observeState().observe(this) {
             render(it)
@@ -134,21 +92,22 @@ class SearchActivity : AppCompatActivity() {
         })
 
         viewModel.clearButtonPressed.observe(this, Observer {
-            searchEditText.clearFocus()
-            searchEditText.text.clear()
+            binding.searchEditText.clearFocus()
+            binding.searchEditText.text.clear()
         })
 
         viewModel.loadHistoryTracks()
 
-        cleanHistoryButton.setOnClickListener {
+        binding.clearButton.setOnClickListener {
             viewModel.clearHistoryAndHide()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadHistoryTracks()
+//        viewModel.loadHistoryTracks()
         viewModel.restoreLastState()
+        adapter.notifyDataSetChanged()
     }
 
     private fun render(state: SearchState) {
@@ -164,22 +123,22 @@ class SearchActivity : AppCompatActivity() {
 
     private fun clearAll() {
         adapter.tracks.clear()
-        recyclerView.visibility = View.GONE
-        historyLayout.visibility = View.GONE
-        loadingIndicator.visibility = View.GONE
+        binding.searchResultsRecyclerView.visibility = View.GONE
+        binding.historyLayout.visibility = View.GONE
+        binding.loadingIndicator.visibility = View.GONE
         hideProblemsLayout()
     }
 
     private fun showLoading() {
-        recyclerView.visibility = View.GONE
-        historyLayout.visibility = View.GONE
-        loadingIndicator.visibility = View.VISIBLE
+        binding.searchResultsRecyclerView.visibility = View.GONE
+        binding.historyLayout.visibility = View.GONE
+        binding.loadingIndicator.visibility = View.VISIBLE
     }
 
     private fun showError(responseState: ResponseState) {
-        recyclerView.visibility = View.GONE
-        historyLayout.visibility = View.GONE
-        loadingIndicator.visibility = View.GONE
+        binding.searchResultsRecyclerView.visibility = View.GONE
+        binding.historyLayout.visibility = View.GONE
+        binding.loadingIndicator.visibility = View.GONE
         showProblemsLayout(responseState)
     }
 
@@ -188,9 +147,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showSearchResult(tracks: List<Track>) {
-        recyclerView.visibility = View.VISIBLE
-        historyLayout.visibility = View.GONE
-        loadingIndicator.visibility = View.GONE
+        binding.searchResultsRecyclerView.visibility = View.VISIBLE
+        binding.historyLayout.visibility = View.GONE
+        binding.loadingIndicator.visibility = View.GONE
         hideProblemsLayout()
 
         adapter.tracks.clear()
@@ -198,54 +157,49 @@ class SearchActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // TODO убить clicklistener
-    }
-
     private fun makeClearButtonInvisible() {
-        clearButton.visibility = View.GONE
-        searchEditText.background = getDrawable(R.drawable.rounded_edittext)
+        binding.clearIcon.visibility = View.GONE
+        binding.searchEditText.background = getDrawable(R.drawable.rounded_edittext)
     }
 
     private fun makeClearButtonVisible() {
-        clearButton.visibility = View.VISIBLE
-        clearButton.background = getDrawable(R.drawable.right_rounded_edittext)
-        searchEditText.background = getDrawable(R.drawable.left_rounded_edittext)
+        binding.clearIcon.visibility = View.VISIBLE
+        binding.clearIcon.background = getDrawable(R.drawable.right_rounded_edittext)
+        binding.searchEditText.background = getDrawable(R.drawable.left_rounded_edittext)
     }
 
     private fun showProblemsLayout(responseState: ResponseState) {
-        recyclerView.visibility = View.GONE
-        problemsLayout.visibility = View.VISIBLE
+        binding.searchResultsRecyclerView.visibility = View.GONE
+        binding.problemsLayout.visibility = View.VISIBLE
         when (responseState.name) {
             ResponseState.ERROR.name -> {
-                recyclerView.visibility = View.GONE
-                loadingIndicator.visibility = View.GONE
-                problemsText.text = getString(R.string.no_internet)
-                problemsIcon.setImageResource(R.drawable.no_internet)
-                refreshButton.visibility = View.VISIBLE
+                binding.searchResultsRecyclerView.visibility = View.GONE
+                binding.loadingIndicator.visibility = View.GONE
+                binding.searchPlaceholderText.text = getString(R.string.no_internet)
+                binding.problemsImage.setImageResource(R.drawable.no_internet)
+                binding.refreshButton.visibility = View.VISIBLE
             }
             ResponseState.NOTHING_FOUND.name -> {
-                recyclerView.visibility = View.GONE
-                loadingIndicator.visibility = View.GONE
-                problemsText.text = getString(R.string.nothing_found)
-                problemsIcon.setImageResource(R.drawable.nothing_found)
-                refreshButton.visibility = View.GONE
+                binding.searchResultsRecyclerView.visibility = View.GONE
+                binding.loadingIndicator.visibility = View.GONE
+                binding.searchPlaceholderText.text = getString(R.string.nothing_found)
+                binding.problemsImage.setImageResource(R.drawable.nothing_found)
+                binding.refreshButton.visibility = View.GONE
             }
         }
     }
 
     private fun hideProblemsLayout() {
-        recyclerView.visibility = View.VISIBLE
-        problemsLayout.visibility = View.GONE
-        refreshButton.visibility = View.GONE
+        binding.searchResultsRecyclerView.visibility = View.VISIBLE
+        binding.problemsLayout.visibility = View.GONE
+        binding.refreshButton.visibility = View.GONE
     }
 
     private fun showHistoryLayout(tracks: List<Track>) {
-        historyLayout.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        problemsLayout.visibility = View.GONE
-        cleanHistoryButton.visibility = View.VISIBLE
+        binding.historyLayout.visibility = View.VISIBLE
+        binding.searchResultsRecyclerView.visibility = View.GONE
+        binding.problemsLayout.visibility = View.GONE
+        binding.clearButton.visibility = View.VISIBLE
 
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
@@ -253,8 +207,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hideHistoryLayout() {
-        recyclerView.visibility = View.VISIBLE
-        historyLayout.visibility = View.GONE
+        binding.searchResultsRecyclerView.visibility = View.VISIBLE
+        binding.historyLayout.visibility = View.GONE
 
     }
 
@@ -268,10 +222,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun setupListeners() {
-        backButton.setOnClickListener {
+        binding.returnButton.setOnClickListener {
             viewModel.onBackButtonPressed()
         }
-        clearButton.setOnClickListener {
+        binding.clearIcon.setOnClickListener {
             viewModel.onClearButtonPressed()
         }
     }

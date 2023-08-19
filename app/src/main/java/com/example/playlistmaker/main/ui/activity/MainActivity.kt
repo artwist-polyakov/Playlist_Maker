@@ -2,31 +2,34 @@ package com.example.playlistmaker.main.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.main.ui.view_model.MainViewModel
 import com.example.playlistmaker.media.ui.activity.MediaActivity
 import com.example.playlistmaker.search.ui.activity.SearchActivity
 import com.example.playlistmaker.settings.ui.activity.SettingsActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: MainViewModel
+
+    private val viewModel: MainViewModel by viewModel()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        viewModel = ViewModelProvider(this, factory = MainViewModel.getViewModelFactory()).get(MainViewModel::class.java)
-        findViewById<Button>(R.id.search).setOnClickListener {
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.search.setOnClickListener {
             viewModel.onSearchClicked()
         }
-        findViewById<Button>(R.id.media).setOnClickListener {
+        binding.media.setOnClickListener {
             viewModel.onMediaClicked()
         }
-        findViewById<Button>(R.id.settings).setOnClickListener {
+        binding.settings.setOnClickListener {
             viewModel.onSettingsClicked()
         }
+
         viewModel.navigationEvent.observe(this) { event ->
             val intent = when (event) {
                 MainViewModel.NavigationEvent.SEARCH -> {

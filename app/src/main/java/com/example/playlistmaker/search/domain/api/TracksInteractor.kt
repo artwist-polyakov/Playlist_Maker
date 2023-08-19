@@ -10,4 +10,5 @@ interface TracksInteractor {
         fun consume(foundTracks: List<Track>?, errorMessage: String?)
     }
     fun addTrackToHistory(track: TrackDto)
+
 }

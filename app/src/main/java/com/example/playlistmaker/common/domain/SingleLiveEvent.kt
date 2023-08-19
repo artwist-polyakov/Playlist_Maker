@@ -1,4 +1,4 @@
-package com.example.playlistmaker.common.domain.models
+package com.example.playlistmaker.common.domain
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

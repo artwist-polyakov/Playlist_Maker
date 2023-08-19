@@ -4,17 +4,15 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.playlistmaker.player.domain.api.MediaPlayerInterface
-import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
+import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 
 
-class MediaPlayerImpl(
-    override var callback: MediaPlayerCallbackInterface? = null,
-    override var withTrack: TrackInformation?
-) : MediaPlayer(), MediaPlayerInterface {
-
+class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
+    private var callback: MediaPlayerCallbackInterface? = null
+    private var track: TrackInformation? = null
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
@@ -42,27 +40,6 @@ class MediaPlayerImpl(
         }
     }
 
-
-    init {
-        withTrack.let { tr ->
-            let { mp ->
-                mp.setDataSource(tr?.previewUrl)
-                mp.prepareAsync()
-                mp.setOnPreparedListener {
-                    this.duration = mp.getDuration()
-                    state = STATE_PREPARED
-                    callback?.onMediaPlayerReady()
-                }
-                // TODO сделать через родную реализацию остановку проигрывания
-//                setOnCompletionListener {
-//                    if (state == STATE_PLAYING) {
-//                        finishPlay()
-//                    }
-//                }
-            }
-        }
-    }
-
     override fun playPauseSwitcher() {
         when (state) {
             STATE_PLAYING -> {
@@ -76,7 +53,6 @@ class MediaPlayerImpl(
     }
 
     override fun destroyPlayer() {
-        Log.d("currentButtonState", "i want to destroyPlayer: $state")
         if (state != STATE_DEFAULT) {
             this.release()
         }
@@ -88,9 +64,7 @@ class MediaPlayerImpl(
         handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
     }
 
-
     override fun startPlayer() {
-        Log.d("currentButtonState", "startPlayer: $state, $customCurrentPosition, $duration")
         this.start()
         state = STATE_PLAYING
         callback?.onMediaPlayerPlay()
@@ -107,11 +81,8 @@ class MediaPlayerImpl(
     }
 
     private fun finishPlay() {
-        Log.d("currentButtonState", "finishPlay: $state, $customCurrentPosition, $duration")
         this.pausePlayer()
-        Log.d("currentButtonState", "finishPlay после pausePlayer")
         customCurrentPosition = 0
-        Log.d("currentButtonState", "finishPlay после seekTo")
         state = STATE_PREPARED
         callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
 
@@ -126,5 +97,27 @@ class MediaPlayerImpl(
         this.seekTo(customCurrentPosition)
     }
 
+    override fun forceInit(track: TrackInformation) {
+        setTrack(track)
+        this.track?.let { tr ->
+            let { mp ->
+                mp.setDataSource(tr.previewUrl)
+                mp.prepareAsync()
+                mp.setOnPreparedListener {
+                    this.duration = mp.getDuration()
+                    state = STATE_PREPARED
+                    callback?.onMediaPlayerReady()
+                }
+            }
+        }
+    }
+
+    override fun setCallback(callback: MediaPlayerCallbackInterface) {
+        this.callback = callback
+    }
+
+    private fun setTrack(track: TrackInformation) {
+        this.track = track
+    }
 
 }

@@ -2,48 +2,42 @@ package com.example.playlistmaker.settings.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.widget.LinearLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
-import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModel()
+    private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        viewModel = ViewModelProvider(this, factory = SettingsViewModel.getViewModelFactory()).get(
-            SettingsViewModel::class.java)
-        val backButton = findViewById<ImageView>(R.id.return_button)
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        val sharingLayout = findViewById<LinearLayout>(R.id.sharing_layout)
-        val supportLayout = findViewById<LinearLayout>(R.id.support_layout)
-        val agreementLayout = findViewById<LinearLayout>(R.id.agreement_layout)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        backButton.setOnClickListener {
+        binding.returnButton.setOnClickListener {
             viewModel.onBackClicked()
         }
 
-        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+        binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
             viewModel.onThemeSwitch(isChecked)
         }
 
-        sharingLayout.setOnClickListener {
+        binding.sharingLayout.setOnClickListener {
             viewModel.shareLink()
         }
 
-        supportLayout.setOnClickListener {
+        binding.supportLayout.setOnClickListener {
             viewModel.sendSupport()
         }
 
-        agreementLayout.setOnClickListener {
+        binding.agreementLayout.setOnClickListener {
             viewModel.openAgreement()
         }
 
@@ -53,13 +47,12 @@ class SettingsActivity : AppCompatActivity() {
         })
 
 
-
         viewModel.isDarkTheme.observe(this, Observer { isDark ->
-            themeSwitcher.isChecked = isDark
+            binding.themeSwitcher.isChecked = isDark
         })
 
         viewModel.themeSwitcherEnabled.observe(this, Observer { isEnabled ->
-            themeSwitcher.setEnabled(isEnabled)
+            binding.themeSwitcher.setEnabled(isEnabled)
         })
 
         viewModel.restartActivity.observe(this) {

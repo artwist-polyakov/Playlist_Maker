@@ -1,43 +1,29 @@
 package com.example.playlistmaker.settings.ui.view_model
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.common.data.ThemeSettings
-import com.example.playlistmaker.common.domain.models.SingleLiveEvent
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.common.domain.SingleLiveEvent
+import com.example.playlistmaker.common.presentation.ThemeDelegate
 import com.example.playlistmaker.settings.domain.NavigationInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractor
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
     private val navigationInteractor: NavigationInteractor,
+    private val delegate: ThemeDelegate
 ) : ViewModel() {
 
     companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as Application
-                val settingsInteractor = Creator.provideSettingsInteractor(application)
-                val navigationInteractor = Creator.provideNavigationInteractor(application)
-                SettingsViewModel(settingsInteractor, navigationInteractor)
-            }
-        }
-
         const val DEBOUNCE_TIME_500L = 500L
     }
+
     val restartActivity = SingleLiveEvent<Unit>()
     val closeScreen = SingleLiveEvent<Unit>()
     val isDarkTheme = MutableLiveData<Boolean>()
     val themeSwitcherEnabled = MutableLiveData<Boolean>(true)
-
     private val themeSwitchHandler = Handler(Looper.getMainLooper())
 
     init {
@@ -51,24 +37,22 @@ class SettingsViewModel(
 
     fun onThemeSwitch(isChecked: Boolean) {
 
+        // Чтобы нельзя было тысячу раз в миллисекунду двинуть переключатель
         if (!themeSwitcherEnabled.value!!) {
             return
         }
-        themeSwitcherEnabled.value = false
 
+        // Делаем переключатель неактивным на 500 мс
+        themeSwitcherEnabled.value = false
         val newThemeSettings = if (isChecked) ThemeSettings.Dark else ThemeSettings.Light
         settingsInteractor.updateThemeSetting(newThemeSettings)
         isDarkTheme.value = isChecked
-
-        if (newThemeSettings == ThemeSettings.Dark) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
+        delegate.updateTheme()
 
         restartActivity.value = Unit
-
         themeSwitchHandler.postDelayed({
+
+            // Возвращаем переключатель в активное состояние
             themeSwitcherEnabled.value = true
         }, DEBOUNCE_TIME_500L)
 
