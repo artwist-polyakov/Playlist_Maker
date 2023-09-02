@@ -36,13 +36,15 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
-        app:tabTextAppearance="@style/MyTabTextAppearance"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="14sp"
+        android:textAllCaps="false"
         android:background="?attr/colorPrimary"
         app:tabTextColor="?attr/colorOnPrimary"
         app:tabIndicatorColor="?attr/colorOnPrimary"
-        app:tabIndicatorFullWidth="true"
+        app:tabIndicatorFullWidth="false"
         android:layout_below="@id/return_button" />
 
     <androidx.viewpager2.widget.ViewPager2
