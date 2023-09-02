@@ -15,7 +15,7 @@
             android:id="@+id/create_button"
             style="@style/search_activity_refresh_button"
             android:layout_marginTop="24dp"
-            android:text="Новый плейлист"
+            android:text="@string/new_playlist"
             android:visibility="invisible" />
 
         <ImageView
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Ваша медиатека пуста" />
+            android:text="@string/empty_library" />
     </LinearLayout>
 
 

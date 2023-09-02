@@ -42,4 +42,7 @@
     <string name="track_genre_placeholder">Rock</string>
     <string name="track_country_description">Страна</string>
     <string name="track_country_placeholder">Великобритания</string>
+    <string name="no_playlists">Вы не создали \nни одного плейлиста</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="empty_library">Ваша медиатека пуста</string>
 </resources>

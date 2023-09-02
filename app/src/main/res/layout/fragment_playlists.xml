@@ -15,7 +15,7 @@
             android:id="@+id/create_button"
             android:layout_marginTop="24dp"
             style="@style/search_activity_refresh_button"
-            android:text="Новый плейлист"
+            android:text="@string/new_playlist"
             android:visibility="visible" />
 
         <ImageView
@@ -31,7 +31,7 @@
             android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Вы не создали \nни одного плейлиста" />
+            android:text="@string/no_playlists" />
     </LinearLayout>
 
 
