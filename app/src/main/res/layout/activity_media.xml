@@ -39,8 +39,8 @@
         android:layout_height="48dp"
         android:background="?attr/colorPrimary"
         app:tabIndicatorColor="?attr/colorOnPrimary"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="2dp"
+        app:tabIndicatorFullWidth="true"
+        app:tabIndicator="@drawable/custom_tab_indicator"
         app:tabRippleColor="#00FFFFFF"
         app:tabTextAppearance="@style/MyTabTextAppearance"
         app:tabTextColor="?attr/colorOnPrimary" />
