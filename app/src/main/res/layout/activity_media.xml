@@ -37,7 +37,6 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_below="@id/return_button"
         android:background="?attr/colorPrimary"
         app:tabIndicatorColor="@color/black"
         app:tabIndicatorFullWidth="false"
@@ -49,6 +48,5 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tabLayout" />
+        android:layout_height="match_parent"/>
 </LinearLayout>
