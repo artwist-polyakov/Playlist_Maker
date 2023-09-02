@@ -30,22 +30,25 @@
             android:text="@string/media_button_text"
             android:textColor="?attr/colorOnPrimary"
             android:textFontWeight="500"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="22sp" />
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:textSize="14sp"
-        android:textAllCaps="false"
+        android:layout_below="@id/return_button"
         android:background="?attr/colorPrimary"
-        app:tabTextColor="?attr/colorOnPrimary"
+        android:fontFamily="@font/ys_display_medium"
+        android:textAllCaps="false"
+        android:textFontWeight="500"
+        android:textSize="14sp"
         app:tabIndicatorColor="?attr/colorOnPrimary"
         app:tabIndicatorFullWidth="false"
-        android:layout_below="@id/return_button" />
+        app:tabIndicatorHeight="2dp"
+        app:tabRippleColor="#00FFFFFF"
+        app:tabTextAppearance="@style/MyTabTextAppearance"
+        app:tabTextColor="?attr/colorOnPrimary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
