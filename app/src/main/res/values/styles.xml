@@ -55,8 +55,8 @@
 
     <style name="settings_linear_layout_style">
         <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_height">@dimen/settings_element_height</item>
-        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:gravity">center</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:clickable">true</item>
