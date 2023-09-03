@@ -29,4 +29,7 @@
     <dimen name="main_screen_button_corner_radius">16dp</dimen>
     <dimen name="main_screen_button_icon_padding">10dp</dimen>
     <dimen name="main_screen_button_margin_top">16dp</dimen>
+
+<!--    MARK: Media Screen-->
+    <dimen name="media_layouts_height">48dp</dimen>
 </resources>

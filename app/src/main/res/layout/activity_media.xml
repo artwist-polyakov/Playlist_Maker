@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/media_layouts_height"
         android:orientation="horizontal">
 
         <ImageView
@@ -36,7 +36,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/media_layouts_height"
         android:background="@android:color/transparent"
         app:tabIndicatorColor="?attr/colorOnPrimary"
         app:tabIndicatorFullWidth="true"
