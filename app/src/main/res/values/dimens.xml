@@ -32,4 +32,5 @@
 
 <!--    MARK: Media Screen-->
     <dimen name="media_layouts_height">48dp</dimen>
+    <dimen name="media_state_image_bounds">120dp</dimen>
 </resources>
