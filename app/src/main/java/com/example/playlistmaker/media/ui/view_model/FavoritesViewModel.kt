@@ -8,7 +8,6 @@ class FavoritesViewModel : ViewModel() {
     val state = MutableLiveData<FavoriteState>(FavoriteState.NOTHING_TO_SHOW)
 }
 
-
 sealed class FavoriteState {
     object NOTHING_TO_SHOW : FavoriteState()
     object LOADING : FavoriteState()
