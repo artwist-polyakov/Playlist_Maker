@@ -14,8 +14,13 @@ class ThemeRepositoryImpl(private val context: Context): ThemeRepository {
     private val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
     override fun isDarkTheme(): Boolean {
-        val currentNightMode = Configuration.UI_MODE_NIGHT_YES
-        return prefs.getBoolean(THEME_PREF, currentNightMode == Configuration.UI_MODE_NIGHT_YES)
+        val defaultNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val currentNightMode = when (defaultNightMode) {
+            Configuration.UI_MODE_NIGHT_NO -> false
+            Configuration.UI_MODE_NIGHT_YES -> true
+            else -> false
+        }
+        return prefs.getBoolean(THEME_PREF, currentNightMode)
     }
 
     override fun saveTheme(isDark: Boolean) {
