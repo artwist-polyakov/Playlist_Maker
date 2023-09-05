@@ -7,4 +7,8 @@ class ThemeInteractorImpl(private val settingsRepository: SettingsRepository): T
     override fun getTemeSettings(): ThemeSettings {
         return settingsRepository.getThemeSettings()
     }
+
+    override fun getPreferredThemeMode(): Int {
+        return settingsRepository.getPreferredThemeMode()
+    }
 }

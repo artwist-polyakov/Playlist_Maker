@@ -4,4 +4,5 @@ import com.example.playlistmaker.common.data.ThemeSettings
 
 interface ThemeInteractor {
     fun getTemeSettings(): ThemeSettings
+    fun getPreferredThemeMode(): Int
 }

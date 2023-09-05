@@ -19,4 +19,8 @@ class SettingsRepositoryImpl(private val themeRepository: ThemeRepository) : Set
             else -> throw IllegalArgumentException("Unsupported theme setting")
         }
     }
+
+    override fun getPreferredThemeMode(): Int {
+        return themeRepository.getPreferredThemeMode()
+    }
 }
