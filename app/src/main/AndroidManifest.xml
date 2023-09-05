@@ -19,17 +19,20 @@
         <activity
             android:name=".media.ui.activity.MediaActivity"
             android:exported="false"
+            android:configChanges="uiMode"
             android:theme="@style/Theme.PlaylistMaker"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".search.ui.activity.SearchActivity"
             android:exported="false"
+            android:configChanges="uiMode"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
             android:name=".player.ui.activity.PlayerActivity"
             android:label="PlayerActivity"
             android:parentActivityName=".search.ui.activity.SearchActivity"
             android:exported="false"
+            android:configChanges="uiMode"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
             android:name="com.example.playlistmaker.settings.ui.activity.SettingsActivity"
@@ -40,6 +43,7 @@
         <activity
             android:name=".main.ui.activity.MainActivity"
             android:exported="true"
+            android:configChanges="uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.PlaylistMakerMainScreen">
             <intent-filter>
