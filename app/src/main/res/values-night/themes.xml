@@ -12,7 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
-        <item name="android:background">?attr/colorPrimary</item>
+<!--        <item name="android:background">?attr/colorPrimary</item>-->
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="android:checked">true</item>
         <item name="android:trackTint">@color/switch_track_tint_night</item>

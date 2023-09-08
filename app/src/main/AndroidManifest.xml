@@ -19,6 +19,7 @@
         <activity
             android:name=".media.ui.activity.MediaActivity"
             android:exported="false"
+            android:theme="@style/Theme.PlaylistMaker"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".search.ui.activity.SearchActivity"
