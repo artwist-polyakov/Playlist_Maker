@@ -20,4 +20,12 @@
         android:name="com.example.playlistmaker.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/playlistsFragment"
+        android:name="com.example.playlistmaker.media.ui.activity.PlaylistsFragment"
+        android:label="PlaylistsFragment" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.playlistmaker.media.ui.activity.FavoritesFragment"
+        android:label="FavoritesFragment" />
 </navigation>
