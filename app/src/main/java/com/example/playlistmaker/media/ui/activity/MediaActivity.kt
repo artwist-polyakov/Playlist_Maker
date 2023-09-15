@@ -18,7 +18,7 @@ class MediaActivity : AppCompatActivity() {
         binding.returnButton.setOnClickListener {
             finish()
         }
-        binding.viewPager.adapter = MediaViewPagerAdapter(supportFragmentManager, lifecycle)
+//        binding.viewPager.adapter = MediaViewPagerAdapter(supportFragmentManager, lifecycle)
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when(position) {
                 0 -> tab.text = getString(R.string.favorite_tracks)

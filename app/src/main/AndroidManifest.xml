@@ -39,9 +39,14 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".main.ui.activity.MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.PlaylistMakerMainScreen">
+
+        </activity>
+        <activity
+            android:name=".root.ui.RootActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

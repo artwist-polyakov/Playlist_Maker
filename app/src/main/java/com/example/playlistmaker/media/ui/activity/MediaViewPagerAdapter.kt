@@ -1,19 +1,25 @@
 package com.example.playlistmaker.media.ui.activity
 
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.playlistmaker.media.ui.fragments.MediaFragment
 
-class MediaViewPagerAdapter (fragmentManager: FragmentManager, lifecycle: Lifecycle)
-    : FragmentStateAdapter(fragmentManager, lifecycle) {
+class MediaViewPagerAdapter(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    val fragments = listOf(
-        FavoritesFragment.newInstance(),
-        PlaylistsFragment.newInstance()
-    )
+    override fun getItemCount(): Int {
+        return 2
+    }
 
-    override fun getItemCount() = fragments.size
-
-    override fun createFragment(position: Int) = fragments[position]
-
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> FavoritesFragment.newInstance()
+            1 -> PlaylistsFragment.newInstance()
+            else -> throw IllegalArgumentException("Unknown position: $position")
+        }
+    }
 }
