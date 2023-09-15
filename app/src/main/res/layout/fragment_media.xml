@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="0dp"
     tools:context=".media.ui.fragments.MediaFragment">
 
     <TextView
@@ -23,7 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/media_layouts_height"
         android:background="@android:color/transparent"
-        android:layout_marginTop="56dp"
         app:tabIndicatorColor="?attr/colorOnPrimary"
         app:tabIndicatorFullWidth="true"
         app:tabIndicator="@drawable/custom_tab_indicator"
@@ -36,4 +38,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</FrameLayout>
+</LinearLayout>
