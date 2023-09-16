@@ -4,7 +4,6 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -15,7 +14,7 @@ import com.example.playlistmaker.search.data.storage.TracksStorage
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.activity.ResponseState
-import com.example.playlistmaker.search.ui.activity.SearchState
+import com.example.playlistmaker.search.ui.fragments.SearchState
 
 
 class SearchViewModel(private val application: Application,

@@ -1,6 +1,7 @@
-package com.example.playlistmaker.search.ui.activity
+package com.example.playlistmaker.search.ui.fragments
 
 import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.ui.activity.ResponseState
 
 sealed interface SearchState {
 
