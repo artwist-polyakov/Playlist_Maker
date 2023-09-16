@@ -16,10 +16,6 @@ class SettingsViewModel(
     private val delegate: ThemeDelegate
 ) : ViewModel() {
 
-    companion object {
-        const val DEBOUNCE_TIME_500L = 500L
-    }
-
     val isDarkTheme = MutableLiveData<Boolean>()
     val themeSwitcherEnabled = MutableLiveData<Boolean>(true)
     private val themeSwitchHandler = Handler(Looper.getMainLooper())
