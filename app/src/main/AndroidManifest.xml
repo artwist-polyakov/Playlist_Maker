@@ -24,7 +24,7 @@
         <activity
             android:name=".player.ui.activity.PlayerActivity"
             android:label="PlayerActivity"
-            android:parentActivityName=".search.ui.activity.SearchActivity"
+            android:parentActivityName=".search.ui.fragments.SearchFragment"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"/>
         <activity
