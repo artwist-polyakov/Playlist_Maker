@@ -17,22 +17,11 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".media.ui.activity.MediaActivity"
-            android:exported="false"
-            android:theme="@style/Theme.PlaylistMaker"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".player.ui.activity.PlayerActivity"
             android:label="PlayerActivity"
             android:parentActivityName=".search.ui.fragments.SearchFragment"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"/>
-        <activity
-            android:name="com.example.playlistmaker.settings.ui.activity.SettingsActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:theme="@style/Theme.PlaylistMaker"
-            android:screenOrientation="portrait"/>
         <activity
             android:name=".root.ui.RootActivity"
             android:windowSoftInputMode="adjustNothing"
