@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMediaBinding
-import com.example.playlistmaker.media.ui.activity.MediaViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MediaFragment : Fragment() {
@@ -17,9 +16,7 @@ class MediaFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMediaBinding.inflate(inflater, container, false)
-        binding.viewPager.adapter = MediaViewPagerAdapter(
-            fragmentManager = childFragmentManager,
-            lifecycle = lifecycle)
+        binding.viewPager.adapter = MediaViewPagerAdapter(this)
         return binding.root
     }
 

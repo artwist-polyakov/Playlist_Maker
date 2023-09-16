@@ -1,11 +1,10 @@
-package com.example.playlistmaker.media.ui.activity
+package com.example.playlistmaker.media.ui.fragments
 
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class MediaViewPagerAdapter (fragmentManager: FragmentManager, lifecycle: Lifecycle)
-    : FragmentStateAdapter(fragmentManager, lifecycle) {
+class MediaViewPagerAdapter (parentFragment: Fragment)
+    : FragmentStateAdapter(parentFragment) {
 
     val fragments = listOf(
         FavoritesFragment.newInstance(),
