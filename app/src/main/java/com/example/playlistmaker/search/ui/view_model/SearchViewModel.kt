@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -80,10 +81,10 @@ class SearchViewModel(private val application: Application,
         if (newSearchText.isNotEmpty()) {
             renderState(SearchState.Loading)
             tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundMovies: List<Track>?, errorMessage: String?) {
+                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                     val tracks = mutableListOf<Track>()
-                    if (foundMovies != null) {
-                        tracks.addAll(foundMovies)
+                    if (foundTracks != null) {
+                        tracks.addAll(foundTracks)
                     }
                     when {
                         errorMessage != null -> {
@@ -136,7 +137,7 @@ class SearchViewModel(private val application: Application,
     fun loadHistoryTracks() {
         val historyTracksDto = tracksStorage.takeHistory(reverse = true)
         val historyTracks = historyTracksDto.map { TrackDtoToTrackMapper().invoke(it) }
-        renderState(SearchState.Virgin)
+//        renderState(SearchState.Virgin)
         if (historyTracks.isNotEmpty()) {
             renderState(SearchState.History(historyTracks))
         } else {

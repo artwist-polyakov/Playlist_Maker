@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.searchResultsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.searchResultsRecyclerView.adapter = adapter
@@ -87,27 +87,23 @@ class SearchFragment : Fragment() {
                     makeClearButtonVisible()
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {
             }
+
         }
-
         textWatcher?.let { binding.searchEditText.addTextChangedListener(it) }
-
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-
         viewModel.clearButtonPressed.observe(viewLifecycleOwner, Observer {
             binding.searchEditText.clearFocus()
             binding.searchEditText.text.clear()
         })
-
-        viewModel.loadHistoryTracks()
-
         binding.clearButton.setOnClickListener {
             viewModel.clearHistoryAndHide()
         }
+        viewModel.restoreLastState()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {
@@ -175,6 +171,7 @@ class SearchFragment : Fragment() {
 
     private fun showProblemsLayout(responseState: ResponseState) {
         binding.searchResultsRecyclerView.visibility = View.GONE
+        binding.historyLayout.visibility = View.GONE
         binding.problemsLayout.visibility = View.VISIBLE
         when (responseState.name) {
             ResponseState.ERROR.name -> {
