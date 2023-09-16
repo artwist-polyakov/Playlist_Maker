@@ -22,10 +22,6 @@
             android:theme="@style/Theme.PlaylistMaker"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".search.ui.activity.SearchActivity"
-            android:exported="false"
-            android:theme="@style/Theme.PlaylistMaker"/>
-        <activity
             android:name=".player.ui.activity.PlayerActivity"
             android:label="PlayerActivity"
             android:parentActivityName=".search.ui.activity.SearchActivity"
@@ -37,13 +33,6 @@
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".main.ui.activity.MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.PlaylistMakerMainScreen">
-
-        </activity>
         <activity
             android:name=".root.ui.RootActivity"
             android:windowSoftInputMode="adjustNothing"

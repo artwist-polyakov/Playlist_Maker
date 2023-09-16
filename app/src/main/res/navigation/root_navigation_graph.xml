@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_media" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.playlistmaker.SettingsFragment"
+        android:name="com.example.playlistmaker.settings.ui.fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
