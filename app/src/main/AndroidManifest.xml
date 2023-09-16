@@ -46,6 +46,7 @@
         </activity>
         <activity
             android:name=".root.ui.RootActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
