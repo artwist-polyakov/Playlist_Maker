@@ -16,7 +16,7 @@
         android:layout_marginStart="12dp"
         android:fontFamily="@font/ys_display_medium"
         android:letterSpacing="0"
-        android:text="@string/search_button_text"
+        android:text="@string/search_str"
         android:textColor="?attr/colorOnPrimary"
         android:textFontWeight="500"
         android:textSize="22sp" />
@@ -72,6 +72,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_recycler_view"
         android:layout_width="match_parent"
+        android:background="@android:color/transparent"
         android:layout_height="match_parent"
         android:layout_marginTop="24dp"
         android:visibility="gone"
@@ -81,6 +82,7 @@
         android:id="@+id/history_layout"
         android:orientation="vertical"
         android:gravity="center_horizontal"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible">
@@ -105,6 +107,7 @@
                 android:id="@+id/search_history_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -125,6 +128,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:background="@android:color/transparent"
         android:orientation="vertical"
         android:visibility="gone">
 

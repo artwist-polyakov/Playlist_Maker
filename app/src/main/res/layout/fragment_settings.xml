@@ -1,14 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="0dp"
     tools:context=".settings.ui.fragments.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="" />
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:letterSpacing="0"
+        android:text="@string/settings_str"
+        android:textColor="?attr/colorOnPrimary"
+        android:textFontWeight="500"
+        android:textSize="22sp" />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:paddingHorizontal="20dp"
+        style="@style/settings_linear_layout_style">
+        <TextView
+            style="@style/settings_menu_style"
+            android:text="@string/dark_theme_str" />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="wrap_content"
+            tools:ignore="UseSwitchCompatOrMaterialXml"
+            android:id="@+id/themeSwitcher"
+            style="@style/switchStyle"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sharing_layout"
+        android:paddingHorizontal="20dp"
+        style="@style/settings_linear_layout_style">
+        <TextView
+            style="@style/settings_menu_style"
+            android:text="@string/share_str"/>
+        <ImageView
+            style="@style/settings_icon_style"
+            android:src="@drawable/share_icon"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/support_layout"
+        android:paddingHorizontal="20dp"
+        style="@style/settings_linear_layout_style">
+        <TextView
+            style="@style/settings_menu_style"
+            android:text="@string/support_message_str" />
+        <ImageView
+            style="@style/settings_icon_style"
+            android:src="@drawable/support_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/agreement_layout"
+        android:paddingHorizontal="20dp"
+        style="@style/settings_linear_layout_style">
+        <TextView
+            style="@style/settings_menu_style"
+            android:text="@string/agreement_str"/>
+        <ImageView
+            style="@style/settings_icon_style"
+            android:src="@drawable/arrow_icon" />
+    </LinearLayout>
+
+</LinearLayout>

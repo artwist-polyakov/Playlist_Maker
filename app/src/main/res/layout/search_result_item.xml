@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/search_element_main_layout_style"
+    android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="@dimen/search_element_height"
     android:orientation="horizontal">

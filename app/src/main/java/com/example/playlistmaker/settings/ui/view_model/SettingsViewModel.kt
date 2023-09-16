@@ -43,19 +43,18 @@ class SettingsViewModel(
         }
 
         // Делаем переключатель неактивным на 500 мс
-        themeSwitcherEnabled.value = false
+//        themeSwitcherEnabled.value = false
         val newThemeSettings = if (isChecked) ThemeSettings.Dark else ThemeSettings.Light
         settingsInteractor.updateThemeSetting(newThemeSettings)
         isDarkTheme.value = isChecked
         delegate.updateTheme()
 
-        restartActivity.value = Unit
-        themeSwitchHandler.postDelayed({
-
-            // Возвращаем переключатель в активное состояние
-            themeSwitcherEnabled.value = true
-        }, DEBOUNCE_TIME_500L)
-
+//        restartActivity.value = Unit
+//        themeSwitchHandler.postDelayed({
+//
+//            // Возвращаем переключатель в активное состояние
+//            themeSwitcherEnabled.value = true
+//        }, DEBOUNCE_TIME_500L)
     }
 
     fun shareLink() {
