@@ -54,15 +54,6 @@ class SettingsActivity : AppCompatActivity() {
         viewModel.themeSwitcherEnabled.observe(this, Observer { isEnabled ->
             binding.themeSwitcher.setEnabled(isEnabled)
         })
-
-        viewModel.restartActivity.observe(this) {
-            Handler(Looper.getMainLooper()).postDelayed({
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-                overridePendingTransition(0, 0)
-                finish()
-            }, 500)  // Задержка в 0.5 секунды
-        }
     }
 }
 

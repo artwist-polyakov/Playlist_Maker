@@ -136,7 +136,6 @@ class SearchViewModel(private val application: Application,
     fun loadHistoryTracks() {
         val historyTracksDto = tracksStorage.takeHistory(reverse = true)
         val historyTracks = historyTracksDto.map { TrackDtoToTrackMapper().invoke(it) }
-//        renderState(SearchState.Virgin)
         if (historyTracks.isNotEmpty()) {
             renderState(SearchState.History(historyTracks))
         } else {
@@ -151,10 +150,6 @@ class SearchViewModel(private val application: Application,
 
     fun clearHistory() {
         tracksStorage.clearHistory()
-    }
-
-    fun onBackButtonPressed() {
-        _backButtonPressed.value = Unit
     }
 
     fun onClearButtonPressed() {
