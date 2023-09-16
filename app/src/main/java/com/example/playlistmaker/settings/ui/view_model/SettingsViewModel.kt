@@ -20,8 +20,6 @@ class SettingsViewModel(
         const val DEBOUNCE_TIME_500L = 500L
     }
 
-    val restartActivity = SingleLiveEvent<Unit>()
-    val closeScreen = SingleLiveEvent<Unit>()
     val isDarkTheme = MutableLiveData<Boolean>()
     val themeSwitcherEnabled = MutableLiveData<Boolean>(true)
     private val themeSwitchHandler = Handler(Looper.getMainLooper())
@@ -31,30 +29,11 @@ class SettingsViewModel(
         isDarkTheme.value = themeSettings is ThemeSettings.Dark
     }
 
-    fun onBackClicked() {
-        closeScreen.value = Unit
-    }
-
     fun onThemeSwitch(isChecked: Boolean) {
-
-        // Чтобы нельзя было тысячу раз в миллисекунду двинуть переключатель
-        if (!themeSwitcherEnabled.value!!) {
-            return
-        }
-
-        // Делаем переключатель неактивным на 500 мс
-//        themeSwitcherEnabled.value = false
         val newThemeSettings = if (isChecked) ThemeSettings.Dark else ThemeSettings.Light
         settingsInteractor.updateThemeSetting(newThemeSettings)
         isDarkTheme.value = isChecked
         delegate.updateTheme()
-
-//        restartActivity.value = Unit
-//        themeSwitchHandler.postDelayed({
-//
-//            // Возвращаем переключатель в активное состояние
-//            themeSwitcherEnabled.value = true
-//        }, DEBOUNCE_TIME_500L)
     }
 
     fun shareLink() {

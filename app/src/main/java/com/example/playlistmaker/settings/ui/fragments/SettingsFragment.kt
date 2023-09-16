@@ -52,15 +52,6 @@ class SettingsFragment : Fragment() {
         viewModel.themeSwitcherEnabled.observe(viewLifecycleOwner, Observer { isEnabled ->
             binding.themeSwitcher.setEnabled(isEnabled)
         })
-
-        viewModel.restartActivity.observe(viewLifecycleOwner) {
-            Handler(Looper.getMainLooper()).postDelayed({
-                val intent = Intent(requireContext(), requireActivity()::class.java)
-                startActivity(intent)
-                requireActivity().overridePendingTransition(0, 0)
-                requireActivity().finish()
-            }, 500)  // Задержка в 0.5 секунды
-        }
     }
 
 
