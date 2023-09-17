@@ -19,10 +19,10 @@ import org.koin.dsl.module
 val repositoryModule = module {
     single<ThemeRepository> { ThemeRepositoryImpl(get()) }
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
-    single<TracksRepository> {TracksRepositoryImpl(get(), get())}
-    single<TracksStorage>{TracksStorageImpl(get())}
+    single<TracksRepository> { TracksRepositoryImpl(get(), get()) }
+    single<TracksStorage>{ TracksStorageImpl(get()) }
     single<NetworkClient> { RetrofitNetworkClient(get()) }
-    factory<MediaPlayerInterface> {MediaPlayerImpl()}
+    factory<MediaPlayerInterface> { MediaPlayerImpl() }
 }
 
 val dataModule = module {
