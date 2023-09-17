@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.data.storage
+package com.example.playlistmaker.search.domain.storage
 
 import com.example.playlistmaker.search.data.dto.TrackDto
 

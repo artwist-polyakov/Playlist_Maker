@@ -3,7 +3,7 @@ package com.example.playlistmaker.search.data.network
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
 import com.example.playlistmaker.search.data.dto.TracksSearchResponse
-import com.example.playlistmaker.search.data.storage.TracksStorage
+import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.domain.api.TracksRepository
 
 class TracksRepositoryImpl (
