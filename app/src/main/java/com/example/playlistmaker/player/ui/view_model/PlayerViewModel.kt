@@ -76,4 +76,10 @@ class PlayerViewModel (private val trackStorageInteractor: TrackStorageInteracto
     fun restoreState(): Pair<PlayerState?, TrackDurationTime> {
         return Pair(lastState, lastTimerState)
     }
+
+    fun makeItPause() {
+        if(_playerState.value == PlayerState.Play) {
+            mediaPlayerInteractor.playPauseSwitcher()
+        }
+    }
 }
