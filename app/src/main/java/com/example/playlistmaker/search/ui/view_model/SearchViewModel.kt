@@ -10,11 +10,11 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.playlistmaker.common.presentation.models.TrackDtoToTrackMapper
 import com.example.playlistmaker.search.data.dto.TrackDto
-import com.example.playlistmaker.search.data.storage.TracksStorage
+import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.ui.activity.ResponseState
-import com.example.playlistmaker.search.ui.activity.SearchState
+import com.example.playlistmaker.search.ui.fragments.ResponseState
+import com.example.playlistmaker.search.ui.fragments.SearchState
 
 
 class SearchViewModel(private val application: Application,
@@ -80,10 +80,10 @@ class SearchViewModel(private val application: Application,
         if (newSearchText.isNotEmpty()) {
             renderState(SearchState.Loading)
             tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundMovies: List<Track>?, errorMessage: String?) {
+                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                     val tracks = mutableListOf<Track>()
-                    if (foundMovies != null) {
-                        tracks.addAll(foundMovies)
+                    if (foundTracks != null) {
+                        tracks.addAll(foundTracks)
                     }
                     when {
                         errorMessage != null -> {
@@ -136,7 +136,6 @@ class SearchViewModel(private val application: Application,
     fun loadHistoryTracks() {
         val historyTracksDto = tracksStorage.takeHistory(reverse = true)
         val historyTracks = historyTracksDto.map { TrackDtoToTrackMapper().invoke(it) }
-        renderState(SearchState.Virgin)
         if (historyTracks.isNotEmpty()) {
             renderState(SearchState.History(historyTracks))
         } else {
@@ -151,10 +150,6 @@ class SearchViewModel(private val application: Application,
 
     fun clearHistory() {
         tracksStorage.clearHistory()
-    }
-
-    fun onBackButtonPressed() {
-        _backButtonPressed.value = Unit
     }
 
     fun onClearButtonPressed() {

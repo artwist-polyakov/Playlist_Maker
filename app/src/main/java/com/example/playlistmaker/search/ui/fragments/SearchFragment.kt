@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.ui.activity
+package com.example.playlistmaker.search.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,14 +6,16 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.models.TrackToTrackInformationMapper
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
@@ -26,9 +28,11 @@ enum class ResponseState {
     CLEAR
 }
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
+
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
+
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
@@ -38,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTrackClick(track: Track) {
                 if (clickDebounce()) {
                     viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-                    val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+                    val intent = Intent(context, PlayerActivity::class.java)
                     intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
                     startActivity(intent)
                 }
@@ -50,14 +54,16 @@ class SearchActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var textWatcher: TextWatcher
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.searchResultsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.searchResultsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.searchResultsRecyclerView.adapter = adapter
         binding.searchHistoryRecyclerView.adapter = adapter
         setupListeners()
@@ -76,38 +82,28 @@ class SearchActivity : AppCompatActivity() {
                     makeClearButtonVisible()
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {
             }
+
         }
-
         textWatcher?.let { binding.searchEditText.addTextChangedListener(it) }
-
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-
-        viewModel.backButtonPressed.observe(this, Observer {
-            this.finish()
-        })
-
-        viewModel.clearButtonPressed.observe(this, Observer {
+        viewModel.clearButtonPressed.observe(viewLifecycleOwner, Observer {
             binding.searchEditText.clearFocus()
             binding.searchEditText.text.clear()
         })
-
-        viewModel.loadHistoryTracks()
-
         binding.clearButton.setOnClickListener {
             viewModel.clearHistoryAndHide()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        viewModel.loadHistoryTracks()
         viewModel.restoreLastState()
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textWatcher?.let { binding.searchEditText.removeTextChangedListener(it) }
     }
 
     private fun render(state: SearchState) {
@@ -159,17 +155,18 @@ class SearchActivity : AppCompatActivity() {
 
     private fun makeClearButtonInvisible() {
         binding.clearIcon.visibility = View.GONE
-        binding.searchEditText.background = getDrawable(R.drawable.rounded_edittext)
+        binding.searchEditText.background = requireContext().getDrawable(R.drawable.rounded_edittext)
     }
 
     private fun makeClearButtonVisible() {
         binding.clearIcon.visibility = View.VISIBLE
-        binding.clearIcon.background = getDrawable(R.drawable.right_rounded_edittext)
-        binding.searchEditText.background = getDrawable(R.drawable.left_rounded_edittext)
+        binding.clearIcon.background = requireContext().getDrawable(R.drawable.right_rounded_edittext)
+        binding.searchEditText.background = requireContext().getDrawable(R.drawable.left_rounded_edittext)
     }
 
     private fun showProblemsLayout(responseState: ResponseState) {
         binding.searchResultsRecyclerView.visibility = View.GONE
+        binding.historyLayout.visibility = View.GONE
         binding.problemsLayout.visibility = View.VISIBLE
         when (responseState.name) {
             ResponseState.ERROR.name -> {
@@ -222,11 +219,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun setupListeners() {
-        binding.returnButton.setOnClickListener {
-            viewModel.onBackButtonPressed()
-        }
         binding.clearIcon.setOnClickListener {
             viewModel.onClearButtonPressed()
         }
     }
+
+
+
 }

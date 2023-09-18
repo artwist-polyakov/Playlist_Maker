@@ -20,10 +20,10 @@ import org.koin.dsl.module
 val domainModule = module {
     single<ThemeInteractor> { ThemeInteractorImpl(get()) }
     single<ThemeDelegate> { ThemeDelegateImpl(get()) }
-    single<ThemeUseCase> {ThemeUseCaseImpl(get())}
+    single<ThemeUseCase> { ThemeUseCaseImpl(get()) }
     single<SettingsInteractor> { SettingsInteractorImpl(get(), get()) }
     single<NavigationInteractor> { NavigationInteractor(get()) }
-    single<TracksInteractor> {TracksInteractorImpl(get())}
+    single<TracksInteractor> { TracksInteractorImpl(get()) }
     single<TrackStorageInteractor> { TrackStorageInteractorImpl(get()) }
     factory<MediaPlayerInteractor>{ MediaPlayerInteractorImpl(get()) }
 }

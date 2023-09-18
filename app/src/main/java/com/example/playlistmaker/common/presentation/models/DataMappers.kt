@@ -58,7 +58,7 @@ class TrackToTrackDtoMapper : (Track) -> TrackDto {
             trackName = track.trackName,
             artistName = track.artistName,
             trackTimeMillis = track.trackTime.let {
-                SimpleDateFormat("mm:ss", Locale.getDefault()).parse(it).time
+                SimpleDateFormat("mm:ss", Locale.getDefault()).parse(it)?.time ?: 0
             }.toInt(),
             artworkUrl100 = track.artworkUrl100,
             collectionName = track.collectionName,
@@ -67,7 +67,7 @@ class TrackToTrackDtoMapper : (Track) -> TrackDto {
                     val sdfInput = SimpleDateFormat("yyyy", Locale.getDefault())
                     val date = sdfInput.parse(it)
                     val sdfOutput = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                    sdfOutput.format(date)
+                    date?.let { it1 -> sdfOutput.format(it1) }
                 } catch (e: Exception) {
                     null
                 }

@@ -5,40 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="20dp"
+    android:background="?attr/colorPrimary"
     android:paddingTop="20dp"
     android:paddingBottom="0dp"
-    tools:context=".settings.ui.activity.SettingsActivity">
+    tools:context=".settings.ui.fragments.SettingsFragment">
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal">
-
-        <ImageView
-            style="@style/settings_icon_style"
-            android:id="@+id/return_button"
-            android:layout_marginStart="4dp"
-            android:src="@drawable/arrow_back_icon" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="28dp"
-            android:text="@string/settings_str"
-            android:textColor="?attr/colorOnPrimary"
-            android:fontFamily="@font/ys_display_medium"
-            android:textFontWeight="500"
-            android:letterSpacing="0"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:letterSpacing="0"
+        android:text="@string/settings_str"
+        android:textColor="?attr/colorOnPrimary"
+        android:textFontWeight="500"
+        android:textSize="22sp" />
 
     <LinearLayout
         android:layout_marginTop="40dp"
+        android:paddingHorizontal="20dp"
         style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"
@@ -50,9 +36,9 @@
             style="@style/switchStyle"/>
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/sharing_layout"
+        android:paddingHorizontal="20dp"
         style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"
@@ -64,6 +50,7 @@
 
     <LinearLayout
         android:id="@+id/support_layout"
+        android:paddingHorizontal="20dp"
         style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"
@@ -75,6 +62,7 @@
 
     <LinearLayout
         android:id="@+id/agreement_layout"
+        android:paddingHorizontal="20dp"
         style="@style/settings_linear_layout_style">
         <TextView
             style="@style/settings_menu_style"

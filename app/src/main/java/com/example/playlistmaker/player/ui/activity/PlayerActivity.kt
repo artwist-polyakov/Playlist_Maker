@@ -69,6 +69,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.makeItPause()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySongPageBinding.inflate(layoutInflater)

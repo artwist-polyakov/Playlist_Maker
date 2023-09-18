@@ -4,7 +4,7 @@ import com.example.playlistmaker.common.presentation.models.TrackDtoToTrackMappe
 import com.example.playlistmaker.common.presentation.models.TrackToTrackInformationMapper
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
-import com.example.playlistmaker.search.data.storage.TracksStorage
+import com.example.playlistmaker.search.domain.storage.TracksStorage
 
 class TrackStorageInteractorImpl(private val tracksStorage: TracksStorage) : TrackStorageInteractor {
     override fun giveMeLastTrack(): TrackInformation {

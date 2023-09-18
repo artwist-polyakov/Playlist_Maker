@@ -1,7 +1,7 @@
 package com.example.playlistmaker.settings.data
 
 import com.example.playlistmaker.common.domain.ThemeRepository
-import com.example.playlistmaker.common.data.ThemeSettings
+import com.example.playlistmaker.common.domain.ThemeSettings
 
 class SettingsRepositoryImpl(private val themeRepository: ThemeRepository) : SettingsRepository {
     override fun getThemeSettings(): ThemeSettings {
