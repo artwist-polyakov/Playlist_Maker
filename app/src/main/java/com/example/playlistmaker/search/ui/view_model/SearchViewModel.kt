@@ -1,14 +1,13 @@
 package com.example.playlistmaker.search.ui.view_model
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.presentation.models.TrackDtoToTrackMapper
+import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.domain.api.TracksInteractor
@@ -24,15 +23,13 @@ class SearchViewModel(private val application: Application,
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val SEARCH_REQUEST_TOKEN = Any()
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private val musicSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { text ->
+        searchRequest(text)
+    }
 
     private val stateLiveData = MutableLiveData<SearchState>()
-
-    private val _backButtonPressed = MutableLiveData<Unit>()
-    val backButtonPressed: LiveData<Unit> get() = _backButtonPressed
 
     private val _clearButtonPressed = MutableLiveData<Unit>()
     val clearButtonPressed: LiveData<Unit> get() = _clearButtonPressed
@@ -58,22 +55,13 @@ class SearchViewModel(private val application: Application,
     override fun onCleared() {
         super.onCleared()
         tracksStorage.saveHistory()
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
-            return
+        if (latestSearchText != changedText) {
+            latestSearchText = changedText
+            musicSearchDebounce(changedText)
         }
-        this.latestSearchText = changedText
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val searchRunnable = Runnable { searchRequest(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
     }
 
     private fun searchRequest(newSearchText: String) {
