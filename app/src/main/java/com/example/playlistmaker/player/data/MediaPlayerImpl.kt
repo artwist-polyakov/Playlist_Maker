@@ -1,11 +1,14 @@
 package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
@@ -20,24 +23,13 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     }
 
     private var state = STATE_DEFAULT
-    private var handler = Handler(Looper.getMainLooper())
     private var customCurrentPosition = 0
     private var duration = 0
-
-    private val updateProgressRunnable: Runnable = object : Runnable {
-        override fun run() {
-            if (state == STATE_PLAYING) {
-                customCurrentPosition += UPDATE_STEP_250MS_LONG.toInt()
-                if (customCurrentPosition >= duration) {
-                    customCurrentPosition = duration
-                    finishPlay()
-                }
-                handler.postDelayed(this, UPDATE_STEP_250MS_LONG)
-            }
-        }
-    }
+    private val myScope = CoroutineScope(Job() + Dispatchers.Main)
+    private var timerJob: Job? = null
 
     override fun playPauseSwitcher() {
+        startTimer()
         when (state) {
             STATE_PLAYING -> {
                 pausePlayer()
@@ -54,20 +46,19 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
             this.release()
         }
         state = STATE_DEFAULT
+        timerJob?.cancel()
     }
 
     override fun startPlayer() {
         this.start()
         state = STATE_PLAYING
         callback?.onMediaPlayerPlay()
-        handler.postDelayed(updateProgressRunnable, UPDATE_STEP_250MS_LONG)
     }
 
     override fun pausePlayer() {
         if (state == STATE_PLAYING) {
             this.pause()
             state = STATE_PAUSED
-            handler.removeCallbacks(updateProgressRunnable)
             callback?.onMediaPlayerPause()
         }
     }
@@ -77,6 +68,7 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         customCurrentPosition = 0
         state = STATE_PREPARED
         callback?.onMediaPlayerReady()
+        timerJob?.cancel()
     }
 
     override fun getTrackPosition(): Int {
@@ -109,5 +101,18 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
 
     private fun setTrack(track: TrackInformation) {
         this.track = track
+    }
+
+    private fun startTimer() {
+        timerJob = myScope.launch {
+            while (state == STATE_PLAYING) {
+                delay(UPDATE_STEP_250MS_LONG)
+                customCurrentPosition += UPDATE_STEP_250MS_LONG.toInt()
+                if (customCurrentPosition >= duration) {
+                    customCurrentPosition = duration
+                    finishPlay()
+                }
+            }
+        }
     }
 }
