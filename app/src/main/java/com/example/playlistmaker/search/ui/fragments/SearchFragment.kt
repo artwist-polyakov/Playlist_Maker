@@ -36,6 +36,7 @@ class SearchFragment : Fragment() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val adapter = TracksAdapter(
         object : TracksAdapter.TrackClickListener {
@@ -43,7 +44,7 @@ class SearchFragment : Fragment() {
                 if (clickDebounce()) {
                     viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
                     val intent = Intent(context, PlayerActivity::class.java)
-                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
+//                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
                     startActivity(intent)
                 }
             }
