@@ -2,8 +2,6 @@ package com.example.playlistmaker.search.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -48,8 +46,6 @@ class SearchFragment : Fragment() {
         }
     )
 
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
     private lateinit var textWatcher: TextWatcher
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -213,15 +209,6 @@ class SearchFragment : Fragment() {
         binding.searchResultsRecyclerView.visibility = View.VISIBLE
         binding.historyLayout.visibility = View.GONE
 
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 
     fun setupListeners() {
