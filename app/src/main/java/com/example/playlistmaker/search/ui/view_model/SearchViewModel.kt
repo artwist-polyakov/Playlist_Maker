@@ -25,7 +25,10 @@ class SearchViewModel(private val application: Application,
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
-    private val musicSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { text ->
+    private val musicSearchDebounce = debounce<String>(
+        SEARCH_DEBOUNCE_DELAY,
+        viewModelScope,
+        true) { text ->
         searchRequest(text)
     }
 
