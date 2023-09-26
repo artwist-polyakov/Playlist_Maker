@@ -3,9 +3,7 @@ package com.example.playlistmaker.player.data
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.example.playlistmaker.player.domain.MediaPlayerInterface
-import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 
@@ -18,7 +16,7 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val UPDATE_STEP_400MS_LONG = 400L
+        private const val UPDATE_STEP_250MS_LONG = 250L
     }
 
     private var state = STATE_DEFAULT
@@ -29,13 +27,12 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     private val updateProgressRunnable: Runnable = object : Runnable {
         override fun run() {
             if (state == STATE_PLAYING) {
-                customCurrentPosition += UPDATE_STEP_400MS_LONG.toInt()
-                val time = TrackDurationTime(customCurrentPosition)
-                callback?.onMediaPlayerTimeUpdate(time)
+                customCurrentPosition += UPDATE_STEP_250MS_LONG.toInt()
                 if (customCurrentPosition >= duration) {
+                    customCurrentPosition = duration
                     finishPlay()
                 }
-                handler.postDelayed(this, UPDATE_STEP_400MS_LONG)
+                handler.postDelayed(this, UPDATE_STEP_250MS_LONG)
             }
         }
     }
@@ -59,16 +56,11 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         state = STATE_DEFAULT
     }
 
-    override fun updateProgress(callback: MediaPlayerCallbackInterface) {
-        callback.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
-        handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
-    }
-
     override fun startPlayer() {
         this.start()
         state = STATE_PLAYING
         callback?.onMediaPlayerPlay()
-        handler.postDelayed(updateProgressRunnable, UPDATE_STEP_400MS_LONG)
+        handler.postDelayed(updateProgressRunnable, UPDATE_STEP_250MS_LONG)
     }
 
     override fun pausePlayer() {
@@ -84,8 +76,7 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         this.pausePlayer()
         customCurrentPosition = 0
         state = STATE_PREPARED
-        callback?.onMediaPlayerTimeUpdate(TrackDurationTime(customCurrentPosition))
-
+        callback?.onMediaPlayerReady()
     }
 
     override fun getTrackPosition(): Int {
@@ -119,5 +110,4 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     private fun setTrack(track: TrackInformation) {
         this.track = track
     }
-
 }
