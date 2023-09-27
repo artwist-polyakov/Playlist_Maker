@@ -14,7 +14,6 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val UPDATE_STEP_250MS_LONG = 250L
     }
 
     private var state = STATE_DEFAULT
