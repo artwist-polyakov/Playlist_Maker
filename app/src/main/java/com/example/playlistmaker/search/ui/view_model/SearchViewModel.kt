@@ -14,6 +14,8 @@ import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.ResponseState
 import com.example.playlistmaker.search.ui.fragments.SearchState
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 class SearchViewModel(private val application: Application,
@@ -70,37 +72,47 @@ class SearchViewModel(private val application: Application,
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(SearchState.Loading)
-            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                    val tracks = mutableListOf<Track>()
-                    if (foundTracks != null) {
-                        tracks.addAll(foundTracks)
+            viewModelScope.launch {
+                tracksInteractor
+                    .searchTracks(newSearchText)
+                    .collect { pair ->
+                        processResult(pair.first, pair.second)
+
                     }
-                    when {
-                        errorMessage != null -> {
-                            renderState(
-                                SearchState.Error(
-                                    responseState = ResponseState.ERROR,
-                                )
-                            )
-                        }
-                        tracks.isEmpty() -> {
-                            renderState(
-                                SearchState.Empty(
-                                    responseState = ResponseState.NOTHING_FOUND,
-                                )
-                            )
-                        }
-                        else -> {
-                            renderState(
-                                SearchState.Content(
-                                    tracks = tracks,
-                                )
-                            )
-                        }
-                    }
-                }
+            }
+        }
+    }
+
+    private fun processResult(foundTracks: List<TrackDto>?, errorMessage: String?) {
+        val tracks = mutableListOf<Track>()
+        if (foundTracks != null) {
+            tracks.addAll ( foundTracks. map {dto ->
+                TrackDtoToTrackMapper().invoke(dto)
             })
+        }
+
+        when {
+            errorMessage != null -> {
+                renderState(
+                    SearchState.Error(
+                        responseState = ResponseState.ERROR,
+                    )
+                )
+            }
+            tracks.isEmpty() -> {
+                renderState(
+                    SearchState.Empty(
+                        responseState = ResponseState.NOTHING_FOUND,
+                    )
+                )
+            }
+            else -> {
+                renderState(
+                    SearchState.Content(
+                        tracks = tracks,
+                    )
+                )
+            }
         }
     }
 
