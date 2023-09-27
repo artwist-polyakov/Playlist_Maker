@@ -23,13 +23,8 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     }
 
     private var state = STATE_DEFAULT
-    private var customCurrentPosition = 0
-    private var duration = 0
-    private val myScope = CoroutineScope(Job() + Dispatchers.Main)
-    private var timerJob: Job? = null
 
     override fun playPauseSwitcher() {
-        startTimer()
         when (state) {
             STATE_PLAYING -> {
                 pausePlayer()
@@ -46,7 +41,6 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
             this.release()
         }
         state = STATE_DEFAULT
-        timerJob?.cancel()
     }
 
     override fun startPlayer() {
@@ -65,19 +59,12 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
 
     private fun finishPlay() {
         this.pausePlayer()
-        customCurrentPosition = 0
         state = STATE_PREPARED
         callback?.onMediaPlayerReady()
-        timerJob?.cancel()
     }
 
     override fun getTrackPosition(): Int {
-        return customCurrentPosition
-    }
-
-    override fun setTrackPosition(position: Int) {
-        customCurrentPosition = position
-        this.seekTo(customCurrentPosition)
+        return currentPosition
     }
 
     override fun forceInit(track: TrackInformation) {
@@ -85,9 +72,9 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         this.track?.let { tr ->
             let { mp ->
                 mp.setDataSource(tr.previewUrl)
+                setupCompletionListener()
                 mp.prepareAsync()
                 mp.setOnPreparedListener {
-                    this.duration = mp.getDuration()
                     state = STATE_PREPARED
                     callback?.onMediaPlayerReady()
                 }
@@ -103,16 +90,9 @@ class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
         this.track = track
     }
 
-    private fun startTimer() {
-        timerJob = myScope.launch {
-            while (state == STATE_PLAYING) {
-                delay(UPDATE_STEP_250MS_LONG)
-                customCurrentPosition += UPDATE_STEP_250MS_LONG.toInt()
-                if (customCurrentPosition >= duration) {
-                    customCurrentPosition = duration
-                    finishPlay()
-                }
-            }
+    private fun setupCompletionListener() {
+        this.setOnCompletionListener {
+            finishPlay()
         }
     }
 }

@@ -8,7 +8,6 @@ interface MediaPlayerInterface {
     fun startPlayer()
     fun pausePlayer()
     fun getTrackPosition(): Int
-    fun setTrackPosition(position: Int)
     fun forceInit(track: TrackInformation)
     fun setCallback(callback: MediaPlayerCallbackInterface)
 }
