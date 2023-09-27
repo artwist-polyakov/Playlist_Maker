@@ -2,8 +2,9 @@ package com.example.playlistmaker.search.domain.api
 
 import com.example.playlistmaker.search.data.network.Resource
 import com.example.playlistmaker.search.data.dto.TrackDto
+import kotlinx.coroutines.flow.Flow
 
 interface TracksRepository {
-    fun searchTracks(expression: String): Resource<List<TrackDto>>
+    fun searchTracks(expression: String): Flow<Resource<List<TrackDto>>>
     fun addTrackToHistory(track: TrackDto)
 }
