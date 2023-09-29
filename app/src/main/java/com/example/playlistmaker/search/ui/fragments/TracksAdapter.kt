@@ -1,7 +1,5 @@
 package com.example.playlistmaker.search.ui.fragments
 
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,8 +11,6 @@ import com.example.playlistmaker.search.domain.models.Track
 
 class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder>() {
 
-    private var isClickAllowed: Boolean = true
-    var handler = Handler(Looper.getMainLooper())
     var tracks = ArrayList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder = TrackViewHolder(parent, clickListener)
 
@@ -23,31 +19,6 @@ class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerVie
     }
 
     override fun getItemCount(): Int = tracks.size
-
-    fun takeMyTracks(newTracks: List<Track>?) {
-        tracks.clear()
-        if (!newTracks.isNullOrEmpty()) {
-            tracks.addAll(newTracks)
-        }
-        notifyDataSetChanged()
-    }
-
-    fun giveMeMyTracks(): ArrayList<Track> {
-        return ArrayList(tracks)
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
 
     interface TrackClickListener {
         fun onTrackClick(track: Track)
