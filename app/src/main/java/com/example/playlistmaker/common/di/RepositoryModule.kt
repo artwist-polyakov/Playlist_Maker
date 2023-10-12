@@ -1,6 +1,9 @@
 package com.example.playlistmaker.common.di
 
+import androidx.room.Room
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
+import com.example.playlistmaker.common.data.converters.TracksDbConvertor
+import com.example.playlistmaker.common.data.db.AppDatabase
 import com.example.playlistmaker.common.domain.ThemeRepository
 import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.example.playlistmaker.player.domain.MediaPlayerInterface
@@ -14,6 +17,7 @@ import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.data.SettingsRepository
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.example.playlistmaker.settings.domain.ExternalNavigator
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -23,8 +27,5 @@ val repositoryModule = module {
     single<TracksStorage>{ TracksStorageImpl(get()) }
     single<NetworkClient> { RetrofitNetworkClient(get()) }
     factory<MediaPlayerInterface> { MediaPlayerImpl() }
-}
-
-val dataModule = module {
-    single<ExternalNavigator> { ExternalNavigatorImpl(get()) }
+    factory { TracksDbConvertor() }
 }

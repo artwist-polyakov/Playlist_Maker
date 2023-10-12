@@ -130,7 +130,7 @@
         android:background="@drawable/round_button_background"
         android:contentDescription="@string/like_button_description"
         android:padding="8dp"
-        android:src="@drawable/like_button"
+        android:src="@drawable/like_button_inactive"
         app:layout_constraintBottom_toBottomOf="@id/add_to_collection"
         app:layout_constraintEnd_toEndOf="@id/interface_right_border"
         app:layout_constraintHorizontal_bias="0.5"
