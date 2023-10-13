@@ -91,6 +91,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         binding.playButton.setOnClickListener {
             viewModel.playPause()
         }
+
+        binding.likeButton.setOnClickListener {
+            viewModel.likeTrack()
+        }
+
         //BINDING
         viewModel.timerState.observe(this, Observer {
             binding.time.text = it.toString()

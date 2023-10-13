@@ -9,5 +9,5 @@ interface TracksDbInteractor {
 
     suspend fun isTrackLiked(trackId: Long): Boolean
 
-    suspend fun switchTrackLikeStatus(track: Track): Flow<Boolean>
+    suspend fun switchTrackLikeStatus(track: Track): Boolean
 }

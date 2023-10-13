@@ -23,8 +23,8 @@ class TracksDbRepositoryImpl (
          return appDatabase.trackDao().isTrackLiked(trackId).first() ?: false
     }
 
-    override fun switchTrackLikeStatus(track: TrackEntity) = flow {
-        emit(appDatabase.trackDao().switchLike(track))
+    override suspend fun switchTrackLikeStatus(track: TrackEntity): Boolean  {
+        return appDatabase.trackDao().switchLike(track)
     }
 
 

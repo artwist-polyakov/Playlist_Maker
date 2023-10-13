@@ -18,7 +18,7 @@ class TracksDbInteractorImpl (
         return tracksDbRepository.isTrackLiked(trackId)
     }
 
-    override suspend fun switchTrackLikeStatus(track: Track): Flow<Boolean> {
+    override suspend fun switchTrackLikeStatus(track: Track): Boolean {
         return tracksDbRepository.switchTrackLikeStatus(prepereTrackToLike(track))
     }
 

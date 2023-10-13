@@ -85,11 +85,11 @@ class PlayerViewModel (
         return initializedTrack
     }
 
-    fun setLike() {
+    fun likeTrack() {
         viewModelScope.launch {
             initializedTrack?.let {
                 val track = TrackInformationToTrackMapper().invoke(it)
-                _likeState.postValue(dbInteractor.switchTrackLikeStatus(track).first())
+                _likeState.postValue(dbInteractor.switchTrackLikeStatus(track))
             }
         }
     }

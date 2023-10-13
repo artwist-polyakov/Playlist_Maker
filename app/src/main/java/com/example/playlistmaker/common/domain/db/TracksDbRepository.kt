@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface TracksDbRepository {
     fun allLikedTracks(): Flow<List<Track>>
     suspend fun isTrackLiked(trackId: Long): Boolean
-    fun switchTrackLikeStatus(track: TrackEntity): Flow<Boolean>
+    suspend fun switchTrackLikeStatus(track: TrackEntity): Boolean
 }
