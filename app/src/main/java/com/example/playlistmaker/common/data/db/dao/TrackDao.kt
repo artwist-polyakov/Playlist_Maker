@@ -22,6 +22,9 @@ interface TrackDao {
     @Query("SELECT COUNT(id)>0 FROM music_table WHERE id = :id limit 1")
     suspend fun isTrackExist(id: Long): Boolean
 
+    @Query("SELECT * FROM music_table WHERE isLiked = 1")
+    suspend fun getLikedTracks(): List<TrackEntity>
+
     @Query("UPDATE music_table SET isLiked = :liked, lastLikeUpdate = :timestamp WHERE id = :id")
     suspend fun setTrackIsLiked(id: Long, liked: Boolean, timestamp: Long)
 
