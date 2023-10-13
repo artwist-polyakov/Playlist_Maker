@@ -1,7 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
@@ -131,7 +130,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     }
 
     private fun renderLikeState(isLiked: Boolean) {
-        Log.d("restoreLikeState", "launched")
         if (isLiked) {
             binding.likeButton.setImageResource(R.drawable.like_button_active)
         } else {

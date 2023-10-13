@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,13 +8,11 @@ import com.example.playlistmaker.common.domain.db.TracksDbInteractor
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformationToTrackMapper
-import com.example.playlistmaker.common.presentation.models.TrackToTrackInformationMapper
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -100,17 +97,14 @@ class PlayerViewModel (
     }
 
     fun restoreState(): Pair<PlayerState?, TrackDurationTime> {
-        Log.d("restoreLikeState" ,"launched")
         restoreLikeState()
         return Pair(lastState, lastTimerState)
     }
 
     private fun restoreLikeState() {
         viewModelScope.launch {
-            Log.d("restoreLikeState" ,"$_likeState")
             initializedTrack?.trackId?.let {
                 val value  = dbInteractor.isTrackLiked(it)
-                Log.d("restoreLikeState" ,"$value")
                 _likeState.postValue(value)
             }
         }
