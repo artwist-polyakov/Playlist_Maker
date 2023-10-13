@@ -25,7 +25,7 @@ class TracksDbInteractorImpl (
 
     private suspend fun prepereTrackToLike(track: Track): TrackEntity {
         val likeStatus = isTrackLiked(track.trackId).first() ?: false
-        return tracksDbConvertor.map(track, likeStatus ?: false)
+        return tracksDbConvertor.map(track, likeStatus)
     }
 
 
