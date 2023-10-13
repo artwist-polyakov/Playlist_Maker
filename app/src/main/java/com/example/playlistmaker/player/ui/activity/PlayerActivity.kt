@@ -1,6 +1,7 @@
 package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
@@ -111,12 +112,26 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 }
             }
         })
+
+        viewModel.likeState.observe(this, Observer {
+            renderLikeState(it)
+        })
+
         renderState()
     }
 
     override fun onBackPressed() {
         viewModel.resetPlayer()
         super.onBackPressed()
+    }
+
+    private fun renderLikeState(isLiked: Boolean) {
+        Log.d("restoreLikeState", "launched")
+        if (isLiked) {
+            binding.likeButton.setImageResource(R.drawable.like_button_active)
+        } else {
+            binding.likeButton.setImageResource(R.drawable.like_button_inactive)
+        }
     }
 
     private fun renderState(){

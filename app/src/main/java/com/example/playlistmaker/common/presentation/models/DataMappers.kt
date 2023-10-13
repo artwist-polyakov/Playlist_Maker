@@ -51,6 +51,25 @@ class TrackToTrackInformationMapper : (Track) -> TrackInformation {
     }
 }
 
+class TrackInformationToTrackMapper : (TrackInformation) -> Track {
+    override fun invoke(track: TrackInformation): Track {
+        val result = Track(
+            trackId = track.trackId,
+            trackName = track.trackName,
+            trackTime = track.trackTime,
+            artistName = track.artistName,
+            artworkUrl100 = track.artworkUrl100,
+            artworkUrl512 = track.artworkUrl512,
+            collectionName = track.collectionName,
+            relizeYear = track.relizeYear,
+            primaryGenreName = track.primaryGenreName,
+            country = track.country,
+            previewUrl = track.previewUrl
+        )
+        return result
+    }
+}
+
 class TrackToTrackDtoMapper : (Track) -> TrackDto {
     override fun invoke(track: Track): TrackDto {
         val result = TrackDto(

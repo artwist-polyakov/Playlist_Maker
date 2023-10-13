@@ -7,7 +7,7 @@ interface TracksDbInteractor {
 
     fun allLikedTracks(): Flow<List<Track>>
 
-    fun isTrackLiked(trackId: Long): Flow<Boolean?>
+    suspend fun isTrackLiked(trackId: Long): Boolean
 
     suspend fun switchTrackLikeStatus(track: Track): Flow<Boolean>
 }

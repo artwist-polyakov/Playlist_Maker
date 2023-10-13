@@ -14,7 +14,7 @@ class TracksDbInteractorImpl (
         return tracksDbRepository.allLikedTracks()
     }
 
-    override fun isTrackLiked(trackId: Long): Flow<Boolean?> {
+    override suspend fun isTrackLiked(trackId: Long): Boolean {
         return tracksDbRepository.isTrackLiked(trackId)
     }
 
@@ -23,7 +23,7 @@ class TracksDbInteractorImpl (
     }
 
     private suspend fun prepereTrackToLike(track: Track): TrackEntity {
-        val likeStatus = isTrackLiked(track.trackId).first() ?: false
+        val likeStatus = isTrackLiked(track.trackId) ?: false
         return tracksDbConvertor.map(track, likeStatus)
     }
 
