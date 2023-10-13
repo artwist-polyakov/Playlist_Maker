@@ -22,8 +22,8 @@ interface TrackDao {
     @Query("SELECT COUNT(id)>0 FROM music_table WHERE id = :id limit 1")
     suspend fun isTrackExist(id: Long): Boolean
 
-    @Query("UPDATE music_table SET isLiked = :liked WHERE id = :id")
-    suspend fun setTrackIsLiked(id: Long, liked: Boolean)
+    @Query("UPDATE music_table SET isLiked = :liked, lastLikeUpdate = :timestamp WHERE id = :id")
+    suspend fun setTrackIsLiked(id: Long, liked: Boolean, timestamp: Long)
 
     @Transaction
     suspend fun switchLike(track: TrackEntity) {
@@ -37,7 +37,8 @@ interface TrackDao {
     @Transaction
     suspend fun updateTrackLike(track: TrackEntity) {
         isTrackLiked(track.id)?.let {
-            setTrackIsLiked(track.id, !it)
+            val currentTimestamp = System.currentTimeMillis()
+            setTrackIsLiked(track.id, !it, currentTimestamp)
         }
     }
 }
