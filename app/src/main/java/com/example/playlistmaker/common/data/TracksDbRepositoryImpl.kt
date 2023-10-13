@@ -17,12 +17,12 @@ class TracksDbRepositoryImpl (
         emit(likedTracks.map { tracksDbConvertor.map(it) })
     }
 
-    override suspend fun isTrackLiked(trackId: Long): Boolean? {
-        return appDatabase.trackDao().isTrackLiked(trackId)
+    override fun isTrackLiked(trackId: Long): Flow<Boolean?> = flow {
+         emit(appDatabase.trackDao().isTrackLiked(trackId))
     }
 
-    override suspend fun switchTrackLikeStatus(track: TrackEntity) {
-        appDatabase.trackDao().switchLike(track)
+    override fun switchTrackLikeStatus(track: TrackEntity) = flow {
+        emit(appDatabase.trackDao().switchLike(track))
     }
 
 

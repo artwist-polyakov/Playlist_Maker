@@ -3,6 +3,8 @@ package com.example.playlistmaker.common.di
 import com.example.playlistmaker.common.domain.ThemeInteractor
 import com.example.playlistmaker.common.data.ThemeInteractorImpl
 import com.example.playlistmaker.common.data.ThemeDelegateImpl
+import com.example.playlistmaker.common.domain.db.TracksDbInteractor
+import com.example.playlistmaker.common.domain.db.TracksDbInteractorImpl
 import com.example.playlistmaker.common.presentation.ThemeDelegate
 import com.example.playlistmaker.player.data.MediaPlayerInteractorImpl
 import com.example.playlistmaker.player.data.TrackStorageInteractorImpl
@@ -26,4 +28,5 @@ val domainModule = module {
     single<TracksInteractor> { TracksInteractorImpl(get()) }
     single<TrackStorageInteractor> { TrackStorageInteractorImpl(get()) }
     factory<MediaPlayerInteractor>{ MediaPlayerInteractorImpl(get()) }
+    single<TracksDbInteractor> { TracksDbInteractorImpl(get(), get()) }
 }

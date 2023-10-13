@@ -29,19 +29,21 @@ interface TrackDao {
     suspend fun setTrackIsLiked(id: Long, liked: Boolean, timestamp: Long)
 
     @Transaction
-    suspend fun switchLike(track: TrackEntity) {
+    suspend fun switchLike(track: TrackEntity): Boolean {
         val isTrackExist = isTrackExist(track.id)
         if (!isTrackExist) {
             insertTrack(track)
         }
-        updateTrackLike(track)
+        return updateTrackLike(track)
     }
 
     @Transaction
-    suspend fun updateTrackLike(track: TrackEntity) {
+    suspend fun updateTrackLike(track: TrackEntity): Boolean {
         isTrackLiked(track.id)?.let {
             val currentTimestamp = System.currentTimeMillis()
             setTrackIsLiked(track.id, !it, currentTimestamp)
+            return !it
         }
+        return false
     }
 }
