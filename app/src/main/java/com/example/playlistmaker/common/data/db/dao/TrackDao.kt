@@ -25,7 +25,7 @@ interface TrackDao {
     @Query("SELECT COUNT(id)>0 FROM music_table WHERE id = :id limit 1")
     fun isTrackExist(id: Long): Flow<Boolean>
 
-    @Query("SELECT * FROM music_table WHERE isLiked = 1")
+    @Query("SELECT * FROM music_table WHERE isLiked = 1 ORDER BY lastLikeUpdate DESC")
     fun getLikedTracks(): Flow<List<TrackEntity>>
 
     @Query("UPDATE music_table SET isLiked = :liked, lastLikeUpdate = :timestamp WHERE id = :id")
