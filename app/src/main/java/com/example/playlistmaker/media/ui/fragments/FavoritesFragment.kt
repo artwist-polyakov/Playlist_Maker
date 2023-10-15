@@ -68,7 +68,6 @@ class FavoritesFragment : Fragment() {
             startActivity(intent)
         }
 
-        viewModel.fillData()
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }

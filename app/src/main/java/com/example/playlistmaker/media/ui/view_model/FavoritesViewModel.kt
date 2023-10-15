@@ -18,7 +18,11 @@ class FavoritesViewModel (
     private val state = MutableLiveData<FavoriteState>()
     fun observeState(): LiveData<FavoriteState> = state
 
-    fun fillData() {
+    init {
+        fillData()
+    }
+
+    private fun fillData() {
         state.postValue(FavoriteState.LOADING)
         viewModelScope.launch {
             favoritesInteractor
