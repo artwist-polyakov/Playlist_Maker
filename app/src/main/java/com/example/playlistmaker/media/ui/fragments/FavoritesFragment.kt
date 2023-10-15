@@ -27,8 +27,7 @@ class FavoritesFragment : Fragment() {
         private const val CLICK_DEBOUNCE_DELAY = 10L
     }
 
-    private lateinit var onTrackClickDebounce: (Track) -> Unit
-
+    private var onTrackClickDebounce: (Track) -> Unit = {}
 
     private var adapter: TracksAdapter? = TracksAdapter(
         object : TracksAdapter.TrackClickListener {
@@ -78,6 +77,7 @@ class FavoritesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        onTrackClickDebounce = {}
     }
 
     private fun render(state: FavoriteState) {
