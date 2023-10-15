@@ -90,6 +90,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         binding.playButton.setOnClickListener {
             viewModel.playPause()
         }
+
+        binding.likeButton.setOnClickListener {
+            viewModel.likeTrack()
+        }
+
         //BINDING
         viewModel.timerState.observe(this, Observer {
             binding.time.text = it.toString()
@@ -111,12 +116,25 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 }
             }
         })
+
+        viewModel.likeState.observe(this, Observer {
+            renderLikeState(it)
+        })
+
         renderState()
     }
 
     override fun onBackPressed() {
         viewModel.resetPlayer()
         super.onBackPressed()
+    }
+
+    private fun renderLikeState(isLiked: Boolean) {
+        if (isLiked) {
+            binding.likeButton.setImageResource(R.drawable.like_button_active)
+        } else {
+            binding.likeButton.setImageResource(R.drawable.like_button_inactive)
+        }
     }
 
     private fun renderState(){
