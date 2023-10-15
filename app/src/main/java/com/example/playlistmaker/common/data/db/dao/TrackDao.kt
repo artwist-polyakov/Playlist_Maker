@@ -8,7 +8,7 @@ import androidx.room.Transaction
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
+
 
 @Dao
 interface TrackDao {
@@ -23,7 +23,7 @@ interface TrackDao {
     fun isTrackLiked(id: Long): Flow<Boolean?>
 
     @Query("SELECT COUNT(id)>0 FROM music_table WHERE id = :id limit 1")
-    fun isTrackExist(id: Long): Flow<Boolean>
+    suspend fun isTrackExist(id: Long): Boolean
 
     @Query("SELECT * FROM music_table WHERE isLiked = 1 ORDER BY lastLikeUpdate DESC")
     fun getLikedTracks(): Flow<List<TrackEntity>>
@@ -33,8 +33,7 @@ interface TrackDao {
 
     @Transaction
     suspend fun switchLike(track: TrackEntity): Boolean {
-        val isTrackExist = isTrackExist(track.id).first()
-        if (!isTrackExist) {
+        if (!isTrackExist(track.id)) {
             insertTrack(track)
         }
         return updateTrackLike(track)
