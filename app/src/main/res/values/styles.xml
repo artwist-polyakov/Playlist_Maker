@@ -160,4 +160,16 @@
         <item name="android:layout_marginStart">20dp</item>
     </style>
 
+    <style name="Widget.MyApp.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearance">@style/TextFieldAppearance</item>
+        <item name="boxStrokeColor">?attr/colorOnSecondary</item>
+        <item name="boxStrokeErrorColor">@color/like_color</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
+
+    <style name="TextFieldAppearance" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
 </resources>
