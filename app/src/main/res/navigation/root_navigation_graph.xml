@@ -17,11 +17,7 @@
         tools:layout="@layout/fragment_media" >
         <action
             android:id="@+id/action_mediaFragment_to_createPlaylistFragment"
-            app:destination="@id/createPlaylistFragment"
-            app:enterAnim="@anim/slide_in_down"
-            app:exitAnim="@anim/slide_out_up"
-            app:popEnterAnim="@anim/slide_in_down"
-            app:popExitAnim="@anim/slide_out_up"/>
+            app:destination="@id/createPlaylistFragment"/>
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
