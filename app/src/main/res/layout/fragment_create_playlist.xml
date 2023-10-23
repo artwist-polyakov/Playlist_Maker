@@ -10,7 +10,6 @@
 
     <ImageView
         android:id="@+id/return_button"
-        style="@style/search_icon_style"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
@@ -103,16 +102,16 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        style = "@style/media_create_new_playlist_button"
+    <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="55dp"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="17dp"
-        android:background="@drawable/button_selector"
+        android:textAllCaps="false"
         android:text="Создать"
         android:textColor="@color/white"
+        android:backgroundTint="@color/button_ripple_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

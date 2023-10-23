@@ -178,15 +178,9 @@
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="fontWeight">500</item>
         <item name="textAllCaps">false</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">50dp</item>
-        <item name="android:layout_marginTop">34dp</item>
-        <item name="android:textSize">12sp</item>
-        <item name="rippleColor">@color/button_ripple_selector</item>
+=        <item name="android:textSize">16sp</item>
         <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="backgroundTint">?attr/colorSecondary</item>
-        <item name="background">@drawable/button_selector</item>
-        <item name="cornerRadius">54dp</item>
-        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="backgroundTint">@color/button_ripple_selector</item>
+        <item name="cornerRadius">8dp</item>
     </style>
 </resources>
