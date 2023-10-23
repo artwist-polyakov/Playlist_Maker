@@ -103,7 +103,8 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+        style = "@style/media_create_new_playlist_button"
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="48dp"
