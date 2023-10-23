@@ -162,7 +162,7 @@
 
     <style name="Widget.MyApp.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="shapeAppearance">@style/TextFieldAppearance</item>
-        <item name="boxStrokeColor">?attr/colorOnSecondary</item>
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
         <item name="boxStrokeErrorColor">@color/like_color</item>
         <item name="boxStrokeWidth">1dp</item>
     </style>
