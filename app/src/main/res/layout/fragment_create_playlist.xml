@@ -16,7 +16,8 @@
         android:layout_marginStart="20dp"
         android:src="@drawable/arrow_back_icon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Уйти назад" />
 
     <TextView
         android:id="@+id/textView"
@@ -50,7 +51,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/return_button"
-        app:srcCompat="@drawable/ic_new_playlist" />
+        app:srcCompat="@drawable/ic_new_playlist"
+        android:contentDescription="Плейсхолдер изображения" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout1"
@@ -100,5 +102,20 @@
             android:textColorHint="?attr/colorOnPrimary"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="17dp"
+        android:background="@drawable/button_selector"
+        android:text="Создать"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+        app:layout_constraintVertical_bias="0.833" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
