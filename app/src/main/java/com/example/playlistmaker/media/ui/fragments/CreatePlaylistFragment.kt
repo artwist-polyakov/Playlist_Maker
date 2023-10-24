@@ -44,5 +44,9 @@ class CreatePlaylistFragment: Fragment() {
             binding.button.isEnabled = it
         }
 
+        binding.imageView.setOnClickListener(View.OnClickListener {
+            Toast.makeText(context, "Image clicked", Toast.LENGTH_SHORT).show()
+        })
+
     }
 }
