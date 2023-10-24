@@ -5,13 +5,12 @@ import androidx.core.net.toUri
 import com.example.playlistmaker.common.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.common.presentation.models.TrackInformation
 
 class PlaylistsDbConverter {
-    fun map(playlist: PlaylistInformation, track: TrackInformation): PlaylistTrackReference {
+    fun map(playlistId: Long, trackId: Long): PlaylistTrackReference {
         return PlaylistTrackReference(
-            playlistId = playlist.id,
-            trackId = track.trackId,
+            playlistId = playlistId,
+            trackId = trackId,
             lastUpdate = System.currentTimeMillis()
         )
     }
