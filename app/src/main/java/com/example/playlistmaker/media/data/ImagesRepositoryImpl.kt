@@ -8,28 +8,36 @@ import android.os.Environment
 import com.example.playlistmaker.media.domain.ImagesRepository
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.util.UUID
 
 class ImagesRepositoryImpl (
-    private val context: Context
+    private val context: Context,
+    private val album: String
 ): ImagesRepository {
 
-    override fun saveImage(uri: Uri, album: String): String {
+    override fun saveImage(uri: Uri): String {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
         if (!filePath.exists()){
             filePath.mkdirs()
         }
         val uuid = UUID.randomUUID().toString()
-        val file = File(filePath, uuid)
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        val file = File(filePath, "$uuid.jpg")
+        try {
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                FileOutputStream(file).use { outputStream ->
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+                        ?: throw IOException("Не удалось декодировать изображение")
+                }
+            } ?: throw IOException("Не удалось открыть поток ввода")
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
         return file.absolutePath
     }
 
-    override fun clearAllImages(album: String) {
+    override fun clearAllImages() {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
         if (!filePath.exists()){
             return

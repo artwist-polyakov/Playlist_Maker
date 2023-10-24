@@ -2,6 +2,8 @@ package com.example.playlistmaker.common.di
 
 import androidx.room.Room
 import com.example.playlistmaker.common.data.db.AppDatabase
+import com.example.playlistmaker.media.data.ImagesRepositoryImpl
+import com.example.playlistmaker.media.domain.ImagesRepository
 import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.domain.ExternalNavigator
 import org.koin.android.ext.koin.androidContext
@@ -13,4 +15,5 @@ val dataModule = module {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .build()
     }
+    single<ImagesRepository> { ImagesRepositoryImpl(get(), "playlist_images")}
 }
