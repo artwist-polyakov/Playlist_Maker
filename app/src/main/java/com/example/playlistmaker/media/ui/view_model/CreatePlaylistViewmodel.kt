@@ -4,9 +4,12 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.playlistmaker.media.domain.ImagesRepository
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistInputData
 
-class CreatePlaylistViewmodel: ViewModel() {
+class CreatePlaylistViewmodel (
+    private val imagesRepository: ImagesRepository
+): ViewModel() {
 
     private var currentInputData = PlaylistInputData()
 

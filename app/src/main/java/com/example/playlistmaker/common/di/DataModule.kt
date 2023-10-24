@@ -10,10 +10,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val dataModule = module {
-    single<ExternalNavigator> { ExternalNavigatorImpl(get()) }
+    single<ExternalNavigator> { ExternalNavigatorImpl( get() ) }
     single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+        Room.databaseBuilder( androidContext(), AppDatabase::class.java, "database.db" )
             .build()
     }
-    single<ImagesRepository> { ImagesRepositoryImpl(get(), "playlist_images")}
+    single<ImagesRepository> { ImagesRepositoryImpl( get(), "playlist_images" )}
 }
