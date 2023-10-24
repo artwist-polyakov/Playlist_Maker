@@ -4,7 +4,6 @@ import com.example.playlistmaker.common.data.converters.TracksDbConvertor
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 class TracksDbInteractorImpl (
     private val tracksDbRepository: TracksDbRepository,
@@ -26,6 +25,4 @@ class TracksDbInteractorImpl (
         val likeStatus = isTrackLiked(track.trackId) ?: false
         return tracksDbConvertor.map(track, likeStatus)
     }
-
-
 }
