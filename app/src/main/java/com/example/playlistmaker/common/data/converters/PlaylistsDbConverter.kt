@@ -1,5 +1,7 @@
 package com.example.playlistmaker.common.data.converters
 
+import android.net.Uri
+import androidx.core.net.toUri
 import com.example.playlistmaker.common.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
@@ -29,6 +31,22 @@ class PlaylistsDbConverter {
             name = playlist.name,
             description = playlist.description,
             imageUri = image,
+            tracksCount = playlist.tracksCount,
+            creationDate = playlist.creationDate
+        )
+    }
+
+    fun map(playlist: PlaylistEntity): PlaylistInformation {
+        var image: Uri? = null
+        playlist.imageUri?.let {
+            image = it.toUri()
+        }
+
+        return PlaylistInformation(
+            id = playlist.id,
+            name = playlist.name,
+            description = playlist.description,
+            image = image,
             tracksCount = playlist.tracksCount,
             creationDate = playlist.creationDate
         )
