@@ -37,6 +37,4 @@ class TracksDbConvertor {
             previewUrl = trackEntity.previewUrl
         )
     }
-
-
 }
