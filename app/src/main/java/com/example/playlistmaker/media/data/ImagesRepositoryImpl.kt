@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import com.example.playlistmaker.media.domain.ImagesRepository
 import java.io.File
 import java.io.FileOutputStream
@@ -40,7 +41,12 @@ class ImagesRepositoryImpl (
     override fun clearAllImages() {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
         if (!filePath.exists()){
+            Log.d("ImagesRepositoryImpl", "Папка не существует")
             return
+        }
+        // print contents of folder
+        filePath.listFiles()?.forEach {
+            Log.d("ImagesRepositoryImpl", "Удаляем файл ${it.absolutePath}")
         }
         filePath.deleteRecursively()
     }

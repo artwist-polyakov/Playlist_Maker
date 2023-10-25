@@ -55,6 +55,9 @@ class CreatePlaylistFragment: Fragment() {
         }
         binding.button.setOnClickListener {
             Toast.makeText(context, "Playlist created", Toast.LENGTH_SHORT).show()
+            viewModel.saveData()
+            parentFragmentManager.popBackStack()
+
         }
         viewModel.buttonState.observe(viewLifecycleOwner) {
             Toast.makeText(context, "Button ready $it", Toast.LENGTH_SHORT).show()
