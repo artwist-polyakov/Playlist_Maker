@@ -22,7 +22,7 @@ import androidx.room.ForeignKey
     ]
 )
 data class PlaylistTrackReference(
-    val playlistId: Long,
+    val playlistId: String,
     val trackId: Long,
     val lastUpdate: Long
 )

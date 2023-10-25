@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 class PlaylistsDbInteractorImpl(
     val repository: PlaylistsDbRepository
 ): PlaylistsDbInteractor {
-    override fun giveMeTracksFromPlaylist(playlistId: Long): Flow<List<Track>> {
+    override fun giveMeTracksFromPlaylist(playlistId: String): Flow<List<Track>> {
         return repository.getPlaylistTracks(playlistId)
     }
 
-    override suspend fun addTrackToPlaylist(playlistId: Long, track: Track) {
+    override suspend fun addTrackToPlaylist(playlistId: String, track: Track) {
         repository.addTrackToPlaylist(playlistId, track)
     }
 

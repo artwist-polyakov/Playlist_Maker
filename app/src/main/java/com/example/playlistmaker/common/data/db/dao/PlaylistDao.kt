@@ -32,5 +32,23 @@ interface PlaylistDao {
         WHERE playlist_track_reference.playlistId = :playlistId
         ORDER BY playlist_track_reference.lastUpdate DESC
     """)
-    fun getTracksFromPlaylist(playlistId: Long): Flow<List<TrackEntity>>
+    fun getTracksFromPlaylist(playlistId: String): Flow<List<TrackEntity>>
+
+    @Query("SELECT COUNT(*) > 0 FROM playlist_track_reference WHERE playlistId = :playlistId AND trackId = :trackId")
+    suspend fun isTrackInPlaylist(playlistId: String, trackId: Long): Boolean
+
+    @Transaction
+    suspend fun addTrackToPlaylist(playlistTrackReference: PlaylistTrackReference) {
+        if (!isTrackInPlaylist(
+                playlistTrackReference.playlistId,
+                playlistTrackReference.trackId)
+        ) {
+            incrementTracksCount(playlistTrackReference.playlistId.toString())
+            insertTrackPlaylistTrackReference(playlistTrackReference)
+
+        }
+    }
+
+    @Query("UPDATE playlists SET tracksCount = tracksCount + 1 WHERE id = :playlistId")
+    suspend fun incrementTracksCount(playlistId: String)
 }

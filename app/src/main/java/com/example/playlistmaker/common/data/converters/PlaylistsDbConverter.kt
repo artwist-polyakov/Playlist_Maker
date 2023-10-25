@@ -8,7 +8,7 @@ import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import java.util.UUID
 
 class PlaylistsDbConverter {
-    fun map(playlistId: Long, trackId: Long): PlaylistTrackReference {
+    fun map(playlistId: String, trackId: Long): PlaylistTrackReference {
         return PlaylistTrackReference(
             playlistId = playlistId,
             trackId = trackId,
@@ -16,7 +16,7 @@ class PlaylistsDbConverter {
         )
     }
 
-    fun map(playlistTrackReference: PlaylistTrackReference): Pair<Long, Long> {
+    fun map(playlistTrackReference: PlaylistTrackReference): Pair<String, Long> {
         return Pair(playlistTrackReference.playlistId, playlistTrackReference.trackId)
     }
 

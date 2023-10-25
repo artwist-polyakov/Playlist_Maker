@@ -11,7 +11,7 @@ import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
 
 @Database(
-    version = 12,
+    version = 13,
     entities = [
         TrackEntity::class,
         PlaylistEntity::class,
@@ -73,6 +73,34 @@ abstract class AppDatabase : RoomDatabase(){
                 database.execSQL("DROP TABLE `playlists`")
 
                 database.execSQL("ALTER TABLE `new_playlists` RENAME TO `playlists`")
+            }
+        }
+
+        val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Создаем новую таблицу с обновленной схемой
+                database.execSQL("""
+            CREATE TABLE new_playlist_track_reference (
+                playlistId TEXT NOT NULL,
+                trackId INTEGER NOT NULL,
+                lastUpdate INTEGER NOT NULL,
+                PRIMARY KEY(playlistId, trackId),
+                FOREIGN KEY(playlistId) REFERENCES playlists(id) ON DELETE CASCADE,
+                FOREIGN KEY(trackId) REFERENCES music_table(id) ON DELETE CASCADE
+            )
+        """)
+
+                // Копируем данные из старой таблицы в новую
+                database.execSQL("""
+            INSERT INTO new_playlist_track_reference (playlistId, trackId, lastUpdate)
+            SELECT CAST(playlistId AS TEXT), trackId, lastUpdate FROM playlist_track_reference
+        """)
+
+                // Удаляем старую таблицу
+                database.execSQL("DROP TABLE playlist_track_reference")
+
+                // Переименовываем новую таблицу в имя старой таблицы
+                database.execSQL("ALTER TABLE new_playlist_track_reference RENAME TO playlist_track_reference")
             }
         }
     }

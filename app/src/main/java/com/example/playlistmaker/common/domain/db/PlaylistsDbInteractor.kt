@@ -5,8 +5,8 @@ import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistsDbInteractor {
-    fun giveMeTracksFromPlaylist(playlistId: Long): Flow<List<Track>>
-    suspend fun addTrackToPlaylist(playlistId: Long, track: Track)
+    fun giveMeTracksFromPlaylist(playlistId: String): Flow<List<Track>>
+    suspend fun addTrackToPlaylist(playlistId: String, track: Track)
     fun giveMeAllPlaylists(): Flow<List<PlaylistInformation>>
     suspend fun addPlaylist(playlist: PlaylistInformation)
 }

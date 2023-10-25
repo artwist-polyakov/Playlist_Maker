@@ -24,13 +24,13 @@ class PlaylistsDbRepositoryImpl (
         appDatabase.playlistDao().insertPlaylist(playlistsDbConvertor.map(playlist))
     }
 
-    override fun getPlaylistTracks(playlistId: Long): Flow<List<Track>> =
+    override fun getPlaylistTracks(playlistId: String): Flow<List<Track>> =
         appDatabase.playlistDao().getTracksFromPlaylist(playlistId).distinctUntilChanged()
             .map { playlists ->
                 playlists.map(tracksDbConvertor::map)
             }
 
-    override suspend fun addTrackToPlaylist(playlistId: Long, track: Track) {
+    override suspend fun addTrackToPlaylist(playlistId: String, track: Track) {
         if (!appDatabase.trackDao().isTrackExist(track.trackId)) {
             appDatabase.trackDao().insertTrack(tracksDbConvertor.map(track, false))
         }
