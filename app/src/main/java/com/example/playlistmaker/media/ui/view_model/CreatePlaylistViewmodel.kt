@@ -1,12 +1,15 @@
 package com.example.playlistmaker.media.ui.view_model
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.media.domain.ImagesRepositoryInteractor
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistInputData
+import kotlinx.coroutines.launch
 
 class CreatePlaylistViewmodel (
     private val imagesInteractor: ImagesRepositoryInteractor,
@@ -20,6 +23,13 @@ class CreatePlaylistViewmodel (
 
     init {
         _buttonState.value = false
+        viewModelScope.launch{
+            playlistsDb
+                .giveMeAllPlaylists()
+                .collect {
+                    Log.d("CreatePlaylistViewmodel", "init: $it")
+                }
+        }
     }
 
     fun setName(name: String) {
@@ -44,6 +54,9 @@ class CreatePlaylistViewmodel (
     fun saveData() {
         currentInputData.image?.let {
             imagesInteractor.saveImage(it)
+        }
+        viewModelScope.launch {
+            playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())
         }
     }
 }
