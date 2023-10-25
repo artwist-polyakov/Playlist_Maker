@@ -14,7 +14,7 @@ class PlaylistsDbInteractorImpl(
     }
 
     override suspend fun addTrackToPlaylist(playlistId: Long, track: Track) {
-        repository.addTrackToPlaylist(playlistId, track.trackId)
+        repository.addTrackToPlaylist(playlistId, track)
     }
 
     override fun giveMeAllPlaylists(): Flow<List<PlaylistInformation>> {
