@@ -2,7 +2,6 @@ package com.example.playlistmaker.media.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity.FILL
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,8 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy.FIT_CENTER
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewmodel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -56,18 +56,19 @@ class CreatePlaylistFragment: Fragment() {
         binding.button.setOnClickListener {
             Toast.makeText(context, "Playlist created", Toast.LENGTH_SHORT).show()
             viewModel.saveData()
-            parentFragmentManager.popBackStack()
-
+            findNavController().popBackStack()
         }
+
+        binding.returnButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         viewModel.buttonState.observe(viewLifecycleOwner) {
-            Toast.makeText(context, "Button ready $it", Toast.LENGTH_SHORT).show()
             binding.button.isEnabled = it
         }
 
         binding.imageView.setOnClickListener(View.OnClickListener {
-            Toast.makeText(context, "Image clicked", Toast.LENGTH_SHORT).show()
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         })
     }
-
 }
