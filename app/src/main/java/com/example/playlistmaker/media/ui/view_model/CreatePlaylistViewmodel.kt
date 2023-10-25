@@ -18,6 +18,7 @@ class CreatePlaylistViewmodel (
 
     init {
         _buttonState.value = false
+        imagesRepository.clearAllImages()
     }
 
     fun setName(name: String) {
@@ -36,6 +37,7 @@ class CreatePlaylistViewmodel (
 
     fun setImage(image: Uri) {
         currentInputData = currentInputData.copy(image = image)
+        imagesRepository.saveImage(image)
         checkButtonState()
     }
 }

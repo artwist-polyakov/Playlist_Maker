@@ -1,11 +1,14 @@
 package com.example.playlistmaker.media.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
@@ -14,9 +17,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreatePlaylistFragment: Fragment() {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
-//    companion object {
-//        fun newInstance() = CreatePlaylistFragment()
-//    }
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
 
@@ -29,6 +29,18 @@ class CreatePlaylistFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                //обрабатываем событие выбора пользователем фотографии
+                if (uri != null) {
+                    binding.imageView.setImageURI(uri)
+                    viewModel.setImage(uri)
+                } else {
+                    Log.d("PhotoPicker", "No media selected")
+                }
+            }
+
         binding.button.isEnabled = false
         binding.titleField.addTextChangedListener {
             viewModel.setName(it.toString())
@@ -46,7 +58,8 @@ class CreatePlaylistFragment: Fragment() {
 
         binding.imageView.setOnClickListener(View.OnClickListener {
             Toast.makeText(context, "Image clicked", Toast.LENGTH_SHORT).show()
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         })
-
     }
+
 }
