@@ -14,7 +14,10 @@ val dataModule = module {
     single<ExternalNavigator> { ExternalNavigatorImpl( get() ) }
     single {
         Room.databaseBuilder( androidContext(), AppDatabase::class.java, "database.db" )
-            .addMigrations( AppDatabase.MIGRATION_10_11 )
+            .addMigrations(
+                AppDatabase.MIGRATION_10_11,
+                AppDatabase.MIGRATION_11_12
+            )
             .build()
     }
     single<ImagesRepository> { ImagesRepositoryImpl( get(), "playlist_images" )}

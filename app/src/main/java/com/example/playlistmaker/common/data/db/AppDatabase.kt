@@ -11,7 +11,7 @@ import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
 
 @Database(
-    version = 11,
+    version = 12,
     entities = [
         TrackEntity::class,
         PlaylistEntity::class,
@@ -47,6 +47,32 @@ abstract class AppDatabase : RoomDatabase(){
             FOREIGN KEY(`trackId`) REFERENCES `music_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
         )
     """)
+            }
+        }
+
+
+        val MIGRATION_11_12: Migration = object : Migration(11, 12) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+            CREATE TABLE IF NOT EXISTS `new_playlists` (
+                `id` TEXT NOT NULL, 
+                `name` TEXT NOT NULL, 
+                `description` TEXT NOT NULL, 
+                `imageUri` TEXT, 
+                `tracksCount` INTEGER NOT NULL, 
+                `creationDate` INTEGER NOT NULL,
+                PRIMARY KEY(`id`)
+            )
+        """)
+
+                database.execSQL("""
+            INSERT INTO `new_playlists` (`id`, `name`, `description`, `imageUri`, `tracksCount`, `creationDate`)
+            SELECT `id`, `name`, `description`, `imageUri`, `tracksCount`, `creationDate` FROM `playlists`
+        """)
+
+                database.execSQL("DROP TABLE `playlists`")
+
+                database.execSQL("ALTER TABLE `new_playlists` RENAME TO `playlists`")
             }
         }
     }

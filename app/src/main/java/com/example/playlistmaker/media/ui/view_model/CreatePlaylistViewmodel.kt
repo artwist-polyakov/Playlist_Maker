@@ -4,11 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.media.domain.ImagesRepository
+import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
+import com.example.playlistmaker.media.domain.ImagesRepositoryInteractor
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistInputData
 
 class CreatePlaylistViewmodel (
-    private val imagesRepository: ImagesRepository
+    private val imagesInteractor: ImagesRepositoryInteractor,
+    private val playlistsDb: PlaylistsDbInteractor
 ): ViewModel() {
 
     private var currentInputData = PlaylistInputData()
@@ -18,7 +20,6 @@ class CreatePlaylistViewmodel (
 
     init {
         _buttonState.value = false
-        imagesRepository.clearAllImages()
     }
 
     fun setName(name: String) {
@@ -42,7 +43,7 @@ class CreatePlaylistViewmodel (
 
     fun saveData() {
         currentInputData.image?.let {
-            imagesRepository.saveImage(it)
+            imagesInteractor.saveImage(it)
         }
     }
 }

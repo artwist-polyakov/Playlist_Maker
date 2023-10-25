@@ -20,4 +20,8 @@ class PlaylistsDbInteractorImpl(
     override fun giveMeAllPlaylists(): Flow<List<PlaylistInformation>> {
         return repository.allPlaylists()
     }
+
+    override suspend fun addPlaylist(playlist: PlaylistInformation) {
+        repository.addPlaylist(playlist)
+    }
 }

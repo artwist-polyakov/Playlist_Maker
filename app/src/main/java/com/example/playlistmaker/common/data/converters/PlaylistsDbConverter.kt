@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import com.example.playlistmaker.common.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import java.util.UUID
 
 class PlaylistsDbConverter {
     fun map(playlistId: Long, trackId: Long): PlaylistTrackReference {
@@ -26,7 +27,7 @@ class PlaylistsDbConverter {
         }
 
         return PlaylistEntity(
-            id = playlist.id,
+            id = playlist.id.toString(),
             name = playlist.name,
             description = playlist.description,
             imageUri = image,
@@ -42,7 +43,7 @@ class PlaylistsDbConverter {
         }
 
         return PlaylistInformation(
-            id = playlist.id,
+            id = UUID.fromString(playlist.id),
             name = playlist.name,
             description = playlist.description,
             image = image,

@@ -3,6 +3,7 @@ package com.example.playlistmaker.common.di
 import com.example.playlistmaker.common.data.PlaylistsDbRepositoryImpl
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.common.data.TracksDbRepositoryImpl
+import com.example.playlistmaker.common.data.converters.PlaylistsDbConverter
 import com.example.playlistmaker.common.data.converters.TracksDbConvertor
 import com.example.playlistmaker.common.domain.ThemeRepository
 import com.example.playlistmaker.common.domain.db.PlaylistsDbRepository
@@ -27,6 +28,7 @@ val repositoryModule = module {
     single<NetworkClient> { RetrofitNetworkClient( get() ) }
     factory<MediaPlayerInterface> { MediaPlayerImpl() }
     factory { TracksDbConvertor() }
+    factory { PlaylistsDbConverter() }
     single <TracksDbRepository> { TracksDbRepositoryImpl( get(), get() ) }
     single <PlaylistsDbRepository> { PlaylistsDbRepositoryImpl( get(), get(), get() ) }
 }
