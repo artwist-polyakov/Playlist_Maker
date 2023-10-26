@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.ui.view_model.states
+package com.example.playlistmaker.media.ui.view_model.models
 
 import android.net.Uri
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
@@ -15,6 +15,10 @@ data class PlaylistInputData (
 
     fun isNotEmpty(): Boolean {
         return !isEmpty()
+    }
+
+    fun isDataEntered(): Boolean {
+        return title.isNotEmpty() || description.isNotEmpty() || image != null
     }
 
     fun mapToPlaylistInformation(): PlaylistInformation {

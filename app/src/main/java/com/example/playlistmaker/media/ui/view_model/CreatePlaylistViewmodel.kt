@@ -8,7 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.media.domain.ImagesRepositoryInteractor
-import com.example.playlistmaker.media.ui.view_model.states.PlaylistInputData
+import com.example.playlistmaker.media.ui.view_model.models.PlaylistInputData
+import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenState
 import kotlinx.coroutines.launch
 
 class CreatePlaylistViewmodel (
@@ -20,6 +21,9 @@ class CreatePlaylistViewmodel (
 
     private val _buttonState = MutableLiveData<Boolean>()
     val buttonState: LiveData<Boolean> get() = _buttonState
+
+    private val _state = MutableLiveData<CreatePlaylistScreenState>()
+    val state: LiveData<CreatePlaylistScreenState> get() = _state
 
     init {
         _buttonState.value = false
@@ -39,6 +43,10 @@ class CreatePlaylistViewmodel (
 
     private fun checkButtonState() {
         _buttonState.value = !currentInputData.title.isNullOrEmpty()
+        when (currentInputData.title.isNullOrEmpty()) {
+            true -> _state.postValue(CreatePlaylistScreenState.NotReadyToSave)
+            false -> _state.postValue(CreatePlaylistScreenState.ReadyToSave)
+        }
     }
 
     fun setDescription(description: String) {
@@ -58,5 +66,24 @@ class CreatePlaylistViewmodel (
         viewModelScope.launch {
             playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())
         }
+        _state.postValue(CreatePlaylistScreenState.GoodBye)
     }
+
+    fun handleExit() {
+        Log.d("CreatePlaylistViewmodel", "handleExit: ${currentInputData.isDataEntered()}")
+        when (currentInputData.isDataEntered()) {
+            true -> _state.postValue(CreatePlaylistScreenState.ShowPopupConfirmation)
+            false -> _state.postValue(CreatePlaylistScreenState.GoodBye)
+        }
+    }
+
+    fun clearInputData() {
+        currentInputData = PlaylistInputData()
+        checkButtonState()
+    }
+
+    fun continueCreation() {
+        _state.postValue(CreatePlaylistScreenState.BasicState)
+    }
+
 }
