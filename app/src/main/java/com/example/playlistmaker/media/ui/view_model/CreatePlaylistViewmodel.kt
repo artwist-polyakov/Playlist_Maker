@@ -19,14 +19,10 @@ class CreatePlaylistViewmodel (
 
     private var currentInputData = PlaylistInputData()
 
-    private val _buttonState = MutableLiveData<Boolean>()
-    val buttonState: LiveData<Boolean> get() = _buttonState
-
     private val _state = MutableLiveData<CreatePlaylistScreenState>()
     val state: LiveData<CreatePlaylistScreenState> get() = _state
 
     init {
-        _buttonState.value = false
         viewModelScope.launch{
             playlistsDb
                 .giveMeAllPlaylists()
@@ -42,7 +38,6 @@ class CreatePlaylistViewmodel (
     }
 
     private fun checkButtonState() {
-        _buttonState.value = !currentInputData.title.isNullOrEmpty()
         when (currentInputData.title.isNullOrEmpty()) {
             true -> _state.postValue(CreatePlaylistScreenState.NotReadyToSave)
             false -> _state.postValue(CreatePlaylistScreenState.ReadyToSave)

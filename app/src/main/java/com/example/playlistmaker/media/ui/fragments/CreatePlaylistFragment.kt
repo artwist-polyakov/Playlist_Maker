@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
@@ -36,7 +37,9 @@ class CreatePlaylistFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            viewModel.handleExit()
+        }
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 //обрабатываем событие выбора пользователем фотографии
@@ -58,17 +61,12 @@ class CreatePlaylistFragment: Fragment() {
             viewModel.setDescription(it.toString())
         }
         binding.button.setOnClickListener {
-            Toast.makeText(context, "Playlist created", Toast.LENGTH_SHORT).show()
             viewModel.saveData()
         }
 
         binding.returnButton.setOnClickListener {
             viewModel.handleExit()
         }
-
-//        viewModel.buttonState.observe(viewLifecycleOwner) {
-//            binding.button.isEnabled = it
-//        }
 
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
