@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.ui.fragments.playlists
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,13 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
+import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.media.ui.fragments.favorites.FavoritesFragment
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
+import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -22,12 +31,16 @@ class PlaylistsFragment : Fragment() {
         fun newInstance() = PlaylistsFragment()
         private const val CLICK_DEBOUNCE_DELAY = 10L
     }
-
-    private var onPlaylistClickDebounce: (Track) -> Unit = {}
+    private var onPlaylistClickDebounce: (PlaylistInformation) -> Unit = {}
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
-
+    private val adapter: PlaylistsAdapter = PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
+        override fun onTrackClick(playlist: PlaylistInformation) {
+            onPlaylistClickDebounce(playlist)
+        }
+    })
+    private lateinit var recyclerView: RecyclerView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
@@ -36,9 +49,24 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerView.layoutManager = Grid
+
+        onPlaylistClickDebounce = debounce<PlaylistInformation>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { playlist ->
+            Log.d("Playlists", "some text")
+        }
+
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
         binding.createButton.setOnClickListener {
             findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) {
+            render(it)
         }
 
     }
@@ -50,9 +78,16 @@ class PlaylistsFragment : Fragment() {
             }
             is PlaylistsScreenState.Content -> {
                 showPlaylists()
-
+                adapter.updatePlaylists(state.content)
             }
 
+            is PlaylistsScreenState.Empty -> {
+                showEmptyState()
+            }
+
+            is PlaylistsScreenState.NewPlaylistInitiated -> {
+                findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
+            }
         }
     }
 

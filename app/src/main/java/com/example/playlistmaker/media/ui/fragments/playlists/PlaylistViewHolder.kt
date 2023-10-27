@@ -3,6 +3,7 @@ package com.example.playlistmaker.media.ui.fragments.playlists
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -17,7 +18,7 @@ class PlaylistViewHolder(parent: ViewGroup,
         .inflate(R.layout.playlist_item, parent, false)) {
     private val title: TextView = itemView.findViewById(R.id.trackTitle)
     private val quantity: TextView = itemView.findViewById(R.id.trackQuantity)
-    private val image: View = itemView.findViewById(R.id.imageView)
+    private val image: ImageView = itemView.findViewById(R.id.imageView)
 
     fun bind(playlist: PlaylistInformation) {
         title.text = playlist.name
@@ -26,5 +27,10 @@ class PlaylistViewHolder(parent: ViewGroup,
             playlist.tracksCount,
             playlist.tracksCount
         )
+        if (playlist.image != null) {
+            image.setImageURI(playlist.image)
+        } else {
+            image.setImageResource(R.drawable.song_cover_placeholder_with_padding)
+        }
     }
 }

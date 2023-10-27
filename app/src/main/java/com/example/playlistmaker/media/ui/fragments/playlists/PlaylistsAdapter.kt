@@ -12,6 +12,12 @@ class PlaylistsAdapter(private val clickListener: PlaylistsAdapter.PlaylistClick
     }
     override fun getItemCount(): Int = playlists.size
 
+    fun updatePlaylists(newPlaylists: List<PlaylistInformation>) {
+        playlists.clear()
+        playlists.addAll(newPlaylists)
+        notifyDataSetChanged()
+    }
+
     interface PlaylistClickListener {
         fun onTrackClick(playlist: PlaylistInformation)
     }
