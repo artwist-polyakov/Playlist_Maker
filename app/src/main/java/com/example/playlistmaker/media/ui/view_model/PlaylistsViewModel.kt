@@ -1,18 +1,41 @@
 package com.example.playlistmaker.media.ui.view_model
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.search.domain.models.Track
+import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
+import com.example.playlistmaker.search.domain.storage.TracksStorage
+import kotlinx.coroutines.launch
 
-class PlaylistsViewModel : ViewModel() {
-    val state = MutableLiveData<PlaylistState>(PlaylistState.NOTHING_TO_SHOW)
+class PlaylistsViewModel(
+    private val playlistsDb: PlaylistsDbInteractor,
+) : ViewModel() {
+    private val _state = MutableLiveData<PlaylistsScreenState>()
+    val state: LiveData<PlaylistsScreenState> get() = _state
+
+    init {
+        fillData()
+    }
+
+    private fun fillData() {
+        viewModelScope.launch {
+            playlistsDb
+                .giveMeAllPlaylists()
+                .collect { playlists ->
+                    processResult(playlists)
+                }
+        }
+    }
+
+    private fun processResult(playlists: List<PlaylistInformation>) {
+        if (playlists.isEmpty()) {
+            _state.postValue(PlaylistsScreenState.Empty)
+        } else {
+            _state.postValue(PlaylistsScreenState.Content(playlists))
+        }
+    }
 }
 
-sealed class PlaylistState {
-    object NOTHING_TO_SHOW : PlaylistState()
-    object LOADING : PlaylistState()
-    data class ERROR(val message: String) : PlaylistState()
-    data class PLAYLISTS(val playlists: List<Playlist>) : PlaylistState()
-}
-
-class Playlist(val name: String, val tracks: List<Track>)

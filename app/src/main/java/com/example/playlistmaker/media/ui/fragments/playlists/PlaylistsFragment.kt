@@ -25,8 +25,6 @@ class PlaylistsFragment : Fragment() {
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var problemsLayout: LinearLayout
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
@@ -35,7 +33,6 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        problemsLayout = binding.problemsLayout
         binding.createButton.setOnClickListener {
             findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
         }
