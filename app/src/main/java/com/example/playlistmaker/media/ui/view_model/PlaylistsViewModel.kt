@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
-import com.example.playlistmaker.search.domain.storage.TracksStorage
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(
