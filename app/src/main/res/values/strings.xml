@@ -48,4 +48,9 @@
     <string name="favorite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
     <string name="new_playlist_title">Новый плейлист</string>
+    <string name="exit_confirmation_title">Завершить создание плейлиста?</string>
+    <string name="exit_confirmation_message">Все несохраненные данные будут потеряны</string>
+    <string name="cancel_button">Отмена</string>
+    <string name="finish_button">Завершить</string>
+    <string name="playlist_created">Плейлист %1$s создан</string>
 </resources>

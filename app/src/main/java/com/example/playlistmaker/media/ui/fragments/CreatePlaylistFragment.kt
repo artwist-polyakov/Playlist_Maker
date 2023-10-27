@@ -124,12 +124,12 @@ class CreatePlaylistFragment: Fragment() {
         val likeColor = ContextCompat.getColor(requireContext(), R.color.like_color)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны")
-            .setPositiveButton("Отмена") { dialog, which ->
+            .setTitle(getString(R.string.exit_confirmation_title))
+            .setMessage(getString(R.string.exit_confirmation_message))
+            .setPositiveButton(getString(R.string.cancel_button)) { dialog, which ->
                 viewModel.continueCreation()
             }
-            .setNegativeButton("Завершить") { dialog, which ->
+            .setNegativeButton(getString(R.string.finish_button)) { dialog, which ->
                 viewModel.clearInputData()
                 viewModel.handleExit()
             }
@@ -162,7 +162,11 @@ class CreatePlaylistFragment: Fragment() {
         val backgroundColor = typedValue.data
 
         val snackbar =
-            Snackbar.make(binding.root, "Плейлист $title создан", Snackbar.LENGTH_SHORT)
+            Snackbar.make(
+                binding.root,
+                getString(R.string.playlist_created, title),
+                Snackbar.LENGTH_SHORT
+            )
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(backgroundColor)
         val textView = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
