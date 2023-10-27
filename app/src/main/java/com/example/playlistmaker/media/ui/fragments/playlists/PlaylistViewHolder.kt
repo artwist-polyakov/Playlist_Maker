@@ -1,17 +1,13 @@
 package com.example.playlistmaker.media.ui.fragments.playlists
 
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.search.ui.fragments.TracksAdapter
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class PlaylistViewHolder(parent: ViewGroup,
                          private val clickListener: PlaylistsAdapter.PlaylistClickListener,
@@ -30,7 +26,6 @@ class PlaylistViewHolder(parent: ViewGroup,
             playlist.tracksCount
         )
         if (playlist.image != null) {
-            Log.d("PlaylistViewHolder", "playlist.image.toString() ${playlist.image.toString()}")
             image.setImageURI(Uri.parse(playlist.image.toString()))
         } else {
             image.setPadding(

@@ -15,6 +15,7 @@ import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
+import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,14 +49,13 @@ class PlaylistsFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { playlist ->
-            Log.d("PlaylistsFragment", "onPlaylistClickDebounce ${playlist.name}")
+            viewModel.handleInteraction(PlaylistsScreenInteraction.PlaylistClicked(playlist))
         }
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         binding.createButton.setOnClickListener {
-            Log.d("PlaylistsFragment", "createButton")
             findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
         }
 

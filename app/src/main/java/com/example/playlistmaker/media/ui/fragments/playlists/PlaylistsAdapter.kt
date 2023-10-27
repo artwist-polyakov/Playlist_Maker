@@ -8,7 +8,11 @@ class PlaylistsAdapter(private val clickListener: PlaylistsAdapter.PlaylistClick
     var playlists = ArrayList<PlaylistInformation>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder = PlaylistViewHolder(parent, clickListener)
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(playlists.get(position))
+        val playlist = playlists.get(position)
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener {
+            clickListener.onTrackClick(playlist)
+        }
     }
     override fun getItemCount(): Int = playlists.size
 
