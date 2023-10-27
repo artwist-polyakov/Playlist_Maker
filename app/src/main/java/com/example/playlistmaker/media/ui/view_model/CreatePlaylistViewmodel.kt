@@ -1,6 +1,5 @@
 package com.example.playlistmaker.media.ui.view_model
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.media.domain.ImagesRepositoryInteractor
+import com.example.playlistmaker.media.ui.view_model.models.CreatePlaylistData
 import com.example.playlistmaker.media.ui.view_model.models.PlaylistInputData
+import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenState
 import kotlinx.coroutines.launch
 
@@ -32,8 +33,20 @@ class CreatePlaylistViewmodel (
         }
     }
 
-    fun setName(name: String) {
-        currentInputData = currentInputData.copy(title = name)
+    fun handleInteraction(interaction: CreatePlaylistScreenInteraction) {
+        when (interaction) {
+            is CreatePlaylistScreenInteraction.BackButtonPressed -> handleExit()
+            is CreatePlaylistScreenInteraction.SaveButtonPressed -> saveData()
+            is CreatePlaylistScreenInteraction.DataFilled -> handleDataFilled(interaction.content)
+        }
+    }
+
+    private fun handleDataFilled(content: CreatePlaylistData) {
+        when (content) {
+            is CreatePlaylistData.Title -> currentInputData = currentInputData.copy(title = content.value)
+            is CreatePlaylistData.Description -> currentInputData = currentInputData.copy(description = content.value)
+            is CreatePlaylistData.ImageUri -> currentInputData = currentInputData.copy(image = content.value)
+        }
         checkButtonState()
     }
 
@@ -42,16 +55,6 @@ class CreatePlaylistViewmodel (
             true -> _state.postValue(CreatePlaylistScreenState.NotReadyToSave)
             false -> _state.postValue(CreatePlaylistScreenState.ReadyToSave)
         }
-    }
-
-    fun setDescription(description: String) {
-        currentInputData = currentInputData.copy(description = description)
-        checkButtonState()
-    }
-
-    fun setImage(image: Uri) {
-        currentInputData = currentInputData.copy(image = image)
-        checkButtonState()
     }
 
     fun saveData() {
@@ -80,5 +83,4 @@ class CreatePlaylistViewmodel (
     fun continueCreation() {
         _state.postValue(CreatePlaylistScreenState.BasicState)
     }
-
 }

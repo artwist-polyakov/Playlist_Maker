@@ -1,8 +1,6 @@
 package com.example.playlistmaker.media.ui.fragments
 
 import android.app.AlertDialog
-import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -11,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,6 +19,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewmodel
+import com.example.playlistmaker.media.ui.view_model.models.CreatePlaylistData
+import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,8 +48,8 @@ class CreatePlaylistFragment: Fragment() {
                 if (uri != null) {
                     binding.imageView.setImageURI(uri)
                     binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-
-                    viewModel.setImage(uri)
+                    val data = CreatePlaylistData.ImageUri(uri)
+                    viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
                 } else {
                     Log.d("PhotoPicker", "No media selected")
                 }
@@ -58,17 +57,19 @@ class CreatePlaylistFragment: Fragment() {
 
         binding.button.isEnabled = false
         binding.titleField.addTextChangedListener {
-            viewModel.setName(it.toString())
+            val data = CreatePlaylistData.Title(it.toString())
+            viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }
         binding.descriptionField.addTextChangedListener {
-            viewModel.setDescription(it.toString())
+            val data = CreatePlaylistData.Description(it.toString())
+            viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }
         binding.button.setOnClickListener {
-            viewModel.saveData()
+            viewModel.handleInteraction(CreatePlaylistScreenInteraction.SaveButtonPressed)
         }
 
         binding.returnButton.setOnClickListener {
-            viewModel.handleExit()
+            viewModel.handleInteraction(CreatePlaylistScreenInteraction.BackButtonPressed)
         }
 
         viewModel.state.observe(viewLifecycleOwner) {
