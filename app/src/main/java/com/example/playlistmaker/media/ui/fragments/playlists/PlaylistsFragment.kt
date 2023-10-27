@@ -62,8 +62,6 @@ class PlaylistsFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
-        binding.createButton.bringToFront()
-        binding.recyclerView.bringToFront()
     }
 
     private fun render(state: PlaylistsScreenState) {

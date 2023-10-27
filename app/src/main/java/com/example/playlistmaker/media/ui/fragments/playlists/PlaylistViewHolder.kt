@@ -1,5 +1,7 @@
 package com.example.playlistmaker.media.ui.fragments.playlists
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +30,15 @@ class PlaylistViewHolder(parent: ViewGroup,
             playlist.tracksCount
         )
         if (playlist.image != null) {
-            image.setImageURI(playlist.image)
+            Log.d("PlaylistViewHolder", "playlist.image.toString() ${playlist.image.toString()}")
+            image.setImageURI(Uri.parse(playlist.image.toString()))
         } else {
+            image.setPadding(
+                image.paddingLeft + 28, // слева
+                image.paddingTop + 28,
+                image.paddingRight + 28,
+                image.paddingBottom
+            )
             image.setImageResource(R.drawable.song_cover_placeholder_with_padding)
         }
     }

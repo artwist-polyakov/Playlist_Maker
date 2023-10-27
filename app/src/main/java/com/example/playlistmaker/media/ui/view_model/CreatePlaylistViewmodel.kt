@@ -1,6 +1,8 @@
 package com.example.playlistmaker.media.ui.view_model
 
+import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,8 +60,12 @@ class CreatePlaylistViewmodel (
     }
 
     fun saveData() {
+        var imageLink: String?
         currentInputData.image?.let {
-            imagesInteractor.saveImage(it)
+            imageLink = imagesInteractor.saveImage(it)
+            Uri.parse(imageLink).let {
+                currentInputData = currentInputData.copy(image = it)
+            }
         }
         viewModelScope.launch {
             playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())

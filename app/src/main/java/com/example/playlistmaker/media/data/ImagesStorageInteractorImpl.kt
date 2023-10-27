@@ -7,8 +7,8 @@ import com.example.playlistmaker.media.domain.ImagesStorageInteractor
 class ImagesStorageInteractorImpl(
     val repository: ImagesRepository
 ): ImagesStorageInteractor {
-    override fun saveImage(uri: Uri) {
-        repository.saveImage(uri)
+    override fun saveImage(uri: Uri): String {
+        return repository.saveImage(uri)
     }
 
     override fun clearAllImages() {
