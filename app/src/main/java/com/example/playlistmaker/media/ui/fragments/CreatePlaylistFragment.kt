@@ -40,6 +40,7 @@ class CreatePlaylistFragment: Fragment() {
         return binding.root
     }
 
+    // MARK :- Lifecycle
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -84,6 +85,12 @@ class CreatePlaylistFragment: Fragment() {
         })
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    // MARK :- Private
     private fun render(state: CreatePlaylistScreenState) {
         Log.d("CreatePlaylistFragment", "render: $state")
         when (state) {
