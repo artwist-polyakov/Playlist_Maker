@@ -30,7 +30,7 @@
         android:label="PlaylistsFragment" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.playlistmaker.media.ui.fragments.FavoritesFragment"
+        android:name="com.example.playlistmaker.media.ui.fragments.favorites.FavoritesFragment"
         android:label="FavoritesFragment" />
     <fragment
         android:id="@+id/createPlaylistFragment"
