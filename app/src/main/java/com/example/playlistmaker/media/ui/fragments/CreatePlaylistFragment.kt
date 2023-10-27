@@ -1,9 +1,11 @@
 package com.example.playlistmaker.media.ui.fragments
 
 import android.app.AlertDialog
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -86,21 +89,7 @@ class CreatePlaylistFragment: Fragment() {
                 binding.button.isEnabled = false
             }
             is CreatePlaylistScreenState.ShowPopupConfirmation -> {
-                Log.d("CreatePlaylistViewmodel", "render: ShowPopupConfirmation")
-                val dialog = MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Завершить создание плейлиста?")
-                    .setMessage("Все несохраненные данные будут потеряны")
-                    .setNegativeButton("Отмена") { dialog, which ->
-                        viewModel.continueCreation()
-                    }
-                    .setPositiveButton("Завершить") { dialog, which ->
-                        viewModel.clearInputData()
-                        viewModel.handleExit()
-                    }
-                    .show()
-
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+                showExitConfirmation()
             }
             is CreatePlaylistScreenState.GoodBye -> {
                 findNavController().popBackStack()
@@ -109,5 +98,28 @@ class CreatePlaylistFragment: Fragment() {
                 Log.d("CreatePlaylistFragment", "render: BasicState")
             }
         }
+    }
+
+    private fun showExitConfirmation() {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
+        val colorOnPrimary = typedValue.data
+
+        val likeColor = ContextCompat.getColor(requireContext(), R.color.like_color)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Завершить создание плейлиста?")
+            .setMessage("Все несохраненные данные будут потеряны")
+            .setPositiveButton("Отмена") { dialog, which ->
+                viewModel.continueCreation()
+            }
+            .setNegativeButton("Завершить") { dialog, which ->
+                viewModel.clearInputData()
+                viewModel.handleExit()
+            }
+            .show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(colorOnPrimary)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(likeColor)
     }
 }
