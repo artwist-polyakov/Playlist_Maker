@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/playlistsFragment"
-        android:name="com.example.playlistmaker.media.ui.fragments.PlaylistsFragment"
+        android:name="com.example.playlistmaker.media.ui.fragments.playlists.PlaylistsFragment"
         android:label="PlaylistsFragment" />
     <fragment
         android:id="@+id/favoritesFragment"
@@ -34,7 +34,7 @@
         android:label="FavoritesFragment" />
     <fragment
         android:id="@+id/createPlaylistFragment"
-        android:name="com.example.playlistmaker.media.ui.fragments.CreatePlaylistFragment"
+        android:name="com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment"
         android:label="fragment_create_playlist"
         tools:layout="@layout/fragment_create_playlist" />
 </navigation>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:paddingTop="20dp"
-    tools:context=".media.ui.fragments.CreatePlaylistFragment">
+    tools:context=".media.ui.fragments.create.CreatePlaylistFragment">
 
     <ImageView
         android:id="@+id/return_button"

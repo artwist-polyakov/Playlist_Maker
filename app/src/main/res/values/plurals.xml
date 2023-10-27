@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <plurals name="tracks">
-        <item quantity="one">трек</item>
-        <item quantity="few">трека</item>
-        <item quantity="many">треков</item>
-        <item quantity="other">трека</item>
+        <item quantity="one">%d трек</item>
+        <item quantity="few">%d трека</item>
+        <item quantity="many">%d треков</item>
+        <item quantity="other">%d трека</item>
     </plurals>
 </resources>

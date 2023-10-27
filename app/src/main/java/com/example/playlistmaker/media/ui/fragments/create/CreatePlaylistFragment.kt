@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.ui.fragments
+package com.example.playlistmaker.media.ui.fragments.create
 
 import android.app.AlertDialog
 import android.os.Bundle
