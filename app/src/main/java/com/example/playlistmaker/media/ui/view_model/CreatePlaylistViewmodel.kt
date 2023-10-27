@@ -64,11 +64,11 @@ class CreatePlaylistViewmodel (
         viewModelScope.launch {
             playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())
         }
-        _state.postValue(CreatePlaylistScreenState.GoodBye)
+        _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
+
     }
 
     fun handleExit() {
-        Log.d("CreatePlaylistViewmodel", "handleExit: ${currentInputData.isDataEntered()}")
         when (currentInputData.isDataEntered()) {
             true -> _state.postValue(CreatePlaylistScreenState.ShowPopupConfirmation)
             false -> _state.postValue(CreatePlaylistScreenState.GoodBye)

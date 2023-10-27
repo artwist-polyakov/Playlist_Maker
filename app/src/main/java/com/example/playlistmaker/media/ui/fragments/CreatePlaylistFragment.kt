@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -82,6 +83,7 @@ class CreatePlaylistFragment: Fragment() {
     }
 
     private fun render(state: CreatePlaylistScreenState) {
+        Log.d("CreatePlaylistFragment", "render: $state")
         when (state) {
             is CreatePlaylistScreenState.ReadyToSave -> {
                 binding.button.isEnabled = true
@@ -97,6 +99,10 @@ class CreatePlaylistFragment: Fragment() {
             }
             is CreatePlaylistScreenState.BasicState -> {
                 Log.d("CreatePlaylistFragment", "render: BasicState")
+            }
+            is CreatePlaylistScreenState.SuccessState -> {
+                Toast.makeText(requireContext(), "Плейлист ${state.name} создан", Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
             }
         }
     }
