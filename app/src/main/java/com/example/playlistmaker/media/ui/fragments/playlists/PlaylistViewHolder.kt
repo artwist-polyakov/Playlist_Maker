@@ -11,7 +11,7 @@ import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import kotlinx.coroutines.NonDisposableHandle.parent
 
 class PlaylistViewHolder(parent: ViewGroup,
-                         private val clickListener: PlaylistsAdapter.TrackClickListener,
+                         private val clickListener: PlaylistsAdapter.PlaylistClickListener,
 ): RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.playlist_item, parent, false)) {
