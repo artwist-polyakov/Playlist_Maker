@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.Toast
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,7 +24,9 @@ import com.example.playlistmaker.media.ui.view_model.models.CreatePlaylistData
 import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class CreatePlaylistFragment: Fragment() {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
@@ -101,7 +103,7 @@ class CreatePlaylistFragment: Fragment() {
                 Log.d("CreatePlaylistFragment", "render: BasicState")
             }
             is CreatePlaylistScreenState.SuccessState -> {
-                Toast.makeText(requireContext(), "Плейлист ${state.name} создан", Toast.LENGTH_SHORT).show()
+                showSuccess(state.name)
                 findNavController().popBackStack()
             }
         }
@@ -128,5 +130,37 @@ class CreatePlaylistFragment: Fragment() {
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(colorOnPrimary)
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(likeColor)
+    }
+
+    private fun showSuccess(title: String) {
+
+        // Получение цветов из темы
+        val typedValue = TypedValue()
+        requireContext()
+            .theme
+            .resolveAttribute(
+                org.koin.android.R.attr.colorPrimary,
+                typedValue,
+                true
+            )
+        val textColor = typedValue.data
+
+        requireContext()
+            .theme.
+            resolveAttribute(
+                com.google.android.material.R.attr.colorOnPrimary,
+                typedValue,
+                true
+            )
+        val backgroundColor = typedValue.data
+
+        val snackbar =
+            Snackbar.make(binding.root, "Плейлист $title создан", Snackbar.LENGTH_SHORT)
+        val snackbarView = snackbar.view
+        snackbarView.setBackgroundColor(backgroundColor)
+        val textView = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        textView.setTextColor(textColor)
+        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        snackbar.show()
     }
 }
