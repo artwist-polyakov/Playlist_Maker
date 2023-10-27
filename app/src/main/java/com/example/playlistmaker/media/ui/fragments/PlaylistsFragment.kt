@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
 import com.example.playlistmaker.search.domain.models.Track
@@ -39,7 +37,6 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         problemsLayout = binding.problemsLayout
         binding.createButton.setOnClickListener {
-            Toast.makeText(context, "Создание плейлиста", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
         }
     }
