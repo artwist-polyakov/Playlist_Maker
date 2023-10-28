@@ -38,6 +38,9 @@ class PlayerViewModel (
     private val _likeState = MutableLiveData<Boolean>()
     val likeState: LiveData<Boolean> get() = _likeState
 
+    private val _bottomSheetState = MutableLiveData<PlayerBottomSheetState>()
+    val bottomSheetState: LiveData<PlayerBottomSheetState> get() = _bottomSheetState
+
     private val _timerState = MutableLiveData<TrackDurationTime>()
     val timerState: LiveData<TrackDurationTime> get() = _timerState
     private val lastTimerState: TrackDurationTime = TrackDurationTime(0)
@@ -126,5 +129,18 @@ class PlayerViewModel (
                 _timerState.postValue(TrackDurationTime(mediaPlayerInteractor.getCurrentPosition()))
             }
         }
+    }
+
+    fun addCollection() {
+        viewModelScope.launch {
+            playlistsInteractor.giveMeAllPlaylists()
+                .collect() {
+                    _bottomSheetState.postValue(PlayerBottomSheetState.Shown(it))
+                }
+        }
+    }
+
+    fun hideCollection() {
+        _bottomSheetState.postValue(PlayerBottomSheetState.Hidden)
     }
 }

@@ -265,12 +265,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingHorizontal="13dp"
         android:paddingTop="42dp"
-        app:behavior_peekHeight="505dp"
         app:behavior_hideable="true"
         android:background="?attr/colorPrimary"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
