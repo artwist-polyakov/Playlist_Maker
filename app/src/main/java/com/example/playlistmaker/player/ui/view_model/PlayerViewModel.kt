@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.common.domain.db.TracksDbInteractor
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformationToTrackMapper
+import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
@@ -142,5 +144,19 @@ class PlayerViewModel (
 
     fun hideCollection() {
         _bottomSheetState.postValue(PlayerBottomSheetState.Hidden)
+    }
+
+    fun handlePlaylistTap(playlist: PlaylistInformation) {
+        viewModelScope.launch {
+            initializedTrack?.let {
+                val track = TrackInformationToTrackMapper().invoke(it)
+                val result = playlistsInteractor.addTrackToPlaylist(playlist.id.toString(), track)
+                if (result) {
+                    _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistAdded(playlist))
+                } else {
+                    _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistNotAdded(playlist))
+                }
+            }
+        }
     }
 }

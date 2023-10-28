@@ -2,19 +2,27 @@ package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.ActivitySongPageBinding
 import com.example.playlistmaker.player.presentation.PlayerActivityInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
@@ -22,6 +30,16 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     private val viewModel: PlayerViewModel by viewModel()
     private lateinit var currentTrack: TrackInformation
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
+
+    private var onPlaylistClickDebounce: (PlaylistInformation) -> Unit = {}
+
+    private val adapter: PlayerBottomSheetAdapter = PlayerBottomSheetAdapter(object : PlayerBottomSheetAdapter.PlaylistClickListener {
+        override fun onTrackClick(playlist: PlaylistInformation) {
+            onPlaylistClickDebounce(playlist)
+        }
+    })
+    private lateinit var recyclerView: RecyclerView
+
     override fun showTrackInfo(trackInfo: TrackInformation) {
         if (trackInfo.country == null) {
             binding.trackCountryInfo.visibility = Group.GONE
@@ -134,6 +152,16 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
+        onPlaylistClickDebounce = debounce<PlaylistInformation>(
+            CLICK_DEBOUNCE_DELAY,
+            lifecycleScope,
+            false
+        ) { playlist ->
+            viewModel.handlePlaylistTap(playlist)
+        }
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
+
         //BINDING
         viewModel.timerState.observe(this, Observer {
             binding.time.text = it.toString()
@@ -208,12 +236,64 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             is PlayerBottomSheetState.Shown -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                 binding.mainLayout.alpha = 0.5f
+                Log.d("PlayerActivity", "renderBottomSheetState: ${state.playlists}")
+                adapter.updatePlaylists(state.playlists)
+            }
+            is PlayerBottomSheetState.PlaylistAdded -> {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                binding.mainLayout.alpha = 1f
+                showSuccess(state)
             }
             else -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 binding.mainLayout.alpha = 0.5f
             }
         }
+    }
+
+    private fun showSuccess(state: PlayerBottomSheetState) {
+        var text: String = ""
+        when (state) {
+            is PlayerBottomSheetState.PlaylistAdded -> {
+                text = getString(R.string.track_added, state.playlist.name)
+            }
+            is PlayerBottomSheetState.PlaylistNotAdded  -> {
+                text = getString(R.string.track_already_in, state.playlist.name)
+            }
+            else -> {
+                text = ""
+            }
+        }
+        val typedValue = TypedValue()
+        theme.resolveAttribute(
+            androidx.transition.R.attr.colorPrimary,
+            typedValue,
+            true
+        )
+        val textColor = typedValue.data
+
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnPrimary,
+            typedValue,
+            true
+        )
+        val backgroundColor = typedValue.data
+
+        val snackbar = Snackbar.make(
+            binding.root,
+            text,
+            Snackbar.LENGTH_SHORT
+        )
+        val snackbarView = snackbar.view
+        snackbarView.setBackgroundColor(backgroundColor)
+        val textView = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        textView.setTextColor(textColor)
+        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        snackbar.show()
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 10L
     }
 }
 
