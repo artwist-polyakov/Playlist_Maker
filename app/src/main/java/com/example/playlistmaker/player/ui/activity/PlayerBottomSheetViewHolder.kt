@@ -15,9 +15,9 @@ class PlayerBottomSheetViewHolder(parent: ViewGroup,
 ): RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.playlist_little_item, parent, false)) {
-    private val title: TextView = itemView.findViewById(R.id.trackTitle)
-    private val quantity: TextView = itemView.findViewById(R.id.trackQuantity)
-    private val image: ImageView = itemView.findViewById(R.id.imageView)
+    private val title: TextView = itemView.findViewById(R.id.playlist_title)
+    private val quantity: TextView = itemView.findViewById(R.id.tracks_quantity)
+    private val image: ImageView = itemView.findViewById(R.id.playlist_cover)
 
     fun bind(playlist: PlaylistInformation) {
         title.text = playlist.name

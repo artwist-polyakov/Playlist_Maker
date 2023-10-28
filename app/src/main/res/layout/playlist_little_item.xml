@@ -39,7 +39,7 @@
             android:text="@string/track_title"/>
 
         <TextView
-            android:id="@+id/track_artist"
+            android:id="@+id/tracks_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ys_display_regular"

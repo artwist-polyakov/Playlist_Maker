@@ -160,7 +160,8 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             viewModel.handlePlaylistTap(playlist)
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
+        recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
 
         //BINDING
         viewModel.timerState.observe(this, Observer {
