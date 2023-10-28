@@ -229,6 +229,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     }
 
     private fun renderBottomSheetState(state: PlayerBottomSheetState) {
+        Log.d("PlayerActivity", "renderBottomSheetState: $state")
         when(state) {
             is PlayerBottomSheetState.Hidden -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -241,6 +242,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 adapter.updatePlaylists(state.playlists)
             }
             is PlayerBottomSheetState.PlaylistAdded -> {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                binding.mainLayout.alpha = 1f
+                showSuccess(state)
+            }
+            is PlayerBottomSheetState.PlaylistNotAdded -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 binding.mainLayout.alpha = 1f
                 showSuccess(state)

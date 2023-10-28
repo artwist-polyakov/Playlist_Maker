@@ -16,6 +16,7 @@ import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 
@@ -136,7 +137,8 @@ class PlayerViewModel (
     fun addCollection() {
         viewModelScope.launch {
             playlistsInteractor.giveMeAllPlaylists()
-                .collect() {
+                .take(1)
+                .collect {
                     _bottomSheetState.postValue(PlayerBottomSheetState.Shown(it))
                 }
         }

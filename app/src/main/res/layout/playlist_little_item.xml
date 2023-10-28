@@ -16,6 +16,7 @@
         android:layout_width="@dimen/search_screen_cover_size"
         android:layout_height="@dimen/search_screen_cover_size"
         android:layout_marginStart="@dimen/search_screen_cover_margin_start"
+        android:scaleType="centerCrop"
         android:layout_gravity="center_vertical"
         android:src="@drawable/song_cover_placeholder" />
 
