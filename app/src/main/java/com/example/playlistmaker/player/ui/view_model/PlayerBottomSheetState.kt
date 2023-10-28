@@ -7,4 +7,5 @@ sealed class PlayerBottomSheetState {
     data class Shown(val playlists: List<PlaylistInformation>) : PlayerBottomSheetState()
     data class PlaylistAdded(val playlist: PlaylistInformation) : PlayerBottomSheetState()
     data class PlaylistNotAdded(val playlist: PlaylistInformation) : PlayerBottomSheetState()
+    object NewPlaylist : PlayerBottomSheetState()
 }

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
+
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,6 +20,7 @@ import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.ActivitySongPageBinding
+import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment
 import com.example.playlistmaker.player.presentation.PlayerActivityInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
@@ -121,6 +125,10 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             viewModel.addCollection()
         }
 
+        binding.createButton.setOnClickListener {
+            viewModel.handleNewPlaylistTap()
+        }
+
 
         //BOTTOM SHEET
         val bottomSheetContainer = binding.bottomSheet
@@ -193,13 +201,19 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         viewModel.likeState.observe(this, Observer {
             renderLikeState(it)
         })
-
+        binding.navGraphPlayer.visibility = View.GONE
         renderState()
     }
 
     override fun onBackPressed() {
-        viewModel.resetPlayer()
-        super.onBackPressed()
+        if (binding.navGraphPlayer.visibility == View.GONE) {
+            viewModel.resetPlayer()
+            super.onBackPressed()
+            finish()
+        } else {
+            binding.navGraphPlayer.visibility = View.GONE
+            binding.mainLayout.alpha = 1f
+        }
     }
 
     private fun renderLikeState(isLiked: Boolean) {
@@ -251,9 +265,25 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 binding.mainLayout.alpha = 1f
                 showSuccess(state)
             }
-            else -> {
+            is PlayerBottomSheetState.NewPlaylist -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                binding.mainLayout.alpha = 0.5f
+                binding.mainLayout.alpha = 1f
+                binding.navGraphPlayer.visibility = View.VISIBLE
+
+//                val navController = findNavController(R.id.nav_graph_player)
+//                navController.navigate(R.id.createPlaylistFragment2)
+                val createFragment = CreatePlaylistFragment()
+                createFragment.returningClosure = {
+                    Log.d("CreatePlaylistFragment", "render: GoodBye from activity")
+                    binding.navGraphPlayer.visibility = View.GONE
+                    binding.mainLayout.alpha = 1f
+//                    viewModel.initializePlayer()
+                }
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.nav_graph_player, createFragment)
+                    .commit()
+
             }
         }
     }

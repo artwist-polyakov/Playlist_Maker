@@ -10,7 +10,6 @@ import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformationToTrackMapper
-import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
@@ -160,5 +159,9 @@ class PlayerViewModel (
                 }
             }
         }
+    }
+
+    fun handleNewPlaylistTap() {
+        _bottomSheetState.postValue(PlayerBottomSheetState.NewPlaylist)
     }
 }

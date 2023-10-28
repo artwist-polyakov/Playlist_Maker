@@ -32,6 +32,7 @@ class CreatePlaylistFragment: Fragment() {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
+    var returningClosure: (() -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -92,7 +93,6 @@ class CreatePlaylistFragment: Fragment() {
 
     // MARK :- Private
     private fun render(state: CreatePlaylistScreenState) {
-        Log.d("CreatePlaylistFragment", "render: $state")
         when (state) {
             is CreatePlaylistScreenState.ReadyToSave -> {
                 binding.button.isEnabled = true
@@ -104,15 +104,25 @@ class CreatePlaylistFragment: Fragment() {
                 showExitConfirmation()
             }
             is CreatePlaylistScreenState.GoodBye -> {
-                findNavController().popBackStack()
+                goBack()
+//                findNavController().popBackStack()
             }
             is CreatePlaylistScreenState.BasicState -> {
                 Log.d("CreatePlaylistFragment", "render: BasicState")
             }
             is CreatePlaylistScreenState.SuccessState -> {
                 showSuccess(state.name)
-                findNavController().popBackStack()
+                goBack()
             }
+        }
+    }
+
+    private fun goBack() {
+        if (parentFragment != null) {
+            findNavController().popBackStack()
+        } else {
+            Log.d("CreatePlaylistFragment", "render: GoodBye")
+            returningClosure?.invoke()
         }
     }
 

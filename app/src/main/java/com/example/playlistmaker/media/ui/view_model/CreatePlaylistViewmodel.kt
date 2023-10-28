@@ -1,8 +1,6 @@
 package com.example.playlistmaker.media.ui.view_model
 
 import android.net.Uri
-import android.util.Log
-import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,16 +22,6 @@ class CreatePlaylistViewmodel (
 
     private val _state = MutableLiveData<CreatePlaylistScreenState>()
     val state: LiveData<CreatePlaylistScreenState> get() = _state
-
-    init {
-        viewModelScope.launch{
-            playlistsDb
-                .giveMeAllPlaylists()
-                .collect {
-                    Log.d("CreatePlaylistViewmodel", "init: $it")
-                }
-        }
-    }
 
     fun handleInteraction(interaction: CreatePlaylistScreenInteraction) {
         when (interaction) {
