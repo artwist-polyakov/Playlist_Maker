@@ -5,13 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -102,6 +101,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         binding = ActivitySongPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel.giveCurrentTrack()?.let{
