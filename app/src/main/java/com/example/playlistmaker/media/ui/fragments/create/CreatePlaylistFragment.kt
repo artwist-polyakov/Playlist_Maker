@@ -28,7 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CreatePlaylistFragment: Fragment() {
+class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
@@ -183,5 +183,11 @@ class CreatePlaylistFragment: Fragment() {
         textView.setTextColor(textColor)
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackbar.show()
+    }
+
+    override fun emulateBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            viewModel.handleExit()
+        }
     }
 }
