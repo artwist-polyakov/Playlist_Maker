@@ -8,7 +8,14 @@
     android:orientation="vertical"
     tools:context=".player.ui.activity.PlayerActivity">
 
+    <View
+        android:id="@+id/backgroundDimView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorPrimary">
@@ -272,7 +279,7 @@
         android:paddingHorizontal="13dp"
         android:paddingTop="42dp"
         app:behavior_hideable="true"
-        android:background="?attr/colorPrimary"
+        android:background="@drawable/bottom_sheet_background"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
         
         <TextView

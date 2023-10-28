@@ -203,12 +203,15 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         when(state) {
             is PlayerBottomSheetState.Hidden -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                binding.mainLayout.alpha = 1f
             }
             is PlayerBottomSheetState.Shown -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                binding.mainLayout.alpha = 0.5f
             }
             else -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                binding.mainLayout.alpha = 0.5f
             }
         }
     }
