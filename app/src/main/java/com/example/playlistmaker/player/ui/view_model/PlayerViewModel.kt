@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.common.domain.db.TracksDbInteractor
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
@@ -20,6 +21,7 @@ class PlayerViewModel (
     private val trackStorageInteractor: TrackStorageInteractor,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val dbInteractor: TracksDbInteractor,
+    private val playlistsInteractor: PlaylistsDbInteractor
 ) : ViewModel(), MediaPlayerCallbackInterface {
 
     companion object {
