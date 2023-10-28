@@ -30,11 +30,11 @@ class PlaylistsDbRepositoryImpl (
                 playlists.map(tracksDbConvertor::map)
             }
 
-    override suspend fun addTrackToPlaylist(playlistId: String, track: Track) {
+    override suspend fun addTrackToPlaylist(playlistId: String, track: Track): Boolean {
         if (!appDatabase.trackDao().isTrackExist(track.trackId)) {
             appDatabase.trackDao().insertTrack(tracksDbConvertor.map(track, false))
         }
-        appDatabase.playlistDao().insertTrackPlaylistTrackReference(playlistsDbConvertor.map(playlistId, track.trackId))
+        return appDatabase.playlistDao().addTrackToPlaylist(playlistsDbConvertor.map(playlistId, track.trackId))
     }
 
 }

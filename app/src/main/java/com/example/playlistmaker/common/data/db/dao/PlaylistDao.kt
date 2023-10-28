@@ -38,14 +38,16 @@ interface PlaylistDao {
     suspend fun isTrackInPlaylist(playlistId: String, trackId: Long): Boolean
 
     @Transaction
-    suspend fun addTrackToPlaylist(playlistTrackReference: PlaylistTrackReference) {
+    suspend fun addTrackToPlaylist(playlistTrackReference: PlaylistTrackReference): Boolean {
         if (!isTrackInPlaylist(
                 playlistTrackReference.playlistId,
                 playlistTrackReference.trackId)
         ) {
             incrementTracksCount(playlistTrackReference.playlistId.toString())
             insertTrackPlaylistTrackReference(playlistTrackReference)
-
+            return true
+        } else {
+            return false
         }
     }
 

@@ -13,8 +13,8 @@ class PlaylistsDbInteractorImpl(
         return repository.getPlaylistTracks(playlistId)
     }
 
-    override suspend fun addTrackToPlaylist(playlistId: String, track: Track) {
-        repository.addTrackToPlaylist(playlistId, track)
+    override suspend fun addTrackToPlaylist(playlistId: String, track: Track): Boolean {
+        return repository.addTrackToPlaylist(playlistId, track)
     }
 
     override fun giveMeAllPlaylists(): Flow<List<PlaylistInformation>> {

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistsDbInteractor {
     fun giveMeTracksFromPlaylist(playlistId: String): Flow<List<Track>>
-    suspend fun addTrackToPlaylist(playlistId: String, track: Track)
+    suspend fun addTrackToPlaylist(playlistId: String, track: Track): Boolean
     fun giveMeAllPlaylists(): Flow<List<PlaylistInformation>>
     suspend fun addPlaylist(playlist: PlaylistInformation)
 }
