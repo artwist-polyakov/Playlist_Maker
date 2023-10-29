@@ -24,17 +24,8 @@ class PlayerBottomSheetViewHolder(parent: ViewGroup,
     fun bind(playlist: PlaylistInformation) {
         title.text = playlist.name
 
-        // Создаем объект Locale для русского языка
-        val locale = Locale("ru")
-        // Получаем конфигурацию из ресурсов
-        val configuration = Configuration(itemView.context.resources.configuration)
-        // Устанавливаем локаль в конфигурацию
-        configuration.setLocale(locale)
-        // Создаем контекст с новой конфигурацией
-        val localeContext = itemView.context.createConfigurationContext(configuration)
-
         // Получаем ресурсы из контекста с установленной локалью и используем их для получения строки
-        quantity.text = localeContext.resources.getQuantityString(
+        quantity.text = itemView.context.applicationContext.resources.getQuantityString(
             R.plurals.tracks,
             playlist.tracksCount,
             playlist.tracksCount

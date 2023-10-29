@@ -21,7 +21,7 @@ class PlaylistViewHolder(parent: ViewGroup,
 
     fun bind(playlist: PlaylistInformation) {
         title.text = playlist.name
-        quantity.text = itemView.context.resources.getQuantityString(
+        quantity.text = itemView.context.applicationContext.resources.getQuantityString(
             R.plurals.tracks,
             playlist.tracksCount,
             playlist.tracksCount
