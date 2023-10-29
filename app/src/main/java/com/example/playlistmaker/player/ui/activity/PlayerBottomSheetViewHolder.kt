@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import java.util.Locale
 
 class PlayerBottomSheetViewHolder(parent: ViewGroup,
                                   private val clickListener: PlayerBottomSheetAdapter.PlaylistClickListener,
@@ -21,11 +23,23 @@ class PlayerBottomSheetViewHolder(parent: ViewGroup,
 
     fun bind(playlist: PlaylistInformation) {
         title.text = playlist.name
-        quantity.text = itemView.context.resources.getQuantityString(
+
+        // Создаем объект Locale для русского языка
+        val locale = Locale("ru")
+        // Получаем конфигурацию из ресурсов
+        val configuration = Configuration(itemView.context.resources.configuration)
+        // Устанавливаем локаль в конфигурацию
+        configuration.setLocale(locale)
+        // Создаем контекст с новой конфигурацией
+        val localeContext = itemView.context.createConfigurationContext(configuration)
+
+        // Получаем ресурсы из контекста с установленной локалью и используем их для получения строки
+        quantity.text = localeContext.resources.getQuantityString(
             R.plurals.tracks,
             playlist.tracksCount,
             playlist.tracksCount
         )
+
         if (playlist.image != null) {
             image.setImageURI(Uri.parse(playlist.image.toString()))
         } else {
