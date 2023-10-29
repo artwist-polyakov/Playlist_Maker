@@ -20,6 +20,4 @@ class App  : Application() {
         val themeDelegate: ThemeDelegate by inject()
         themeDelegate.updateTheme()
     }
-
-
 }
