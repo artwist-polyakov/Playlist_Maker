@@ -16,7 +16,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        teperTyRusskiy()
+        tyRusskiy()
 
         startKoin {
             androidContext(this@App)
@@ -27,7 +27,7 @@ class App : Application() {
         themeDelegate.updateTheme()
     }
 
-    private fun teperTyRusskiy() {
+    private fun tyRusskiy() {
         val locale = Locale("ru")
         Locale.setDefault(locale)
         val config: Configuration = baseContext.resources.configuration
