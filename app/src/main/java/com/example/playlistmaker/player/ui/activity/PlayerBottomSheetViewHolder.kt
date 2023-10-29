@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.activity
 
-import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import java.util.Locale
 
 class PlayerBottomSheetViewHolder(parent: ViewGroup,
                                   private val clickListener: PlayerBottomSheetAdapter.PlaylistClickListener,
@@ -24,7 +22,6 @@ class PlayerBottomSheetViewHolder(parent: ViewGroup,
     fun bind(playlist: PlaylistInformation) {
         title.text = playlist.name
 
-        // Получаем ресурсы из контекста с установленной локалью и используем их для получения строки
         quantity.text = itemView.context.applicationContext.resources.getQuantityString(
             R.plurals.tracks,
             playlist.tracksCount,

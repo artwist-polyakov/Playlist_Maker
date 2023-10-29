@@ -11,15 +11,12 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import java.util.Locale
 
-
-
-
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        tyTeperRusskiy()
+        teperTyRusskiy()
 
         startKoin {
             androidContext(this@App)
@@ -30,7 +27,7 @@ class App : Application() {
         themeDelegate.updateTheme()
     }
 
-    private fun tyTeperRusskiy() {
+    private fun teperTyRusskiy() {
         val locale = Locale("ru")
         Locale.setDefault(locale)
         val config: Configuration = baseContext.resources.configuration
