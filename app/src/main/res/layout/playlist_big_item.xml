@@ -26,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
+
     </androidx.cardview.widget.CardView>
 
         <TextView
@@ -44,7 +45,6 @@
             android:id="@+id/trackQuantity"
             android:layout_width="match_parent"
             android:layout_height="16dp"
-            android:layout_marginTop="4dp"
             android:fontFamily="@font/ys_display_regular"
             android:textSize="12sp"
             android:textColor="?attr/colorOnPrimary"
