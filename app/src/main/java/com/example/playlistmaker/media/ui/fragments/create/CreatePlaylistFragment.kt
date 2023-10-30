@@ -65,7 +65,9 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
             val data = CreatePlaylistData.Title(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }
+
         binding.descriptionField.addTextChangedListener {
+            binding.textInputLayout2.boxStrokeColor = getFieldColorAttr(it.toString().isNullOrEmpty())
             val data = CreatePlaylistData.Description(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }
@@ -188,5 +190,16 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.handleExit()
         }
+    }
+
+    private fun getFieldColorAttr(isEmpty: Boolean): Int {
+        val colorRes = if (isEmpty) {
+            Log.d("CreatePlaylistFragment", "getFieldColorAttr: selector")
+            R.color.box_stroke_color
+        } else {
+            Log.d("CreatePlaylistFragment", "getFieldColorAttr: blue")
+            R.color.main_screen_background_color
+        }
+        return ContextCompat.getColor(requireContext(), colorRes)
     }
 }
