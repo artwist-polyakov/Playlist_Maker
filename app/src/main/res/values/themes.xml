@@ -14,6 +14,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <item name="colorOnBackground">@color/grey_color</item>
+        <item name="colorContainer">@color/border_color_text_field</item>
 <!--        <item name="android:background">?attr/colorPrimary</item>-->
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
 <!--        <item name="android:checked">false</item>-->

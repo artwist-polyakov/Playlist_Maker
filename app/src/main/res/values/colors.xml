@@ -22,4 +22,6 @@
     <color name="switch_thumb_tint_night">#3772E7</color>
     <color name="switch_track_tint_night">#3772E7</color>
     <color name="like_color">#F56B6C</color>
+    <color name="border_color_text_field">#AEAFB4</color>
+    <color name="dark_border_color_text_field">#FFFFFF</color>
 </resources>
