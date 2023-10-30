@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="colorOnBackground">@color/dark_text_color</item>
 <!--        <item name="android:background">?attr/colorPrimary</item>-->
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="android:checked">true</item>
