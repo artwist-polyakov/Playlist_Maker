@@ -44,7 +44,6 @@ class ImagesRepositoryImpl (
             Log.d("ImagesRepositoryImpl", "Папка не существует")
             return
         }
-        // print contents of folder
         filePath.listFiles()?.forEach {
             Log.d("ImagesRepositoryImpl", "Удаляем файл ${it.absolutePath}")
         }

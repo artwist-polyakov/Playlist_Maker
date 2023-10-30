@@ -141,15 +141,12 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 // newState — новое состояние BottomSheet
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        // загружаем рекламный баннер
                         Log.d("PlayerActivity", "STATE_EXPANDED")
                     }
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        // останавливаем трейлер
                         viewModel.hideCollection()
                     }
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        // возобновляем трейлер
                         viewModel.hideCollection()
                     }
                     else -> {
@@ -248,7 +245,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     }
 
     private fun renderBottomSheetState(state: PlayerBottomSheetState) {
-        Log.d("PlayerActivity", "renderBottomSheetState: $state")
         when(state) {
             is PlayerBottomSheetState.Hidden -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -257,7 +253,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             is PlayerBottomSheetState.Shown -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                 binding.mainLayout.alpha = 0.5f
-                Log.d("PlayerActivity", "renderBottomSheetState: ${state.playlists}")
                 adapter.updatePlaylists(state.playlists)
             }
             is PlayerBottomSheetState.PlaylistAdded -> {
@@ -279,7 +274,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 //                navController.navigate(R.id.createPlaylistFragment2)
                 val createFragment = CreatePlaylistFragment()
                 createFragment.returningClosure = {
-                    Log.d("CreatePlaylistFragment", "render: GoodBye from activity")
                     binding.navGraphPlayer.visibility = View.GONE
                     binding.mainLayout.alpha = 1f
 //                    viewModel.initializePlayer()

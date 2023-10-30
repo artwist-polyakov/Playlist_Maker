@@ -121,7 +121,6 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
         if (parentFragment != null) {
             findNavController().popBackStack()
         } else {
-            Log.d("CreatePlaylistFragment", "render: GoodBye")
             returningClosure?.invoke()
         }
     }
