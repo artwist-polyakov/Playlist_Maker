@@ -105,16 +105,20 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="17dp"
         android:textAllCaps="false"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="16sp"
         android:text="Создать"
         android:textColor="@color/white"
-        android:backgroundTint="@color/button_ripple_selector"
+        app:backgroundTint="@color/button_ripple_selector"
+        app:cornerRadius="8dp"
+        app:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
