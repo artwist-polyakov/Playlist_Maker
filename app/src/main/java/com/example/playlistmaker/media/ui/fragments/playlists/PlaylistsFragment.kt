@@ -43,7 +43,7 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        clearScreen()
         onPlaylistClickDebounce = debounce<PlaylistInformation>(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
@@ -94,5 +94,11 @@ class PlaylistsFragment : Fragment() {
         binding.problemsImage.visibility = View.GONE
         binding.searchPlaceholderText.visibility = View.GONE
         binding.recyclerView.visibility = View.VISIBLE
+    }
+
+    private fun clearScreen() {
+        binding.problemsImage.visibility = View.GONE
+        binding.searchPlaceholderText.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
     }
 }

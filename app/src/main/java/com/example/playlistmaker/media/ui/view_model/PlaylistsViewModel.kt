@@ -17,7 +17,7 @@ class PlaylistsViewModel(
     val state: LiveData<PlaylistsScreenState> get() = _state
 
     init {
-        _state.postValue(PlaylistsScreenState.Empty)
+//        _state.postValue(PlaylistsScreenState.Empty)
         fillData()
     }
 
