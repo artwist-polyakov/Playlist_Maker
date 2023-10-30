@@ -261,8 +261,6 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 showSuccess(state)
             }
             is PlayerBottomSheetState.PlaylistNotAdded -> {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                binding.mainLayout.alpha = 1f
                 showSuccess(state)
             }
             is PlayerBottomSheetState.NewPlaylist -> {
