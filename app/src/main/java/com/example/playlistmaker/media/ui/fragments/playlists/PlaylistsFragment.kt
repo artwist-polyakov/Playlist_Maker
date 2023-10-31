@@ -107,4 +107,9 @@ class PlaylistsFragment : Fragment() {
         binding.searchPlaceholderText.visibility = View.GONE
         binding.recyclerView.visibility = View.GONE
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
