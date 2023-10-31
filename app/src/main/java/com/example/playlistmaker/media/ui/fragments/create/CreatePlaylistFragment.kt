@@ -16,6 +16,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -98,9 +99,9 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
 
         binding.descriptionField.addTextChangedListener {
             Log.d("ColorOfLayout","box_stroke_color_blue ${binding.textInputLayout2.boxStrokeColor}")
-            binding.textInputLayout2.setBoxStrokeColorStateList(getFieldColorStateList(it.toString().isNullOrEmpty()))
-            binding.textInputLayout2.setHelperTextColor(getFieldColorStateList(it.toString().isNullOrEmpty()))
+
             binding.textInputLayout2.hintTextColor = getFieldColorStateList(it.toString().isNullOrEmpty())
+            binding.textInputLayout2.setBoxStrokeColorStateList(getFieldColorStateList(it.toString().isNullOrEmpty()))
             Log.d("ColorOfLayout","box_stroke_color_blue ${binding.textInputLayout2.boxStrokeColor}")
             val data = CreatePlaylistData.Description(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
