@@ -217,19 +217,17 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     }
 
     private fun showSuccess(state: PlayerBottomSheetState) {
-        var text: String = ""
-        when (state) {
+        val text = when (state) {
             is PlayerBottomSheetState.PlaylistAdded -> {
-                text = getString(R.string.track_added, state.playlist.name)
+                getString(R.string.track_added, state.playlist.name)
             }
 
             is PlayerBottomSheetState.PlaylistNotAdded -> {
-                text = getString(R.string.track_already_in, state.playlist.name)
+                getString(R.string.track_already_in, state.playlist.name)
             }
 
-            else -> {
-                text = ""
-            }
+            else -> ""
+
         }
         val typedValue = TypedValue()
         theme.resolveAttribute(
