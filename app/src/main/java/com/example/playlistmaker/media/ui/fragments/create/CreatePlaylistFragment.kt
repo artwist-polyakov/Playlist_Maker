@@ -120,9 +120,9 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
             render(it)
         }
 
-        binding.imageView.setOnClickListener(View.OnClickListener {
+        binding.imageView.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        })
+        }
     }
 
     override fun onDestroyView() {
