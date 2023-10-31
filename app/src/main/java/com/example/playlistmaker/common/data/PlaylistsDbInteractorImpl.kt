@@ -7,7 +7,7 @@ import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistsDbInteractorImpl(
-    val repository: PlaylistsDbRepository
+    private val repository: PlaylistsDbRepository
 ): PlaylistsDbInteractor {
     override fun giveMeTracksFromPlaylist(playlistId: String): Flow<List<Track>> {
         return repository.getPlaylistTracks(playlistId)
