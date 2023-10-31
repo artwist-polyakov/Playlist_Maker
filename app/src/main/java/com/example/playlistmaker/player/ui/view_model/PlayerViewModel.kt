@@ -103,9 +103,9 @@ class PlayerViewModel(
         mediaPlayerInteractor.destroyPlayer()
     }
 
-    fun restoreState(): Pair<PlayerState?, TrackDurationTime> {
+    fun restoreState(): Triple<PlayerState?, TrackDurationTime, PlayerBottomSheetState?> {
         restoreLikeState()
-        return Pair(lastState, lastTimerState)
+        return Triple(lastState, lastTimerState, bottomSheetState.value)
     }
 
     private fun restoreLikeState() {

@@ -167,6 +167,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                     viewModel.initializePlayer()
                 }
             }
+            renderBottomSheetState(it.third?: PlayerBottomSheetState.Hidden)
         }
     }
 
