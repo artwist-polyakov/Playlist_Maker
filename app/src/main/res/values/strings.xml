@@ -59,4 +59,6 @@
     <string name="create_playlist_button_title">Создать</string>
     <string name="text_input_layout_title_field_name">Название*</string>
     <string name="text_input_layout_description_field_name">Описание</string>
+    <string name="go_back_descriptior">Уйти назад</string>
+    <string name="placeholder_descriptior">Плейсхолдер изображения</string>
 </resources>

@@ -29,7 +29,7 @@
                 android:layout_marginStart="16dp"
                 android:src="@drawable/arrow_back_icon"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="Уйти назад" />
+                android:contentDescription="@string/go_back_descriptior" />
 
             <TextView
                 android:id="@+id/textView"
@@ -61,7 +61,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:srcCompat="@drawable/ic_new_playlist"
-            android:contentDescription="Плейсхолдер изображения" />
+            android:contentDescription="@string/placeholder_descriptior" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout1"
