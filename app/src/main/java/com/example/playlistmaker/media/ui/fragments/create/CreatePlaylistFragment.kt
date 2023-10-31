@@ -1,6 +1,7 @@
 package com.example.playlistmaker.media.ui.fragments.create
 
 import android.app.AlertDialog
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -60,7 +61,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
                     Log.d("PhotoPicker", "No media selected")
                 }
             }
-        binding.textInputLayout1.setOnFocusChangeListener { _, hasFocus ->
+        binding.titleField.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 Log.d("ColorOfLayout","box_stroke_color_blue")
                 AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
@@ -96,7 +97,9 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
         }
 
         binding.descriptionField.addTextChangedListener {
-            binding.textInputLayout2.boxStrokeColor = getFieldColorAttr(it.toString().isNullOrEmpty())
+            Log.d("ColorOfLayout","box_stroke_color_blue ${binding.textInputLayout2.boxStrokeColor}")
+            binding.textInputLayout2.setBoxStrokeColorStateList(getFieldColorStateList(it.toString().isNullOrEmpty()))
+            binding.textInputLayout2.hintTextColor = getFieldColorStateList(it.toString().isNullOrEmpty())
             Log.d("ColorOfLayout","box_stroke_color_blue ${binding.textInputLayout2.boxStrokeColor}")
             val data = CreatePlaylistData.Description(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
@@ -222,12 +225,13 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
         }
     }
 
-    private fun getFieldColorAttr(isEmpty: Boolean): Int {
+    private fun getFieldColorStateList(isEmpty: Boolean): ColorStateList {
+        Log.d("ColorOfLayout","getFieldColorAttr - $isEmpty")
         val colorRes = if (isEmpty) {
             R.color.box_stroke_color
         } else {
             R.color.box_stroke_color_blue
         }
-        return ContextCompat.getColor(requireContext(), colorRes)
+        return AppCompatResources.getColorStateList(requireContext(), colorRes)
     }
 }
