@@ -37,4 +37,7 @@ class TracksDbConvertor {
             previewUrl = trackEntity.previewUrl
         )
     }
+
+    fun map(tracks: List<TrackEntity>): List<Track> = tracks.map(this::map)
+
 }

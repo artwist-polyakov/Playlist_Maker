@@ -15,18 +15,15 @@ class TracksDbRepositoryImpl (
     private val tracksDbConvertor: TracksDbConvertor,
 ): TracksDbRepository {
     override fun allLikedTracks(): Flow<List<Track>> =
-        appDatabase.trackDao().getLikedTracks().distinctUntilChanged().map { likedTracks ->
-            likedTracks.map ( tracksDbConvertor::map )
-        }
+        appDatabase
+            .trackDao()
+            .getLikedTracks()
+            .distinctUntilChanged()
+            .map( tracksDbConvertor::map )
 
+    override suspend fun isTrackLiked(trackId: Long): Boolean =
+        appDatabase.trackDao().isTrackLiked(trackId).first() ?: false
 
-    override suspend fun isTrackLiked(trackId: Long): Boolean  {
-         return appDatabase.trackDao().isTrackLiked(trackId).first() ?: false
-    }
-
-    override suspend fun switchTrackLikeStatus(track: TrackEntity): Boolean  {
-        return appDatabase.trackDao().switchLike(track)
-    }
-
-
+    override suspend fun switchTrackLikeStatus(track: TrackEntity): Boolean  =
+         appDatabase.trackDao().switchLike(track)
 }

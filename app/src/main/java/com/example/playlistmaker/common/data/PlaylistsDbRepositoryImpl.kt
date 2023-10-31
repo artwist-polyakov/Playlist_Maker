@@ -16,25 +16,36 @@ class PlaylistsDbRepositoryImpl (
     private val tracksDbConvertor: TracksDbConvertor
 ): PlaylistsDbRepository {
     override fun allPlaylists(): Flow<List<PlaylistInformation>> =
-        appDatabase.playlistDao().getPlaylists().distinctUntilChanged().map { playlists ->
-            playlists.map(playlistsDbConvertor::map)
-        }
+        appDatabase
+            .playlistDao()
+            .getPlaylists()
+            .distinctUntilChanged()
+            .map(playlistsDbConvertor::map)
 
     override suspend fun addPlaylist(playlist: PlaylistInformation) {
-        appDatabase.playlistDao().insertPlaylist(playlistsDbConvertor.map(playlist))
+        appDatabase
+            .playlistDao()
+            .insertPlaylist(playlistsDbConvertor.map(playlist))
     }
 
     override fun getPlaylistTracks(playlistId: String): Flow<List<Track>> =
-        appDatabase.playlistDao().getTracksFromPlaylist(playlistId).distinctUntilChanged()
-            .map { playlists ->
-                playlists.map(tracksDbConvertor::map)
-            }
+        appDatabase
+            .playlistDao()
+            .getTracksFromPlaylist(playlistId)
+            .distinctUntilChanged()
+            .map(tracksDbConvertor::map)
 
     override suspend fun addTrackToPlaylist(playlistId: String, track: Track): Boolean {
-        if (!appDatabase.trackDao().isTrackExist(track.trackId)) {
-            appDatabase.trackDao().insertTrack(tracksDbConvertor.map(track, false))
+        if (!appDatabase
+            .trackDao()
+            .isTrackExist(track.trackId)
+            ) {
+            appDatabase
+                .trackDao()
+                .insertTrack(tracksDbConvertor.map(track, false))
         }
-        return appDatabase.playlistDao().addTrackToPlaylist(playlistsDbConvertor.map(playlistId, track.trackId))
+        return appDatabase
+            .playlistDao()
+            .addTrackToPlaylist(playlistsDbConvertor.map(playlistId, track.trackId))
     }
-
 }

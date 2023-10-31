@@ -16,6 +16,10 @@ class PlaylistsDbConverter {
         )
     }
 
+    fun map(playlists: List<PlaylistEntity>): List<PlaylistInformation> {
+        return playlists.map(this::map)
+    }
+
     fun map(playlistTrackReference: PlaylistTrackReference): Pair<String, Long> {
         return Pair(playlistTrackReference.playlistId, playlistTrackReference.trackId)
     }
