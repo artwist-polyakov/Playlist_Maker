@@ -99,7 +99,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlaylistInterface {
 
         /*
         Способ 2 — установки цвета бордера (он часто будет дёргать контекст и ресурсы,
-        но смотрится красиво
+        но короткий  смотрится красиво
          */
         binding.descriptionField.addTextChangedListener {
             val colorValues = getFieldColorStateList(it.toString().isNullOrEmpty())

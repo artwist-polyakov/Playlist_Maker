@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 
-class PlaylistViewHolder(parent: ViewGroup,
-                         private val clickListener: PlaylistsAdapter.PlaylistClickListener,
-): RecyclerView.ViewHolder(
+class PlaylistViewHolder(
+    parent: ViewGroup,
+    private val clickListener: PlaylistsAdapter.PlaylistClickListener,
+) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
-        .inflate(R.layout.playlist_big_item, parent, false)) {
+        .inflate(R.layout.playlist_big_item, parent, false)
+) {
     private val title: TextView = itemView.findViewById(R.id.trackTitle)
     private val quantity: TextView = itemView.findViewById(R.id.trackQuantity)
     private val image: ImageView = itemView.findViewById(R.id.imageView)
