@@ -64,27 +64,20 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
             }
         binding.titleField.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                Log.d("ColorOfLayout","box_stroke_color_blue")
                 AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
                     ?.let { binding.textInputLayout1.setBoxStrokeColorStateList(it) }
             } else {
                 when (binding.titleField.text.isNullOrEmpty()) {
                     true -> {
-                        Log.d("ColorOfLayout","box_stroke_color")
                         AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color)
                             ?.let {
-                                binding.textInputLayout1.setBoxStrokeColorStateList(
-                                    it
-                                )
+                                binding.textInputLayout1.setBoxStrokeColorStateList(it)
                             }
                         }
                     false -> {
-                        Log.d("ColorOfLayout","box_stroke_color_blue")
                         AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
                             ?.let {
-                                binding.textInputLayout1.setBoxStrokeColorStateList(
-                                    it
-                                )
+                                binding.textInputLayout1.setBoxStrokeColorStateList(it)
                             }
                     }
                 }
@@ -98,11 +91,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
         }
 
         binding.descriptionField.addTextChangedListener {
-            Log.d("ColorOfLayout","box_stroke_color_blue ${binding.textInputLayout2.boxStrokeColor}")
-
-            binding.textInputLayout2.hintTextColor = getFieldColorStateList(it.toString().isNullOrEmpty())
             binding.textInputLayout2.setBoxStrokeColorStateList(getFieldColorStateList(it.toString().isNullOrEmpty()))
-            Log.d("ColorOfLayout","box_stroke_color_blue ${binding.textInputLayout2.boxStrokeColor}")
             val data = CreatePlaylistData.Description(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }

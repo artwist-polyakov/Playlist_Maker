@@ -98,6 +98,7 @@
             android:layout_marginHorizontal="16dp"
             android:paddingBottom="32dp"
             app:hintEnabled="true"
+            app:hintTextColor="@color/box_stroke_color"
             android:hint="Описание"
             android:textColorHint="?attr/colorOnPrimary"
             app:hintAnimationEnabled="true"
