@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 
-class PlayerViewModel (
+class PlayerViewModel(
     private val trackStorageInteractor: TrackStorageInteractor,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val dbInteractor: TracksDbInteractor,
@@ -80,9 +80,9 @@ class PlayerViewModel (
 
     fun initializePlayer() {
         mediaPlayerInteractor.setCallback(this)
-         giveCurrentTrack()?.let {
-             mediaPlayerInteractor.initialize(it)
-         }
+        giveCurrentTrack()?.let {
+            mediaPlayerInteractor.initialize(it)
+        }
     }
 
     fun giveCurrentTrack(): TrackInformation? {
@@ -111,14 +111,14 @@ class PlayerViewModel (
     private fun restoreLikeState() {
         viewModelScope.launch {
             initializedTrack?.trackId?.let {
-                val value  = dbInteractor.isTrackLiked(it)
+                val value = dbInteractor.isTrackLiked(it)
                 _likeState.postValue(value)
             }
         }
     }
 
     fun makeItPause() {
-        if(_playerState.value == PlayerState.Play) {
+        if (_playerState.value == PlayerState.Play) {
             mediaPlayerInteractor.playPauseSwitcher()
             timerJob?.cancel()
         }

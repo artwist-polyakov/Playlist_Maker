@@ -1,6 +1,6 @@
 package com.example.playlistmaker.settings.domain
 
-class NavigationInteractor (private val navigator: ExternalNavigator) {
+class NavigationInteractor(private val navigator: ExternalNavigator) {
 
     fun navigateToSupport(email: EmailData) {
         navigator.openEmail(email)

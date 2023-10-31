@@ -115,98 +115,15 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             finish()
         }
         // PLAYER INTERFACE
-        binding.playButton.setOnClickListener {
-            viewModel.playPause()
-        }
-
-        binding.likeButton.setOnClickListener {
-            viewModel.likeTrack()
-        }
-
-        binding.addToCollection.setOnClickListener {
-            viewModel.addCollection()
-        }
-
-        binding.createButton.setOnClickListener {
-            viewModel.handleNewPlaylistTap()
-        }
+        setupPlayerInterface()
 
 
         //BOTTOM SHEET
-        val bottomSheetContainer = binding.bottomSheet
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-        bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                // newState — новое состояние BottomSheet
-                when (newState) {
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        Log.d("PlayerActivity", "STATE_EXPANDED")
-                    }
-
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
-                        viewModel.hideCollection()
-                    }
-
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        viewModel.hideCollection()
-                    }
-
-                    else -> {
-                        // Остальные состояния не обрабатываем
-                    }
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-        })
-
-        onPlaylistClickDebounce = debounce<PlaylistInformation>(
-            CLICK_DEBOUNCE_DELAY,
-            lifecycleScope,
-            false
-        ) { playlist ->
-            viewModel.handlePlaylistTap(playlist)
-        }
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView = binding.recyclerView
-        recyclerView.adapter = adapter
+        setupBottomSheet()
 
         //BINDING
-        viewModel.timerState.observe(this, Observer {
-            binding.time.text = it.toString()
-        })
+        setupObservers()
 
-        viewModel.bottomSheetState.observe(this, Observer {
-            renderBottomSheetState(it)
-        })
-
-        viewModel.giveCurrentTrack()?.let { showTrackInfo(it) }
-        viewModel.playerState.observe(this, Observer { state ->
-            when (state) {
-                PlayerState.Loading -> {
-                    binding.playButton.isEnabled = false
-                }
-
-                PlayerState.Ready -> {
-                    binding.playButton.isEnabled = true
-                }
-
-                PlayerState.Play -> {
-                    binding.playButton.setImageResource(R.drawable.pause_button)
-                }
-
-                PlayerState.Pause -> {
-                    binding.playButton.setImageResource(R.drawable.play_button)
-                }
-            }
-        })
-
-        viewModel.likeState.observe(this, Observer {
-            renderLikeState(it)
-        })
         binding.navGraphPlayer.visibility = View.GONE
         renderState()
     }
@@ -340,6 +257,102 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         textView.setTextColor(textColor)
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackbar.show()
+    }
+
+    private fun setupBottomSheet() {
+        val bottomSheetContainer = binding.bottomSheet
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // newState — новое состояние BottomSheet
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        Log.d("PlayerActivity", "STATE_EXPANDED")
+                    }
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        viewModel.hideCollection()
+                    }
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        viewModel.hideCollection()
+                    }
+
+                    else -> {
+                        // Остальные состояния не обрабатываем
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        onPlaylistClickDebounce = debounce<PlaylistInformation>(
+            CLICK_DEBOUNCE_DELAY,
+            lifecycleScope,
+            false
+        ) { playlist ->
+            viewModel.handlePlaylistTap(playlist)
+        }
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+    }
+
+    private fun setupObservers() {
+        viewModel.timerState.observe(this, Observer {
+            binding.time.text = it.toString()
+        })
+
+        viewModel.bottomSheetState.observe(this, Observer {
+            renderBottomSheetState(it)
+        })
+
+        viewModel.giveCurrentTrack()?.let { showTrackInfo(it) }
+        viewModel.playerState.observe(this, Observer { state ->
+            when (state) {
+                PlayerState.Loading -> {
+                    binding.playButton.isEnabled = false
+                }
+
+                PlayerState.Ready -> {
+                    binding.playButton.isEnabled = true
+                }
+
+                PlayerState.Play -> {
+                    binding.playButton.setImageResource(R.drawable.pause_button)
+                }
+
+                PlayerState.Pause -> {
+                    binding.playButton.setImageResource(R.drawable.play_button)
+                }
+            }
+        })
+
+        viewModel.likeState.observe(this, Observer {
+            renderLikeState(it)
+        })
+    }
+
+    private fun setupPlayerInterface() {
+        binding.playButton.setOnClickListener {
+            viewModel.playPause()
+        }
+
+        binding.likeButton.setOnClickListener {
+            viewModel.likeTrack()
+        }
+
+        binding.addToCollection.setOnClickListener {
+            viewModel.addCollection()
+        }
+
+        binding.createButton.setOnClickListener {
+            viewModel.handleNewPlaylistTap()
+        }
     }
 
     companion object {

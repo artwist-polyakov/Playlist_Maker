@@ -52,7 +52,7 @@ class CreatePlaylistViewmodel(
         }
     }
 
-    fun saveData() {
+    private fun saveData() {
         var imageLink: String?
         currentInputData.image?.let {
             imageLink = imagesInteractor.saveImage(it)
