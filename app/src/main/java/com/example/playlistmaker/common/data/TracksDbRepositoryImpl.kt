@@ -10,20 +10,20 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class TracksDbRepositoryImpl (
+class TracksDbRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val tracksDbConvertor: TracksDbConvertor,
-): TracksDbRepository {
+) : TracksDbRepository {
     override fun allLikedTracks(): Flow<List<Track>> =
         appDatabase
             .trackDao()
             .getLikedTracks()
             .distinctUntilChanged()
-            .map( tracksDbConvertor::map )
+            .map(tracksDbConvertor::map)
 
     override suspend fun isTrackLiked(trackId: Long): Boolean =
         appDatabase.trackDao().isTrackLiked(trackId).first() ?: false
 
-    override suspend fun switchTrackLikeStatus(track: TrackEntity): Boolean  =
-         appDatabase.trackDao().switchLike(track)
+    override suspend fun switchTrackLikeStatus(track: TrackEntity): Boolean =
+        appDatabase.trackDao().switchLike(track)
 }

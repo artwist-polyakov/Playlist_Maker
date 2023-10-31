@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-class PlaylistsDbRepositoryImpl (
+class PlaylistsDbRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val playlistsDbConvertor: PlaylistsDbConverter,
     private val tracksDbConvertor: TracksDbConvertor
-): PlaylistsDbRepository {
+) : PlaylistsDbRepository {
     override fun allPlaylists(): Flow<List<PlaylistInformation>> =
         appDatabase
             .playlistDao()
@@ -37,9 +37,9 @@ class PlaylistsDbRepositoryImpl (
 
     override suspend fun addTrackToPlaylist(playlistId: String, track: Track): Boolean {
         if (!appDatabase
-            .trackDao()
-            .isTrackExist(track.trackId)
-            ) {
+                .trackDao()
+                .isTrackExist(track.trackId)
+        ) {
             appDatabase
                 .trackDao()
                 .insertTrack(tracksDbConvertor.map(track, false))

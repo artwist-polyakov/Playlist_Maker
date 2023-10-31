@@ -26,12 +26,14 @@ interface PlaylistDao {
     fun getPlaylists(): Flow<List<PlaylistEntity>>
 
     @Transaction
-    @Query("""
+    @Query(
+        """
         SELECT music_table.* FROM music_table
         JOIN playlist_track_reference ON music_table.id = playlist_track_reference.trackId
         WHERE playlist_track_reference.playlistId = :playlistId
         ORDER BY playlist_track_reference.lastUpdate DESC
-    """)
+    """
+    )
     fun getTracksFromPlaylist(playlistId: String): Flow<List<TrackEntity>>
 
     @Query("SELECT COUNT(*) > 0 FROM playlist_track_reference WHERE playlistId = :playlistId AND trackId = :trackId")
@@ -41,7 +43,8 @@ interface PlaylistDao {
     suspend fun addTrackToPlaylist(playlistTrackReference: PlaylistTrackReference): Boolean {
         return if (!isTrackInPlaylist(
                 playlistTrackReference.playlistId,
-                playlistTrackReference.trackId)
+                playlistTrackReference.trackId
+            )
         ) {
             incrementTracksCount(playlistTrackReference.playlistId.toString())
             insertTrackPlaylistTrackReference(playlistTrackReference)

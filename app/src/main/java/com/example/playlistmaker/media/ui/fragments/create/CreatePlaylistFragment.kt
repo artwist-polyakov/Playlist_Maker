@@ -31,14 +31,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.google.android.material.R as MaterialR
 
 
-class CreatePlaylistFragment: Fragment(), CreatePlaylistInterface {
+class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
     var returningClosure: (() -> Unit)? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentCreatePlaylistBinding.inflate(inflater, container, false)
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         return binding.root
@@ -69,19 +71,29 @@ class CreatePlaylistFragment: Fragment(), CreatePlaylistInterface {
          */
         binding.titleField.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
+                AppCompatResources.getColorStateList(
+                    requireContext(),
+                    R.color.box_stroke_color_blue
+                )
                     ?.let { binding.textInputLayout1.setBoxStrokeColorStateList(it) }
             } else {
                 when (binding.titleField.text.isNullOrEmpty()) {
                     true -> {
-                        AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color)
+                        AppCompatResources.getColorStateList(
+                            requireContext(),
+                            R.color.box_stroke_color
+                        )
                             ?.let {
                                 binding.textInputLayout1.setBoxStrokeColorStateList(it)
                                 binding.textInputLayout1.defaultHintTextColor = it
                             }
-                        }
+                    }
+
                     false -> {
-                        AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
+                        AppCompatResources.getColorStateList(
+                            requireContext(),
+                            R.color.box_stroke_color_blue
+                        )
                             ?.let {
                                 binding.textInputLayout1.setBoxStrokeColorStateList(it)
                                 binding.textInputLayout1.defaultHintTextColor = it
@@ -136,19 +148,24 @@ class CreatePlaylistFragment: Fragment(), CreatePlaylistInterface {
             is CreatePlaylistScreenState.ReadyToSave -> {
                 binding.button.isEnabled = true
             }
+
             is CreatePlaylistScreenState.NotReadyToSave -> {
                 binding.button.isEnabled = false
             }
+
             is CreatePlaylistScreenState.ShowPopupConfirmation -> {
                 showExitConfirmation()
             }
+
             is CreatePlaylistScreenState.GoodBye -> {
                 goBack()
 //                findNavController().popBackStack()
             }
+
             is CreatePlaylistScreenState.BasicState -> {
                 Log.d("CreatePlaylistFragment", "render: BasicState")
             }
+
             is CreatePlaylistScreenState.SuccessState -> {
                 showSuccess(state.name)
                 goBack()
@@ -201,8 +218,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlaylistInterface {
         val textColor = typedValue.data
 
         requireContext()
-            .theme.
-            resolveAttribute(
+            .theme.resolveAttribute(
                 MaterialR.attr.colorOnPrimary,
                 typedValue,
                 true
@@ -230,7 +246,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlaylistInterface {
     }
 
     private fun getFieldColorStateList(isEmpty: Boolean): ColorStateList {
-        Log.d("ColorOfLayout","getFieldColorAttr - $isEmpty")
+        Log.d("ColorOfLayout", "getFieldColorAttr - $isEmpty")
         val colorRes = if (isEmpty) {
             R.color.box_stroke_color
         } else {

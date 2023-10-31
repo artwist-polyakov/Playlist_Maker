@@ -2,14 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.playlistmaker">
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:allowBackup="true"
         android:name="com.example.playlistmaker.common.presentation.App"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -19,14 +20,14 @@
         tools:targetApi="31">
         <activity
             android:name=".player.ui.activity.PlayerActivity"
+            android:exported="false"
             android:label="PlayerActivity"
             android:parentActivityName=".search.ui.fragments.SearchFragment"
-            android:exported="false"
-            android:theme="@style/Theme.PlaylistMaker"/>
+            android:theme="@style/Theme.PlaylistMaker" />
         <activity
             android:name=".root.ui.RootActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

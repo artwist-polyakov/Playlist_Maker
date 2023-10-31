@@ -36,6 +36,7 @@ class SearchFragment : Fragment() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 10L
     }
+
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val adapter = TracksAdapter(
@@ -48,8 +49,10 @@ class SearchFragment : Fragment() {
 
     private lateinit var textWatcher: TextWatcher
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,12 +60,17 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.searchResultsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.searchResultsRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.searchResultsRecyclerView.adapter = adapter
         binding.searchHistoryRecyclerView.adapter = adapter
         setupListeners()
 
-        onTrackClickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
             viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
             val intent = Intent(context, PlayerActivity::class.java)
 //                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
@@ -84,6 +92,7 @@ class SearchFragment : Fragment() {
                     makeClearButtonVisible()
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -157,13 +166,16 @@ class SearchFragment : Fragment() {
 
     private fun makeClearButtonInvisible() {
         binding.clearIcon.visibility = View.GONE
-        binding.searchEditText.background = requireContext().getDrawable(R.drawable.rounded_edittext)
+        binding.searchEditText.background =
+            requireContext().getDrawable(R.drawable.rounded_edittext)
     }
 
     private fun makeClearButtonVisible() {
         binding.clearIcon.visibility = View.VISIBLE
-        binding.clearIcon.background = requireContext().getDrawable(R.drawable.right_rounded_edittext)
-        binding.searchEditText.background = requireContext().getDrawable(R.drawable.left_rounded_edittext)
+        binding.clearIcon.background =
+            requireContext().getDrawable(R.drawable.right_rounded_edittext)
+        binding.searchEditText.background =
+            requireContext().getDrawable(R.drawable.left_rounded_edittext)
     }
 
     private fun showProblemsLayout(responseState: ResponseState) {
@@ -178,6 +190,7 @@ class SearchFragment : Fragment() {
                 binding.problemsImage.setImageResource(R.drawable.no_internet)
                 binding.refreshButton.visibility = View.VISIBLE
             }
+
             ResponseState.NOTHING_FOUND.name -> {
                 binding.searchResultsRecyclerView.visibility = View.GONE
                 binding.loadingIndicator.visibility = View.GONE
@@ -216,7 +229,6 @@ class SearchFragment : Fragment() {
             viewModel.onClearButtonPressed()
         }
     }
-
 
 
 }

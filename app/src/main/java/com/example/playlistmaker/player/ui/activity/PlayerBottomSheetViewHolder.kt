@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 
-class PlayerBottomSheetViewHolder(parent: ViewGroup,
-                                  private val clickListener: PlayerBottomSheetAdapter.PlaylistClickListener,
-): RecyclerView.ViewHolder(
+class PlayerBottomSheetViewHolder(
+    parent: ViewGroup,
+    private val clickListener: PlayerBottomSheetAdapter.PlaylistClickListener,
+) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
-        .inflate(R.layout.playlist_little_item, parent, false)) {
+        .inflate(R.layout.playlist_little_item, parent, false)
+) {
     private val title: TextView = itemView.findViewById(R.id.playlist_title)
     private val quantity: TextView = itemView.findViewById(R.id.tracks_quantity)
     private val image: ImageView = itemView.findViewById(R.id.playlist_cover)

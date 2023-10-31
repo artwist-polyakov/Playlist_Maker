@@ -37,11 +37,12 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
     private var onPlaylistClickDebounce: (PlaylistInformation) -> Unit = {}
 
-    private val adapter: PlayerBottomSheetAdapter = PlayerBottomSheetAdapter(object : PlayerBottomSheetAdapter.PlaylistClickListener {
-        override fun onTrackClick(playlist: PlaylistInformation) {
-            onPlaylistClickDebounce(playlist)
-        }
-    })
+    private val adapter: PlayerBottomSheetAdapter =
+        PlayerBottomSheetAdapter(object : PlayerBottomSheetAdapter.PlaylistClickListener {
+            override fun onTrackClick(playlist: PlaylistInformation) {
+                onPlaylistClickDebounce(playlist)
+            }
+        })
     private lateinit var recyclerView: RecyclerView
 
     override fun showTrackInfo(trackInfo: TrackInformation) {
@@ -105,7 +106,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         binding = ActivitySongPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.giveCurrentTrack()?.let{
+        viewModel.giveCurrentTrack()?.let {
             currentTrack = it
         }
         // BACK BUTTON
@@ -136,19 +137,23 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 // newState — новое состояние BottomSheet
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         Log.d("PlayerActivity", "STATE_EXPANDED")
                     }
+
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         viewModel.hideCollection()
                     }
+
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         viewModel.hideCollection()
                     }
+
                     else -> {
                         // Остальные состояния не обрабатываем
                     }
@@ -180,16 +185,19 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
 
         viewModel.giveCurrentTrack()?.let { showTrackInfo(it) }
         viewModel.playerState.observe(this, Observer { state ->
-            when(state) {
+            when (state) {
                 PlayerState.Loading -> {
                     binding.playButton.isEnabled = false
                 }
+
                 PlayerState.Ready -> {
                     binding.playButton.isEnabled = true
                 }
+
                 PlayerState.Play -> {
                     binding.playButton.setImageResource(R.drawable.pause_button)
                 }
+
                 PlayerState.Pause -> {
                     binding.playButton.setImageResource(R.drawable.play_button)
                 }
@@ -226,15 +234,16 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         }
     }
 
-    private fun renderState(){
-        viewModel.restoreState().let{
+    private fun renderState() {
+        viewModel.restoreState().let {
             binding.time.text = it.second.toString()
-            when(it.first) {
+            when (it.first) {
                 PlayerState.Play -> showPlayState()
                 PlayerState.Pause -> showPauseState()
                 PlayerState.Loading -> {
                     showPreparationState()
                 }
+
                 PlayerState.Ready -> showReadyState()
                 else -> {
                     showPreparationState()
@@ -245,24 +254,28 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
     }
 
     private fun renderBottomSheetState(state: PlayerBottomSheetState) {
-        when(state) {
+        when (state) {
             is PlayerBottomSheetState.Hidden -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 binding.mainLayout.alpha = 1f
             }
+
             is PlayerBottomSheetState.Shown -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                 binding.mainLayout.alpha = 0.5f
                 adapter.updatePlaylists(state.playlists)
             }
+
             is PlayerBottomSheetState.PlaylistAdded -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 binding.mainLayout.alpha = 1f
                 showSuccess(state)
             }
+
             is PlayerBottomSheetState.PlaylistNotAdded -> {
                 showSuccess(state)
             }
+
             is PlayerBottomSheetState.NewPlaylist -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 binding.mainLayout.alpha = 1f
@@ -291,9 +304,11 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             is PlayerBottomSheetState.PlaylistAdded -> {
                 text = getString(R.string.track_added, state.playlist.name)
             }
-            is PlayerBottomSheetState.PlaylistNotAdded  -> {
+
+            is PlayerBottomSheetState.PlaylistNotAdded -> {
                 text = getString(R.string.track_already_in, state.playlist.name)
             }
+
             else -> {
                 text = ""
             }
@@ -320,7 +335,8 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
         )
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(backgroundColor)
-        val textView = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        val textView =
+            snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
         textView.setTextColor(textColor)
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackbar.show()

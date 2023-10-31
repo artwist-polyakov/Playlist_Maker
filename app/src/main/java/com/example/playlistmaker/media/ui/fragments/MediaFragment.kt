@@ -14,7 +14,11 @@ class MediaFragment : Fragment() {
     private lateinit var binding: FragmentMediaBinding
     private lateinit var tabsMediator: TabLayoutMediator
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentMediaBinding.inflate(inflater, container, false)
         binding.viewPager.adapter = MediaViewPagerAdapter(this)
         return binding.root

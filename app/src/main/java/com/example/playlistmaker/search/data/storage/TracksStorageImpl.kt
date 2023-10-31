@@ -7,13 +7,15 @@ import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class TracksStorageImpl (
+class TracksStorageImpl(
     context: Context
-): TracksStorage {
+) : TracksStorage {
     private companion object {
         const val HISTORY_KEY = "HISTORY_KEY"
     }
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("local_storage", Context.MODE_PRIVATE)
+
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("local_storage", Context.MODE_PRIVATE)
     private val trackSet: LinkedHashSet<TrackDto> = LinkedHashSet()
 
     private fun addTrack(track: TrackDto) {
@@ -51,7 +53,7 @@ class TracksStorageImpl (
         } else {
             result = ArrayList(trackSet)
 
-            }
+        }
         return result
     }
 

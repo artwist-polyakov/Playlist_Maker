@@ -13,10 +13,10 @@ import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreen
 import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenState
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewmodel (
+class CreatePlaylistViewmodel(
     private val imagesInteractor: ImagesRepositoryInteractor,
     private val playlistsDb: PlaylistsDbInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private var currentInputData = PlaylistInputData()
 
@@ -33,9 +33,14 @@ class CreatePlaylistViewmodel (
 
     private fun handleDataFilled(content: CreatePlaylistData) {
         when (content) {
-            is CreatePlaylistData.Title -> currentInputData = currentInputData.copy(title = content.value)
-            is CreatePlaylistData.Description -> currentInputData = currentInputData.copy(description = content.value)
-            is CreatePlaylistData.ImageUri -> currentInputData = currentInputData.copy(image = content.value)
+            is CreatePlaylistData.Title -> currentInputData =
+                currentInputData.copy(title = content.value)
+
+            is CreatePlaylistData.Description -> currentInputData =
+                currentInputData.copy(description = content.value)
+
+            is CreatePlaylistData.ImageUri -> currentInputData =
+                currentInputData.copy(image = content.value)
         }
         checkButtonState()
     }

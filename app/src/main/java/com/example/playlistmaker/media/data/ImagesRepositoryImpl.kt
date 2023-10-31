@@ -13,14 +13,14 @@ import java.io.IOException
 import java.lang.Error
 import java.util.UUID
 
-class ImagesRepositoryImpl (
+class ImagesRepositoryImpl(
     private val context: Context,
     private val album: String
-): ImagesRepository {
+) : ImagesRepository {
 
     override fun saveImage(uri: Uri): String {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
-        if (!filePath.exists()){
+        if (!filePath.exists()) {
             filePath.mkdirs()
         }
         val uuid = UUID.randomUUID().toString()
@@ -42,7 +42,7 @@ class ImagesRepositoryImpl (
 
     override fun clearAllImages() {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
-        if (!filePath.exists()){
+        if (!filePath.exists()) {
             Log.d("ImagesRepositoryImpl", "Папка не существует")
             return
         }

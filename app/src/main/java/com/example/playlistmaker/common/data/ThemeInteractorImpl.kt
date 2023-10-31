@@ -4,7 +4,7 @@ import com.example.playlistmaker.common.domain.ThemeInteractor
 import com.example.playlistmaker.common.domain.ThemeSettings
 import com.example.playlistmaker.settings.data.SettingsRepository
 
-class ThemeInteractorImpl(private val settingsRepository: SettingsRepository): ThemeInteractor {
+class ThemeInteractorImpl(private val settingsRepository: SettingsRepository) : ThemeInteractor {
     override fun getTemeSettings(): ThemeSettings {
         return settingsRepository.getThemeSettings()
     }

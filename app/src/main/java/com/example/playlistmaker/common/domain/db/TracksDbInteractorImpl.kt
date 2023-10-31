@@ -5,10 +5,10 @@ import com.example.playlistmaker.common.data.db.entity.TrackEntity
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
-class TracksDbInteractorImpl (
+class TracksDbInteractorImpl(
     private val tracksDbRepository: TracksDbRepository,
     private val tracksDbConvertor: TracksDbConvertor
-): TracksDbInteractor {
+) : TracksDbInteractor {
     override fun allLikedTracks(): Flow<List<Track>> {
         return tracksDbRepository.allLikedTracks()
     }

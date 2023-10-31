@@ -13,4 +13,4 @@ data class PlaylistInformation(
     val image: Uri?,
     val tracksCount: Int,
     val creationDate: Long
-): Parcelable {}
+) : Parcelable {}

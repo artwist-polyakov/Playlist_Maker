@@ -18,7 +18,7 @@ import com.example.playlistmaker.common.data.db.entity.TrackEntity
         PlaylistTrackReference::class
     ]
 )
-abstract class AppDatabase : RoomDatabase(){
+abstract class AppDatabase : RoomDatabase() {
     abstract fun trackDao(): TrackDao
     abstract fun playlistDao(): PlaylistDao
 
@@ -26,7 +26,8 @@ abstract class AppDatabase : RoomDatabase(){
         val MIGRATION_10_11: Migration = object : Migration(10, 11) {
             override fun migrate(database: SupportSQLiteDatabase) {
 
-                database.execSQL("""
+                database.execSQL(
+                    """
         CREATE TABLE IF NOT EXISTS `playlists` (
             `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
             `name` TEXT NOT NULL, 
@@ -35,9 +36,11 @@ abstract class AppDatabase : RoomDatabase(){
             `tracksCount` INTEGER NOT NULL, 
             `creationDate` INTEGER NOT NULL
         )
-    """)
+    """
+                )
 
-                database.execSQL("""
+                database.execSQL(
+                    """
         CREATE TABLE IF NOT EXISTS `playlist_track_reference` (
             `playlistId` INTEGER NOT NULL, 
             `trackId` INTEGER NOT NULL, 
@@ -46,14 +49,16 @@ abstract class AppDatabase : RoomDatabase(){
             FOREIGN KEY(`playlistId`) REFERENCES `playlists`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE, 
             FOREIGN KEY(`trackId`) REFERENCES `music_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
         )
-    """)
+    """
+                )
             }
         }
 
 
         val MIGRATION_11_12: Migration = object : Migration(11, 12) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("""
+                database.execSQL(
+                    """
             CREATE TABLE IF NOT EXISTS `new_playlists` (
                 `id` TEXT NOT NULL, 
                 `name` TEXT NOT NULL, 
@@ -63,12 +68,15 @@ abstract class AppDatabase : RoomDatabase(){
                 `creationDate` INTEGER NOT NULL,
                 PRIMARY KEY(`id`)
             )
-        """)
+        """
+                )
 
-                database.execSQL("""
+                database.execSQL(
+                    """
             INSERT INTO `new_playlists` (`id`, `name`, `description`, `imageUri`, `tracksCount`, `creationDate`)
             SELECT `id`, `name`, `description`, `imageUri`, `tracksCount`, `creationDate` FROM `playlists`
-        """)
+        """
+                )
 
                 database.execSQL("DROP TABLE `playlists`")
 
@@ -79,7 +87,8 @@ abstract class AppDatabase : RoomDatabase(){
         val MIGRATION_12_13 = object : Migration(12, 13) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Создаем новую таблицу с обновленной схемой
-                database.execSQL("""
+                database.execSQL(
+                    """
             CREATE TABLE new_playlist_track_reference (
                 playlistId TEXT NOT NULL,
                 trackId INTEGER NOT NULL,
@@ -88,13 +97,16 @@ abstract class AppDatabase : RoomDatabase(){
                 FOREIGN KEY(playlistId) REFERENCES playlists(id) ON DELETE CASCADE,
                 FOREIGN KEY(trackId) REFERENCES music_table(id) ON DELETE CASCADE
             )
-        """)
+        """
+                )
 
                 // Копируем данные из старой таблицы в новую
-                database.execSQL("""
+                database.execSQL(
+                    """
             INSERT INTO new_playlist_track_reference (playlistId, trackId, lastUpdate)
             SELECT CAST(playlistId AS TEXT), trackId, lastUpdate FROM playlist_track_reference
-        """)
+        """
+                )
 
                 // Удаляем старую таблицу
                 database.execSQL("DROP TABLE playlist_track_reference")

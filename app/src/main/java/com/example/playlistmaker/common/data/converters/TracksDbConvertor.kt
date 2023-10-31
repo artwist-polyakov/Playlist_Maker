@@ -4,8 +4,8 @@ import com.example.playlistmaker.common.data.db.entity.TrackEntity
 import com.example.playlistmaker.search.domain.models.Track
 
 class TracksDbConvertor {
-    fun map (track: Track, isLiked: Boolean): TrackEntity {
-        return with (track) {
+    fun map(track: Track, isLiked: Boolean): TrackEntity {
+        return with(track) {
             TrackEntity(
                 id = trackId,
                 lastLikeUpdate = System.currentTimeMillis(),
@@ -25,7 +25,7 @@ class TracksDbConvertor {
     }
 
     fun map(trackEntity: TrackEntity): Track {
-        return with (trackEntity) {
+        return with(trackEntity) {
             Track(
                 trackId = id,
                 trackName = trackName,

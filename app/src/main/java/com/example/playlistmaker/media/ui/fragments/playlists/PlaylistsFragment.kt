@@ -21,22 +21,27 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
     private val viewModel: PlaylistsViewModel by viewModel()
+
     companion object {
         fun newInstance() = PlaylistsFragment()
         private const val CLICK_DEBOUNCE_DELAY = 10L
     }
+
     private var onPlaylistClickDebounce: (PlaylistInformation) -> Unit = {}
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
-    private val adapter: PlaylistsAdapter = PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
-        override fun onTrackClick(playlist: PlaylistInformation) {
-            onPlaylistClickDebounce(playlist)
-        }
-    })
+    private val adapter: PlaylistsAdapter =
+        PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
+            override fun onTrackClick(playlist: PlaylistInformation) {
+                onPlaylistClickDebounce(playlist)
+            }
+        })
     private lateinit var recyclerView: RecyclerView
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -69,6 +74,7 @@ class PlaylistsFragment : Fragment() {
             is PlaylistsScreenState.GoToPlaylist -> {
                 Log.d("PlaylistsFragment", "GoToPlaylist ${state.playlist}")
             }
+
             is PlaylistsScreenState.Content -> {
                 showPlaylists()
                 adapter.updatePlaylists(state.content)

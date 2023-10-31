@@ -4,9 +4,9 @@ import android.net.Uri
 import com.example.playlistmaker.media.domain.ImagesRepository
 import com.example.playlistmaker.media.domain.ImagesRepositoryInteractor
 
-class ImagesRepositoryInteractorImpl (
+class ImagesRepositoryInteractorImpl(
     val repository: ImagesRepository
-): ImagesRepositoryInteractor {
+) : ImagesRepositoryInteractor {
     override fun saveImage(uri: Uri): String {
         return repository.saveImage(uri)
     }

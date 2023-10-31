@@ -4,7 +4,7 @@ import android.net.Uri
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import java.util.UUID
 
-data class PlaylistInputData (
+data class PlaylistInputData(
     val title: String = "",
     val description: String = "",
     val image: Uri? = null

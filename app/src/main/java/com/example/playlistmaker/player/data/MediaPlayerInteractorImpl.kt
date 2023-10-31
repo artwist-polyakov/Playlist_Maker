@@ -6,10 +6,12 @@ import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.MediaPlayerInterface
 
-class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayerInterface): MediaPlayerInteractor {
+class MediaPlayerInteractorImpl(private val mediaPlayer: MediaPlayerInterface) :
+    MediaPlayerInteractor {
     override fun playPauseSwitcher() {
         mediaPlayer.playPauseSwitcher()
     }
+
     override fun destroyPlayer() {
         mediaPlayer.destroyPlayer()
     }

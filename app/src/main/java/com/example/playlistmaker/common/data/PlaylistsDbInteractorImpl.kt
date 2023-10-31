@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 class PlaylistsDbInteractorImpl(
     private val repository: PlaylistsDbRepository
-): PlaylistsDbInteractor {
+) : PlaylistsDbInteractor {
     override fun giveMeTracksFromPlaylist(playlistId: String): Flow<List<Track>> {
         return repository.getPlaylistTracks(playlistId)
     }

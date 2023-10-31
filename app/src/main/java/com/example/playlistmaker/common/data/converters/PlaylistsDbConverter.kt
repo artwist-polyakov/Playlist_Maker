@@ -30,7 +30,7 @@ class PlaylistsDbConverter {
             image = it.toString()
         }
 
-        return with (playlist ) {
+        return with(playlist) {
             PlaylistEntity(
                 id = id.toString(),
                 name = name,
@@ -48,7 +48,7 @@ class PlaylistsDbConverter {
             image = it.toUri()
         }
 
-        return with (playlist) {
+        return with(playlist) {
             PlaylistInformation(
                 id = UUID.fromString(id),
                 name = name,
