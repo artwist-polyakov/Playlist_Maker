@@ -1,5 +1,5 @@
 package com.example.playlistmaker.media.ui.fragments.create
 
-interface CreatePlylistInterface {
+interface CreatePlaylistInterface {
     fun emulateBackButton()
 }

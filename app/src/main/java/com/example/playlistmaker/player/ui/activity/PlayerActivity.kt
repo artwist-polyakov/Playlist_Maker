@@ -20,7 +20,7 @@ import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.ActivitySongPageBinding
 import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment
-import com.example.playlistmaker.media.ui.fragments.create.CreatePlylistInterface
+import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistInterface
 import com.example.playlistmaker.player.presentation.PlayerActivityInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
@@ -211,7 +211,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             viewModel.resetPlayer()
             super.onBackPressed()
             finish()
-        } else if (currentFragment != null && currentFragment is CreatePlylistInterface) {
+        } else if (currentFragment != null && currentFragment is CreatePlaylistInterface) {
             currentFragment.emulateBackButton()
         } else {
             super.onBackPressed()

@@ -31,7 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.google.android.material.R as MaterialR
 
 
-class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
+class CreatePlaylistFragment: Fragment(), CreatePlaylistInterface {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
