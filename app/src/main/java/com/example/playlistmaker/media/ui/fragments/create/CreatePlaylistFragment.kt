@@ -62,6 +62,11 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
                     Log.d("PhotoPicker", "No media selected")
                 }
             }
+
+        /*
+        Способ 1 — установки цвета бордера (он реже будет дёргать контекст и
+         ресурсы,но очень длинный)
+         */
         binding.titleField.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
@@ -72,12 +77,14 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
                         AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color)
                             ?.let {
                                 binding.textInputLayout1.setBoxStrokeColorStateList(it)
+                                binding.textInputLayout1.defaultHintTextColor = it
                             }
                         }
                     false -> {
                         AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
                             ?.let {
                                 binding.textInputLayout1.setBoxStrokeColorStateList(it)
+                                binding.textInputLayout1.defaultHintTextColor = it
                             }
                     }
                 }
@@ -90,8 +97,14 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }
 
+        /*
+        Способ 2 — установки цвета бордера (он часто будет дёргать контекст и ресурсы,
+        но смотрится красиво
+         */
         binding.descriptionField.addTextChangedListener {
-            binding.textInputLayout2.setBoxStrokeColorStateList(getFieldColorStateList(it.toString().isNullOrEmpty()))
+            val colorValues = getFieldColorStateList(it.toString().isNullOrEmpty())
+            binding.textInputLayout2.setBoxStrokeColorStateList(colorValues)
+            binding.textInputLayout2.defaultHintTextColor = colorValues
             val data = CreatePlaylistData.Description(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }
