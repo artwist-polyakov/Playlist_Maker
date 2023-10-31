@@ -16,7 +16,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -29,6 +28,7 @@ import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreen
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.google.android.material.R as MaterialR
 
 
 class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
@@ -166,7 +166,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
 
     private fun showExitConfirmation() {
         val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
+        requireContext().theme.resolveAttribute(MaterialR.attr.colorOnPrimary, typedValue, true)
         val colorOnPrimary = typedValue.data
 
         val likeColor = ContextCompat.getColor(requireContext(), R.color.like_color)
@@ -203,7 +203,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
         requireContext()
             .theme.
             resolveAttribute(
-                com.google.android.material.R.attr.colorOnPrimary,
+                MaterialR.attr.colorOnPrimary,
                 typedValue,
                 true
             )
@@ -217,7 +217,7 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
             )
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(backgroundColor)
-        val textView = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        val textView = snackbarView.findViewById<TextView>(MaterialR.id.snackbar_text)
         textView.setTextColor(textColor)
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackbar.show()
