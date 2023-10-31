@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -59,9 +60,37 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
                     Log.d("PhotoPicker", "No media selected")
                 }
             }
-
+        binding.textInputLayout1.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                Log.d("ColorOfLayout","box_stroke_color_blue")
+                AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
+                    ?.let { binding.textInputLayout1.setBoxStrokeColorStateList(it) }
+            } else {
+                when (binding.titleField.text.isNullOrEmpty()) {
+                    true -> {
+                        Log.d("ColorOfLayout","box_stroke_color")
+                        AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color)
+                            ?.let {
+                                binding.textInputLayout1.setBoxStrokeColorStateList(
+                                    it
+                                )
+                            }
+                        }
+                    false -> {
+                        Log.d("ColorOfLayout","box_stroke_color_blue")
+                        AppCompatResources.getColorStateList(requireContext(), R.color.box_stroke_color_blue)
+                            ?.let {
+                                binding.textInputLayout1.setBoxStrokeColorStateList(
+                                    it
+                                )
+                            }
+                    }
+                }
+            }
+        }
         binding.button.isEnabled = false
         binding.titleField.addTextChangedListener {
+
             val data = CreatePlaylistData.Title(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }
@@ -194,10 +223,8 @@ class CreatePlaylistFragment: Fragment(), CreatePlylistInterface {
 
     private fun getFieldColorAttr(isEmpty: Boolean): Int {
         val colorRes = if (isEmpty) {
-            Log.d("CreatePlaylistFragment", "getFieldColorAttr: selector")
             R.color.box_stroke_color
         } else {
-            Log.d("CreatePlaylistFragment", "getFieldColorAttr: blue")
             R.color.main_screen_background_color
         }
         return ContextCompat.getColor(requireContext(), colorRes)
