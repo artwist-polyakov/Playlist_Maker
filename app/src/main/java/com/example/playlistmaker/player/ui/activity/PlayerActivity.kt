@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.common.presentation.showCustomSnackbar
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.ActivitySongPageBinding
 import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment
@@ -26,6 +27,7 @@ import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -229,33 +231,8 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             else -> ""
 
         }
-        val typedValue = TypedValue()
-        theme.resolveAttribute(
-            androidx.transition.R.attr.colorPrimary,
-            typedValue,
-            true
-        )
-        val textColor = typedValue.data
 
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnPrimary,
-            typedValue,
-            true
-        )
-        val backgroundColor = typedValue.data
-
-        val snackbar = Snackbar.make(
-            binding.root,
-            text,
-            Snackbar.LENGTH_SHORT
-        )
-        val snackbarView = snackbar.view
-        snackbarView.setBackgroundColor(backgroundColor)
-        val textView =
-            snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-        textView.setTextColor(textColor)
-        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-        snackbar.show()
+        binding.root.showCustomSnackbar(text)
     }
 
     private fun setupBottomSheet() {

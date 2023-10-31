@@ -20,6 +20,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.showCustomSnackbar
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewmodel
 import com.example.playlistmaker.media.ui.view_model.models.CreatePlaylistData
@@ -205,38 +206,14 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     }
 
     private fun showSuccess(title: String) {
-
-        // Получение цветов из темы
-        val typedValue = TypedValue()
-        requireContext()
-            .theme
-            .resolveAttribute(
-                org.koin.android.R.attr.colorPrimary,
-                typedValue,
-                true
+        binding
+            .root
+            .showCustomSnackbar(
+                getString(
+                    R.string.playlist_created,
+                    title
+                )
             )
-        val textColor = typedValue.data
-
-        requireContext()
-            .theme.resolveAttribute(
-                MaterialR.attr.colorOnPrimary,
-                typedValue,
-                true
-            )
-        val backgroundColor = typedValue.data
-
-        val snackbar =
-            Snackbar.make(
-                binding.root,
-                getString(R.string.playlist_created, title),
-                Snackbar.LENGTH_SHORT
-            )
-        val snackbarView = snackbar.view
-        snackbarView.setBackgroundColor(backgroundColor)
-        val textView = snackbarView.findViewById<TextView>(MaterialR.id.snackbar_text)
-        textView.setTextColor(textColor)
-        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-        snackbar.show()
     }
 
     override fun emulateBackButton() {
