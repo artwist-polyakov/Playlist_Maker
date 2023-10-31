@@ -160,11 +160,17 @@
         <item name="android:layout_marginStart">20dp</item>
     </style>
 
+    <!--    MARK: - Playlist-->
+
     <style name="Widget.MyApp.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="shapeAppearance">@style/TextFieldAppearance</item>
         <item name="boxStrokeColor">@color/box_stroke_color</item>
         <item name="boxStrokeErrorColor">@color/like_color</item>
         <item name="boxStrokeWidth">1dp</item>
+        <item name="hintEnabled">true</item>
+        <item name="hintTextColor">@color/box_stroke_color</item>
+        <item name="android:textColorHint">?attr/colorOnPrimary</item>
+        <item name="hintAnimationEnabled">true</item>
     </style>
 
     <style name="TextFieldAppearance" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -172,7 +178,14 @@
         <item name="cornerSize">6dp</item>
     </style>
 
-    <!--    MARK: - Playlist-->
+    <style name="TextInputEditTextCustom" parent="Widget.MyApp.TextInputLayout">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColorHint">?attr/colorOnPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:imeActionLabel">Ввести</item>
+    </style>
 
     <style name="media_create_new_playlist_button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="fontFamily">@font/ys_display_medium</item>
