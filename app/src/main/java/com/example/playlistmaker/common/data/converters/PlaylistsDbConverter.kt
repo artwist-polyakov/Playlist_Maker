@@ -30,14 +30,16 @@ class PlaylistsDbConverter {
             image = it.toString()
         }
 
-        return PlaylistEntity(
-            id = playlist.id.toString(),
-            name = playlist.name,
-            description = playlist.description,
-            imageUri = image,
-            tracksCount = playlist.tracksCount,
-            creationDate = playlist.creationDate
-        )
+        return with (playlist ) {
+            PlaylistEntity(
+                id = id.toString(),
+                name = name,
+                description = description,
+                imageUri = image,
+                tracksCount = tracksCount,
+                creationDate = creationDate
+            )
+        }
     }
 
     fun map(playlist: PlaylistEntity): PlaylistInformation {
@@ -46,13 +48,15 @@ class PlaylistsDbConverter {
             image = it.toUri()
         }
 
-        return PlaylistInformation(
-            id = UUID.fromString(playlist.id),
-            name = playlist.name,
-            description = playlist.description,
-            image = image,
-            tracksCount = playlist.tracksCount,
-            creationDate = playlist.creationDate
-        )
+        return with (playlist) {
+            PlaylistInformation(
+                id = UUID.fromString(id),
+                name = name,
+                description = description,
+                image = image,
+                tracksCount = tracksCount,
+                creationDate = creationDate
+            )
+        }
     }
 }
