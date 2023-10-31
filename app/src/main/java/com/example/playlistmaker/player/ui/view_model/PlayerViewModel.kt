@@ -149,14 +149,12 @@ class PlayerViewModel(
 
     fun handlePlaylistTap(playlist: PlaylistInformation) {
         viewModelScope.launch {
-            initializedTrack?.let {
-                val track = TrackInformationToTrackMapper().invoke(it)
-                val result = playlistsInteractor.addTrackToPlaylist(playlist.id.toString(), track)
-                if (result) {
-                    _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistAdded(playlist))
-                } else {
-                    _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistNotAdded(playlist))
-                }
+            val track = TrackInformationToTrackMapper().invoke(initializedTrack)
+            val result = playlistsInteractor.addTrackToPlaylist(playlist.id.toString(), track)
+            if (result) {
+                _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistAdded(playlist))
+            } else {
+                _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistNotAdded(playlist))
             }
         }
     }
