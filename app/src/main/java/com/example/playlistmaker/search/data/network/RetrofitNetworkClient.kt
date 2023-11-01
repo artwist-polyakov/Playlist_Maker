@@ -10,9 +10,9 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient (private val context: Context)  : NetworkClient {
+class RetrofitNetworkClient(private val context: Context) : NetworkClient {
 
-    private val itunesBaseUrl =  "https://itunes.apple.com"
+    private val itunesBaseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
@@ -34,15 +34,17 @@ class RetrofitNetworkClient (private val context: Context)  : NetworkClient {
                 val response = iTunesService.search(dto.expression)
                 response.apply { resultCode = 200 }
             } catch (e: Throwable) {
-                Response().apply { resultCode = 500}
+                Response().apply { resultCode = 500 }
             }
         }
     }
 
     private fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true

@@ -1,19 +1,14 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_gravity="center_horizontal"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/problems_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <Button
             android:id="@+id/create_button"
             android:layout_marginTop="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             style="@style/search_activity_refresh_button"
             android:text="@string/new_playlist"
             android:visibility="visible" />
@@ -23,16 +18,30 @@
             android:layout_width="@dimen/media_state_image_bounds"
             android:layout_marginTop="46dp"
             android:layout_height="@dimen/media_state_image_bounds"
+            app:layout_constraintTop_toBottomOf="@id/create_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/nothing_found" />
 
         <TextView
             android:id="@+id/search_placeholder_text"
             style="@style/search_error_text"
             android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/problems_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_playlists" />
-    </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/create_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

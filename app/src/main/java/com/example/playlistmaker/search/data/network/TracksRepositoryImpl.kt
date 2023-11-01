@@ -8,7 +8,7 @@ import com.example.playlistmaker.search.domain.api.TracksRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TracksRepositoryImpl (
+class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
     private val localStorage: TracksStorage,
 ) : TracksRepository {
@@ -19,6 +19,7 @@ class TracksRepositoryImpl (
             -1 -> {
                 emit(Resource.Error("Проверьте подключение к интернету"))
             }
+
             200 -> {
 //                val history = localStorage.takeHistory(true)
                 with(response as TracksSearchResponse) {
@@ -39,6 +40,7 @@ class TracksRepositoryImpl (
                     emit(Resource.Success(data))
                 }
             }
+
             else -> {
                 emit(Resource.Error("Ошибка сервера"))
             }

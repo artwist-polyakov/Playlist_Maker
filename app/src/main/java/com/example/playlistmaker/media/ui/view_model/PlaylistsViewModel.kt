@@ -1,18 +1,61 @@
 package com.example.playlistmaker.media.ui.view_model
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.search.domain.models.Track
+import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenInteraction
+import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
+import kotlinx.coroutines.launch
 
-class PlaylistsViewModel : ViewModel() {
-    val state = MutableLiveData<PlaylistState>(PlaylistState.NOTHING_TO_SHOW)
+class PlaylistsViewModel(
+    private val playlistsDb: PlaylistsDbInteractor,
+) : ViewModel() {
+    private val _state = MutableLiveData<PlaylistsScreenState>()
+    val state: LiveData<PlaylistsScreenState> get() = _state
+
+    init {
+//        _state.postValue(PlaylistsScreenState.Empty)
+        fillData()
+    }
+
+    private fun fillData() {
+        viewModelScope.launch {
+            playlistsDb
+                .giveMeAllPlaylists()
+                .collect { playlists ->
+                    processResult(playlists)
+                }
+        }
+    }
+
+    private fun processResult(playlists: List<PlaylistInformation>) {
+        if (playlists.isEmpty()) {
+            _state.postValue(PlaylistsScreenState.Empty)
+        } else {
+            _state.postValue(PlaylistsScreenState.Content(playlists))
+        }
+    }
+
+    fun handleInteraction(interaction: PlaylistsScreenInteraction) {
+        when (interaction) {
+
+            is PlaylistsScreenInteraction.CreateButtonPressed -> {
+                _state.postValue(PlaylistsScreenState.NewPlaylistInitiated)
+            }
+
+            is PlaylistsScreenInteraction.PlaylistClicked -> {
+                _state.postValue(PlaylistsScreenState.GoToPlaylist(interaction.content))
+            }
+
+            is PlaylistsScreenInteraction.newPlaylistButtonPressed -> {
+                _state.postValue(PlaylistsScreenState.NewPlaylistInitiated)
+            }
+        }
+    }
+
+
 }
 
-sealed class PlaylistState {
-    object NOTHING_TO_SHOW : PlaylistState()
-    object LOADING : PlaylistState()
-    data class ERROR(val message: String) : PlaylistState()
-    data class PLAYLISTS(val playlists: List<Playlist>) : PlaylistState()
-}
-
-class Playlist(val name: String, val tracks: List<Track>)

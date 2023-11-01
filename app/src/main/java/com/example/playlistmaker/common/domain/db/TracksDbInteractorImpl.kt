@@ -4,12 +4,11 @@ import com.example.playlistmaker.common.data.converters.TracksDbConvertor
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
-class TracksDbInteractorImpl (
+class TracksDbInteractorImpl(
     private val tracksDbRepository: TracksDbRepository,
     private val tracksDbConvertor: TracksDbConvertor
-): TracksDbInteractor {
+) : TracksDbInteractor {
     override fun allLikedTracks(): Flow<List<Track>> {
         return tracksDbRepository.allLikedTracks()
     }
@@ -23,9 +22,7 @@ class TracksDbInteractorImpl (
     }
 
     private suspend fun prepereTrackToLike(track: Track): TrackEntity {
-        val likeStatus = isTrackLiked(track.trackId) ?: false
+        val likeStatus = isTrackLiked(track.trackId)
         return tracksDbConvertor.map(track, likeStatus)
     }
-
-
 }

@@ -9,10 +9,12 @@ import com.example.playlistmaker.R
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.search.domain.models.Track
 
-class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder>() {
+class TracksAdapter(private val clickListener: TrackClickListener) :
+    RecyclerView.Adapter<TrackViewHolder>() {
 
     var tracks = ArrayList<Track>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder = TrackViewHolder(parent, clickListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder =
+        TrackViewHolder(parent, clickListener)
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks.get(position))
@@ -28,10 +30,11 @@ class TracksAdapter(private val clickListener: TrackClickListener) : RecyclerVie
 class TrackViewHolder(
     parent: ViewGroup,
     private val clickListener: TracksAdapter.TrackClickListener,
-    ) :
+) :
     RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
-            .inflate(R.layout.search_result_item, parent, false)) {
+            .inflate(R.layout.search_result_item, parent, false)
+    ) {
 
     var cover: ImageView = itemView.findViewById(R.id.track_cover)
     var title: TextView = itemView.findViewById(R.id.track_name)

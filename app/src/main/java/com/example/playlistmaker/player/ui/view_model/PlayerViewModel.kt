@@ -4,27 +4,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.common.domain.db.TracksDbInteractor
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformationToTrackMapper
+import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 
-class PlayerViewModel (
+class PlayerViewModel(
     private val trackStorageInteractor: TrackStorageInteractor,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val dbInteractor: TracksDbInteractor,
+    private val playlistsInteractor: PlaylistsDbInteractor
 ) : ViewModel(), MediaPlayerCallbackInterface {
 
     companion object {
         const val UPDATE_FREQUENCY = 250L
     }
+
+    private var _newPlaylistFragmentBackup: CreatePlaylistFragment? = null
 
     private var timerJob: Job? = null
 
@@ -35,6 +42,9 @@ class PlayerViewModel (
 
     private val _likeState = MutableLiveData<Boolean>()
     val likeState: LiveData<Boolean> get() = _likeState
+
+    private val _bottomSheetState = MutableLiveData<PlayerBottomSheetState>()
+    val bottomSheetState: LiveData<PlayerBottomSheetState> get() = _bottomSheetState
 
     private val _timerState = MutableLiveData<TrackDurationTime>()
     val timerState: LiveData<TrackDurationTime> get() = _timerState
@@ -73,9 +83,9 @@ class PlayerViewModel (
 
     fun initializePlayer() {
         mediaPlayerInteractor.setCallback(this)
-         giveCurrentTrack()?.let {
-             mediaPlayerInteractor.initialize(it)
-         }
+        giveCurrentTrack()?.let {
+            mediaPlayerInteractor.initialize(it)
+        }
     }
 
     fun giveCurrentTrack(): TrackInformation? {
@@ -96,22 +106,22 @@ class PlayerViewModel (
         mediaPlayerInteractor.destroyPlayer()
     }
 
-    fun restoreState(): Pair<PlayerState?, TrackDurationTime> {
+    fun restoreState(): Triple<PlayerState?, TrackDurationTime, PlayerBottomSheetState?> {
         restoreLikeState()
-        return Pair(lastState, lastTimerState)
+        return Triple(lastState, lastTimerState, bottomSheetState.value)
     }
 
     private fun restoreLikeState() {
         viewModelScope.launch {
             initializedTrack?.trackId?.let {
-                val value  = dbInteractor.isTrackLiked(it)
+                val value = dbInteractor.isTrackLiked(it)
                 _likeState.postValue(value)
             }
         }
     }
 
     fun makeItPause() {
-        if(_playerState.value == PlayerState.Play) {
+        if (_playerState.value == PlayerState.Play) {
             mediaPlayerInteractor.playPauseSwitcher()
             timerJob?.cancel()
         }
@@ -124,5 +134,47 @@ class PlayerViewModel (
                 _timerState.postValue(TrackDurationTime(mediaPlayerInteractor.getCurrentPosition()))
             }
         }
+    }
+
+    fun addCollection() {
+        viewModelScope.launch {
+            playlistsInteractor.giveMeAllPlaylists()
+                .take(1)
+                .collect {
+                    _bottomSheetState.postValue(PlayerBottomSheetState.Shown(it))
+                }
+        }
+    }
+
+    fun hideCollection() {
+        _bottomSheetState.postValue(PlayerBottomSheetState.Hidden)
+    }
+
+    fun handlePlaylistTap(playlist: PlaylistInformation) {
+        viewModelScope.launch {
+            val track = TrackInformationToTrackMapper().invoke(initializedTrack)
+            val result = playlistsInteractor.addTrackToPlaylist(playlist.id.toString(), track)
+            if (result) {
+                _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistAdded(playlist))
+            } else {
+                _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistNotAdded(playlist))
+            }
+        }
+    }
+
+    fun savePlaylistFragment(playlistFragment: CreatePlaylistFragment) {
+        _newPlaylistFragmentBackup = playlistFragment
+    }
+
+    fun restorePlaylistFragment(): CreatePlaylistFragment? {
+        return _newPlaylistFragmentBackup
+    }
+
+    fun clearPlaylistFragment() {
+        _newPlaylistFragmentBackup = null
+    }
+
+    fun handleNewPlaylistTap() {
+        _bottomSheetState.postValue(PlayerBottomSheetState.NewPlaylist)
     }
 }

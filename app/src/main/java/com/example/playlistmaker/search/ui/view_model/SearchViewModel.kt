@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
-class SearchViewModel(private val application: Application,
-                      private val tracksInteractor: TracksInteractor,
-                      private val tracksStorage: TracksStorage
+class SearchViewModel(
+    private val application: Application,
+    private val tracksInteractor: TracksInteractor,
+    private val tracksStorage: TracksStorage
 ) : AndroidViewModel(application) {
 
     companion object {
@@ -30,7 +31,8 @@ class SearchViewModel(private val application: Application,
     private val musicSearchDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
-        true) { text ->
+        true
+    ) { text ->
         searchRequest(text)
     }
 
@@ -86,7 +88,7 @@ class SearchViewModel(private val application: Application,
     private fun processResult(foundTracks: List<TrackDto>?, errorMessage: String?) {
         val tracks = mutableListOf<Track>()
         if (foundTracks != null) {
-            tracks.addAll ( foundTracks. map {dto ->
+            tracks.addAll(foundTracks.map { dto ->
                 TrackDtoToTrackMapper().invoke(dto)
             })
         }
@@ -99,6 +101,7 @@ class SearchViewModel(private val application: Application,
                     )
                 )
             }
+
             tracks.isEmpty() -> {
                 renderState(
                     SearchState.Empty(
@@ -106,6 +109,7 @@ class SearchViewModel(private val application: Application,
                     )
                 )
             }
+
             else -> {
                 renderState(
                     SearchState.Content(

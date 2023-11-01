@@ -34,7 +34,8 @@ class SettingsInteractorImpl(
     }
 
     override fun getSupportEmailDate(): EmailData {
-        return EmailData(getSupportEmail(),
+        return EmailData(
+            getSupportEmail(),
             getSupportSubject(),
             ""
         )

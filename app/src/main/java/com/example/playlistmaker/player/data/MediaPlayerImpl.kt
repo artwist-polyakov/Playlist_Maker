@@ -9,6 +9,7 @@ import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     private var callback: MediaPlayerCallbackInterface? = null
     private var track: TrackInformation? = null
+
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1

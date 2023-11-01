@@ -11,7 +11,7 @@ import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.ui.view_model.FavoriteState
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel (
+class FavoritesViewModel(
     private val favoritesInteractor: TracksDbInteractor,
     private val tracksStorage: TracksStorage
 ) : ViewModel() {

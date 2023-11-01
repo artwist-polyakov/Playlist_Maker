@@ -1,9 +1,12 @@
 package com.example.playlistmaker.common.di
 
+import com.example.playlistmaker.common.data.PlaylistsDbRepositoryImpl
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.common.data.TracksDbRepositoryImpl
+import com.example.playlistmaker.common.data.converters.PlaylistsDbConverter
 import com.example.playlistmaker.common.data.converters.TracksDbConvertor
 import com.example.playlistmaker.common.domain.ThemeRepository
+import com.example.playlistmaker.common.domain.db.PlaylistsDbRepository
 import com.example.playlistmaker.common.domain.db.TracksDbRepository
 import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.example.playlistmaker.player.domain.MediaPlayerInterface
@@ -21,9 +24,11 @@ val repositoryModule = module {
     single<ThemeRepository> { ThemeRepositoryImpl(get()) }
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
     single<TracksRepository> { TracksRepositoryImpl(get(), get()) }
-    single<TracksStorage>{ TracksStorageImpl(get()) }
+    single<TracksStorage> { TracksStorageImpl(get()) }
     single<NetworkClient> { RetrofitNetworkClient(get()) }
     factory<MediaPlayerInterface> { MediaPlayerImpl() }
     factory { TracksDbConvertor() }
-    single <TracksDbRepository> { TracksDbRepositoryImpl(get(), get()) }
+    factory { PlaylistsDbConverter() }
+    single<TracksDbRepository> { TracksDbRepositoryImpl(get(), get()) }
+    single<PlaylistsDbRepository> { PlaylistsDbRepositoryImpl(get(), get(), get()) }
 }
