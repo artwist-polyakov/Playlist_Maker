@@ -169,6 +169,13 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             renderBottomSheetState(it.third?: PlayerBottomSheetState.Hidden)
         }
         viewModel.restorePlaylistFragment()?.let {
+
+            it.returningClosure = {
+                binding.navGraphPlayer.visibility = View.GONE
+                binding.mainLayout.alpha = 1f
+                viewModel.clearPlaylistFragment()
+            }
+
             binding.navGraphPlayer.visibility = View.VISIBLE
             supportFragmentManager
                 .beginTransaction()
