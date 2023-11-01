@@ -31,12 +31,7 @@ class PlaylistsFragment : Fragment() {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
-    private val adapter: PlaylistsAdapter =
-        PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
-            override fun onTrackClick(playlist: PlaylistInformation) {
-                onPlaylistClickDebounce(playlist)
-            }
-        })
+    private lateinit var adapter: PlaylistsAdapter
     private lateinit var recyclerView: RecyclerView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +43,12 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter =
+        PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
+            override fun onTrackClick(playlist: PlaylistInformation) {
+                onPlaylistClickDebounce(playlist)
+            }
+        })
         clearScreen()
         onPlaylistClickDebounce = debounce<PlaylistInformation>(
             CLICK_DEBOUNCE_DELAY,
@@ -110,6 +111,7 @@ class PlaylistsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        recyclerView.adapter = null
         _binding = null
     }
 }
