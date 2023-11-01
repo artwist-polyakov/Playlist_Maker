@@ -22,7 +22,7 @@ class MediaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMediaBinding.inflate(inflater, container, false)
-        binding.viewPager.adapter = MediaViewPagerAdapter(this)
+        binding.viewPager.adapter = MediaViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         return binding.root
     }
 
