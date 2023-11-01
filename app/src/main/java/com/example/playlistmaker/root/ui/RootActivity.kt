@@ -19,5 +19,15 @@ class RootActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.createPlaylistFragment -> {
+                    binding.bottomNavigationView.visibility = android.view.View.GONE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = android.view.View.VISIBLE
+                }
+            }
+        }
     }
 }
