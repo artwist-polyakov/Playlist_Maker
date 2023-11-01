@@ -276,7 +276,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="13dp"
+        android:paddingHorizontal="5dp"
         android:paddingTop="8dp"
         app:behavior_hideable="true"
         android:background="@drawable/bottom_sheet_background"
@@ -311,6 +311,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
+            tools:listitem="@layout/playlist_little_item"
             android:paddingTop="24dp"
             android:layout_height="wrap_content"/>
 
