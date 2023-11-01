@@ -3,10 +3,8 @@ package com.example.playlistmaker.player.ui.activity
 
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.Observer
@@ -27,8 +25,6 @@ import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
@@ -142,6 +138,7 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
             currentFragment.emulateBackButton()
         } else {
             super.onBackPressed()
+            viewModel.clearPlaylistFragment()
         }
     }
 
@@ -170,6 +167,13 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 }
             }
             renderBottomSheetState(it.third?: PlayerBottomSheetState.Hidden)
+        }
+        viewModel.restorePlaylistFragment()?.let {
+            binding.navGraphPlayer.visibility = View.VISIBLE
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_graph_player, it)
+                .commit()
         }
     }
 
@@ -207,8 +211,10 @@ class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
                 createFragment.returningClosure = {
                     binding.navGraphPlayer.visibility = View.GONE
                     binding.mainLayout.alpha = 1f
+                    viewModel.clearPlaylistFragment()
 //                    viewModel.initializePlayer()
                 }
+                viewModel.savePlaylistFragment(createFragment)
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.nav_graph_player, createFragment)

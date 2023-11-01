@@ -10,6 +10,7 @@ import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformationToTrackMapper
+import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
@@ -29,6 +30,8 @@ class PlayerViewModel(
     companion object {
         const val UPDATE_FREQUENCY = 250L
     }
+
+    private var _newPlaylistFragmentBackup: CreatePlaylistFragment? = null
 
     private var timerJob: Job? = null
 
@@ -157,6 +160,18 @@ class PlayerViewModel(
                 _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistNotAdded(playlist))
             }
         }
+    }
+
+    fun savePlaylistFragment(playlistFragment: CreatePlaylistFragment) {
+        _newPlaylistFragmentBackup = playlistFragment
+    }
+
+    fun restorePlaylistFragment(): CreatePlaylistFragment? {
+        return _newPlaylistFragmentBackup
+    }
+
+    fun clearPlaylistFragment() {
+        _newPlaylistFragmentBackup = null
     }
 
     fun handleNewPlaylistTap() {
