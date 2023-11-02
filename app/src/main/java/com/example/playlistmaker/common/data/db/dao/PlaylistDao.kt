@@ -36,7 +36,7 @@ interface PlaylistDao {
     )
     fun getTracksFromPlaylist(playlistId: String): Flow<List<TrackEntity>>
 
-    @Query("SELECT * FROM playlists WHERE id = :playlistId")
+    @Query("SELECT * FROM playlists WHERE id = :playlistId LIMIT 1")
     suspend fun getPlaylist(playlistId: String): PlaylistEntity
 
     @Query("SELECT COUNT(*) > 0 FROM playlist_track_reference WHERE playlistId = :playlistId AND trackId = :trackId")
