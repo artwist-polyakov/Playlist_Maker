@@ -20,14 +20,14 @@ import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.ActivitySongPageBinding
 import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment
 import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistInterface
-import com.example.playlistmaker.player.presentation.PlayerActivityInterface
+import com.example.playlistmaker.player.presentation.PlayerInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlayerActivity : AppCompatActivity(), PlayerActivityInterface {
+class PlayerActivity : AppCompatActivity(), PlayerInterface {
     private lateinit var binding: ActivitySongPageBinding
     private val viewModel: PlayerViewModel by viewModel()
     private lateinit var currentTrack: TrackInformation
