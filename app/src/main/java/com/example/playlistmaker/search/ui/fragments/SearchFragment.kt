@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
@@ -72,9 +73,11 @@ class SearchFragment : Fragment() {
             false
         ) { track ->
             viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-            val intent = Intent(context, PlayerActivity::class.java)
-//                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
-            startActivity(intent)
+//            val intent = Intent(context, PlayerActivity::class.java)
+////                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
+//            startActivity(intent)
+            findNavController().navigate(R.id.action_searchFragment_to_playerFragment
+            )
         }
 
         textWatcher = object : TextWatcher {

@@ -21,7 +21,6 @@ import com.example.playlistmaker.common.presentation.showCustomSnackbar
 import com.example.playlistmaker.common.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
-import com.example.playlistmaker.media.ui.fragments.create.CreatePlaylistFragment
 import com.example.playlistmaker.player.presentation.PlayerInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.activity
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.View
