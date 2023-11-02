@@ -1,7 +1,6 @@
-package com.example.playlistmaker.common.data
+package com.example.playlistmaker.common.domain.db
 
-import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
-import com.example.playlistmaker.common.domain.db.PlaylistsDbRepository
+
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
@@ -23,5 +22,9 @@ class PlaylistsDbInteractorImpl(
 
     override suspend fun addPlaylist(playlist: PlaylistInformation) {
         repository.addPlaylist(playlist)
+    }
+
+    override suspend fun getPlaylist(playlistId: String): PlaylistInformation {
+        return repository.getPlaylist(playlistId)
     }
 }

@@ -9,4 +9,5 @@ interface PlaylistsDbInteractor {
     suspend fun addTrackToPlaylist(playlistId: String, track: Track): Boolean
     fun giveMeAllPlaylists(): Flow<List<PlaylistInformation>>
     suspend fun addPlaylist(playlist: PlaylistInformation)
+    suspend fun getPlaylist(playlistId: String): PlaylistInformation
 }

@@ -48,4 +48,9 @@ class PlaylistsDbRepositoryImpl(
             .playlistDao()
             .addTrackToPlaylist(playlistsDbConvertor.map(playlistId, track.trackId))
     }
+
+    override suspend fun getPlaylist(playlistId: String): PlaylistInformation =
+        playlistsDbConvertor.map(appDatabase
+            .playlistDao()
+            .getPlaylist(playlistId))
 }
