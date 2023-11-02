@@ -78,6 +78,11 @@ class PlayerFragment : Fragment(), PlayerInterface {
         renderState()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun renderLikeState(isLiked: Boolean) {
         if (isLiked) {
             binding.likeButton.setImageResource(R.drawable.like_button_active)

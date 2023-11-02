@@ -1,7 +1,5 @@
 package com.example.playlistmaker.player.ui.activity
 
-import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView

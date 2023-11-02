@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.utils.debounce
+import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
@@ -29,7 +30,8 @@ enum class ResponseState {
 class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 10L
@@ -51,7 +53,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -115,6 +117,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         textWatcher?.let { binding.searchEditText.removeTextChangedListener(it) }
+        _binding = null
     }
 
     private fun render(state: SearchState) {
