@@ -31,12 +31,6 @@ class PlaylistViewHolder(
         if (playlist.image != null) {
             image.setImageURI(Uri.parse(playlist.image.toString()))
         } else {
-            image.setPadding(
-                image.paddingLeft + 28,
-                image.paddingTop + 28,
-                image.paddingRight + 28,
-                image.paddingBottom
-            )
             image.setImageResource(R.drawable.song_cover_placeholder_with_padding)
             image.setBackgroundColor(Color.TRANSPARENT)
         }
