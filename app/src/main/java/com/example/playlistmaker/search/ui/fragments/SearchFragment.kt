@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,10 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
-import com.example.playlistmaker.common.presentation.models.TrackToTrackInformationMapper
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
