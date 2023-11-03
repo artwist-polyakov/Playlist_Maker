@@ -24,6 +24,8 @@ class PlaylistViewModel (
     private val _playlistState = MutableLiveData<ArrayList<Track>>()
     val playlistState: MutableLiveData<ArrayList<Track>> get() = _playlistState
 
+    var dataLoaded: Boolean = false
+
     init {
         fillData()
     }
@@ -39,6 +41,7 @@ class PlaylistViewModel (
                 .collect() {
                     Log.d("PlaylistViewModel", "fillData $it")
                     _playlistState.postValue(ArrayList(it))
+                    dataLoaded = true
                 }
         }
     }
@@ -69,6 +72,15 @@ class PlaylistViewModel (
                 val trackDto = TrackToTrackDtoMapper().invoke(interaction.track)
                 tracksStorage.pushTrackToHistory(trackDto)
                 tracksStorage.saveHistory()
+            }
+        }
+    }
+
+    fun checkDataLoaded() {
+        if (dataLoaded) {
+            _playlistState.value.let{
+                _playlistState.postValue(it)
+                dataLoaded = false
             }
         }
     }

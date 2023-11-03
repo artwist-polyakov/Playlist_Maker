@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
@@ -37,6 +39,7 @@ class PlaylistFragment: Fragment() {
     private var onTrackClickDebounce: (Track) -> Unit = {}
 
     private lateinit var adapter: TracksAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -186,6 +189,10 @@ class PlaylistFragment: Fragment() {
             }
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        viewModel.checkDataLoaded()
     }
 
     companion object {
