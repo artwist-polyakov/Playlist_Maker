@@ -8,6 +8,7 @@ import androidx.room.Transaction
 import com.example.playlistmaker.common.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
+import com.example.playlistmaker.common.utils.countDurationInSeconds
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,6 +22,9 @@ interface PlaylistDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertTrackPlaylistTrackReference(playlistTrackReference: PlaylistTrackReference)
+
+    @Query("DELETE FROM playlist_track_reference WHERE playlistId = :playlistId AND trackId = :trackId")
+    suspend fun deleteTrackPlaylistTrackReference(playlistId: String, trackId: Long)
 
     @Query("SELECT * FROM playlists ORDER BY tracksCount DESC")
     fun getPlaylists(): Flow<List<PlaylistEntity>>
@@ -42,6 +46,9 @@ interface PlaylistDao {
     @Query("SELECT COUNT(*) > 0 FROM playlist_track_reference WHERE playlistId = :playlistId AND trackId = :trackId")
     suspend fun isTrackInPlaylist(playlistId: String, trackId: Long): Boolean
 
+    @Query("SELECT trackTime FROM music_table WHERE id = :trackId LIMIT 1")
+    suspend fun getTrackDurationString(trackId: Long): String
+
     @Transaction
     suspend fun addTrackToPlaylist(playlistTrackReference: PlaylistTrackReference): Boolean {
         return if (!isTrackInPlaylist(
@@ -49,7 +56,11 @@ interface PlaylistDao {
                 playlistTrackReference.trackId
             )
         ) {
-            incrementTracksCount(playlistTrackReference.playlistId.toString())
+            val durationUpdate = getTrackDurationString(playlistTrackReference.trackId).countDurationInSeconds()
+            incrementTracksCount(playlistTrackReference.playlistId)
+            incrementPlaylistDuration(
+                playlistTrackReference.playlistId,
+                durationUpdate)
             insertTrackPlaylistTrackReference(playlistTrackReference)
             true
         } else {
@@ -57,6 +68,25 @@ interface PlaylistDao {
         }
     }
 
+    @Transaction
+    suspend fun removeTrackFromPlaylist(playlistTrackReference: PlaylistTrackReference) {
+        val durationUpdate = getTrackDurationString(playlistTrackReference.trackId).countDurationInSeconds()
+        decrementTracksCount(playlistTrackReference.playlistId)
+        decrementPlaylistDuration(
+            playlistTrackReference.playlistId,
+            durationUpdate)
+        deleteTrackPlaylistTrackReference(playlistTrackReference.playlistId, playlistTrackReference.trackId)
+    }
+
     @Query("UPDATE playlists SET tracksCount = tracksCount + 1 WHERE id = :playlistId")
     suspend fun incrementTracksCount(playlistId: String)
+
+    @Query("UPDATE playlists SET tracksCount = tracksCount - 1 WHERE id = :playlistId")
+    suspend fun decrementTracksCount(playlistId: String)
+
+    @Query("UPDATE playlists SET playlistDurationSeconds = playlistDurationSeconds + :update WHERE id = :playlistId")
+    suspend fun incrementPlaylistDuration(playlistId: String, update: Long)
+
+    @Query("UPDATE playlists SET playlistDurationSeconds = playlistDurationSeconds - :update WHERE id = :playlistId")
+    suspend fun decrementPlaylistDuration(playlistId: String, update: Long)
 }
