@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,16 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.common.utils.setImageUriOrDefault
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenState
-import com.example.playlistmaker.player.ui.activity.PlayerBottomSheetAdapter
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.ui.fragments.SearchFragment
 import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -175,14 +171,19 @@ class PlaylistFragment: Fragment() {
     private fun setupBottomSheet() {
         val bottomSheetContainer = binding.bottomSheet
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        val desiredHeight = resources.displayMetrics.heightPixels / 4
+
+        bottomSheetBehavior.peekHeight = desiredHeight
 
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                        bottomSheetBehavior.peekHeight = desiredHeight
+                        bottomSheet.post {
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                        }
                     }
 
                     else -> {
@@ -195,7 +196,6 @@ class PlaylistFragment: Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
-//        viewModel.checkDataLoaded()
     }
 
     companion object {
