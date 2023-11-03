@@ -119,8 +119,13 @@ class PlaylistFragment: Fragment() {
     }
 
     private fun render(tracks: ArrayList<Track>) {
-        adapter.tracks = tracks
-        adapter.notifyDataSetChanged()
+        if (tracks.isEmpty()) {
+            binding.bottomSheet.visibility = View.GONE
+        } else {
+            binding.bottomSheet.visibility = View.VISIBLE
+            adapter.tracks = tracks
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun configureContent(playlist: PlaylistInformation) {
