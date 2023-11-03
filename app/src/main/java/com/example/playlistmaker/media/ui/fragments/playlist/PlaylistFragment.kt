@@ -102,9 +102,7 @@ class PlaylistFragment: Fragment() {
             is SinglePlaylistScreenState.Error -> {
                 Log.d("SinglePlaylistScreenState", "Error")
             }
-            is SinglePlaylistScreenState.Empty -> {
-                Log.d("SinglePlaylistScreenState", "Empty")
-            }
+
             is SinglePlaylistScreenState.Success -> {
                 showLoading()
                 configureContent(state.playlist)
