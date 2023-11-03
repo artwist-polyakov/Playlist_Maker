@@ -26,7 +26,7 @@
             android:id="@+id/action_mediaFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
         <action
-            android:id="@+id/action_mediaFragment_to_playlistFragment2"
+            android:id="@+id/action_mediaFragment_to_playlistFragment"
             app:destination="@id/playlistFragment" />
     </fragment>
     <fragment

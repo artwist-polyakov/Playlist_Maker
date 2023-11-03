@@ -1,5 +1,6 @@
 package com.example.playlistmaker.common.data.db.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -98,6 +99,7 @@ interface PlaylistDao {
     @Transaction
     suspend fun givePlaylistWithTime(playlistId: String): PlaylistEntity {
         var playlist = getPlaylist(playlistId)
+        Log.d("PlaylistDao", "getPlaylist: ${playlistId}")
         if (!playlist.wasDurationCalculated) {
             val duration = getTracksFromPlaylist(playlistId).map { tracks ->
                 tracks.map { track ->
