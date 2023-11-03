@@ -84,6 +84,9 @@ class PlaylistFragment: Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
+        viewModel.playlistState.observe(viewLifecycleOwner) {
+            render(it)
+        }
     }
 
     override fun onDestroyView() {
@@ -192,14 +195,14 @@ class PlaylistFragment: Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
-        viewModel.checkDataLoaded()
+//        viewModel.checkDataLoaded()
     }
 
     companion object {
 
         private const val ARG_PLAYLIST_ID = "arg_playlist_id"
 
-        private val CLICK_DEBOUNCE_DELAY = 1000L
+        private val CLICK_DEBOUNCE_DELAY = 10L
 
         fun newInstance(playlistId: String): PlaylistFragment {
             val fragment = PlaylistFragment()

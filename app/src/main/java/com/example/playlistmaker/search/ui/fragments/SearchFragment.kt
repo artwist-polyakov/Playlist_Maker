@@ -33,10 +33,6 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 10L
-    }
-
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val adapter = TracksAdapter(
@@ -230,5 +226,8 @@ class SearchFragment : Fragment() {
         }
     }
 
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 10L
+    }
 
 }
