@@ -104,9 +104,11 @@ interface PlaylistDao {
             val duration = getTracksFromPlaylist(playlistId).map { tracks ->
                 tracks.map { track ->
                     track.trackTime.countDurationInSeconds()
+                    Log.d("PlaylistDao", "getPlaylist: ${track.trackTime.countDurationInSeconds()}")
                 }.sum()
             }.first()
-            incrementPlaylistDuration(playlistId, duration+1)
+            Log.d("PlaylistDao", "getPlaylist: ${duration}")
+            incrementPlaylistDuration(playlistId, duration+1L)
             setWasDurationCalculated(playlistId)
             playlist = getPlaylist(playlistId)
         }

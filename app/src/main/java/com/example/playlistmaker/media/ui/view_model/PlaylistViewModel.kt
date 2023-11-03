@@ -30,6 +30,7 @@ class PlaylistViewModel (
     }
 
     private fun processResult(playlist: PlaylistInformation) {
+        Log.d("PlaylistViewModel", "processResult $playlist")
         _state.postValue(SinglePlaylistScreenState.Success(playlist))
     }
 
