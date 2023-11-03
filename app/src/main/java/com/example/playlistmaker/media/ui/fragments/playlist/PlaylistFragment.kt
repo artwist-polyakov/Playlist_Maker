@@ -8,14 +8,21 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
+import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.common.utils.setImageUriOrDefault
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenState
+import com.example.playlistmaker.player.ui.activity.PlayerBottomSheetAdapter
+import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.ui.fragments.SearchFragment
+import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -27,6 +34,9 @@ class PlaylistFragment: Fragment() {
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
 
+    private var onTrackClickDebounce: (Track) -> Unit = {}
+
+    private lateinit var adapter: TracksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +54,21 @@ class PlaylistFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showLoading()
+        adapter = TracksAdapter(
+            object : TracksAdapter.TrackClickListener {
+                override fun onTrackClick(track: Track) {
+                    onTrackClickDebounce(track)
+                }
+            }
+        )
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            viewModel.handleInteraction(SinglePlaylistScreenInteraction.TrackClicked(track))
+            findNavController().navigate(R.id.action_playlistFragment_to_playerFragment)
+        }
         setupBottomSheet()
 //        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_color)
 
@@ -85,6 +110,11 @@ class PlaylistFragment: Fragment() {
             }
             is SinglePlaylistScreenState.SharePlaylistInitiated -> Log.d("SinglePlaylistScreenState", "SharePlaylistInitiated")
         }
+    }
+
+    private fun render(tracks: ArrayList<Track>) {
+        adapter.tracks = tracks
+        adapter.notifyDataSetChanged()
     }
 
     private fun configureContent(playlist: PlaylistInformation) {
@@ -161,6 +191,8 @@ class PlaylistFragment: Fragment() {
     companion object {
 
         private const val ARG_PLAYLIST_ID = "arg_playlist_id"
+
+        private val CLICK_DEBOUNCE_DELAY = 1000L
 
         fun newInstance(playlistId: String): PlaylistFragment {
             val fragment = PlaylistFragment()

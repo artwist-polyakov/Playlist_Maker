@@ -6,17 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenState
+import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.domain.storage.TracksStorage
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel (
     val playlistId: String,
-    val playlistsInteractor: PlaylistsDbInteractor
+    val playlistsInteractor: PlaylistsDbInteractor,
+    private val tracksStorage: TracksStorage
 ): ViewModel() {
 
     private val _state = MutableLiveData<SinglePlaylistScreenState>()
     val state: MutableLiveData<SinglePlaylistScreenState> get() = _state
+    private val _playlistState = MutableLiveData<ArrayList<Track>>()
+    val playlistState: MutableLiveData<ArrayList<Track>> get() = _playlistState
 
     init {
         fillData()
@@ -27,10 +33,17 @@ class PlaylistViewModel (
         viewModelScope.launch {
                 processResult(playlistsInteractor.getPlaylist(playlistId))
         }
+        viewModelScope.launch {
+            playlistsInteractor
+                .giveMeTracksFromPlaylist(playlistId)
+                .collect() {
+                    Log.d("PlaylistViewModel", "fillData $it")
+                    _playlistState.postValue(ArrayList(it))
+                }
+        }
     }
 
     private fun processResult(playlist: PlaylistInformation) {
-        Log.d("PlaylistViewModel", "processResult $playlist")
         _state.postValue(SinglePlaylistScreenState.Success(playlist))
     }
 
@@ -50,6 +63,12 @@ class PlaylistViewModel (
             }
             is SinglePlaylistScreenInteraction.OptionsDismissed -> {
                 Log.d("PlaylistViewModel", "OptionsDismissed")
+            }
+
+            is SinglePlaylistScreenInteraction.TrackClicked -> {
+                val trackDto = TrackToTrackDtoMapper().invoke(interaction.track)
+                tracksStorage.pushTrackToHistory(trackDto)
+                tracksStorage.saveHistory()
             }
         }
     }
