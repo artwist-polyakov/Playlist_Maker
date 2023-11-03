@@ -17,23 +17,5 @@ data class TrackInformation(
     val country: String?,
     val previewUrl: String?
 ) : Parcelable {
-
-    fun countDurationInSeconds(): Int {
-        var trackTimeComponents: Map<Int, Int> = mapOf(
-            0 to 1,
-            1 to 60,
-            2 to 3600,
-            3 to 3600*24
-        )
-        var result: Int = 0
-        val trackTimeComponentsList: List<Int> = trackTime.split(":").map { it.toInt() }
-        for (i in trackTimeComponentsList.indices) {
-            val timeComponent = trackTimeComponentsList[trackTimeComponentsList.size - i - 1]
-            val multiplier = trackTimeComponents[i] ?: 0
-            result += timeComponent * multiplier
-        }
-        return result
-    }
-
 }
 

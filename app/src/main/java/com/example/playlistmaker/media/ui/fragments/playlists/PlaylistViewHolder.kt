@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.common.presentation.setImageUriOrDefault
+import com.example.playlistmaker.common.utils.setImageUriOrDefault
 
 class PlaylistViewHolder(
     parent: ViewGroup,
