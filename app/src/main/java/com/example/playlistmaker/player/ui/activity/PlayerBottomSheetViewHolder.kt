@@ -1,7 +1,5 @@
 package com.example.playlistmaker.player.ui.activity
 
-import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.utils.setImageUriOrDefault
 
 class PlayerBottomSheetViewHolder(
     parent: ViewGroup,
@@ -23,18 +22,11 @@ class PlayerBottomSheetViewHolder(
 
     fun bind(playlist: PlaylistInformation) {
         title.text = playlist.name
-
         quantity.text = itemView.context.applicationContext.resources.getQuantityString(
             R.plurals.tracks,
             playlist.tracksCount,
             playlist.tracksCount
         )
-
-        if (playlist.image != null) {
-            image.setImageURI(Uri.parse(playlist.image.toString()))
-        } else {
-            image.setImageResource(R.drawable.song_cover_placeholder)
-            image.setBackgroundColor(Color.TRANSPARENT)
-        }
+        image.setImageUriOrDefault(playlist.image, R.drawable.song_cover_placeholder)
     }
 }

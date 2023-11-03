@@ -28,7 +28,9 @@ data class PlaylistInputData(
             description = description,
             image = image,
             tracksCount = 0,
-            creationDate = System.currentTimeMillis()
+            creationDate = System.currentTimeMillis(),
+            wasDurationCalculated = true,
+            durationInSeconds = 0
         )
     }
 }

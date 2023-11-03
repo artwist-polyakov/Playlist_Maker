@@ -1,4 +1,4 @@
-package com.example.playlistmaker.common.presentation
+package com.example.playlistmaker.common.utils
 
 import android.view.View
 import android.widget.TextView

@@ -11,5 +11,7 @@ data class PlaylistEntity(
     val description: String,
     val imageUri: String?,
     val tracksCount: Int,
+    val playlistDurationSeconds: Long,
+    val wasDurationCalculated: Boolean,
     val creationDate: Long
 )

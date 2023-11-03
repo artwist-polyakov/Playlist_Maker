@@ -1,7 +1,7 @@
 package com.example.playlistmaker.common.di
 
 import com.example.playlistmaker.common.data.ImagesRepositoryInteractorImpl
-import com.example.playlistmaker.common.data.PlaylistsDbInteractorImpl
+import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractorImpl
 import com.example.playlistmaker.common.domain.ThemeInteractor
 import com.example.playlistmaker.common.data.ThemeInteractorImpl
 import com.example.playlistmaker.common.data.ThemeDelegateImpl

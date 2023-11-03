@@ -55,7 +55,13 @@ class PlaylistsFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { playlist ->
-            viewModel.handleInteraction(PlaylistsScreenInteraction.PlaylistClicked(playlist))
+            val bundle = Bundle().apply {
+                putString("arg_playlist_id", playlist.id.toString())
+            }
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_playlistFragment,
+                bundle
+            )
         }
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -72,9 +78,6 @@ class PlaylistsFragment : Fragment() {
 
     private fun render(state: PlaylistsScreenState) {
         when (state) {
-            is PlaylistsScreenState.GoToPlaylist -> {
-                Log.d("PlaylistsFragment", "GoToPlaylist ${state.playlist}")
-            }
 
             is PlaylistsScreenState.Content -> {
                 showPlaylists()
@@ -85,9 +88,6 @@ class PlaylistsFragment : Fragment() {
                 showEmptyState()
             }
 
-            is PlaylistsScreenState.NewPlaylistInitiated -> {
-                findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
-            }
         }
     }
 

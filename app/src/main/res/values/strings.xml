@@ -61,4 +61,6 @@
     <string name="text_input_layout_description_field_name">Описание</string>
     <string name="go_back_descriptior">Уйти назад</string>
     <string name="placeholder_descriptior">Плейсхолдер изображения</string>
+    <string name="playlist_title">Best Songs 2021</string>
+    <string name="description_example">2022</string>
 </resources>

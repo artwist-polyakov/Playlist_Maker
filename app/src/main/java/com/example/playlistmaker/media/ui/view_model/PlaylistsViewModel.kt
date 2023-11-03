@@ -38,24 +38,5 @@ class PlaylistsViewModel(
             _state.postValue(PlaylistsScreenState.Content(playlists))
         }
     }
-
-    fun handleInteraction(interaction: PlaylistsScreenInteraction) {
-        when (interaction) {
-
-            is PlaylistsScreenInteraction.CreateButtonPressed -> {
-                _state.postValue(PlaylistsScreenState.NewPlaylistInitiated)
-            }
-
-            is PlaylistsScreenInteraction.PlaylistClicked -> {
-                _state.postValue(PlaylistsScreenState.GoToPlaylist(interaction.content))
-            }
-
-            is PlaylistsScreenInteraction.newPlaylistButtonPressed -> {
-                _state.postValue(PlaylistsScreenState.NewPlaylistInitiated)
-            }
-        }
-    }
-
-
 }
 
