@@ -52,5 +52,5 @@ class PlaylistsDbRepositoryImpl(
     override suspend fun getPlaylist(playlistId: String): PlaylistInformation =
         playlistsDbConvertor.map(appDatabase
             .playlistDao()
-            .getPlaylist(playlistId))
+            .givePlaylistWithTime(playlistId))
 }

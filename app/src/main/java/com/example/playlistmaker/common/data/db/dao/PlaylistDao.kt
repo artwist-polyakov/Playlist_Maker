@@ -10,6 +10,8 @@ import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
 import com.example.playlistmaker.common.utils.countDurationInSeconds
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 @Dao
 interface PlaylistDao {
@@ -89,4 +91,23 @@ interface PlaylistDao {
 
     @Query("UPDATE playlists SET playlistDurationSeconds = playlistDurationSeconds - :update WHERE id = :playlistId")
     suspend fun decrementPlaylistDuration(playlistId: String, update: Long)
+
+    @Query("UPDATE playlists SET wasDurationCalculated = 1 WHERE id = :playlistId")
+    suspend fun setWasDurationCalculated(playlistId: String)
+
+    @Transaction
+    suspend fun givePlaylistWithTime(playlistId: String): PlaylistEntity {
+        var playlist = getPlaylist(playlistId)
+        if (!playlist.wasDurationCalculated) {
+            val duration = getTracksFromPlaylist(playlistId).map { tracks ->
+                tracks.map { track ->
+                    track.trackTime.countDurationInSeconds()
+                }.sum()
+            }.first()
+            incrementPlaylistDuration(playlistId, duration+1)
+            setWasDurationCalculated(playlistId)
+            playlist = getPlaylist(playlistId)
+        }
+        return playlist
+    }
 }
