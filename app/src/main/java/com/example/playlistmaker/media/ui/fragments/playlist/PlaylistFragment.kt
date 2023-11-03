@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.addCallback
-import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -26,6 +25,7 @@ import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.lang.Math.max
 
 class PlaylistFragment: Fragment() {
     private var playlistId: String = ""
@@ -178,10 +178,16 @@ class PlaylistFragment: Fragment() {
     private fun setupBottomSheet() {
         val bottomSheetContainer = binding.bottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
-//        view?.doOnNextLayout{ calculatePeekHeight()}
-
-        val desiredHeight = resources.displayMetrics.heightPixels / 4 + 36 * resources.displayMetrics.density
-        bottomSheetBehavior.peekHeight = desiredHeight.toInt()
+        val desiredHeight = max (
+            resources
+                .displayMetrics.heightPixels -
+                    (resources.displayMetrics.widthPixels +
+                            ((24 + 24 + 150) * resources.displayMetrics.density)
+                                .toInt()
+                            ),
+            250
+        )
+        bottomSheetBehavior.peekHeight = desiredHeight
 
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -204,12 +210,6 @@ class PlaylistFragment: Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
-    }
-
-    private fun calculatePeekHeight() {
-        val screenHeight = binding.root.height
-        bottomSheetBehavior.peekHeight = screenHeight - binding.shareButton.bottom
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     companion object {
