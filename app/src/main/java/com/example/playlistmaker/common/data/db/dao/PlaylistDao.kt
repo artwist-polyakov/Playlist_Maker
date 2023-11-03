@@ -99,15 +99,12 @@ interface PlaylistDao {
     @Transaction
     suspend fun givePlaylistWithTime(playlistId: String): PlaylistEntity {
         var playlist = getPlaylist(playlistId)
-        Log.d("PlaylistDao", "getPlaylist: ${playlistId}")
         if (!playlist.wasDurationCalculated) {
             val duration = getTracksFromPlaylist(playlistId).map { tracks ->
                 tracks.map { track ->
                     track.trackTime.countDurationInSeconds()
-                    Log.d("PlaylistDao", "getPlaylist: ${track.trackTime.countDurationInSeconds()}")
                 }.sum()
             }.first()
-            Log.d("PlaylistDao", "getPlaylist: ${duration}")
             incrementPlaylistDuration(playlistId, duration+1L)
             setWasDurationCalculated(playlistId)
             playlist = getPlaylist(playlistId)
