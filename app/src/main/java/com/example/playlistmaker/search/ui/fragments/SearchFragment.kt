@@ -33,10 +33,6 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 10L
-    }
-
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val adapter = TracksAdapter(
@@ -72,9 +68,6 @@ class SearchFragment : Fragment() {
             false
         ) { track ->
             viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-//            val intent = Intent(context, PlayerActivity::class.java)
-////                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
-//            startActivity(intent)
             findNavController().navigate(R.id.action_searchFragment_to_playerFragment
             )
         }
@@ -233,5 +226,8 @@ class SearchFragment : Fragment() {
         }
     }
 
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 10L
+    }
 
 }
