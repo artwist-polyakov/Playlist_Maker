@@ -16,6 +16,7 @@ import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenState
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -43,7 +44,7 @@ class PlaylistFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showLoading()
-
+        setupBottomSheet()
 //        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_color)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -133,6 +134,28 @@ class PlaylistFragment: Fragment() {
         binding.shareButton.visibility = View.GONE
         binding.dots.visibility = View.GONE
         binding.loadingIndicator.visibility = View.VISIBLE
+    }
+
+    private fun setupBottomSheet() {
+        val bottomSheetContainer = binding.bottomSheet
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                    }
+
+                    else -> {
+                        // Остальные состояния не обрабатываем
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
     }
 
     companion object {
