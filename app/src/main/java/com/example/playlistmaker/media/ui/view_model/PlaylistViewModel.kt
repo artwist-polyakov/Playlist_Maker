@@ -53,7 +53,13 @@ class PlaylistViewModel (
     fun handleInteraction(interaction: SinglePlaylistScreenInteraction) {
         when (interaction) {
             is SinglePlaylistScreenInteraction.SharePlaylist -> {
-                _state.postValue(SinglePlaylistScreenState.SharePlaylistInitiated)
+                if (_playlistState.value?.isEmpty() != false) {
+                    _state.postValue(SinglePlaylistScreenState.ShowMessageEmptyList)
+                    return
+                } else {
+                    _state.postValue(SinglePlaylistScreenState.SharePlaylistInitiated)
+                }
+
             }
             is SinglePlaylistScreenInteraction.DeletePlaylist -> {
                 Log.d("PlaylistViewModel", "DeletePlaylist")
@@ -72,6 +78,10 @@ class PlaylistViewModel (
                 val trackDto = TrackToTrackDtoMapper().invoke(interaction.track)
                 tracksStorage.pushTrackToHistory(trackDto)
                 tracksStorage.saveHistory()
+            }
+
+            is SinglePlaylistScreenInteraction.toBasicState -> {
+                _state.postValue(SinglePlaylistScreenState.Basic)
             }
         }
     }

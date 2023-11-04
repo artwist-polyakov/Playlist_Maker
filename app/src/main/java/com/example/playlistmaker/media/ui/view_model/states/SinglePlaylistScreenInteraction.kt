@@ -3,7 +3,7 @@ package com.example.playlistmaker.media.ui.view_model.states
 import com.example.playlistmaker.search.domain.models.Track
 
 sealed class SinglePlaylistScreenInteraction {
-
+    object toBasicState : SinglePlaylistScreenInteraction()
     object SharePlaylist : SinglePlaylistScreenInteraction()
     object DeletePlaylist : SinglePlaylistScreenInteraction()
     object TappedBackButton : SinglePlaylistScreenInteraction()

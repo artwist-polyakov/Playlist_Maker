@@ -16,6 +16,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.common.utils.setImageUriOrDefault
+import com.example.playlistmaker.common.utils.showCustomSnackbar
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenInteraction
@@ -78,9 +79,15 @@ class PlaylistFragment: Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.TappedBackButton)
         }
+
         binding.returnButton.setOnClickListener {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.TappedBackButton)
         }
+
+        binding.shareButton.setOnClickListener {
+            viewModel.handleInteraction(SinglePlaylistScreenInteraction.SharePlaylist)
+        }
+
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
@@ -113,6 +120,13 @@ class PlaylistFragment: Fragment() {
                 findNavController().popBackStack()
             }
             is SinglePlaylistScreenState.SharePlaylistInitiated -> Log.d("SinglePlaylistScreenState", "SharePlaylistInitiated")
+
+            is SinglePlaylistScreenState.Basic -> {}
+
+            is SinglePlaylistScreenState.ShowMessageEmptyList -> {
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
+                binding.root.showCustomSnackbar (getString(R.string.playlist_is_empty_warning))
+            }
         }
     }
 

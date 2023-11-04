@@ -63,4 +63,5 @@
     <string name="placeholder_descriptior">Плейсхолдер изображения</string>
     <string name="playlist_title">Best Songs 2021</string>
     <string name="description_example">2022</string>
+    <string name="playlist_is_empty_warning">В этом плейлисте нет списка треков, которым можно поделиться</string>
 </resources>
