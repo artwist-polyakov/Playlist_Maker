@@ -11,14 +11,17 @@ import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreen
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenState
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.storage.TracksStorage
+import com.example.playlistmaker.settings.domain.NavigationInteractor
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel (
-    val playlistId: String,
-    val playlistsInteractor: PlaylistsDbInteractor,
-    private val tracksStorage: TracksStorage
+    private val playlistId: String,
+    private val playlistsInteractor: PlaylistsDbInteractor,
+    private val tracksStorage: TracksStorage,
+    private val navigationInteractor: NavigationInteractor
 ): ViewModel() {
 
+    private var currentPlaylistInformation: PlaylistInformation? = null
     private val _state = MutableLiveData<SinglePlaylistScreenState>()
     val state: MutableLiveData<SinglePlaylistScreenState> get() = _state
     private val _playlistState = MutableLiveData<ArrayList<Track>>()
@@ -47,6 +50,7 @@ class PlaylistViewModel (
     }
 
     private fun processResult(playlist: PlaylistInformation) {
+        currentPlaylistInformation = playlist
         _state.postValue(SinglePlaylistScreenState.Success(playlist))
     }
 
@@ -57,7 +61,9 @@ class PlaylistViewModel (
                     _state.postValue(SinglePlaylistScreenState.ShowMessageEmptyList)
                     return
                 } else {
-                    _state.postValue(SinglePlaylistScreenState.SharePlaylistInitiated)
+                    _state.postValue(SinglePlaylistScreenState.SharePlaylistInitiated(
+                        currentPlaylistInformation,
+                        _playlistState.value))
                 }
 
             }
@@ -83,7 +89,15 @@ class PlaylistViewModel (
             is SinglePlaylistScreenInteraction.toBasicState -> {
                 _state.postValue(SinglePlaylistScreenState.Basic)
             }
+
+            is SinglePlaylistScreenInteraction.sendMessage -> {
+                sendMessage(interaction.message)
+            }
         }
+    }
+
+    private fun sendMessage(message: String) {
+        navigationInteractor.navigateToMessage(message)
     }
 
     fun checkDataLoaded() {

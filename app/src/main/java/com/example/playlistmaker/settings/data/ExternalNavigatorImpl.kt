@@ -36,4 +36,13 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         }
         context.startActivity(intent)
     }
+
+    override fun sendMessage(message: String) {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, message)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
+    }
 }

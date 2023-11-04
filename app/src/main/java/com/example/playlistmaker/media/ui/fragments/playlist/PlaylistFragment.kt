@@ -119,7 +119,17 @@ class PlaylistFragment: Fragment() {
             is SinglePlaylistScreenState.GoBack -> {
                 findNavController().popBackStack()
             }
-            is SinglePlaylistScreenState.SharePlaylistInitiated -> Log.d("SinglePlaylistScreenState", "SharePlaylistInitiated")
+
+            is SinglePlaylistScreenState.SharePlaylistInitiated -> {
+                val playlist = state.playlist ?: return
+                val tracks = state.tracks ?: return
+
+                viewModel.handleInteraction(
+                    SinglePlaylistScreenInteraction.sendMessage(
+                        generateShareMessage(playlist, tracks)
+                    )
+                )
+            }
 
             is SinglePlaylistScreenState.Basic -> {}
 
@@ -224,6 +234,38 @@ class PlaylistFragment: Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
+    }
+
+    private fun generateMessage(playlist: PlaylistInformation, tracks: ArrayList<Track>): String {
+        var message = "${playlist.name}\n"
+        message+= "${playlist.description}\n"
+        message+= "${requireContext().
+        applicationContext.
+        resources.getQuantityString(
+            R.plurals.tracks,
+            playlist.tracksCount,
+            playlist.tracksCount
+        )} tracks\n"
+        for ((index, track) in tracks.withIndex()) {
+            message+= "${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n"
+        }
+        return message
+    }
+    private fun generateShareMessage(playlist: PlaylistInformation, tracks: ArrayList<Track>): String {
+        var message = "${playlist.name}\n"
+        message+= "${playlist.description}\n"
+        message+= "${requireContext().
+        applicationContext.
+        resources.getQuantityString(
+            R.plurals.tracks,
+            playlist.tracksCount,
+            playlist.tracksCount
+        )} tracks\n"
+        // enumerated loop
+        for ((index, track) in tracks.withIndex()) {
+            message+= "${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n"
+        }
+        return message
     }
 
     companion object {

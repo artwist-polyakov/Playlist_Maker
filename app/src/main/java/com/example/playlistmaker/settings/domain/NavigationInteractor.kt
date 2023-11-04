@@ -14,4 +14,8 @@ class NavigationInteractor(private val navigator: ExternalNavigator) {
         navigator.shareLink(link)
     }
 
+    fun navigateToMessage(message: String) {
+        navigator.sendMessage(message)
+    }
+
 }
