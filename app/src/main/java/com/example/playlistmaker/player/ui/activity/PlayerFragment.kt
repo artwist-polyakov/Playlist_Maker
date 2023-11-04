@@ -137,6 +137,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
             is PlayerBottomSheetState.NewPlaylist -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 binding.mainLayout.alpha = 1f
+                viewModel.hideCollection()
                 findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
             }
         }

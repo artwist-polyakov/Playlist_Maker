@@ -105,7 +105,7 @@ interface PlaylistDao {
                     track.trackTime.countDurationInSeconds()
                 }.sum()
             }.first()
-            incrementPlaylistDuration(playlistId, duration+1L)
+            incrementPlaylistDuration(playlistId, duration)
             setWasDurationCalculated(playlistId)
             playlist = getPlaylist(playlistId)
         }
