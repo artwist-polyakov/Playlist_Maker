@@ -82,17 +82,31 @@ class CreatePlaylistViewmodel(
     }
 
     private fun saveData() {
-        var imageLink: String?
-        currentInputData.image?.let {
-            imageLink = imagesInteractor.saveImage(it)
-            Uri.parse(imageLink).let {
-                currentInputData = currentInputData.copy(image = it)
+
+        if (currentPlaylist != null) {
+            currentPlaylist = currentPlaylist!!.copy(
+                name = currentInputData.title,
+                description = currentInputData.description,
+                image = currentInputData.image
+            )
+            viewModelScope.launch {
+                playlistsDb.addPlaylist(currentPlaylist!!)
             }
+            _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
+
+        } else {
+            var imageLink: String?
+            currentInputData.image?.let {
+                imageLink = imagesInteractor.saveImage(it)
+                Uri.parse(imageLink).let {
+                    currentInputData = currentInputData.copy(image = it)
+                }
+            }
+            viewModelScope.launch {
+                playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())
+            }
+            _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
         }
-        viewModelScope.launch {
-            playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())
-        }
-        _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
 
     }
 

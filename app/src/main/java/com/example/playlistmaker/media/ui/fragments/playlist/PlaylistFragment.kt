@@ -123,6 +123,12 @@ class PlaylistFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshData()
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -160,7 +166,6 @@ class PlaylistFragment : Fragment() {
             }
 
             is SinglePlaylistScreenState.Basic -> {
-                viewModel.refreshData()
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
             }
 
