@@ -34,7 +34,6 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
-    var returningClosure: (() -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -173,11 +172,7 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     }
 
     private fun goBack() {
-        if (parentFragment != null) {
-            findNavController().popBackStack()
-        } else {
-            returningClosure?.invoke()
-        }
+        findNavController().popBackStack()
     }
 
     private fun showExitConfirmation() {
