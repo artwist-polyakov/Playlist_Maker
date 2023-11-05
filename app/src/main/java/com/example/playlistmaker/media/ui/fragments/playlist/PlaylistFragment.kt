@@ -238,6 +238,7 @@ class PlaylistFragment : Fragment() {
     private fun render(tracks: ArrayList<Track>) {
         if (tracks.isEmpty()) {
             binding.bottomSheet.visibility = View.GONE
+            binding.root.showCustomSnackbar(getString(R.string.empty_list_notification))
         } else {
             binding.bottomSheet.visibility = View.VISIBLE
             adapter.tracks = tracks
