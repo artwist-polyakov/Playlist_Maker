@@ -82,7 +82,7 @@ class CreatePlaylistViewmodel(
     }
 
     private fun saveData() {
-        val playlistToSave = currentPlaylist?.copy(
+        var playlistToSave = currentPlaylist?.copy(
             name = currentInputData.title,
             description = currentInputData.description,
             image = currentInputData.image
@@ -92,6 +92,7 @@ class CreatePlaylistViewmodel(
             playlistToSave.image?.let(imagesInteractor::removeImage)
             val imageLink = imagesInteractor.saveImage(newImage)
             currentInputData = currentInputData.copy(image = Uri.parse(imageLink))
+            playlistToSave = playlistToSave.copy(image = Uri.parse(imageLink))
         }
         updatePlaylistInDatabase(playlistToSave)
     }
@@ -104,6 +105,7 @@ class CreatePlaylistViewmodel(
     }
 
     fun handleExit() {
+        currentPlaylist?.let { _state.postValue(CreatePlaylistScreenState.GoodBye) }
         when (currentInputData.isDataEntered()) {
             true -> _state.postValue(CreatePlaylistScreenState.ShowPopupConfirmation)
             false -> _state.postValue(CreatePlaylistScreenState.GoodBye)
