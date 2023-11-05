@@ -12,4 +12,7 @@ sealed class SinglePlaylistScreenState {
     data class  SharePlaylistInitiated (val playlist: PlaylistInformation?, val tracks: ArrayList<Track>?) : SinglePlaylistScreenState()
     object GoBack : SinglePlaylistScreenState()
     object ShownOptions : SinglePlaylistScreenState()
+    data class ConfirmDelete(val playlist: PlaylistInformation) : SinglePlaylistScreenState()
+    object CancelDelete : SinglePlaylistScreenState()
+    object DeleteSuccess : SinglePlaylistScreenState()
 }

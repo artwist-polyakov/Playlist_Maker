@@ -68,7 +68,7 @@ class PlaylistViewModel (
 
             }
             is SinglePlaylistScreenInteraction.DeletePlaylist -> {
-                Log.d("PlaylistViewModel", "DeletePlaylist")
+                _state.postValue(SinglePlaylistScreenState.ConfirmDelete(currentPlaylistInformation!!))
             }
             is SinglePlaylistScreenInteraction.TappedBackButton -> {
                 _state.postValue(SinglePlaylistScreenState.GoBack)
@@ -94,8 +94,15 @@ class PlaylistViewModel (
                 sendMessage(interaction.message)
             }
 
-            SinglePlaylistScreenInteraction.cancelDelete -> TODO()
-            SinglePlaylistScreenInteraction.confirmDelete -> TODO()
+            SinglePlaylistScreenInteraction.cancelDelete -> {
+                _state.postValue(SinglePlaylistScreenState.CancelDelete)
+            }
+            SinglePlaylistScreenInteraction.confirmDelete -> {
+                viewModelScope.launch {
+                    playlistsInteractor.deletePlaylist(currentPlaylistInformation!!)
+                    _state.postValue(SinglePlaylistScreenState.DeleteSuccess)
+                }
+            }
         }
     }
 

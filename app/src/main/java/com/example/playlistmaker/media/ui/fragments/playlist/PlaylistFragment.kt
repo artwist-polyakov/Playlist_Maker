@@ -103,6 +103,10 @@ class PlaylistFragment: Fragment() {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.SharePlaylist)
         }
 
+        binding.removeBottomsheetButton.setOnClickListener {
+            viewModel.handleInteraction(SinglePlaylistScreenInteraction.DeletePlaylist)
+        }
+
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
@@ -157,6 +161,22 @@ class PlaylistFragment: Fragment() {
 
             is SinglePlaylistScreenState.ShownOptions -> {
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+
+            is SinglePlaylistScreenState.ConfirmDelete -> {
+                state.playlist?.let {
+                    showDeleteConfirmation(it)
+                }
+            }
+
+            SinglePlaylistScreenState.CancelDelete -> {
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
+                optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+            SinglePlaylistScreenState.DeleteSuccess -> {
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
+                optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+                findNavController().popBackStack()
             }
         }
     }
@@ -293,15 +313,15 @@ class PlaylistFragment: Fragment() {
             .setTitle(getString(R.string.remove_confirmation_title))
             .setMessage(getString(R.string.remove_confirmation_text))
             .setPositiveButton(getString(R.string.yes_string)) { dialog, which ->
-
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.confirmDelete)
             }
-            .setPositiveButton(getString(R.string.no_string)) { dialog, which ->
-
+            .setNegativeButton(getString(R.string.no_string)) { dialog, which ->
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.cancelDelete)
             }
             .show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(posColor)
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(likeColor)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(posColor)
     }
 
     companion object {
