@@ -42,7 +42,6 @@ class PlaylistViewModel(
             playlistsInteractor
                 .giveMeTracksFromPlaylist(playlistId)
                 .collect() {
-                    Log.d("PlaylistViewModel", "fillData $it")
                     _playlistState.postValue(ArrayList(it))
                     dataLoaded = true
                 }

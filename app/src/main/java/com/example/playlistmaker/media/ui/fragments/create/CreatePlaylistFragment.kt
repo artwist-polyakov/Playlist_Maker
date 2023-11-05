@@ -236,7 +236,6 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     }
 
     private fun getFieldColorStateList(isEmpty: Boolean): ColorStateList {
-        Log.d("ColorOfLayout", "getFieldColorAttr - $isEmpty")
         val colorRes = if (isEmpty) {
             R.color.box_stroke_color
         } else {
