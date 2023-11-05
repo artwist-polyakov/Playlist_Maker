@@ -9,8 +9,15 @@
     android:orientation="vertical"
     tools:context=".media.ui.fragments.playlist.PlaylistFragment">
 
+    <View
+        android:id="@+id/backgroundDimView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/grey_color"
+        android:id="@+id/main_layout"
+        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

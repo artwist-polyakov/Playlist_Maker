@@ -143,6 +143,7 @@ class PlaylistFragment: Fragment() {
     private fun render(tracks: ArrayList<Track>) {
         if (tracks.isEmpty()) {
             binding.bottomSheet.visibility = View.GONE
+            binding.mainLayout.alpha = 1f
         } else {
             binding.bottomSheet.visibility = View.VISIBLE
             adapter.tracks = tracks
@@ -212,13 +213,12 @@ class PlaylistFragment: Fragment() {
             250
         )
         bottomSheetBehavior.peekHeight = desiredHeight
-
+        binding.mainLayout.alpha = 0.5f
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-//                        bottomSheetBehavior.peekHeight = desiredHeight
                         bottomSheet.post {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                         }
