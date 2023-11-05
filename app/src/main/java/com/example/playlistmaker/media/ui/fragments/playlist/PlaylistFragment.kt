@@ -72,7 +72,6 @@ class PlaylistFragment : Fragment() {
                 override fun onTrackLongClick(track: Track) {
                     viewModel.handleInteraction(SinglePlaylistScreenInteraction.longTrackTap(track))
                 }
-
             }
         )
         onTrackClickDebounce = debounce<Track>(
@@ -85,7 +84,6 @@ class PlaylistFragment : Fragment() {
         }
 
         setupBottomSheet()
-//        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_color)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.TappedBackButton)

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
 import kotlinx.coroutines.launch
 
@@ -17,7 +16,6 @@ class PlaylistsViewModel(
     val state: LiveData<PlaylistsScreenState> get() = _state
 
     init {
-//        _state.postValue(PlaylistsScreenState.Empty)
         fillData()
     }
 

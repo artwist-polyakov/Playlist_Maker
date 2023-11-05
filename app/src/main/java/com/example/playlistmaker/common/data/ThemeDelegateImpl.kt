@@ -10,6 +10,4 @@ class ThemeDelegateImpl(private val interactor: ThemeInteractor) : ThemeDelegate
         val themeMode = interactor.getPreferredThemeMode()
         AppCompatDelegate.setDefaultNightMode(themeMode)
     }
-
-
 }

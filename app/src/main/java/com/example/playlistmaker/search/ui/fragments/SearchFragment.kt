@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.utils.debounce
-import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
@@ -68,7 +67,8 @@ class SearchFragment : Fragment() {
             false
         ) { track ->
             viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-            findNavController().navigate(R.id.action_searchFragment_to_playerFragment
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment
             )
         }
 
@@ -229,5 +229,4 @@ class SearchFragment : Fragment() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 10L
     }
-
 }

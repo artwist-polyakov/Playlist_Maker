@@ -14,12 +14,12 @@ import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.settings.domain.NavigationInteractor
 import kotlinx.coroutines.launch
 
-class PlaylistViewModel (
+class PlaylistViewModel(
     private val playlistId: String,
     private val playlistsInteractor: PlaylistsDbInteractor,
     private val tracksStorage: TracksStorage,
     private val navigationInteractor: NavigationInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private var currentPlaylistInformation: PlaylistInformation? = null
     private val _state = MutableLiveData<SinglePlaylistScreenState>()
@@ -36,7 +36,7 @@ class PlaylistViewModel (
     private fun fillData() {
         _state.postValue(SinglePlaylistScreenState.Loading)
         viewModelScope.launch {
-                processResult(playlistsInteractor.getPlaylist(playlistId))
+            processResult(playlistsInteractor.getPlaylist(playlistId))
         }
         viewModelScope.launch {
             playlistsInteractor
@@ -67,21 +67,28 @@ class PlaylistViewModel (
                     _state.postValue(SinglePlaylistScreenState.ShowMessageEmptyList)
                     return
                 } else {
-                    _state.postValue(SinglePlaylistScreenState.SharePlaylistInitiated(
-                        currentPlaylistInformation,
-                        _playlistState.value))
+                    _state.postValue(
+                        SinglePlaylistScreenState.SharePlaylistInitiated(
+                            currentPlaylistInformation,
+                            _playlistState.value
+                        )
+                    )
                 }
 
             }
+
             is SinglePlaylistScreenInteraction.DeletePlaylist -> {
                 _state.postValue(SinglePlaylistScreenState.ConfirmDelete(currentPlaylistInformation!!))
             }
+
             is SinglePlaylistScreenInteraction.TappedBackButton -> {
                 _state.postValue(SinglePlaylistScreenState.GoBack)
             }
+
             is SinglePlaylistScreenInteraction.OptionsClicked -> {
                 _state.postValue(SinglePlaylistScreenState.ShownOptions)
             }
+
             is SinglePlaylistScreenInteraction.OptionsDismissed -> {
                 Log.d("PlaylistViewModel", "OptionsDismissed")
             }
@@ -103,6 +110,7 @@ class PlaylistViewModel (
             SinglePlaylistScreenInteraction.cancelDelete -> {
                 _state.postValue(SinglePlaylistScreenState.CancelDelete)
             }
+
             SinglePlaylistScreenInteraction.confirmDelete -> {
                 viewModelScope.launch {
                     playlistsInteractor.deletePlaylist(currentPlaylistInformation!!)
@@ -134,7 +142,7 @@ class PlaylistViewModel (
 
     fun checkDataLoaded() {
         if (dataLoaded) {
-            _playlistState.value.let{
+            _playlistState.value.let {
                 _playlistState.postValue(it)
                 dataLoaded = false
             }

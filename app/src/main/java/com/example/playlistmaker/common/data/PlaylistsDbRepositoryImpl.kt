@@ -50,10 +50,11 @@ class PlaylistsDbRepositoryImpl(
     }
 
     override suspend fun getPlaylist(playlistId: String): PlaylistInformation =
-        playlistsDbConvertor.map(appDatabase
-            .playlistDao()
-            .givePlaylistWithTime(playlistId))
-
+        playlistsDbConvertor.map(
+            appDatabase
+                .playlistDao()
+                .givePlaylistWithTime(playlistId)
+        )
 
     override suspend fun deletePlaylist(playlistId: String) {
         appDatabase

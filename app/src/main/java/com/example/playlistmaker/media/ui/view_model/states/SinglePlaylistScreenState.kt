@@ -9,7 +9,11 @@ sealed class SinglePlaylistScreenState {
     object Error : SinglePlaylistScreenState()
     object ShowMessageEmptyList : SinglePlaylistScreenState()
     data class Success(val playlist: PlaylistInformation) : SinglePlaylistScreenState()
-    data class  SharePlaylistInitiated (val playlist: PlaylistInformation?, val tracks: ArrayList<Track>?) : SinglePlaylistScreenState()
+    data class SharePlaylistInitiated(
+        val playlist: PlaylistInformation?,
+        val tracks: ArrayList<Track>?
+    ) : SinglePlaylistScreenState()
+
     object GoBack : SinglePlaylistScreenState()
     object ShownOptions : SinglePlaylistScreenState()
     data class ConfirmDelete(val playlist: PlaylistInformation) : SinglePlaylistScreenState()

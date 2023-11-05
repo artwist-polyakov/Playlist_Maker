@@ -58,11 +58,13 @@ interface PlaylistDao {
                 playlistTrackReference.trackId
             )
         ) {
-            val durationUpdate = getTrackDurationString(playlistTrackReference.trackId).countDurationInSeconds()
+            val durationUpdate =
+                getTrackDurationString(playlistTrackReference.trackId).countDurationInSeconds()
             incrementTracksCount(playlistTrackReference.playlistId)
             incrementPlaylistDuration(
                 playlistTrackReference.playlistId,
-                durationUpdate)
+                durationUpdate
+            )
             insertTrackPlaylistTrackReference(playlistTrackReference)
             true
         } else {
@@ -72,12 +74,17 @@ interface PlaylistDao {
 
     @Transaction
     suspend fun removeTrackFromPlaylist(playlistTrackReference: PlaylistTrackReference) {
-        val durationUpdate = getTrackDurationString(playlistTrackReference.trackId).countDurationInSeconds()
+        val durationUpdate =
+            getTrackDurationString(playlistTrackReference.trackId).countDurationInSeconds()
         decrementTracksCount(playlistTrackReference.playlistId)
         decrementPlaylistDuration(
             playlistTrackReference.playlistId,
-            durationUpdate)
-        deleteTrackPlaylistTrackReference(playlistTrackReference.playlistId, playlistTrackReference.trackId)
+            durationUpdate
+        )
+        deleteTrackPlaylistTrackReference(
+            playlistTrackReference.playlistId,
+            playlistTrackReference.trackId
+        )
     }
 
     @Query("UPDATE playlists SET tracksCount = tracksCount + 1 WHERE id = :playlistId")

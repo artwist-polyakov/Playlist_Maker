@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.domain
 
-import com.example.playlistmaker.common.presentation.models.TrackDurationTime
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 
 interface MediaPlayerInteractor {

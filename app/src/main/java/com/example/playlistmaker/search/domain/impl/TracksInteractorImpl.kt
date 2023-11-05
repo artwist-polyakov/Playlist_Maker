@@ -7,7 +7,6 @@ import com.example.playlistmaker.search.domain.api.TracksRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
 class TracksInteractorImpl(private val repository: TracksRepository) : TracksInteractor {
 
     override fun searchTracks(expression: String): Flow<Pair<List<TrackDto>?, String?>> {

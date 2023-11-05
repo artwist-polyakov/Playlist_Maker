@@ -14,9 +14,7 @@ import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.ResponseState
 import com.example.playlistmaker.search.ui.fragments.SearchState
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-
 
 class SearchViewModel(
     private val application: Application,

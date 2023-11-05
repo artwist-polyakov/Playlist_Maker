@@ -83,5 +83,4 @@ class TracksStorageImpl(
         sharedPreferences.edit().remove(key).apply()
         clear()
     }
-
 }

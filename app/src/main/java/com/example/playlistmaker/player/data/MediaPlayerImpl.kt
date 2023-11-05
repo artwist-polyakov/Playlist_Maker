@@ -5,7 +5,6 @@ import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 
-
 class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     private var callback: MediaPlayerCallbackInterface? = null
     private var track: TrackInformation? = null

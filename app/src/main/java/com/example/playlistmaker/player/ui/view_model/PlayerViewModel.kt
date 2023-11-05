@@ -19,7 +19,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
-
 class PlayerViewModel(
     private val trackStorageInteractor: TrackStorageInteractor,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
@@ -30,8 +29,6 @@ class PlayerViewModel(
     companion object {
         const val UPDATE_FREQUENCY = 250L
     }
-
-    private var _newPlaylistFragmentBackup: CreatePlaylistFragment? = null
 
     private var timerJob: Job? = null
 
@@ -51,7 +48,6 @@ class PlayerViewModel(
     private val lastTimerState: TrackDurationTime = TrackDurationTime(0)
 
     // MediaPlayer
-
     private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
 
     // Функции для управления проигрыванием
@@ -160,18 +156,6 @@ class PlayerViewModel(
                 _bottomSheetState.postValue(PlayerBottomSheetState.PlaylistNotAdded(playlist))
             }
         }
-    }
-
-    fun savePlaylistFragment(playlistFragment: CreatePlaylistFragment) {
-        _newPlaylistFragmentBackup = playlistFragment
-    }
-
-    fun restorePlaylistFragment(): CreatePlaylistFragment? {
-        return _newPlaylistFragmentBackup
-    }
-
-    fun clearPlaylistFragment() {
-        _newPlaylistFragmentBackup = null
     }
 
     fun handleNewPlaylistTap() {

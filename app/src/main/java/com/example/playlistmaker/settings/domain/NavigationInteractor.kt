@@ -17,5 +17,4 @@ class NavigationInteractor(private val navigator: ExternalNavigator) {
     fun navigateToMessage(message: String) {
         navigator.sendMessage(message)
     }
-
 }

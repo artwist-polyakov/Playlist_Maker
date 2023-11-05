@@ -47,7 +47,6 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     }
 
     // MARK :- Lifecycle
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         playlistId = arguments?.getString(ARG_PLAYLIST_ID) ?: "null"
@@ -165,7 +164,6 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
 
             is CreatePlaylistScreenState.GoodBye -> {
                 goBack()
-//                findNavController().popBackStack()
             }
 
             is CreatePlaylistScreenState.BasicState -> {

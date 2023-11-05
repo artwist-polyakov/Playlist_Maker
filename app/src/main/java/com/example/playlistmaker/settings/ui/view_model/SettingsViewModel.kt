@@ -16,7 +16,6 @@ class SettingsViewModel(
     val isDarkTheme = MutableLiveData<Boolean>()
     val themeSwitcherEnabled = MutableLiveData<Boolean>(true)
 
-
     init {
         val themeSettings = settingsInteractor.getThemeSettings()
         isDarkTheme.value = themeSettings is ThemeSettings.Dark

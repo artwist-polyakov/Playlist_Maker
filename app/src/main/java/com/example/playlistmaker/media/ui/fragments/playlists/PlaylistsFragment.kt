@@ -1,7 +1,6 @@
 package com.example.playlistmaker.media.ui.fragments.playlists
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
-import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -44,11 +42,11 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter =
-        PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
-            override fun onTrackClick(playlist: PlaylistInformation) {
-                onPlaylistClickDebounce(playlist)
-            }
-        })
+            PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
+                override fun onTrackClick(playlist: PlaylistInformation) {
+                    onPlaylistClickDebounce(playlist)
+                }
+            })
         clearScreen()
         onPlaylistClickDebounce = debounce<PlaylistInformation>(
             CLICK_DEBOUNCE_DELAY,

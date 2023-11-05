@@ -9,7 +9,6 @@ import com.example.playlistmaker.common.data.db.entity.TrackEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-
 @Dao
 interface TrackDao {
 
