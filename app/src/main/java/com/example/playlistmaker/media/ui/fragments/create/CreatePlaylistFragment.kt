@@ -29,6 +29,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.google.android.material.R as MaterialR
 
+// TODO: Создать конструктор Instance of CreatePlaylistFragment и передать в него playlistId
+// TODO: Инициализировать во ViewModel playlistId из конструктора
+// TODO: Менять логику поведения при заполненном playlistId и при пустом во VoewwModel
+// TODO: Удалять фотографию из хранилища при смене фотографии
 
 class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     private val viewModel: CreatePlaylistViewmodel by viewModel()
