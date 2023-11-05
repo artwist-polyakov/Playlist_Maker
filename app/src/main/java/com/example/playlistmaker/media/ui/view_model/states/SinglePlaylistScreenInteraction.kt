@@ -15,4 +15,5 @@ sealed class SinglePlaylistScreenInteraction {
     object cancelDelete : SinglePlaylistScreenInteraction()
     data class longTrackTap (val track: Track) : SinglePlaylistScreenInteraction()
     data class confirmDeleteTrack (val track: Track) : SinglePlaylistScreenInteraction()
+    object editPlaylist : SinglePlaylistScreenInteraction()
 }

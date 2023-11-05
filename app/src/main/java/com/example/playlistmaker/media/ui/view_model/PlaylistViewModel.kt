@@ -121,6 +121,10 @@ class PlaylistViewModel (
                     _state.postValue(SinglePlaylistScreenState.SuccessTrackDelete)
                 }
             }
+
+            SinglePlaylistScreenInteraction.editPlaylist -> {
+                _state.postValue(SinglePlaylistScreenState.EditPlaylist(playlistId))
+            }
         }
     }
 

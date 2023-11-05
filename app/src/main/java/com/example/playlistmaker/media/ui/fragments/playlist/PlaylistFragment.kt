@@ -107,6 +107,10 @@ class PlaylistFragment : Fragment() {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.SharePlaylist)
         }
 
+        binding.editBottomsheetButton.setOnClickListener {
+            viewModel.handleInteraction(SinglePlaylistScreenInteraction.editPlaylist)
+        }
+
         binding.removeBottomsheetButton.setOnClickListener {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.DeletePlaylist)
         }
@@ -156,6 +160,7 @@ class PlaylistFragment : Fragment() {
             }
 
             is SinglePlaylistScreenState.Basic -> {
+                viewModel.refreshData()
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
             }
 
@@ -210,6 +215,17 @@ class PlaylistFragment : Fragment() {
             SinglePlaylistScreenState.SuccessTrackDelete -> {
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
                 viewModel.refreshData()
+            }
+
+            is SinglePlaylistScreenState.EditPlaylist -> {
+                val bundle = Bundle().apply {
+                    putString("arg_playlist_id", state.playlistId)
+                }
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
+                findNavController().navigate(
+                    R.id.action_playlistFragment_to_createPlaylistFragment,
+                    bundle
+                )
             }
         }
     }

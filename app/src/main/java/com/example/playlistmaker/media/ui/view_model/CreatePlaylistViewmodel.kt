@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.media.domain.ImagesRepositoryInteractor
 import com.example.playlistmaker.media.ui.view_model.models.CreatePlaylistData
 import com.example.playlistmaker.media.ui.view_model.models.PlaylistInputData
@@ -14,14 +15,42 @@ import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreen
 import kotlinx.coroutines.launch
 
 class CreatePlaylistViewmodel(
+    private val playlistId: String,
     private val imagesInteractor: ImagesRepositoryInteractor,
     private val playlistsDb: PlaylistsDbInteractor
 ) : ViewModel() {
 
     private var currentInputData = PlaylistInputData()
 
+    private var currentPlaylist: PlaylistInformation? = null
+
     private val _state = MutableLiveData<CreatePlaylistScreenState>()
     val state: LiveData<CreatePlaylistScreenState> get() = _state
+
+    init {
+        if (playlistId != "null") {
+            viewModelScope.launch {
+                playlistsDb.getPlaylist(playlistId).let {
+                    currentPlaylist = it
+                    currentInputData = currentInputData.copy(
+                        title = it.name,
+                        description = it.description,
+                        image = it.image
+                    )
+                    _state.postValue(CreatePlaylistScreenState.ReadyToSave)
+                    _state.postValue(
+                        CreatePlaylistScreenState.ReadyToEdit(
+                            name = it.name,
+                            description = it.description,
+                            image = it.image
+                        )
+                    )
+                }
+            }
+        } else {
+            _state.postValue(CreatePlaylistScreenState.BasicState)
+        }
+    }
 
     fun handleInteraction(interaction: CreatePlaylistScreenInteraction) {
         when (interaction) {
