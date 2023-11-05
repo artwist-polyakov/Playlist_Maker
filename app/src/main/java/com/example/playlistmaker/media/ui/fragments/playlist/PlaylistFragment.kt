@@ -253,22 +253,7 @@ class PlaylistFragment: Fragment() {
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
     }
-
-    private fun generateMessage(playlist: PlaylistInformation, tracks: ArrayList<Track>): String {
-        var message = "${playlist.name}\n"
-        message+= "${playlist.description}\n"
-        message+= "${requireContext().
-        applicationContext.
-        resources.getQuantityString(
-            R.plurals.tracks,
-            playlist.tracksCount,
-            playlist.tracksCount
-        )} tracks\n"
-        for ((index, track) in tracks.withIndex()) {
-            message+= "${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n"
-        }
-        return message
-    }
+    
     private fun generateShareMessage(playlist: PlaylistInformation, tracks: ArrayList<Track>): String {
         var message = "${playlist.name}\n"
         message+= "${playlist.description}\n"
