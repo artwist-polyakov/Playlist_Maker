@@ -95,6 +95,10 @@ class PlaylistFragment: Fragment() {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.OptionsClicked)
         }
 
+        binding.shareBottomsheetButton.setOnClickListener {
+            viewModel.handleInteraction(SinglePlaylistScreenInteraction.SharePlaylist)
+        }
+
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
@@ -130,7 +134,7 @@ class PlaylistFragment: Fragment() {
             is SinglePlaylistScreenState.SharePlaylistInitiated -> {
                 val playlist = state.playlist ?: return
                 val tracks = state.tracks ?: return
-
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
                 viewModel.handleInteraction(
                     SinglePlaylistScreenInteraction.sendMessage(
                         generateShareMessage(playlist, tracks)
@@ -138,7 +142,9 @@ class PlaylistFragment: Fragment() {
                 )
             }
 
-            is SinglePlaylistScreenState.Basic -> {}
+            is SinglePlaylistScreenState.Basic -> {
+                optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+            }
 
             is SinglePlaylistScreenState.ShowMessageEmptyList -> {
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
