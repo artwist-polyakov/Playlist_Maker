@@ -36,6 +36,6 @@ val domainModule = module {
     factory<MediaPlayerInteractor> { MediaPlayerInteractorImpl(get()) }
     single<TracksDbInteractor> { TracksDbInteractorImpl(get(), get()) }
     single<ImagesStorageInteractor> { ImagesStorageInteractorImpl(get()) }
-    single<PlaylistsDbInteractor> { PlaylistsDbInteractorImpl(get()) }
+    single<PlaylistsDbInteractor> { PlaylistsDbInteractorImpl(get(), get()) }
     single<ImagesRepositoryInteractor> { ImagesRepositoryInteractorImpl(get()) }
 }

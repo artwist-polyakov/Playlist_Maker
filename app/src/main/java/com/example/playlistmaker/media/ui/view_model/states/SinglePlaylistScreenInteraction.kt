@@ -11,4 +11,6 @@ sealed class SinglePlaylistScreenInteraction {
     object OptionsDismissed : SinglePlaylistScreenInteraction()
     data class TrackClicked(val track: Track) : SinglePlaylistScreenInteraction()
     data class sendMessage(val message: String) : SinglePlaylistScreenInteraction()
+    object confirmDelete : SinglePlaylistScreenInteraction()
+    object cancelDelete : SinglePlaylistScreenInteraction()
 }

@@ -14,4 +14,8 @@ class ImagesRepositoryInteractorImpl(
     override fun clearAllImages() {
         repository.clearAllImages()
     }
+
+    override fun removeImage(uri: Uri): Boolean {
+        return repository.removeImage(uri)
+    }
 }

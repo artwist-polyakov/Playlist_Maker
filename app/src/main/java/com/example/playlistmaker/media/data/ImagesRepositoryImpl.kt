@@ -51,4 +51,15 @@ class ImagesRepositoryImpl(
         }
         filePath.deleteRecursively()
     }
+
+    override fun removeImage(uri: Uri): Boolean {
+        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
+        val file = File(filePath, uri.lastPathSegment ?: "")
+        return try {
+            file.delete()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
 }

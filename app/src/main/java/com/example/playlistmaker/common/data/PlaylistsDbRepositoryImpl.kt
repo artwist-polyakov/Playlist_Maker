@@ -53,4 +53,11 @@ class PlaylistsDbRepositoryImpl(
         playlistsDbConvertor.map(appDatabase
             .playlistDao()
             .givePlaylistWithTime(playlistId))
+
+
+    override suspend fun deletePlaylist(playlistId: String) {
+        appDatabase
+            .playlistDao()
+            .deletePlaylist(playlistId)
+    }
 }

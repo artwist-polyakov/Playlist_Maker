@@ -1,12 +1,15 @@
 package com.example.playlistmaker.media.ui.fragments.playlist
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,6 +28,7 @@ import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreen
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.lang.Math.max
@@ -204,7 +208,6 @@ class PlaylistFragment: Fragment() {
         binding.loadingIndicator.visibility = View.GONE
     }
 
-
     private fun showLoading() {
         binding.playlistCover.visibility = View.GONE
         binding.playlistTitle.visibility = View.GONE
@@ -276,6 +279,29 @@ class PlaylistFragment: Fragment() {
                 quantity,
                 quantity
             )
+    }
+
+    private fun showDeleteConfirmation(playlist: PlaylistInformation) {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
+        val colorOnPrimary = typedValue.data
+
+        val likeColor = ContextCompat.getColor(requireContext(), R.color.like_color)
+        val posColor  = ContextCompat.getColor(requireContext(), R.color.main_screen_background_color)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.remove_confirmation_title))
+            .setMessage(getString(R.string.remove_confirmation_text))
+            .setPositiveButton(getString(R.string.yes_string)) { dialog, which ->
+
+            }
+            .setPositiveButton(getString(R.string.no_string)) { dialog, which ->
+
+            }
+            .show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(posColor)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(likeColor)
     }
 
     companion object {

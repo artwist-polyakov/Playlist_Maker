@@ -67,4 +67,9 @@
     <string name="bottom_sheet_remove">Удалить плейлист</string>
     <string name="bottom_sheet_edit">Редактировать информацию</string>
     <string name="bottom_sheet_share">Поделиться</string>
+    <string name="remove_confirmation">Хотите удалить плейлист «%1$s»?</string>
+    <string name="yes_string">Да</string>
+    <string name="no_string">Нет</string>
+    <string name="remove_confirmation_title">Удалить плейлист</string>
+    <string name="remove_confirmation_text">Хотите удалить плейлист?</string>
 </resources>

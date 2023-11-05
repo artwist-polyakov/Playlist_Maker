@@ -93,6 +93,9 @@ class PlaylistViewModel (
             is SinglePlaylistScreenInteraction.sendMessage -> {
                 sendMessage(interaction.message)
             }
+
+            SinglePlaylistScreenInteraction.cancelDelete -> TODO()
+            SinglePlaylistScreenInteraction.confirmDelete -> TODO()
         }
     }
 
