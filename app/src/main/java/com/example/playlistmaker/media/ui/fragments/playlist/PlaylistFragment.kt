@@ -1,9 +1,7 @@
 package com.example.playlistmaker.media.ui.fragments.playlist
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +32,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.android.ext.android.inject
 
-class PlaylistFragment: Fragment() {
+class PlaylistFragment : Fragment() {
     private var playlistId: String = ""
     private val viewModel: PlaylistViewModel by viewModel { parametersOf(playlistId) }
     private val confirmator: ConfirmationPresenter by inject { parametersOf(requireContext()) }
@@ -53,7 +51,8 @@ class PlaylistFragment: Fragment() {
         super.onCreate(savedInstanceState)
         playlistId = arguments?.getString(ARG_PLAYLIST_ID) ?: "null"
     }
-    override fun onCreateView (
+
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -101,7 +100,7 @@ class PlaylistFragment: Fragment() {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.SharePlaylist)
         }
 
-        binding.dots.setOnClickListener{
+        binding.dots.setOnClickListener {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.OptionsClicked)
         }
 
@@ -131,6 +130,7 @@ class PlaylistFragment: Fragment() {
             is SinglePlaylistScreenState.Loading -> {
                 showLoading()
             }
+
             is SinglePlaylistScreenState.Error -> {
                 Log.d("SinglePlaylistScreenState", "Error")
             }
@@ -162,7 +162,7 @@ class PlaylistFragment: Fragment() {
 
             is SinglePlaylistScreenState.ShowMessageEmptyList -> {
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
-                binding.root.showCustomSnackbar (getString(R.string.playlist_is_empty_warning))
+                binding.root.showCustomSnackbar(getString(R.string.playlist_is_empty_warning))
             }
 
             is SinglePlaylistScreenState.ShownOptions -> {
@@ -179,6 +179,7 @@ class PlaylistFragment: Fragment() {
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
             }
+
             SinglePlaylistScreenState.DeleteSuccess -> {
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
@@ -234,11 +235,13 @@ class PlaylistFragment: Fragment() {
 
         val trackQuantity = generatePluralString(
             playlist.tracksCount,
-            R.plurals.tracks)
+            R.plurals.tracks
+        )
 
         val trackDuration = generatePluralString(
             playlist.durationInSeconds.toInt() / 60,
-            R.plurals.playlist_minutes)
+            R.plurals.playlist_minutes
+        )
 
         binding.tracksQuantity.text = trackQuantity
         binding.tracksDuration.text = trackDuration
@@ -300,6 +303,7 @@ class PlaylistFragment: Fragment() {
                     }
                 }
             }
+
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
@@ -307,57 +311,51 @@ class PlaylistFragment: Fragment() {
         recyclerView.adapter = adapter
     }
 
-    private fun generateShareMessage(playlist: PlaylistInformation, tracks: ArrayList<Track>): String {
+    private fun generateShareMessage(
+        playlist: PlaylistInformation,
+        tracks: ArrayList<Track>
+    ): String {
         var message = "${playlist.name}\n"
-        message+= "${playlist.description}\n"
-        message+= "${requireContext().
-        applicationContext.
-        resources.getQuantityString(
-            R.plurals.tracks,
-            playlist.tracksCount,
-            playlist.tracksCount
-        )}\n"
-        // enumerated loop
+        message += "${playlist.description}\n"
+        message += "${
+            requireContext().applicationContext.resources.getQuantityString(
+                R.plurals.tracks,
+                playlist.tracksCount,
+                playlist.tracksCount
+            )
+        }\n"
+
         for ((index, track) in tracks.withIndex()) {
-            message+= "${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n"
+            message += "${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n"
         }
         return message
     }
 
     private fun generatePluralString(quantity: Int, stringId: Int): String {
-        return requireContext().
-            applicationContext.
-            resources.getQuantityString(
-                stringId,
-                quantity,
-                quantity
-            )
+        return requireContext().applicationContext.resources.getQuantityString(
+            stringId,
+            quantity,
+            quantity
+        )
     }
 
     private fun showPlaylistDeleteConfirmation(playlist: PlaylistInformation) {
-        val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
-        val colorOnPrimary = typedValue.data
-
-        val likeColor = ContextCompat.getColor(requireContext(), R.color.like_color)
-        val posColor  = ContextCompat.getColor(requireContext(), R.color.main_screen_background_color)
-
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.remove_playlist_confirmation_title))
-            .setMessage(getString(R.string.remove_playlist_confirmation_text))
-            .setPositiveButton(getString(R.string.yes_string)) { dialog, which ->
+        confirmator.showConfirmationDialog(
+            getString(R.string.remove_playlist_confirmation_title),
+            getString(R.string.remove_playlist_confirmation_text),
+            getString(R.string.yes_string),
+            getString(R.string.no_string),
+            {
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.confirmDelete)
-            }
-            .setNegativeButton(getString(R.string.no_string)) { dialog, which ->
+            },
+            {
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.cancelDelete)
-            }
-            .show()
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(posColor)
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(posColor)
+            },
+            ContextCompat.getColor(requireContext(), R.color.main_screen_background_color),
+            ContextCompat.getColor(requireContext(), R.color.main_screen_background_color)
+        )
     }
-
-
 
     companion object {
         private const val ARG_PLAYLIST_ID = "arg_playlist_id"

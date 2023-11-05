@@ -106,7 +106,6 @@ class PlaylistViewModel (
             SinglePlaylistScreenInteraction.confirmDelete -> {
                 viewModelScope.launch {
                     playlistsInteractor.deletePlaylist(currentPlaylistInformation!!)
-                    processResult(playlistsInteractor.getPlaylist(playlistId))
                     _state.postValue(SinglePlaylistScreenState.DeleteSuccess)
 
                 }
