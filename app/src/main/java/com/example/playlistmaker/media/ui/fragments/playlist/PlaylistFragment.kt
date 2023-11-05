@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.utils.calculateDesiredHeight
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.common.utils.setImageUriOrDefault
 import com.example.playlistmaker.common.utils.showCustomSnackbar
@@ -224,25 +225,9 @@ class PlaylistFragment: Fragment() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         optionsBottomSheetBehaviour = BottomSheetBehavior.from(optionsBottomSheetContainer)
 
-        val desiredHeight = max (
-            resources
-                .displayMetrics.heightPixels -
-                    (resources.displayMetrics.widthPixels +
-                            ((24 + 24 + 150) * resources.displayMetrics.density)
-                                .toInt()
-                            ),
-            250
-        )
+        val desiredHeight = resources.calculateDesiredHeight(24 + 24 + 150)
+        val optionsDesiredHeight = resources.calculateDesiredHeight(24 + 28)
 
-        val optionsDesiredHeight = max (
-            resources
-                .displayMetrics.heightPixels -
-                    (resources.displayMetrics.widthPixels +
-                            ((24 + 28) * resources.displayMetrics.density)
-                                .toInt()
-                            ),
-            250
-        )
         bottomSheetBehavior.peekHeight = desiredHeight
         optionsBottomSheetBehaviour.peekHeight = optionsDesiredHeight
         optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
@@ -252,7 +237,6 @@ class PlaylistFragment: Fragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-//                        bottomSheetBehavior.peekHeight = desiredHeight
                         bottomSheet.post {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                         }
