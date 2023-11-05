@@ -82,32 +82,25 @@ class CreatePlaylistViewmodel(
     }
 
     private fun saveData() {
+        val playlistToSave = currentPlaylist?.copy(
+            name = currentInputData.title,
+            description = currentInputData.description,
+            image = currentInputData.image
+        ) ?: currentInputData.mapToPlaylistInformation()
 
-        if (currentPlaylist != null) {
-            currentPlaylist = currentPlaylist!!.copy(
-                name = currentInputData.title,
-                description = currentInputData.description,
-                image = currentInputData.image
-            )
-            viewModelScope.launch {
-                playlistsDb.addPlaylist(currentPlaylist!!)
-            }
-            _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
+        currentInputData.image?.let { newImage ->
+            playlistToSave.image?.let(imagesInteractor::removeImage)
+            val imageLink = imagesInteractor.saveImage(newImage)
+            currentInputData = currentInputData.copy(image = Uri.parse(imageLink))
+        }
+        updatePlaylistInDatabase(playlistToSave)
+    }
 
-        } else {
-            var imageLink: String?
-            currentInputData.image?.let {
-                imageLink = imagesInteractor.saveImage(it)
-                Uri.parse(imageLink).let {
-                    currentInputData = currentInputData.copy(image = it)
-                }
-            }
-            viewModelScope.launch {
-                playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())
-            }
+    private fun updatePlaylistInDatabase(playlist: PlaylistInformation) {
+        viewModelScope.launch {
+            playlistsDb.addPlaylist(playlist)
             _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
         }
-
     }
 
     fun handleExit() {

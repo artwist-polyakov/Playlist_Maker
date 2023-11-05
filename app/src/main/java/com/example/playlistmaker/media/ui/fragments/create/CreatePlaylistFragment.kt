@@ -189,6 +189,8 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
                     state.image,
                     R.drawable.song_cover_placeholder_with_padding
                 )
+                binding.textView.text = getString(R.string.edit_playlist)
+                binding.button.text = getString(R.string.edit_save_button)
             }
         }
     }
