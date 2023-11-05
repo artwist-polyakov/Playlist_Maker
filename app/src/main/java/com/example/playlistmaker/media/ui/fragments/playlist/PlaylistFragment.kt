@@ -209,6 +209,7 @@ class PlaylistFragment: Fragment() {
 
             SinglePlaylistScreenState.SuccessTrackDelete -> {
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+                viewModel.refreshData()
             }
         }
     }

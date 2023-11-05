@@ -49,6 +49,12 @@ class PlaylistViewModel (
         }
     }
 
+    fun refreshData() {
+        viewModelScope.launch {
+            processResult(playlistsInteractor.getPlaylist(playlistId))
+        }
+    }
+
     private fun processResult(playlist: PlaylistInformation) {
         currentPlaylistInformation = playlist
         _state.postValue(SinglePlaylistScreenState.Success(playlist))
