@@ -1,6 +1,5 @@
 package com.example.playlistmaker.common.data.db.dao
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -101,9 +100,9 @@ interface PlaylistDao {
         var playlist = getPlaylist(playlistId)
         if (!playlist.wasDurationCalculated) {
             val duration = getTracksFromPlaylist(playlistId).map { tracks ->
-                tracks.map { track ->
+                tracks.sumOf { track ->
                     track.trackTime.countDurationInSeconds()
-                }.sum()
+                }
             }.first()
             incrementPlaylistDuration(playlistId, duration)
             setWasDurationCalculated(playlistId)

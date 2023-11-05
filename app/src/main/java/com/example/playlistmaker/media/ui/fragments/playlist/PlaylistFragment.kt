@@ -168,22 +168,15 @@ class PlaylistFragment: Fragment() {
         )
         binding.playlistTitle.text = playlist.name
         binding.playlistDescription.text = playlist.description
-        val trackQuantity = requireContext().
-            applicationContext.
-            resources.getQuantityString(
-                R.plurals.tracks,
-                playlist.tracksCount,
-                playlist.tracksCount
-            )
 
-        val trackDuration = requireContext().
-            applicationContext.
-            resources.
-            getQuantityString(
-                R.plurals.playlist_minutes,
-                playlist.durationInSeconds.toInt() / 60,
-                playlist.durationInSeconds.toInt() / 60
-            )
+        val trackQuantity = generatePluralString(
+            playlist.tracksCount,
+            R.plurals.tracks)
+
+        val trackDuration = generatePluralString(
+            playlist.durationInSeconds.toInt() / 60,
+            R.plurals.playlist_minutes)
+
         binding.tracksQuantity.text = trackQuantity
         binding.tracksDuration.text = trackDuration
         binding.playlistLittleTitle.text = playlist.name
@@ -192,8 +185,6 @@ class PlaylistFragment: Fragment() {
             R.drawable.song_cover_placeholder
         )
         binding.tracksQuantityLittle.text = trackQuantity
-
-
     }
 
     private fun showContent() {
@@ -253,7 +244,7 @@ class PlaylistFragment: Fragment() {
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
     }
-    
+
     private fun generateShareMessage(playlist: PlaylistInformation, tracks: ArrayList<Track>): String {
         var message = "${playlist.name}\n"
         message+= "${playlist.description}\n"
@@ -263,12 +254,22 @@ class PlaylistFragment: Fragment() {
             R.plurals.tracks,
             playlist.tracksCount,
             playlist.tracksCount
-        )} tracks\n"
+        )}\n"
         // enumerated loop
         for ((index, track) in tracks.withIndex()) {
             message+= "${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n"
         }
         return message
+    }
+
+    private fun generatePluralString(quantity: Int, stringId: Int): String {
+        return requireContext().
+            applicationContext.
+            resources.getQuantityString(
+                stringId,
+                quantity,
+                quantity
+            )
     }
 
     companion object {
