@@ -107,6 +107,10 @@ class PlaylistFragment : Fragment() {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.SharePlaylist)
         }
 
+        binding.editBottomsheetButton.setOnClickListener {
+            viewModel.handleInteraction(SinglePlaylistScreenInteraction.editPlaylist)
+        }
+
         binding.removeBottomsheetButton.setOnClickListener {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.DeletePlaylist)
         }
@@ -118,6 +122,12 @@ class PlaylistFragment : Fragment() {
             render(it)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshData()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -211,12 +221,24 @@ class PlaylistFragment : Fragment() {
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
                 viewModel.refreshData()
             }
+
+            is SinglePlaylistScreenState.EditPlaylist -> {
+                val bundle = Bundle().apply {
+                    putString("arg_playlist_id", state.playlistId)
+                }
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
+                findNavController().navigate(
+                    R.id.action_playlistFragment_to_createPlaylistFragment,
+                    bundle
+                )
+            }
         }
     }
 
     private fun render(tracks: ArrayList<Track>) {
         if (tracks.isEmpty()) {
             binding.bottomSheet.visibility = View.GONE
+            binding.root.showCustomSnackbar(getString(R.string.empty_list_notification))
         } else {
             binding.bottomSheet.visibility = View.VISIBLE
             adapter.tracks = tracks

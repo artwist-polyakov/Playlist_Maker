@@ -19,6 +19,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.utils.setImageUriOrDefault
 import com.example.playlistmaker.common.utils.showCustomSnackbar
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewmodel
@@ -27,11 +28,17 @@ import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreen
 import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreenState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import com.google.android.material.R as MaterialR
 
+// TODO: Создать конструктор Instance of CreatePlaylistFragment и передать в него playlistId
+// TODO: Инициализировать во ViewModel playlistId из конструктора
+// TODO: Менять логику поведения при заполненном playlistId и при пустом во VoewwModel
+// TODO: Удалять фотографию из хранилища при смене фотографии
 
 class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
-    private val viewModel: CreatePlaylistViewmodel by viewModel()
+    private var playlistId: String = ""
+    private val viewModel: CreatePlaylistViewmodel by viewModel { parametersOf(playlistId) }
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
 
@@ -45,6 +52,12 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     }
 
     // MARK :- Lifecycle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        playlistId = arguments?.getString(ARG_PLAYLIST_ID) ?: "null"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -168,6 +181,20 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
                 showSuccess(state.name)
                 goBack()
             }
+
+            is CreatePlaylistScreenState.ReadyToEdit -> {
+                binding.titleField.setText(state.name)
+                binding.descriptionField.setText(state.description)
+                binding.imageView.setImageUriOrDefault(
+                    state.image,
+                    R.drawable.song_cover_placeholder_with_padding
+                )
+                if (state.image != null) {
+                    binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                }
+                binding.textView.text = getString(R.string.edit_playlist)
+                binding.button.text = getString(R.string.edit_save_button)
+            }
         }
     }
 
@@ -223,5 +250,16 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
             R.color.box_stroke_color_blue
         }
         return AppCompatResources.getColorStateList(requireContext(), colorRes)
+    }
+
+    companion object {
+        private const val ARG_PLAYLIST_ID = "arg_playlist_id"
+        fun newInstance(playlistId: String): CreatePlaylistFragment {
+            val fragment = CreatePlaylistFragment()
+            val args = Bundle()
+            args.putString(ARG_PLAYLIST_ID, playlistId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
