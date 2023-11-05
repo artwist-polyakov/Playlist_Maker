@@ -11,4 +11,5 @@ interface PlaylistsDbInteractor {
     suspend fun addPlaylist(playlist: PlaylistInformation)
     suspend fun getPlaylist(playlistId: String): PlaylistInformation
     suspend fun deletePlaylist(playlist: PlaylistInformation)
+    suspend fun removeTrackFromPlaylist(playlistId: String, track: Track)
 }

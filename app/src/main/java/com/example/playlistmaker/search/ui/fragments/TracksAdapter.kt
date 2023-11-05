@@ -24,12 +24,13 @@ class TracksAdapter(private val clickListener: TrackClickListener) :
 
     interface TrackClickListener {
         fun onTrackClick(track: Track)
+        fun onTrackLongClick(track: Track) {}
     }
 }
 
 class TrackViewHolder(
     parent: ViewGroup,
-    private val clickListener: TracksAdapter.TrackClickListener,
+    private val clickListener: TracksAdapter.TrackClickListener
 ) :
     RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
@@ -50,6 +51,10 @@ class TrackViewHolder(
         duration.text = track.trackTime
 
         itemView.setOnClickListener { clickListener.onTrackClick(track) }
+        itemView.setOnLongClickListener {
+            clickListener.onTrackLongClick(track)
+            true
+        }
     }
 }
 

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.utils.ConfirmationPresenter
 import com.example.playlistmaker.common.utils.calculateDesiredHeight
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.common.utils.setImageUriOrDefault
@@ -31,12 +32,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.lang.Math.max
+import org.koin.android.ext.android.inject
 
 class PlaylistFragment: Fragment() {
     private var playlistId: String = ""
     private val viewModel: PlaylistViewModel by viewModel { parametersOf(playlistId) }
-
+    private val confirmator: ConfirmationPresenter by inject { parametersOf(requireContext()) }
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
 
@@ -69,6 +70,11 @@ class PlaylistFragment: Fragment() {
                 override fun onTrackClick(track: Track) {
                     onTrackClickDebounce(track)
                 }
+
+                override fun onTrackLongClick(track: Track) {
+                    viewModel.handleInteraction(SinglePlaylistScreenInteraction.longTrackTap(track))
+                }
+
             }
         )
         onTrackClickDebounce = debounce<Track>(
@@ -165,7 +171,7 @@ class PlaylistFragment: Fragment() {
 
             is SinglePlaylistScreenState.ConfirmDelete -> {
                 state.playlist?.let {
-                    showDeleteConfirmation(it)
+                    showPlaylistDeleteConfirmation(it)
                 }
             }
 
@@ -177,6 +183,32 @@ class PlaylistFragment: Fragment() {
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
                 optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
                 findNavController().popBackStack()
+            }
+
+            is SinglePlaylistScreenState.ConfirmTrackDelete -> {
+                confirmator.showConfirmationDialog(
+                    getString(R.string.remove_track_confirmation_title),
+                    getString(R.string.remove_track_confirmation_text),
+                    getString(R.string.yes_string),
+                    getString(R.string.no_string),
+                    {
+                        viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
+                        optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+                        viewModel.handleInteraction(
+                            SinglePlaylistScreenInteraction.confirmDeleteTrack(state.track)
+                        )
+                    },
+                    {
+                        viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
+                        optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+                    },
+                    ContextCompat.getColor(requireContext(), R.color.main_screen_background_color),
+                    ContextCompat.getColor(requireContext(), R.color.main_screen_background_color)
+                )
+            }
+
+            SinglePlaylistScreenState.SuccessTrackDelete -> {
+                optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
     }
@@ -301,7 +333,7 @@ class PlaylistFragment: Fragment() {
             )
     }
 
-    private fun showDeleteConfirmation(playlist: PlaylistInformation) {
+    private fun showPlaylistDeleteConfirmation(playlist: PlaylistInformation) {
         val typedValue = TypedValue()
         requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
         val colorOnPrimary = typedValue.data
@@ -310,8 +342,8 @@ class PlaylistFragment: Fragment() {
         val posColor  = ContextCompat.getColor(requireContext(), R.color.main_screen_background_color)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.remove_confirmation_title))
-            .setMessage(getString(R.string.remove_confirmation_text))
+            .setTitle(getString(R.string.remove_playlist_confirmation_title))
+            .setMessage(getString(R.string.remove_playlist_confirmation_text))
             .setPositiveButton(getString(R.string.yes_string)) { dialog, which ->
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.confirmDelete)
             }
@@ -323,6 +355,8 @@ class PlaylistFragment: Fragment() {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(posColor)
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(posColor)
     }
+
+
 
     companion object {
         private const val ARG_PLAYLIST_ID = "arg_playlist_id"

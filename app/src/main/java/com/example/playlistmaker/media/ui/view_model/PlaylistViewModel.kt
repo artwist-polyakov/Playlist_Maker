@@ -100,7 +100,20 @@ class PlaylistViewModel (
             SinglePlaylistScreenInteraction.confirmDelete -> {
                 viewModelScope.launch {
                     playlistsInteractor.deletePlaylist(currentPlaylistInformation!!)
+                    processResult(playlistsInteractor.getPlaylist(playlistId))
                     _state.postValue(SinglePlaylistScreenState.DeleteSuccess)
+
+                }
+            }
+
+            is SinglePlaylistScreenInteraction.longTrackTap -> {
+                _state.postValue(SinglePlaylistScreenState.ConfirmTrackDelete(interaction.track))
+            }
+
+            is SinglePlaylistScreenInteraction.confirmDeleteTrack -> {
+                viewModelScope.launch {
+                    playlistsInteractor.removeTrackFromPlaylist(playlistId, interaction.track)
+                    _state.postValue(SinglePlaylistScreenState.SuccessTrackDelete)
                 }
             }
         }

@@ -15,4 +15,6 @@ sealed class SinglePlaylistScreenState {
     data class ConfirmDelete(val playlist: PlaylistInformation) : SinglePlaylistScreenState()
     object CancelDelete : SinglePlaylistScreenState()
     object DeleteSuccess : SinglePlaylistScreenState()
+    data class ConfirmTrackDelete(val track: Track) : SinglePlaylistScreenState()
+    object SuccessTrackDelete : SinglePlaylistScreenState()
 }

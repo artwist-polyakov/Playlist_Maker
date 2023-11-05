@@ -1,5 +1,7 @@
 package com.example.playlistmaker.common.di
 
+import android.content.Context
+import com.example.playlistmaker.common.utils.ConfirmationPresenter
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewmodel
 import com.example.playlistmaker.media.ui.view_model.FavoritesViewModel
 import com.example.playlistmaker.media.ui.view_model.PlaylistViewModel
@@ -18,4 +20,8 @@ val viewModelModule = module {
     viewModel { FavoritesViewModel(get(), get()) }
     viewModel { CreatePlaylistViewmodel(get(), get()) }
     viewModel { (playlistId: String) -> PlaylistViewModel(playlistId = playlistId, get(), get(), get())}
+}
+
+val uimodule = module {
+    factory { (context: Context) -> ConfirmationPresenter(context = context) }
 }

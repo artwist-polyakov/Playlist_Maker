@@ -60,4 +60,10 @@ class PlaylistsDbRepositoryImpl(
             .playlistDao()
             .deletePlaylist(playlistId)
     }
+
+    override suspend fun removeTrackFromPlaylist(playlistId: String, track: Track) {
+        appDatabase
+            .playlistDao()
+            .removeTrackFromPlaylist(playlistsDbConvertor.map(playlistId, track.trackId))
+    }
 }

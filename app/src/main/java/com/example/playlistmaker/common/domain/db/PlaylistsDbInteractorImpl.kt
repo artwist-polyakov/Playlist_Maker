@@ -34,4 +34,8 @@ class PlaylistsDbInteractorImpl(
         playlist.image?.let { imagesRepositoryInteractor.removeImage(it) }
         repository.deletePlaylist(playlist.id.toString())
     }
+
+    override suspend fun removeTrackFromPlaylist(playlistId: String, track: Track) {
+        repository.removeTrackFromPlaylist(playlistId, track)
+    }
 }
