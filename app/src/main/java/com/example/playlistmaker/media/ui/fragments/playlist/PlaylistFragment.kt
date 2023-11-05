@@ -325,6 +325,27 @@ class PlaylistFragment : Fragment() {
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
+
+        optionsBottomSheetBehaviour.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        bottomSheet.post {
+                            binding.backgroundDimView.visibility = View.GONE
+
+                        }
+                    }
+
+                    else -> {
+                        binding.backgroundDimView.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
