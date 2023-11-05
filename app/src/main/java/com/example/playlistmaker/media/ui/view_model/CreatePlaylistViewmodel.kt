@@ -105,7 +105,10 @@ class CreatePlaylistViewmodel(
     }
 
     fun handleExit() {
-        currentPlaylist?.let { _state.postValue(CreatePlaylistScreenState.GoodBye) }
+        if (currentPlaylist != null) {
+            _state.postValue(CreatePlaylistScreenState.GoodBye)
+            return
+        }
         when (currentInputData.isDataEntered()) {
             true -> _state.postValue(CreatePlaylistScreenState.ShowPopupConfirmation)
             false -> _state.postValue(CreatePlaylistScreenState.GoodBye)
