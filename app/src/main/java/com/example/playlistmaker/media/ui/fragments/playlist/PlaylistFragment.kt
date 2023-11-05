@@ -90,6 +90,10 @@ class PlaylistFragment: Fragment() {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.SharePlaylist)
         }
 
+        binding.dots.setOnClickListener{
+            viewModel.handleInteraction(SinglePlaylistScreenInteraction.OptionsClicked)
+        }
+
         viewModel.state.observe(viewLifecycleOwner) {
             render(it)
         }
@@ -139,6 +143,10 @@ class PlaylistFragment: Fragment() {
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
                 binding.root.showCustomSnackbar (getString(R.string.playlist_is_empty_warning))
             }
+
+            is SinglePlaylistScreenState.ShownOptions -> {
+                optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
         }
     }
 
@@ -159,23 +167,32 @@ class PlaylistFragment: Fragment() {
         )
         binding.playlistTitle.text = playlist.name
         binding.playlistDescription.text = playlist.description
-        binding.tracksQuantity.text =
-            requireContext().
+        val trackQuantity = requireContext().
             applicationContext.
             resources.getQuantityString(
                 R.plurals.tracks,
                 playlist.tracksCount,
                 playlist.tracksCount
             )
-        binding.tracksDuration.text =
-            requireContext().
+
+        val trackDuration = requireContext().
             applicationContext.
             resources.
             getQuantityString(
                 R.plurals.playlist_minutes,
                 playlist.durationInSeconds.toInt() / 60,
                 playlist.durationInSeconds.toInt() / 60
+            )
+        binding.tracksQuantity.text = trackQuantity
+        binding.tracksDuration.text = trackDuration
+        binding.playlistLittleTitle.text = playlist.name
+        binding.playlistLittleCover.setImageUriOrDefault(
+            playlist.image,
+            R.drawable.song_cover_placeholder
         )
+        binding.tracksQuantityLittle.text = trackQuantity
+
+
     }
 
     private fun showContent() {
@@ -221,7 +238,7 @@ class PlaylistFragment: Fragment() {
             resources
                 .displayMetrics.heightPixels -
                     (resources.displayMetrics.widthPixels +
-                            (150 * resources.displayMetrics.density)
+                            ((24 + 28) * resources.displayMetrics.density)
                                 .toInt()
                             ),
             250

@@ -74,7 +74,7 @@ class PlaylistViewModel (
                 _state.postValue(SinglePlaylistScreenState.GoBack)
             }
             is SinglePlaylistScreenInteraction.OptionsClicked -> {
-                Log.d("PlaylistViewModel", "OptionsClicked")
+                _state.postValue(SinglePlaylistScreenState.ShownOptions)
             }
             is SinglePlaylistScreenInteraction.OptionsDismissed -> {
                 Log.d("PlaylistViewModel", "OptionsDismissed")
