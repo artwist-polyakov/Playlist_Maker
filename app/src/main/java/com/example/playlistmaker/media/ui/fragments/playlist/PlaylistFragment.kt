@@ -27,7 +27,6 @@ import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreen
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.android.ext.android.inject
