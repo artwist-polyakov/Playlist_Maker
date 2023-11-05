@@ -41,6 +41,7 @@ class PlaylistFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var optionsBottomSheetBehaviour: BottomSheetBehavior<LinearLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +74,7 @@ class PlaylistFragment: Fragment() {
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.TrackClicked(track))
             findNavController().navigate(R.id.action_playlistFragment_to_playerFragment)
         }
+
         setupBottomSheet()
 //        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_color)
 
@@ -201,7 +203,10 @@ class PlaylistFragment: Fragment() {
 
     private fun setupBottomSheet() {
         val bottomSheetContainer = binding.bottomSheet
+        val optionsBottomSheetContainer = binding.hideableBottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+        optionsBottomSheetBehaviour = BottomSheetBehavior.from(optionsBottomSheetContainer)
+
         val desiredHeight = max (
             resources
                 .displayMetrics.heightPixels -
@@ -211,7 +216,19 @@ class PlaylistFragment: Fragment() {
                             ),
             250
         )
+
+        val optionsDesiredHeight = max (
+            resources
+                .displayMetrics.heightPixels -
+                    (resources.displayMetrics.widthPixels +
+                            (150 * resources.displayMetrics.density)
+                                .toInt()
+                            ),
+            250
+        )
         bottomSheetBehavior.peekHeight = desiredHeight
+        optionsBottomSheetBehaviour.peekHeight = optionsDesiredHeight
+        optionsBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
 
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {

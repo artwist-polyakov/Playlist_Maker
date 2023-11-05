@@ -64,4 +64,7 @@
     <string name="playlist_title">Best Songs 2021</string>
     <string name="description_example">2022</string>
     <string name="playlist_is_empty_warning">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="bottom_sheet_remove">Удалить плейлист</string>
+    <string name="bottom_sheet_edit">Редактировать информацию</string>
+    <string name="bottom_sheet_share">Поделиться</string>
 </resources>
