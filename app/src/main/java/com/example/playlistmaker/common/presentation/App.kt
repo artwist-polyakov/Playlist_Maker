@@ -12,6 +12,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import java.util.Locale
 
+
 class App : Application() {
 
     override fun onCreate() {
@@ -31,11 +32,6 @@ class App : Application() {
     private fun tyRusskiy() {
         val locale = Locale("ru")
         Locale.setDefault(locale)
-        val config: Configuration = baseContext.resources.configuration
-        config.setLocale(locale)
-        baseContext.resources.updateConfiguration(
-            config,
-            baseContext.resources.displayMetrics
-        )
+        baseContext.resources.configuration.setLocale(locale)
     }
 }
