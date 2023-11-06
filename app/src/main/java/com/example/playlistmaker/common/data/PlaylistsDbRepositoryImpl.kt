@@ -25,7 +25,7 @@ class PlaylistsDbRepositoryImpl(
     override suspend fun addPlaylist(playlist: PlaylistInformation) {
         appDatabase
             .playlistDao()
-            .upsertPlaylist(playlistsDbConvertor.map(playlist))
+            .insertPlaylist(playlistsDbConvertor.map(playlist))
     }
 
     override fun getPlaylistTracks(playlistId: String): Flow<List<Track>> =

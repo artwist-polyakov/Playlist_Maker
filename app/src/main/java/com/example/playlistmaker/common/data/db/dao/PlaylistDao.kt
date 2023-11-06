@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
+import androidx.room.Upsert
 import com.example.playlistmaker.common.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.common.data.db.entity.PlaylistTrackReference
 import com.example.playlistmaker.common.data.db.entity.TrackEntity
@@ -17,14 +17,8 @@ import kotlinx.coroutines.flow.map
 @Dao
 interface PlaylistDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Upsert
     suspend fun insertPlaylist(playlist: PlaylistEntity): Long
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updatePlaylist(playlist: PlaylistEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlaylists(playlists: List<PlaylistEntity>)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertTrackPlaylistTrackReference(playlistTrackReference: PlaylistTrackReference)
@@ -124,12 +118,4 @@ interface PlaylistDao {
 
     @Query("DELETE FROM playlists WHERE id = :playlistId")
     suspend fun deletePlaylist(playlistId: String)
-
-    @Transaction
-    suspend fun upsertPlaylist(playlist: PlaylistEntity) {
-        val id = insertPlaylist(playlist)
-        if (id == -1L) { // если insertPlaylist вернул -1, это означает, что запись уже существует
-            updatePlaylist(playlist) // так что обновим её
-        }
-    }
 }
