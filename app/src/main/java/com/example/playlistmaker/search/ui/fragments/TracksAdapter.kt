@@ -43,7 +43,7 @@ class TrackViewHolder(
     var duration: TextView = itemView.findViewById(R.id.track_time)
     fun bind(track: Track) {
         Glide.with(itemView)
-            .load(track.artworkUrl100)
+            .load(track.artworkUrl60)
             .placeholder(R.drawable.song_cover_placeholder)
             .into(cover)
 

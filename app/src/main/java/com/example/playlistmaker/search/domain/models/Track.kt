@@ -2,6 +2,7 @@ package com.example.playlistmaker.search.domain.models
 
 import android.os.Parcelable
 import com.example.playlistmaker.search.data.dto.TrackDto
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -28,5 +29,8 @@ data class Track(
         if (other !is TrackDto) return false
         return this.trackId == other.trackId
     }
+
+    @IgnoredOnParcel
+    var artworkUrl60: String = artworkUrl100.replace("100x100", "60x60")
 
 }
