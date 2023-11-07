@@ -87,11 +87,16 @@ class CreatePlaylistViewmodel(
             description = currentInputData.description,
             image = currentInputData.image
         ) ?: currentInputData.mapToPlaylistInformation()
-
+        val oldImage = currentPlaylist?.image
         currentInputData.image?.let { newImage ->
-            playlistToSave.image?.let(imagesInteractor::removeImage)
-            val imageLink = imagesInteractor.saveImage(newImage)
-            currentInputData = currentInputData.copy(image = Uri.parse(imageLink))
+            var imageLink = ""
+            if (oldImage != newImage) {
+                imageLink = imagesInteractor.saveImage(newImage)
+                currentInputData = currentInputData.copy(image = Uri.parse(imageLink))
+                oldImage?.let { imagesInteractor.removeImage(it) }
+            } else {
+                imageLink = oldImage.toString()
+            }
             playlistToSave = playlistToSave.copy(image = Uri.parse(imageLink))
         }
         updatePlaylistInDatabase(playlistToSave)
