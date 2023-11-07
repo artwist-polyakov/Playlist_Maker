@@ -264,7 +264,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
             binding.countryValue.text = trackInfo.country
         }
         // Трек не пустой?
-        if (trackInfo.trackName == "") {
+        if (trackInfo.trackName.isEmpty()) {
             binding.trackInfo.visibility = Group.GONE
         } else {
             binding.trackInfo.visibility = Group.VISIBLE
