@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.common.utils.ConfirmationPresenter
+import com.example.playlistmaker.common.utils.ConfirmationDialog
 import com.example.playlistmaker.common.utils.calculateDesiredHeight
 import com.example.playlistmaker.common.utils.debounce
 import com.example.playlistmaker.common.utils.setImageUriOrDefault
@@ -34,7 +34,7 @@ import org.koin.android.ext.android.inject
 class PlaylistFragment : Fragment() {
     private var playlistId: String = ""
     private val viewModel: PlaylistViewModel by viewModel { parametersOf(playlistId) }
-    private val confirmator: ConfirmationPresenter by inject { parametersOf(requireContext()) }
+    private val confirmator: ConfirmationDialog by inject { parametersOf(requireContext()) }
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
 

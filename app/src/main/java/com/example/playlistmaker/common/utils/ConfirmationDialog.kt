@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 import com.example.playlistmaker.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ConfirmationPresenter(private val context: Context) {
+class ConfirmationDialog(private val context: Context) {
 
     fun showConfirmationDialog(
         title: String,
