@@ -3,7 +3,7 @@ package com.example.playlistmaker.settings.data
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.core.content.ContextCompat.startActivity
+import android.util.Log
 import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.domain.EmailData
 
@@ -17,13 +17,22 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             Intent.createChooser(this, null)
         }
-        startActivity(context, sendIntent, null)
+        try {
+            context.startActivity(sendIntent)
+        } catch (e: Exception) {
+            Log.d("ExternalNavigatorImpl", "shareLink: ${e.message}")
+        }
+
     }
 
     override fun openLink(link: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(browserIntent)
+        try{
+            context.startActivity(browserIntent)
+        } catch (e: Exception) {
+            Log.d("ExternalNavigatorImpl", "openLink: ${e.message}")
+        }
     }
 
     override fun openEmail(email: EmailData) {
@@ -34,7 +43,11 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
             putExtra(Intent.EXTRA_TEXT, email.message)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        context.startActivity(intent)
+        try {
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            Log.d("ExternalNavigatorImpl", "openEmail: ${e.message}")
+        }
     }
 
     override fun sendMessage(message: String) {
@@ -43,6 +56,11 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
             putExtra(Intent.EXTRA_TEXT, message)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        context.startActivity(intent)
+        try {
+            context.startActivity(intent)
+        }
+        catch (e: Exception) {
+            Log.d("ExternalNavigatorImpl", "sendMessage: ${e.message}")
+        }
     }
 }
