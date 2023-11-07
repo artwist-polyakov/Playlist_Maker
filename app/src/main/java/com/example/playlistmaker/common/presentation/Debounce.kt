@@ -1,4 +1,4 @@
-package com.example.playlistmaker.common.utils
+package com.example.playlistmaker.common.presentation
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

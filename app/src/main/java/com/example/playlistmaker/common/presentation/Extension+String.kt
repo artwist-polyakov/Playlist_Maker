@@ -1,4 +1,4 @@
-package com.example.playlistmaker.common.utils
+package com.example.playlistmaker.common.presentation
 
 
 fun String.countDurationInSeconds(): Long =

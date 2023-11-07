@@ -1,4 +1,4 @@
-package com.example.playlistmaker.common.utils
+package com.example.playlistmaker.common.presentation
 
 import android.app.AlertDialog
 import android.content.Context

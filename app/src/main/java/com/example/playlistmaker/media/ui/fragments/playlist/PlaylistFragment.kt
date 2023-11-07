@@ -15,11 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.common.utils.ConfirmationDialog
-import com.example.playlistmaker.common.utils.calculateDesiredHeight
-import com.example.playlistmaker.common.utils.debounce
-import com.example.playlistmaker.common.utils.setImageUriOrDefault
-import com.example.playlistmaker.common.utils.showCustomSnackbar
+import com.example.playlistmaker.common.presentation.ConfirmationDialog
+import com.example.playlistmaker.common.presentation.calculateDesiredHeight
+import com.example.playlistmaker.common.presentation.debounce
+import com.example.playlistmaker.common.presentation.setImageUriOrDefault
+import com.example.playlistmaker.common.presentation.showCustomSnackbar
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreenInteraction

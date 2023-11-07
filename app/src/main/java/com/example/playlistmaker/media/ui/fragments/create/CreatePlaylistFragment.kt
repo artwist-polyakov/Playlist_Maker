@@ -19,8 +19,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.utils.setImageUriOrDefault
-import com.example.playlistmaker.common.utils.showCustomSnackbar
+import com.example.playlistmaker.common.presentation.setImageUriOrDefault
+import com.example.playlistmaker.common.presentation.showCustomSnackbar
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.media.ui.view_model.CreatePlaylistViewmodel
 import com.example.playlistmaker.media.ui.view_model.models.CreatePlaylistData

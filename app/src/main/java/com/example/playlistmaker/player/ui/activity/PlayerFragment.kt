@@ -17,8 +17,8 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformation
-import com.example.playlistmaker.common.utils.showCustomSnackbar
-import com.example.playlistmaker.common.utils.debounce
+import com.example.playlistmaker.common.presentation.showCustomSnackbar
+import com.example.playlistmaker.common.presentation.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.player.presentation.PlayerInterface

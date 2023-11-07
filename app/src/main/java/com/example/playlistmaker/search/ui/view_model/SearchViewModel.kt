@@ -7,7 +7,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.presentation.models.TrackDtoToTrackMapper
-import com.example.playlistmaker.common.utils.debounce
+import com.example.playlistmaker.common.presentation.debounce
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.domain.api.TracksInteractor
