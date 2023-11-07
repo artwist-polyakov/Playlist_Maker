@@ -317,9 +317,7 @@ class PlaylistFragment : Fragment() {
                         }
                     }
 
-                    else -> {
-                        // Остальные состояния не обрабатываем
-                    }
+                    else -> Unit
                 }
             }
 
