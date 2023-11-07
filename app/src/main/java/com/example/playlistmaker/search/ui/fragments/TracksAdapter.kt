@@ -44,6 +44,7 @@ class TrackViewHolder(
     fun bind(track: Track) {
         Glide.with(itemView)
             .load(track.artworkUrl100)
+            .placeholder(R.drawable.song_cover_placeholder)
             .into(cover)
 
         title.text = track.trackName
