@@ -1,7 +1,6 @@
 package com.example.playlistmaker.common.presentation
 
 import android.app.Application
-import android.content.res.Configuration
 import com.example.playlistmaker.common.di.dataModule
 import com.example.playlistmaker.common.di.domainModule
 import com.example.playlistmaker.common.di.repositoryModule
@@ -18,7 +17,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        tyRusskiy()
+        setRussianLocale()
 
         startKoin {
             androidContext(this@App)
@@ -29,7 +28,7 @@ class App : Application() {
         themeDelegate.updateTheme()
     }
 
-    private fun tyRusskiy() {
+    private fun setRussianLocale() {
         val locale = Locale("ru")
         Locale.setDefault(locale)
         baseContext.resources.configuration.setLocale(locale)
