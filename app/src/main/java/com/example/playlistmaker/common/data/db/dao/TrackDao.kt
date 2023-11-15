@@ -1,6 +1,7 @@
 package com.example.playlistmaker.common.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,6 +15,9 @@ interface TrackDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(track: TrackEntity)
+
+    @Delete
+    suspend fun deleteTrack(track: TrackEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTracks(tracks: List<TrackEntity>)
@@ -47,4 +51,11 @@ interface TrackDao {
         }
         return false
     }
+
+    @Query("""
+        SELECT * FROM music_table 
+        LEFT JOIN playlist_track_reference ON music_table.id = playlist_track_reference.trackId
+        WHERE playlist_track_reference.playlistId IS NULL AND isLiked = 0
+    """)
+    fun getGarbageTracks(): Flow<List<TrackEntity>>
 }
