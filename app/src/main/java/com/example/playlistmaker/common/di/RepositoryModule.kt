@@ -31,7 +31,7 @@ val repositoryModule = module {
     factory<MediaPlayerInterface> { MediaPlayerImpl() }
     factory { TracksDbConvertor() }
     factory { PlaylistsDbConverter() }
-    single<TracksDbRepository> { TracksDbRepositoryImpl(get(), get()) }
+    single<TracksDbRepository> { TracksDbRepositoryImpl(get(), get(), get()) }
     single<PrettifyDbRepository> { PrettifyDbRepositoryImpl(get()) }
     single<PlaylistsDbRepository> { PlaylistsDbRepositoryImpl(get(), get(), get(), get()) }
 }
