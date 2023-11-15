@@ -1,12 +1,14 @@
 package com.example.playlistmaker.common.di
 
 import com.example.playlistmaker.common.data.PlaylistsDbRepositoryImpl
+import com.example.playlistmaker.common.data.PrettifyDbRepositoryImpl
 import com.example.playlistmaker.common.data.ThemeRepositoryImpl
 import com.example.playlistmaker.common.data.TracksDbRepositoryImpl
 import com.example.playlistmaker.common.data.converters.PlaylistsDbConverter
 import com.example.playlistmaker.common.data.converters.TracksDbConvertor
 import com.example.playlistmaker.common.domain.ThemeRepository
 import com.example.playlistmaker.common.domain.db.PlaylistsDbRepository
+import com.example.playlistmaker.common.domain.db.PrettifyDbRepository
 import com.example.playlistmaker.common.domain.db.TracksDbRepository
 import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.example.playlistmaker.player.domain.MediaPlayerInterface
@@ -30,5 +32,6 @@ val repositoryModule = module {
     factory { TracksDbConvertor() }
     factory { PlaylistsDbConverter() }
     single<TracksDbRepository> { TracksDbRepositoryImpl(get(), get()) }
-    single<PlaylistsDbRepository> { PlaylistsDbRepositoryImpl(get(), get(), get()) }
+    single<PrettifyDbRepository> { PrettifyDbRepositoryImpl(get()) }
+    single<PlaylistsDbRepository> { PlaylistsDbRepositoryImpl(get(), get(), get(), get()) }
 }

@@ -16,7 +16,22 @@ class PrettifyDbRepositoryImpl(
     private val scope = CoroutineScope(Dispatchers.IO + job)
     private var isRunning: Boolean = false
 
+    init {
+        launchPrettify()
+    }
+
     override suspend fun startPrettify() {
+        launchPrettify()
+    }
+
+    override suspend fun stopPrettify() {
+        if (!isRunning) return // защитимся от многократных остановок
+        isRunning = false
+        /* плохая идея делать scope.cancel */
+        job.cancelChildren() // так мы сможем перезапустить scope
+    }
+
+    private fun launchPrettify() {
         if (isRunning) return // защитимся от многократных запусков
         isRunning = true
         scope.launch {
@@ -32,12 +47,5 @@ class PrettifyDbRepositoryImpl(
                     }
                 }
         }
-    }
-
-    override suspend fun stopPrettify() {
-        if (!isRunning) return // защитимся от многократных остановок
-        isRunning = false
-        /* плохая идея делать scope.cancel */
-        job.cancelChildren() // так мы сможем перезапустить scope
     }
 }
