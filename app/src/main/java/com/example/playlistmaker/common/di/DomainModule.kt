@@ -23,19 +23,21 @@ import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.example.playlistmaker.settings.domain.ThemeUseCase
 import com.example.playlistmaker.settings.domain.ThemeUseCaseImpl
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val domainModule = module {
-    single<ThemeInteractor> { ThemeInteractorImpl(get()) }
-    single<ThemeDelegate> { ThemeDelegateImpl(get()) }
-    single<ThemeUseCase> { ThemeUseCaseImpl(get()) }
-    single<SettingsInteractor> { SettingsInteractorImpl(get(), get()) }
-    single<NavigationInteractor> { NavigationInteractor(get()) }
-    single<TracksInteractor> { TracksInteractorImpl(get()) }
-    single<TrackStorageInteractor> { TrackStorageInteractorImpl(get()) }
-    factory<MediaPlayerInteractor> { MediaPlayerInteractorImpl(get()) }
-    single<TracksDbInteractor> { TracksDbInteractorImpl(get(), get()) }
-    single<ImagesStorageInteractor> { ImagesStorageInteractorImpl(get()) }
-    single<PlaylistsDbInteractor> { PlaylistsDbInteractorImpl(get(), get()) }
-    single<ImagesRepositoryInteractor> { ImagesRepositoryInteractorImpl(get()) }
+    singleOf(::ThemeInteractorImpl) bind ThemeInteractor::class
+    singleOf(::ThemeDelegateImpl) bind ThemeDelegate::class
+    singleOf(::ThemeUseCaseImpl) bind ThemeUseCase::class
+    singleOf(::SettingsInteractorImpl) bind SettingsInteractor::class
+    singleOf(::NavigationInteractor) bind NavigationInteractor::class
+    singleOf(::TracksInteractorImpl) bind TracksInteractor::class
+    singleOf(::TrackStorageInteractorImpl) bind TrackStorageInteractor::class
+    singleOf(::MediaPlayerInteractorImpl) bind MediaPlayerInteractor::class
+    singleOf(::TracksDbInteractorImpl) bind TracksDbInteractor::class
+    singleOf(::ImagesStorageInteractorImpl) bind ImagesStorageInteractor::class
+    singleOf(::PlaylistsDbInteractorImpl) bind PlaylistsDbInteractor::class
+    singleOf(::ImagesRepositoryInteractorImpl) bind ImagesRepositoryInteractor::class
 }
