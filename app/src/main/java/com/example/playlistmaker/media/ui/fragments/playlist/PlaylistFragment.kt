@@ -353,18 +353,21 @@ class PlaylistFragment : Fragment() {
         playlist: PlaylistInformation,
         tracks: ArrayList<Track>
     ): String {
-        var message = "${playlist.name}\n"
-        message += "${playlist.description}\n"
-        message += "${
-            requireContext().applicationContext.resources.getQuantityString(
-                R.plurals.tracks,
-                playlist.tracksCount,
-                playlist.tracksCount
+        var message = buildString {
+            append("${playlist.name}\n")
+            append("${playlist.description}\n")
+            append(
+                "${
+                    requireContext().applicationContext.resources.getQuantityString(
+                        R.plurals.tracks,
+                        playlist.tracksCount,
+                        playlist.tracksCount
+                    )
+                }\n"
             )
-        }\n"
-
-        for ((index, track) in tracks.withIndex()) {
-            message += "${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n"
+            for ((index, track) in tracks.withIndex()) {
+                append("${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})\n")
+            }
         }
         return message
     }
