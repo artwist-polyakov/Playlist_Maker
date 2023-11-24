@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.media.domain.ImagesRepositoryInteractor
 import com.example.playlistmaker.media.ui.view_model.models.CreatePlaylistData
 import com.example.playlistmaker.media.ui.view_model.models.PlaylistInputData
@@ -14,14 +15,42 @@ import com.example.playlistmaker.media.ui.view_model.states.CreatePlaylistScreen
 import kotlinx.coroutines.launch
 
 class CreatePlaylistViewmodel(
+    private val playlistId: String,
     private val imagesInteractor: ImagesRepositoryInteractor,
     private val playlistsDb: PlaylistsDbInteractor
 ) : ViewModel() {
 
     private var currentInputData = PlaylistInputData()
 
+    private var currentPlaylist: PlaylistInformation? = null
+
     private val _state = MutableLiveData<CreatePlaylistScreenState>()
     val state: LiveData<CreatePlaylistScreenState> get() = _state
+
+    init {
+        if (playlistId != "null") {
+            viewModelScope.launch {
+                playlistsDb.getPlaylist(playlistId).let {
+                    currentPlaylist = it
+                    currentInputData = currentInputData.copy(
+                        title = it.name,
+                        description = it.description,
+                        image = it.image
+                    )
+                    _state.postValue(CreatePlaylistScreenState.ReadyToSave)
+                    _state.postValue(
+                        CreatePlaylistScreenState.ReadyToEdit(
+                            name = it.name,
+                            description = it.description,
+                            image = it.image
+                        )
+                    )
+                }
+            }
+        } else {
+            _state.postValue(CreatePlaylistScreenState.BasicState)
+        }
+    }
 
     fun handleInteraction(interaction: CreatePlaylistScreenInteraction) {
         when (interaction) {
@@ -53,21 +82,38 @@ class CreatePlaylistViewmodel(
     }
 
     private fun saveData() {
-        var imageLink: String?
-        currentInputData.image?.let {
-            imageLink = imagesInteractor.saveImage(it)
-            Uri.parse(imageLink).let {
-                currentInputData = currentInputData.copy(image = it)
+        var playlistToSave = currentPlaylist?.copy(
+            name = currentInputData.title,
+            description = currentInputData.description,
+            image = currentInputData.image
+        ) ?: currentInputData.mapToPlaylistInformation()
+        val oldImage = currentPlaylist?.image
+        currentInputData.image?.let { newImage ->
+            var imageLink = ""
+            if (oldImage != newImage) {
+                imageLink = imagesInteractor.saveImage(newImage)
+                currentInputData = currentInputData.copy(image = Uri.parse(imageLink))
+                oldImage?.let { imagesInteractor.removeImage(it) }
+            } else {
+                imageLink = oldImage.toString()
             }
+            playlistToSave = playlistToSave.copy(image = Uri.parse(imageLink))
         }
-        viewModelScope.launch {
-            playlistsDb.addPlaylist(currentInputData.mapToPlaylistInformation())
-        }
-        _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
+        updatePlaylistInDatabase(playlistToSave)
+    }
 
+    private fun updatePlaylistInDatabase(playlist: PlaylistInformation) {
+        viewModelScope.launch {
+            playlistsDb.addPlaylist(playlist)
+            _state.postValue(CreatePlaylistScreenState.SuccessState(currentInputData.title))
+        }
     }
 
     fun handleExit() {
+        if (currentPlaylist != null) {
+            _state.postValue(CreatePlaylistScreenState.GoodBye)
+            return
+        }
         when (currentInputData.isDataEntered()) {
             true -> _state.postValue(CreatePlaylistScreenState.ShowPopupConfirmation)
             false -> _state.postValue(CreatePlaylistScreenState.GoodBye)

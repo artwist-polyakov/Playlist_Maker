@@ -1,7 +1,6 @@
 package com.example.playlistmaker.media.ui.fragments.playlists
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
-import com.example.playlistmaker.common.utils.debounce
+import com.example.playlistmaker.common.presentation.debounce
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
-import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenInteraction
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -44,18 +42,24 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter =
-        PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
-            override fun onTrackClick(playlist: PlaylistInformation) {
-                onPlaylistClickDebounce(playlist)
-            }
-        })
+            PlaylistsAdapter(object : PlaylistsAdapter.PlaylistClickListener {
+                override fun onTrackClick(playlist: PlaylistInformation) {
+                    onPlaylistClickDebounce(playlist)
+                }
+            })
         clearScreen()
         onPlaylistClickDebounce = debounce<PlaylistInformation>(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
             false
         ) { playlist ->
-            viewModel.handleInteraction(PlaylistsScreenInteraction.PlaylistClicked(playlist))
+            val bundle = Bundle().apply {
+                putString("arg_playlist_id", playlist.id.toString())
+            }
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_playlistFragment,
+                bundle
+            )
         }
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -72,9 +76,6 @@ class PlaylistsFragment : Fragment() {
 
     private fun render(state: PlaylistsScreenState) {
         when (state) {
-            is PlaylistsScreenState.GoToPlaylist -> {
-                Log.d("PlaylistsFragment", "GoToPlaylist ${state.playlist}")
-            }
 
             is PlaylistsScreenState.Content -> {
                 showPlaylists()
@@ -85,9 +86,6 @@ class PlaylistsFragment : Fragment() {
                 showEmptyState()
             }
 
-            is PlaylistsScreenState.NewPlaylistInitiated -> {
-                findNavController().navigate(R.id.action_mediaFragment_to_createPlaylistFragment)
-            }
         }
     }
 

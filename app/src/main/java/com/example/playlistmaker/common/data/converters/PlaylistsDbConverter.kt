@@ -37,7 +37,9 @@ class PlaylistsDbConverter {
                 description = description,
                 imageUri = image,
                 tracksCount = tracksCount,
-                creationDate = creationDate
+                creationDate = creationDate,
+                playlistDurationSeconds = durationInSeconds,
+                wasDurationCalculated = wasDurationCalculated
             )
         }
     }
@@ -55,7 +57,9 @@ class PlaylistsDbConverter {
                 description = description,
                 image = image,
                 tracksCount = tracksCount,
-                creationDate = creationDate
+                creationDate = creationDate,
+                durationInSeconds = playlistDurationSeconds,
+                wasDurationCalculated = wasDurationCalculated
             )
         }
     }

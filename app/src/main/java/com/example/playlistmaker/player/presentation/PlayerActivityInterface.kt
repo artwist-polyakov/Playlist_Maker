@@ -2,7 +2,7 @@ package com.example.playlistmaker.player.presentation
 
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 
-interface PlayerActivityInterface {
+interface PlayerInterface {
     fun showTrackInfo(trackInfo: TrackInformation)
     fun showPlayState()
     fun showPauseState()

@@ -2,7 +2,6 @@ package com.example.playlistmaker.common.data
 
 import android.content.Context
 import android.content.res.Configuration
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.common.domain.ThemeRepository
 

@@ -10,7 +10,6 @@ import com.example.playlistmaker.media.domain.ImagesRepository
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Error
 import java.util.UUID
 
 class ImagesRepositoryImpl(
@@ -50,5 +49,16 @@ class ImagesRepositoryImpl(
             Log.d("ImagesRepositoryImpl", "Удаляем файл ${it.absolutePath}")
         }
         filePath.deleteRecursively()
+    }
+
+    override fun removeImage(uri: Uri): Boolean {
+        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
+        val file = File(filePath, uri.lastPathSegment ?: "")
+        return try {
+            file.delete()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.media.ui.fragments.favorites
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
-import com.example.playlistmaker.common.utils.debounce
+import com.example.playlistmaker.common.presentation.debounce
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.media.ui.view_model.FavoritesViewModel
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import com.example.playlistmaker.search.ui.view_model.FavoriteState
@@ -65,8 +65,7 @@ class FavoritesFragment : Fragment() {
             false
         ) { track ->
             viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-            val intent = Intent(context, PlayerActivity::class.java)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_mediaFragment_to_playerFragment)
         }
 
         viewModel.observeState().observe(viewLifecycleOwner) {

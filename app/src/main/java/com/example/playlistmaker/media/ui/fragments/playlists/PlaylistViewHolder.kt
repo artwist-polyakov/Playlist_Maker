@@ -1,7 +1,5 @@
 package com.example.playlistmaker.media.ui.fragments.playlists
 
-import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.presentation.setImageUriOrDefault
 
 class PlaylistViewHolder(
     parent: ViewGroup,
@@ -28,17 +27,6 @@ class PlaylistViewHolder(
             playlist.tracksCount,
             playlist.tracksCount
         )
-        if (playlist.image != null) {
-            image.setImageURI(Uri.parse(playlist.image.toString()))
-        } else {
-            image.setPadding(
-                image.paddingLeft + 28,
-                image.paddingTop + 28,
-                image.paddingRight + 28,
-                image.paddingBottom
-            )
-            image.setImageResource(R.drawable.song_cover_placeholder_with_padding)
-            image.setBackgroundColor(Color.TRANSPARENT)
-        }
+        image.setImageUriOrDefault(playlist.image, R.drawable.song_cover_placeholder_with_padding)
     }
 }

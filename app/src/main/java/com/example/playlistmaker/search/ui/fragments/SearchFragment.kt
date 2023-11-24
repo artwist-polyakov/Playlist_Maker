@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,13 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
-import com.example.playlistmaker.common.presentation.models.TrackToTrackInformationMapper
-import com.example.playlistmaker.common.utils.debounce
+import com.example.playlistmaker.common.presentation.debounce
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,11 +29,8 @@ enum class ResponseState {
 class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var binding: FragmentSearchBinding
-
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 10L
-    }
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
@@ -53,7 +48,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -72,9 +67,9 @@ class SearchFragment : Fragment() {
             false
         ) { track ->
             viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-            val intent = Intent(context, PlayerActivity::class.java)
-//                    intent.putExtra("track", TrackToTrackInformationMapper().invoke(track))
-            startActivity(intent)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment
+            )
         }
 
         textWatcher = object : TextWatcher {
@@ -115,6 +110,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         textWatcher?.let { binding.searchEditText.removeTextChangedListener(it) }
+        _binding = null
     }
 
     private fun render(state: SearchState) {
@@ -230,5 +226,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 10L
+    }
 }

@@ -24,25 +24,27 @@ class TracksAdapter(private val clickListener: TrackClickListener) :
 
     interface TrackClickListener {
         fun onTrackClick(track: Track)
+        fun onTrackLongClick(track: Track) {}
     }
 }
 
 class TrackViewHolder(
     parent: ViewGroup,
-    private val clickListener: TracksAdapter.TrackClickListener,
+    private val clickListener: TracksAdapter.TrackClickListener
 ) :
     RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.search_result_item, parent, false)
     ) {
 
-    var cover: ImageView = itemView.findViewById(R.id.track_cover)
-    var title: TextView = itemView.findViewById(R.id.track_name)
-    var artist: TextView = itemView.findViewById(R.id.track_artist)
-    var duration: TextView = itemView.findViewById(R.id.track_time)
+    private var cover: ImageView = itemView.findViewById(R.id.track_cover)
+    private var title: TextView = itemView.findViewById(R.id.track_name)
+    private var artist: TextView = itemView.findViewById(R.id.track_artist)
+    private var duration: TextView = itemView.findViewById(R.id.track_time)
     fun bind(track: Track) {
         Glide.with(itemView)
-            .load(track.artworkUrl100)
+            .load(track.artworkUrl60)
+            .placeholder(R.drawable.song_cover_placeholder)
             .into(cover)
 
         title.text = track.trackName
@@ -50,6 +52,10 @@ class TrackViewHolder(
         duration.text = track.trackTime
 
         itemView.setOnClickListener { clickListener.onTrackClick(track) }
+        itemView.setOnLongClickListener {
+            clickListener.onTrackLongClick(track)
+            true
+        }
     }
 }
 

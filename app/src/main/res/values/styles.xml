@@ -83,7 +83,6 @@
     <style name="search_element_main_layout_style">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:clickable">true</item>
-        <item name="android:padding">@dimen/search_screen_element_layout_padding</item>
     </style>
 
     <style name="search_element_song_title_style">

@@ -61,4 +61,22 @@
     <string name="text_input_layout_description_field_name">Описание</string>
     <string name="go_back_descriptior">Уйти назад</string>
     <string name="placeholder_descriptior">Плейсхолдер изображения</string>
+    <string name="playlist_title">Best Songs 2021</string>
+    <string name="description_example">2022</string>
+    <string name="playlist_is_empty_warning">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="bottom_sheet_remove">Удалить плейлист</string>
+    <string name="bottom_sheet_edit">Редактировать информацию</string>
+    <string name="bottom_sheet_share">Поделиться</string>
+    <string name="remove_confirmation">Хотите удалить плейлист «%1$s»?</string>
+    <string name="yes_string">Да</string>
+    <string name="no_string">Нет</string>
+    <string name="remove_playlist_confirmation_title">Удалить плейлист</string>
+    <string name="remove_playlist_confirmation_text">Хотите удалить плейлист?</string>
+    <string name="remove_track_confirmation_title">Удалить трек</string>
+    <string name="remove_track_confirmation_text">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="remove_track_confirmation_button">Удалить</string>
+    <string name="remove_track_confirmation_cancel">Отмена</string>
+    <string name="edit_playlist">Редактировать</string>
+    <string name="edit_save_button">Сохранить</string>
+    <string name="empty_list_notification">В этом плейлисте нет треков</string>
 </resources>

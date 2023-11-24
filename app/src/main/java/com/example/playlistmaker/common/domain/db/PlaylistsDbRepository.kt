@@ -9,4 +9,7 @@ interface PlaylistsDbRepository {
     suspend fun addPlaylist(playlist: PlaylistInformation)
     fun getPlaylistTracks(playlistId: String): Flow<List<Track>>
     suspend fun addTrackToPlaylist(playlistId: String, track: Track): Boolean
+    suspend fun getPlaylist(playlistId: String): PlaylistInformation
+    suspend fun deletePlaylist(playlistId: String)
+    suspend fun removeTrackFromPlaylist(playlistId: String, track: Track)
 }
