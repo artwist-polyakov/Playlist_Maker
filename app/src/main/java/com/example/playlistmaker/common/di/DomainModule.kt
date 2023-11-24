@@ -23,6 +23,7 @@ import com.example.playlistmaker.settings.domain.SettingsInteractor
 import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.example.playlistmaker.settings.domain.ThemeUseCase
 import com.example.playlistmaker.settings.domain.ThemeUseCaseImpl
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -35,7 +36,7 @@ val domainModule = module {
     singleOf(::NavigationInteractor) bind NavigationInteractor::class
     singleOf(::TracksInteractorImpl) bind TracksInteractor::class
     singleOf(::TrackStorageInteractorImpl) bind TrackStorageInteractor::class
-    singleOf(::MediaPlayerInteractorImpl) bind MediaPlayerInteractor::class
+    factoryOf(::MediaPlayerInteractorImpl) bind MediaPlayerInteractor::class
     singleOf(::TracksDbInteractorImpl) bind TracksDbInteractor::class
     singleOf(::ImagesStorageInteractorImpl) bind ImagesStorageInteractor::class
     singleOf(::PlaylistsDbInteractorImpl) bind PlaylistsDbInteractor::class
