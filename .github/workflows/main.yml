@@ -16,8 +16,10 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '17' 
           distribution: 'temurin'
+          java-version: '17' 
+          java-package: jdk
+          architecture: x64
 
       - name: Run Lint
         run: ./gradlew detekt
