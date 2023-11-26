@@ -10,16 +10,13 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17' 
-          java-package: jdk
-          architecture: x64
-
-      - name: Run Lint
-        run: ./gradlew detekt
+          java-version: '17'
+          cache: 'gradle'
+          cache-dependency-path: | # optional
+            sub-project/*.gradle*
+            sub-project/**/gradle-wrapper.properties
+      - run: ./gradlew detekt
