@@ -77,6 +77,7 @@ class PlaylistFragment : Fragment() {
         onTrackClickDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
+            false,
             false
         ) { track ->
             viewModel.handleInteraction(SinglePlaylistScreenInteraction.TrackClicked(track))

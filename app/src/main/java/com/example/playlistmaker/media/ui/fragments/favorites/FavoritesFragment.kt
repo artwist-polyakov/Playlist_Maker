@@ -23,7 +23,7 @@ class FavoritesFragment : Fragment() {
 
     companion object {
         fun newInstance() = FavoritesFragment()
-        private const val CLICK_DEBOUNCE_DELAY = 10L
+        private const val CLICK_DEBOUNCE_DELAY = 2000L
     }
 
     private var onTrackClickDebounce: (Track) -> Unit = {}
@@ -62,6 +62,7 @@ class FavoritesFragment : Fragment() {
         onTrackClickDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
+            false,
             false
         ) { track ->
             viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
