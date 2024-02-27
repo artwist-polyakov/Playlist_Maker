@@ -224,11 +224,11 @@ class PlayerFragment : Fragment(), PlayerInterface {
                 }
 
                 PlayerState.Play -> {
-                    binding.playButton.setImageResource(R.drawable.pause_button)
+                    binding.playButton.setIconState(1)
                 }
 
                 PlayerState.Pause -> {
-                    binding.playButton.setImageResource(R.drawable.play_button)
+                    binding.playButton.setIconState(0)
                 }
             }
         }
@@ -282,11 +282,11 @@ class PlayerFragment : Fragment(), PlayerInterface {
 
 
     override fun showPlayState() {
-        binding.playButton.setImageResource(R.drawable.pause_button)
+        binding.playButton.setIconState(1)
     }
 
     override fun showPauseState() {
-        binding.playButton.setImageResource(R.drawable.play_button)
+        binding.playButton.setIconState(0)
     }
 
     override fun showPreparationState() {
