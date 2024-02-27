@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
@@ -22,8 +23,20 @@ class PlayButtonImageView @JvmOverloads constructor(
     private var playIconBitmap: Bitmap? = null
     private var pauseIconBitmap: Bitmap? = null
     private var imageRect = RectF(0f, 0f, 0f, 0f)
+
+    // состояние иконки — пауза или проигрывание
     private var currentIconState = IS_PAUSED
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // смена активности — инвалидирование вьюхи
     private var isActive: Boolean = false
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     init {
         context.theme.obtainStyledAttributes(
@@ -66,9 +79,27 @@ class PlayButtonImageView @JvmOverloads constructor(
         }
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return isActive && when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                performClick()
+                currentIconState = (abs(currentIconState) + 1) % 2
+                true
+            }
+
+            else -> {
+                false
+            }
+        }
+    }
+
     fun setIconState(state: Int) {
-        currentIconState = abs(state % 2)
-        invalidate()
+        // защищаемся от передачи невалидных значений
+        currentIconState = abs(state) % 2
     }
 
     fun isActive(ready: Boolean) {
@@ -81,6 +112,7 @@ class PlayButtonImageView @JvmOverloads constructor(
                     alpha = 1f
                 }
             }
+
             false -> {
                 playIconBitmap?.apply {
                     alpha = .5f
@@ -91,7 +123,6 @@ class PlayButtonImageView @JvmOverloads constructor(
             }
         }
         isActive = ready
-        invalidate()
     }
 
     private fun processBitmap(targetBitmap: Bitmap?, canvas: Canvas) {
