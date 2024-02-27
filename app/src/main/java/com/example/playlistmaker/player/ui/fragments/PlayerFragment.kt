@@ -1,4 +1,4 @@
-package com.example.playlistmaker.player.ui.activity
+package com.example.playlistmaker.player.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
