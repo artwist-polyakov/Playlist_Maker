@@ -75,7 +75,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
         //BINDING
         setupObservers()
 
-        renderState()
+        loadState()
     }
 
     override fun onDestroyView() {
@@ -91,7 +91,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
         }
     }
 
-    private fun renderState() {
+    private fun loadState() {
         viewModel.restoreState().let {
             binding.time.text = it.second.toString()
             when (it.first) {
@@ -216,11 +216,11 @@ class PlayerFragment : Fragment(), PlayerInterface {
         viewModel.playerState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 PlayerState.Loading -> {
-                    binding.playButton.isEnabled = false
+                    binding.playButton.isActive(false)
                 }
 
                 PlayerState.Ready -> {
-                    binding.playButton.isEnabled = true
+                    binding.playButton.isActive(true)
                 }
 
                 PlayerState.Play -> {

@@ -22,7 +22,7 @@ class PlayButtonImageView @JvmOverloads constructor(
     private var playIconBitmap: Bitmap? = null
     private var pauseIconBitmap: Bitmap? = null
     private var imageRect = RectF(0f, 0f, 0f, 0f)
-    private var currentIconState: Int = 0
+    private var currentIconState: Int = 1
 
     init {
         context.theme.obtainStyledAttributes(
@@ -67,6 +67,28 @@ class PlayButtonImageView @JvmOverloads constructor(
 
     fun setIconState(state: Int) {
         currentIconState = abs(state % 2)
+        invalidate()
+    }
+
+    fun isActive(ready: Boolean) {
+        when (ready) {
+            true -> {
+                playIconBitmap?.apply {
+                    alpha = 1f
+                }
+                pauseIconBitmap?.apply {
+                    alpha = 1f
+                }
+            }
+            false -> {
+                playIconBitmap?.apply {
+                    alpha = .5f
+                }
+                pauseIconBitmap?.apply {
+                    alpha = .5f
+                }
+            }
+        }
         invalidate()
     }
 
