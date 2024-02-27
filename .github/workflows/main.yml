@@ -1,9 +1,9 @@
 name: Linter
 on:
   push:
-    branches: [ main ]
+    branches: [ main123 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main123 ]
   workflow_dispatch:
 
 jobs:
