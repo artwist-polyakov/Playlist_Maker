@@ -25,6 +25,7 @@ import com.example.playlistmaker.player.presentation.PlayerInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
+import com.example.playlistmaker.player.ui.views.PlayButtonImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class PlayerFragment : Fragment(), PlayerInterface {
@@ -224,11 +225,11 @@ class PlayerFragment : Fragment(), PlayerInterface {
                 }
 
                 PlayerState.Play -> {
-                    binding.playButton.setIconState(1)
+                    binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Pause -> {
-                    binding.playButton.setIconState(0)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
             }
         }
@@ -315,6 +316,8 @@ class PlayerFragment : Fragment(), PlayerInterface {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 10L
+        val IS_PLAYING = PlayButtonImageView.IS_PLAYING
+        val IS_PAUSED = PlayButtonImageView.IS_PAUSED
     }
 
 }

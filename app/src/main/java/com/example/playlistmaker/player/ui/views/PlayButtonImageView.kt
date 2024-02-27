@@ -22,7 +22,8 @@ class PlayButtonImageView @JvmOverloads constructor(
     private var playIconBitmap: Bitmap? = null
     private var pauseIconBitmap: Bitmap? = null
     private var imageRect = RectF(0f, 0f, 0f, 0f)
-    private var currentIconState: Int = 1
+    private var currentIconState = IS_PAUSED
+    private var isActive: Boolean = false
 
     init {
         context.theme.obtainStyledAttributes(
@@ -60,8 +61,8 @@ class PlayButtonImageView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
 
         when (currentIconState) {
-            0 -> processBitmap(playIconBitmap, canvas)
-            1 -> processBitmap(pauseIconBitmap, canvas)
+            IS_PLAYING -> processBitmap(playIconBitmap, canvas)
+            IS_PAUSED -> processBitmap(pauseIconBitmap, canvas)
         }
     }
 
@@ -89,6 +90,7 @@ class PlayButtonImageView @JvmOverloads constructor(
                 }
             }
         }
+        isActive = ready
         invalidate()
     }
 
@@ -97,5 +99,10 @@ class PlayButtonImageView @JvmOverloads constructor(
             val rect = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
             canvas.drawBitmap(targetBitmap, null, rect, null)
         }
+    }
+
+    companion object {
+        const val IS_PLAYING: Int = 0
+        const val IS_PAUSED: Int = 1
     }
 }
