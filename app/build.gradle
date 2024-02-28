@@ -82,18 +82,23 @@ dependencies {
 
 }
 
+
 tasks.register("detektFormat", Detekt) {
-    source = files("src/main/java", "src/test/java")
-    config.setFrom(files("${project.rootDir}/config/detekt/detekt.yml"))
-    include("**/*.kt", "**/*.kts")
-    exclude("**/resources/**", "**/build/**")
-    autoCorrect = true // Опция для автоматического исправления форматирования
-    reports {
-        txt.enabled = false
-        xml.enabled = false
-        html.enabled = true
-        html.destination = file("build/reports/detekt/detekt.html")
-    }
-    debug = true
+    autoCorrect = true
     parallel = true
+    disableDefaultRuleSets = false
+    buildUponDefaultConfig = false
+    setSource(files(projectDir))
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("**/resources/**")
+    exclude("**/build/**")
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        txt.required.set(true)
+        sarif.required.set(false)
+    }
+    // Configuration
+    config.setFrom(files("${project.rootDir}/app/config/detekt/detekt.yml"))
 }

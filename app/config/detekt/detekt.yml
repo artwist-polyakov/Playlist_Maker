@@ -721,3 +721,150 @@ style:
     active: true
     excludeImports:
       - 'java.util.*'
+
+# Правила форматирования кодовой базы.
+formatting:
+  active: true
+  android: false
+  autoCorrect: true
+  AnnotationOnSeparateLine:
+    active: true
+    autoCorrect: true
+  AnnotationSpacing:
+    active: true
+    autoCorrect: true
+  ArgumentListWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
+  ChainWrapping:
+    active: false
+    autoCorrect: false
+  CommentSpacing:
+    active: true
+    autoCorrect: true
+  EnumEntryNameCase:
+    active: true
+    autoCorrect: true
+  Filename:
+    active: true
+  FinalNewline:
+    active: false
+    autoCorrect: true
+    insertFinalNewLine: true
+  ImportOrdering:
+    active: true
+    autoCorrect: true
+    layout: '*,java.**,javax.**,kotlin.**,kotlinx.android.synthetic.**,^'
+  Indentation:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    #continuationIndentSize: 4
+  # Правило выключено, потому что дублируется правилом style:MaxLineLength
+  MaximumLineLength:
+    active: false
+    maxLineLength: 120
+    ignoreBackTickedIdentifier: false
+  ModifierOrdering:
+    active: true
+    autoCorrect: true
+  MultiLineIfElse:
+    active: true
+    autoCorrect: true
+  # Правило выключено, потому что удобно оставлять пустую строчку
+  # перед закрывающей скобкой класса
+  NoBlankLineBeforeRbrace:
+    active: false
+    autoCorrect: false
+  # Правило выключено, потому что иногда мы ставим больше одной пустой строки
+  # между, например, property и функциями
+  NoConsecutiveBlankLines:
+    active: false
+    autoCorrect: true
+  NoEmptyClassBody:
+    active: true
+    autoCorrect: true
+  NoEmptyFirstLineInMethodBlock:
+    active: true
+    autoCorrect: true
+  NoLineBreakAfterElse:
+    active: true
+    autoCorrect: true
+  NoLineBreakBeforeAssignment:
+    active: true
+    autoCorrect: true
+  NoMultipleSpaces:
+    active: true
+    autoCorrect: true
+  NoSemicolons:
+    active: true
+    autoCorrect: true
+  NoTrailingSpaces:
+    active: true
+    autoCorrect: true
+  NoUnitReturn:
+    active: true
+    autoCorrect: true
+  NoUnusedImports:
+    active: true
+    autoCorrect: true
+  # Правило выключено, потому что оно дублируется правилом WildcardImport, которое лучше настраивается.
+  NoWildcardImports:
+    active: false
+  # Правило выключено, потому что мы разрешаем использовать '_' в имени пакета
+  # Правило дублируется правилом naming:PackageNaming
+  PackageName:
+    active: false
+    autoCorrect: false
+  ParameterListWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
+  SpacingAroundAngleBrackets:
+    active: true
+    autoCorrect: true
+  SpacingAroundColon:
+    active: true
+    autoCorrect: true
+  SpacingAroundComma:
+    active: true
+    autoCorrect: true
+  SpacingAroundCurly:
+    active: true
+    autoCorrect: true
+  SpacingAroundDot:
+    active: true
+    autoCorrect: true
+  SpacingAroundDoubleColon:
+    active: true
+    autoCorrect: true
+  SpacingAroundKeyword:
+    active: true
+    autoCorrect: true
+  SpacingAroundOperators:
+    active: true
+    autoCorrect: true
+  SpacingAroundParens:
+    active: true
+    autoCorrect: true
+  SpacingAroundRangeOperator:
+    active: true
+    autoCorrect: true
+  SpacingAroundUnaryOperator:
+    active: true
+    autoCorrect: true
+  # Правило выключено, потому что оно дублируется
+  # правилом AnnotationOnSeparateLine
+  SpacingBetweenDeclarationsWithAnnotations:
+    active: false
+    autoCorrect: false
+  SpacingBetweenDeclarationsWithComments:
+    active: true
+    autoCorrect: true
+    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+  StringTemplate:
+    active: true
+    autoCorrect: true
