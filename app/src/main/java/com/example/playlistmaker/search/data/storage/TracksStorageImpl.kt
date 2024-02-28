@@ -10,9 +10,6 @@ import com.google.gson.reflect.TypeToken
 class TracksStorageImpl(
     context: Context
 ) : TracksStorage {
-    private companion object {
-        const val HISTORY_KEY = "HISTORY_KEY"
-    }
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("local_storage", Context.MODE_PRIVATE)
@@ -21,7 +18,7 @@ class TracksStorageImpl(
     private fun addTrack(track: TrackDto) {
         if (trackSet.contains(track)) {
             trackSet.remove(track)
-        } else if (trackSet.size >= 10) {
+        } else if (trackSet.size >= CAPACITY) {
             val firstTrack = trackSet.iterator().next()
             trackSet.remove(firstTrack)
         }
@@ -47,14 +44,11 @@ class TracksStorageImpl(
 
     override fun takeHistory(reverse: Boolean): ArrayList<TrackDto> {
         restoreHistory()
-        var result: ArrayList<TrackDto>
-        if (reverse) {
-            result = invertTrackList()
+        return if (reverse) {
+            invertTrackList()
         } else {
-            result = ArrayList(trackSet)
-
+            ArrayList(trackSet)
         }
-        return result
     }
 
     override fun restoreHistory() {
@@ -83,4 +77,10 @@ class TracksStorageImpl(
         sharedPreferences.edit().remove(key).apply()
         clear()
     }
+
+    private companion object {
+        const val HISTORY_KEY = "HISTORY_KEY"
+        const val CAPACITY = 10
+    }
+
 }

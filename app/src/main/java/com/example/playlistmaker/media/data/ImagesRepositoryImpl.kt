@@ -50,7 +50,7 @@ class ImagesRepositoryImpl(
         }
         filePath.deleteRecursively()
     }
-
+    @Suppress("TooGenericExceptionCaught")
     override fun removeImage(uri: Uri): Boolean {
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
         val file = File(filePath, uri.lastPathSegment ?: "")

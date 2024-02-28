@@ -18,6 +18,7 @@ import com.example.playlistmaker.common.data.db.entity.TrackEntity
         PlaylistTrackReference::class
     ]
 )
+@Suppress("MagicNumber")
 abstract class AppDatabase : RoomDatabase() {
     abstract fun trackDao(): TrackDao
     abstract fun playlistDao(): PlaylistDao
