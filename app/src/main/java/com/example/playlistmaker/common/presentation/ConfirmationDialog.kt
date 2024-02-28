@@ -7,7 +7,7 @@ import com.example.playlistmaker.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ConfirmationDialog(private val context: Context) {
-
+    @Suppress("LongParameterList")
     fun showConfirmationDialog(
         title: String,
         message: String,

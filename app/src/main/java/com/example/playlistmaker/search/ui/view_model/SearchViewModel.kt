@@ -16,6 +16,7 @@ import com.example.playlistmaker.search.ui.fragments.ResponseState
 import com.example.playlistmaker.search.ui.fragments.SearchState
 import kotlinx.coroutines.launch
 
+@Suppress("TooManyFunctions")
 class SearchViewModel(
     private val application: Application,
     private val tracksInteractor: TracksInteractor,
@@ -68,7 +69,7 @@ class SearchViewModel(
             musicSearchDebounce(changedText)
         }
     }
-
+    @Suppress("TooManyFunctions")
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(SearchState.Loading)
@@ -82,7 +83,7 @@ class SearchViewModel(
             }
         }
     }
-
+    @Suppress("TooManyFunctions")
     private fun processResult(foundTracks: List<TrackDto>?, errorMessage: String?) {
         val tracks = mutableListOf<Track>()
         if (foundTracks != null) {

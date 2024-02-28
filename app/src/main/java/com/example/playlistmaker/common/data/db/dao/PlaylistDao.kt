@@ -1,3 +1,4 @@
+@file:Suppress("TooManyFunctions")
 package com.example.playlistmaker.common.data.db.dao
 
 import androidx.room.Dao

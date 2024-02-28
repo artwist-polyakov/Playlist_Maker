@@ -25,7 +25,7 @@ enum class ResponseState {
     ERROR,
     CLEAR
 }
-
+@Suppress("TooManyFunctions")
 class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()

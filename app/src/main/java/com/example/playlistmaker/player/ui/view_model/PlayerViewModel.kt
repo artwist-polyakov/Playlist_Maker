@@ -1,3 +1,4 @@
+@file:Suppress("TooManyFunctions")
 package com.example.playlistmaker.player.ui.view_model
 
 import androidx.lifecycle.LiveData

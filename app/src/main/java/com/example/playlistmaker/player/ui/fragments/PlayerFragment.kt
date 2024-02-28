@@ -1,3 +1,4 @@
+@file:Suppress("TooManyFunctions")
 package com.example.playlistmaker.player.ui.fragments
 
 import android.os.Bundle
