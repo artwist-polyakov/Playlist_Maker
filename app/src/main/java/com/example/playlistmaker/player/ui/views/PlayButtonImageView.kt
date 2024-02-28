@@ -49,11 +49,11 @@ class PlayButtonImageView @JvmOverloads constructor(
 
                 playIconBitmap =
                     getDrawable(
-                        R.styleable.PlayButtonImageView_playButtonImage
+                        R.styleable.PlayButtonImageView_playButtonDrawable
                     )?.toBitmap()
                 pauseIconBitmap =
                     getDrawable(
-                        R.styleable.PlayButtonImageView_pauseButtonImage
+                        R.styleable.PlayButtonImageView_pauseButtonDrawable
                     )?.toBitmap()
                 currentIconState = getInt(
                     R.styleable.PlayButtonImageView_PlayerState,
