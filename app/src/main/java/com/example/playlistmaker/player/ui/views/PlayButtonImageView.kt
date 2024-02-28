@@ -23,6 +23,7 @@ class PlayButtonImageView @JvmOverloads constructor(
     private var playIconBitmap: Bitmap? = null
     private var pauseIconBitmap: Bitmap? = null
     private var imageRect = RectF(0f, 0f, 0f, 0f)
+    private var rect = RectF(0f, 0f, 0f, 0f)
 
     // состояние иконки — пауза или проигрывание
     private var currentIconState = IS_PAUSED
@@ -127,7 +128,7 @@ class PlayButtonImageView @JvmOverloads constructor(
 
     private fun processBitmap(targetBitmap: Bitmap?, canvas: Canvas) {
         if (targetBitmap != null) {
-            val rect = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
+            rect = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
             canvas.drawBitmap(targetBitmap, null, rect, null)
         }
     }
