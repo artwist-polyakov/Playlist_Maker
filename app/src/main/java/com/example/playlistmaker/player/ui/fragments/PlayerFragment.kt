@@ -283,11 +283,11 @@ class PlayerFragment : Fragment(), PlayerInterface {
 
 
     override fun showPlayState() {
-        binding.playButton.setIconState(1)
+        binding.playButton.setIconState(IS_PLAYING)
     }
 
     override fun showPauseState() {
-        binding.playButton.setIconState(0)
+        binding.playButton.setIconState(IS_PAUSED)
     }
 
     override fun showPreparationState() {

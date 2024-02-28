@@ -7,7 +7,7 @@
             <enum name="paused" value="1"/>
         </attr>
 
-        <attr name="playButtonImage" format="reference"/>
-        <attr name="pauseButtonImage" format="reference"/>
+        <attr name="playButtonDrawable" format="reference"/>
+        <attr name="pauseButtonDrawable" format="reference"/>
     </declare-styleable>
 </resources>
