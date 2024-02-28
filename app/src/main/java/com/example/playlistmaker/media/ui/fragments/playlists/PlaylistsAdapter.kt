@@ -8,7 +8,7 @@ class PlaylistsAdapter(private val clickListener: PlaylistsAdapter.PlaylistClick
     RecyclerView.Adapter<PlaylistViewHolder>() {
     var playlists = ArrayList<PlaylistInformation>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder =
-        PlaylistViewHolder(parent, clickListener)
+        PlaylistViewHolder(parent)
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         val playlist = playlists.get(position)

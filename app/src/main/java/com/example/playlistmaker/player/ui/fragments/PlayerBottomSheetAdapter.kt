@@ -9,7 +9,7 @@ class PlayerBottomSheetAdapter(private val clickListener: PlayerBottomSheetAdapt
     RecyclerView.Adapter<PlayerBottomSheetViewHolder>() {
     var playlists = ArrayList<PlaylistInformation>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerBottomSheetViewHolder =
-        PlayerBottomSheetViewHolder(parent, clickListener)
+        PlayerBottomSheetViewHolder(parent)
 
     override fun onBindViewHolder(holder: PlayerBottomSheetViewHolder, position: Int) {
         val playlist = playlists.get(position)

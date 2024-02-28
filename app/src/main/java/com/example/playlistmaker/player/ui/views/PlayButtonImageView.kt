@@ -116,10 +116,10 @@ class PlayButtonImageView @JvmOverloads constructor(
 
             false -> {
                 playIconBitmap?.apply {
-                    alpha = .5f
+                    alpha = transparecy_const
                 }
                 pauseIconBitmap?.apply {
-                    alpha = .5f
+                    alpha = transparecy_const
                 }
             }
         }
@@ -136,5 +136,6 @@ class PlayButtonImageView @JvmOverloads constructor(
     companion object {
         const val IS_PLAYING: Int = 0
         const val IS_PAUSED: Int = 1
+        const val transparecy_const = .5f
     }
 }

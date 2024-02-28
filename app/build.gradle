@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -43,10 +45,12 @@ android {
 }
 
 detekt {
-    toolVersion = "1.22.0"
+    toolVersion = "1.23.3"
     config = files("config/detekt/detekt.yml")
     buildUponDefaultConfig = true
 }
+
+
 
 dependencies {
 
@@ -74,4 +78,22 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
+
+}
+
+tasks.register("detektFormat", Detekt) {
+    source = files("src/main/java", "src/test/java")
+    config.setFrom(files("${project.rootDir}/config/detekt/detekt.yml"))
+    include("**/*.kt", "**/*.kts")
+    exclude("**/resources/**", "**/build/**")
+    autoCorrect = true // Опция для автоматического исправления форматирования
+    reports {
+        txt.enabled = false
+        xml.enabled = false
+        html.enabled = true
+        html.destination = file("build/reports/detekt/detekt.html")
+    }
+    debug = true
+    parallel = true
 }

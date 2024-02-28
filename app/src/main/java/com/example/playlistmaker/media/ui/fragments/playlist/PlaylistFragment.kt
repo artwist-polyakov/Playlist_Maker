@@ -134,13 +134,9 @@ class PlaylistFragment : Fragment() {
 
     private fun render(state: SinglePlaylistScreenState) {
         when (state) {
-            is SinglePlaylistScreenState.Loading -> {
-                showLoading()
-            }
+            is SinglePlaylistScreenState.Loading -> { showLoading() }
 
-            is SinglePlaylistScreenState.Error -> {
-                Log.d("SinglePlaylistScreenState", "Error")
-            }
+            is SinglePlaylistScreenState.Error -> { Log.d("SinglePlaylistScreenState", "Error") }
 
             is SinglePlaylistScreenState.Success -> {
                 showLoading()
@@ -148,18 +144,14 @@ class PlaylistFragment : Fragment() {
                 showContent()
             }
 
-            is SinglePlaylistScreenState.GoBack -> {
-                findNavController().popBackStack()
-            }
+            is SinglePlaylistScreenState.GoBack -> { findNavController().popBackStack() }
 
             is SinglePlaylistScreenState.SharePlaylistInitiated -> {
                 val playlist = state.playlist ?: return
                 val tracks = state.tracks ?: return
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
-                viewModel.handleInteraction(
-                    SinglePlaylistScreenInteraction.sendMessage(
-                        generateShareMessage(playlist, tracks)
-                    )
+                viewModel.handleInteraction(SinglePlaylistScreenInteraction.sendMessage(
+                        generateShareMessage(playlist, tracks))
                 )
             }
 
@@ -178,7 +170,7 @@ class PlaylistFragment : Fragment() {
 
             is SinglePlaylistScreenState.ConfirmDelete -> {
                 state.playlist?.let {
-                    showPlaylistDeleteConfirmation(it)
+                    showPlaylistDeleteConfirmation()
                 }
             }
 
@@ -258,7 +250,7 @@ class PlaylistFragment : Fragment() {
         )
 
         val trackDuration = generatePluralString(
-            playlist.durationInSeconds.toInt() / 60,
+            playlist.durationInSeconds.toInt() / SECONDS_IN_MINUTE,
             R.plurals.playlist_minutes
         )
 
@@ -300,8 +292,8 @@ class PlaylistFragment : Fragment() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         optionsBottomSheetBehaviour = BottomSheetBehavior.from(optionsBottomSheetContainer)
 
-        val desiredHeight = resources.calculateDesiredHeight(24 + 24 + 150)
-        val optionsDesiredHeight = resources.calculateDesiredHeight(24 + 28)
+        val desiredHeight = resources.calculateDesiredHeight(offset24 + offset24 + offset150)
+        val optionsDesiredHeight = resources.calculateDesiredHeight(offset24 + offset28)
 
         bottomSheetBehavior.peekHeight = desiredHeight
         optionsBottomSheetBehaviour.peekHeight = optionsDesiredHeight
@@ -380,7 +372,7 @@ class PlaylistFragment : Fragment() {
         )
     }
 
-    private fun showPlaylistDeleteConfirmation(playlist: PlaylistInformation) {
+    private fun showPlaylistDeleteConfirmation() {
         confirmator.showConfirmationDialog(
             getString(R.string.remove_playlist_confirmation_title),
             getString(R.string.remove_playlist_confirmation_text),
@@ -400,7 +392,7 @@ class PlaylistFragment : Fragment() {
 
     companion object {
         private const val ARG_PLAYLIST_ID = "arg_playlist_id"
-        private val CLICK_DEBOUNCE_DELAY = 10L
+        private const val CLICK_DEBOUNCE_DELAY = 10L
         fun newInstance(playlistId: String): PlaylistFragment {
             val fragment = PlaylistFragment()
             val args = Bundle()
@@ -408,5 +400,10 @@ class PlaylistFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
+        private const val offset24 = 24
+        private const val offset150 = 150
+        private const val offset28 = 28
+        private const val SECONDS_IN_MINUTE = 60
+
     }
 }

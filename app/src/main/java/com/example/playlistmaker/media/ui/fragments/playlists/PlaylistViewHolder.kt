@@ -11,7 +11,6 @@ import com.example.playlistmaker.common.presentation.setImageUriOrDefault
 
 class PlaylistViewHolder(
     parent: ViewGroup,
-    private val clickListener: PlaylistsAdapter.PlaylistClickListener,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.playlist_big_item, parent, false)

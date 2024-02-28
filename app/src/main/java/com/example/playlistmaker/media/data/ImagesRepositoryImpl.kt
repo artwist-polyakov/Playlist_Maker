@@ -28,7 +28,7 @@ class ImagesRepositoryImpl(
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 FileOutputStream(file).use { outputStream ->
                     val bitmap = BitmapFactory.decodeStream(inputStream)
-                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+                    bitmap?.compress(Bitmap.CompressFormat.JPEG, QUALITY, outputStream)
                         ?: throw IOException("Не удалось декодировать изображение")
                 }
             } ?: throw IOException("Не удалось открыть поток ввода")
@@ -60,5 +60,9 @@ class ImagesRepositoryImpl(
             e.printStackTrace()
             false
         }
+    }
+
+    companion object {
+        const val QUALITY = 80
     }
 }

@@ -10,8 +10,7 @@ import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.setImageUriOrDefault
 
 class PlayerBottomSheetViewHolder(
-    parent: ViewGroup,
-    private val clickListener: PlayerBottomSheetAdapter.PlaylistClickListener,
+    parent: ViewGroup
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.playlist_little_item, parent, false)

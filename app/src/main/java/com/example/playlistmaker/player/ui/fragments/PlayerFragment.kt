@@ -122,7 +122,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
 
             is PlayerBottomSheetState.Shown -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                binding.mainLayout.alpha = 0.5f
+                binding.mainLayout.alpha = transparensy_const
                 adapter.updatePlaylists(state.playlists)
             }
 
@@ -319,6 +319,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
         private const val CLICK_DEBOUNCE_DELAY = 10L
         val IS_PLAYING = PlayButtonImageView.IS_PLAYING
         val IS_PAUSED = PlayButtonImageView.IS_PAUSED
+        private const val transparensy_const = .5f
     }
 
 }
