@@ -18,7 +18,6 @@ class ConfirmationDialog(private val context: Context) {
         positiveColor: Int? = null,
         negativeColor: Int? = null
     ) {
-
         val posColor = positiveColor
             ?: context.getThemeColor(com.google.android.material.R.attr.colorOnPrimary)
         val likeColor = negativeColor ?: ContextCompat.getColor(context, R.color.like_color)

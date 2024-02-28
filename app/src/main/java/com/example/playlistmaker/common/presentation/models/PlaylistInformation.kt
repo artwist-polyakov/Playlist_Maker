@@ -15,4 +15,4 @@ data class PlaylistInformation(
     val durationInSeconds: Long,
     val wasDurationCalculated: Boolean,
     val creationDate: Long
-) : Parcelable {}
+) : Parcelable

@@ -28,7 +28,7 @@ class TracksDbRepositoryImpl(
 
     override suspend fun switchTrackLikeStatus(track: TrackEntity): Boolean {
         prettyfyDbRepository.stopPrettify()
-        val result  = appDatabase.trackDao().switchLike(track)
+        val result = appDatabase.trackDao().switchLike(track)
         if (!result) {
             prettyfyDbRepository.startPrettify()
         }

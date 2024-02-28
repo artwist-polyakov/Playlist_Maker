@@ -1,9 +1,9 @@
 package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
+import com.example.playlistmaker.player.domain.MediaPlayerInterface
 
 class MediaPlayerImpl : MediaPlayer(), MediaPlayerInterface {
     private var callback: MediaPlayerCallbackInterface? = null

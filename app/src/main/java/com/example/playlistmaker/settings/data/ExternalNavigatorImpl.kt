@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.domain.EmailData
+import com.example.playlistmaker.settings.domain.ExternalNavigator
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
 
@@ -28,7 +28,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun openLink(link: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        try{
+        try {
             context.startActivity(browserIntent)
         } catch (e: Exception) {
             Log.d("ExternalNavigatorImpl", "openLink: ${e.message}")
@@ -58,8 +58,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         }
         try {
             context.startActivity(intent)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("ExternalNavigatorImpl", "sendMessage: ${e.message}")
         }
     }

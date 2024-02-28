@@ -38,7 +38,8 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreatePlaylistBinding.inflate(inflater, container, false)
@@ -59,7 +60,7 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
         }
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                //обрабатываем событие выбора пользователем фотографии
+                // обрабатываем событие выбора пользователем фотографии
                 if (uri != null) {
                     binding.imageView.setImageURI(uri)
                     binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
@@ -109,7 +110,6 @@ class CreatePlaylistFragment : Fragment(), CreatePlaylistInterface {
         }
         binding.button.isEnabled = false
         binding.titleField.addTextChangedListener {
-
             val data = CreatePlaylistData.Title(it.toString())
             viewModel.handleInteraction(CreatePlaylistScreenInteraction.DataFilled(data))
         }

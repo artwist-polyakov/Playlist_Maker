@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.debounce
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
@@ -32,7 +32,8 @@ class PlaylistsFragment : Fragment() {
     private lateinit var adapter: PlaylistsAdapter
     private lateinit var recyclerView: RecyclerView
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
@@ -76,7 +77,6 @@ class PlaylistsFragment : Fragment() {
 
     private fun render(state: PlaylistsScreenState) {
         when (state) {
-
             is PlaylistsScreenState.Content -> {
                 showPlaylists()
                 adapter.updatePlaylists(state.content)

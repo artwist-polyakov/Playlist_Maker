@@ -73,7 +73,6 @@ class PlayButtonImageView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-
         when (currentIconState) {
             IS_PLAYING -> processBitmap(playIconBitmap, canvas)
             IS_PAUSED -> processBitmap(pauseIconBitmap, canvas)

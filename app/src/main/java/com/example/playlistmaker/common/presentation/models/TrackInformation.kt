@@ -16,6 +16,5 @@ data class TrackInformation(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?
-) : Parcelable {
-}
+) : Parcelable
 

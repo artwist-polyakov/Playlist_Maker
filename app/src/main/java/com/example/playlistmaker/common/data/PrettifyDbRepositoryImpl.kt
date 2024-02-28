@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class PrettifyDbRepositoryImpl(
     private val appDatabase: AppDatabase,
-): PrettifyDbRepository {
+) : PrettifyDbRepository {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.IO + job)
     private var isRunning: Boolean = false

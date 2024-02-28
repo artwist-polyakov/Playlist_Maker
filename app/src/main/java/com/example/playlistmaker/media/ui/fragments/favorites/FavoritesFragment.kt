@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.debounce
+import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.media.ui.view_model.FavoritesViewModel
 import com.example.playlistmaker.search.domain.models.Track
@@ -45,7 +45,8 @@ class FavoritesFragment : Fragment() {
     private lateinit var favoritesList: RecyclerView
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)

@@ -1,4 +1,5 @@
 @file:Suppress("TooManyFunctions")
+
 package com.example.playlistmaker.player.ui.fragments
 
 import android.os.Bundle
@@ -16,11 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.debounce
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.showCustomSnackbar
-import com.example.playlistmaker.common.presentation.debounce
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.player.presentation.PlayerInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
@@ -28,6 +28,7 @@ import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.player.ui.views.PlayButtonImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerFragment : Fragment(), PlayerInterface {
     private val viewModel: PlayerViewModel by viewModel()
@@ -40,7 +41,8 @@ class PlayerFragment : Fragment(), PlayerInterface {
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
@@ -71,10 +73,10 @@ class PlayerFragment : Fragment(), PlayerInterface {
         // PLAYER INTERFACE
         setupPlayerInterface()
 
-        //BOTTOM SHEET
+        // BOTTOM SHEET
         setupBottomSheet()
 
-        //BINDING
+        // BINDING
         setupObservers()
 
         loadState()

@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.common.presentation.models.TrackDtoToTrackMapper
 import com.example.playlistmaker.common.presentation.debounce
+import com.example.playlistmaker.common.presentation.models.TrackDtoToTrackMapper
 import com.example.playlistmaker.search.data.dto.TrackDto
-import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.ui.fragments.ResponseState
 import com.example.playlistmaker.search.ui.fragments.SearchState
 import kotlinx.coroutines.launch

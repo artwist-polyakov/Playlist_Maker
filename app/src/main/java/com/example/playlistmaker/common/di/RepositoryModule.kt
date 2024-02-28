@@ -15,9 +15,9 @@ import com.example.playlistmaker.player.domain.MediaPlayerInterface
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.search.data.network.TracksRepositoryImpl
-import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.data.storage.TracksStorageImpl
 import com.example.playlistmaker.search.domain.api.TracksRepository
+import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.settings.data.SettingsRepository
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 import org.koin.core.module.dsl.factoryOf

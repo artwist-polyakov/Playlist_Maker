@@ -14,10 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.ConfirmationDialog
 import com.example.playlistmaker.common.presentation.calculateDesiredHeight
 import com.example.playlistmaker.common.presentation.debounce
+import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.setImageUriOrDefault
 import com.example.playlistmaker.common.presentation.showCustomSnackbar
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
@@ -27,9 +27,9 @@ import com.example.playlistmaker.media.ui.view_model.states.SinglePlaylistScreen
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.TracksAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import org.koin.android.ext.android.inject
 
 class PlaylistFragment : Fragment() {
     private var playlistId: String = ""
@@ -150,8 +150,10 @@ class PlaylistFragment : Fragment() {
                 val playlist = state.playlist ?: return
                 val tracks = state.tracks ?: return
                 viewModel.handleInteraction(SinglePlaylistScreenInteraction.toBasicState)
-                viewModel.handleInteraction(SinglePlaylistScreenInteraction.sendMessage(
-                        generateShareMessage(playlist, tracks))
+                viewModel.handleInteraction(
+                    SinglePlaylistScreenInteraction.sendMessage(
+                        generateShareMessage(playlist, tracks)
+                    )
                 )
             }
 
