@@ -98,6 +98,11 @@ class PlayButtonImageView @JvmOverloads constructor(
         }
     }
 
+    override fun performClick(): Boolean {
+        super.performClick()
+        return isActive
+    }
+
     fun setIconState(state: Int) {
         // защищаемся от передачи невалидных значений
         currentIconState = abs(state) % 2

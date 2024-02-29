@@ -71,6 +71,7 @@
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
+        style="@style/recycler_common_style"
         android:id="@+id/search_results_recycler_view"
         android:layout_width="match_parent"
         android:background="@android:color/transparent"
@@ -105,6 +106,7 @@
             tools:ignore="MissingClass">
 
             <androidx.recyclerview.widget.RecyclerView
+                style="@style/recycler_common_style"
                 android:id="@+id/search_history_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

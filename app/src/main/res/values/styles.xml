@@ -195,4 +195,8 @@
         <item name="cornerRadius">8dp</item>
         <item name="elevation">0dp</item>
     </style>
+
+    <style name="recycler_common_style">
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
 </resources>
