@@ -45,6 +45,7 @@
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
+        style="@style/recycler_common_style"
         android:id="@+id/favorites_recycler_view"
         android:layout_width="match_parent"
         android:background="@android:color/transparent"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".player.ui.activity.PlayerFragment">
+    tools:context=".player.ui.fragments.PlayerFragment">
 
     <View
         android:id="@+id/backgroundDimView"
@@ -120,21 +120,18 @@
             app:layout_constraintStart_toStartOf="@id/interface_left_border"
             app:layout_constraintTop_toBottomOf="@id/artist_name" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.example.playlistmaker.player.ui.views.PlayButtonImageView
             android:id="@+id/play_button"
             android:layout_width="83dp"
             android:layout_height="83dp"
             android:layout_marginTop="38dp"
             android:contentDescription="@string/play_button_description"
-            app:backgroundTint="?attr/colorPrimary"
-            app:fabCustomSize="83dp"
+            app:playButtonDrawable="@drawable/play_button"
+            app:pauseButtonDrawable="@drawable/pause_button"
             app:layout_constraintEnd_toStartOf="@+id/like_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/add_to_collection"
-            app:layout_constraintTop_toBottomOf="@id/artist_name"
-            app:maxImageSize="83dp"
-            app:srcCompat="@drawable/play_button"
-            app:tintMode="multiply" />
+            app:layout_constraintTop_toBottomOf="@id/artist_name" />
 
         <ImageButton
             android:id="@+id/like_button"

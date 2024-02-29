@@ -1,4 +1,4 @@
-package com.example.playlistmaker.player.ui.activity
+package com.example.playlistmaker.player.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +25,7 @@ import com.example.playlistmaker.player.presentation.PlayerInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
+import com.example.playlistmaker.player.ui.views.PlayButtonImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class PlayerFragment : Fragment(), PlayerInterface {
@@ -75,7 +76,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
         //BINDING
         setupObservers()
 
-        renderState()
+        loadState()
     }
 
     override fun onDestroyView() {
@@ -91,7 +92,7 @@ class PlayerFragment : Fragment(), PlayerInterface {
         }
     }
 
-    private fun renderState() {
+    private fun loadState() {
         viewModel.restoreState().let {
             binding.time.text = it.second.toString()
             when (it.first) {
@@ -216,19 +217,19 @@ class PlayerFragment : Fragment(), PlayerInterface {
         viewModel.playerState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 PlayerState.Loading -> {
-                    binding.playButton.isEnabled = false
+                    binding.playButton.isActive(false)
                 }
 
                 PlayerState.Ready -> {
-                    binding.playButton.isEnabled = true
+                    binding.playButton.isActive(true)
                 }
 
                 PlayerState.Play -> {
-                    binding.playButton.setImageResource(R.drawable.pause_button)
+                    binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Pause -> {
-                    binding.playButton.setImageResource(R.drawable.play_button)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
             }
         }
@@ -282,11 +283,11 @@ class PlayerFragment : Fragment(), PlayerInterface {
 
 
     override fun showPlayState() {
-        binding.playButton.setImageResource(R.drawable.pause_button)
+        binding.playButton.setIconState(IS_PLAYING)
     }
 
     override fun showPauseState() {
-        binding.playButton.setImageResource(R.drawable.play_button)
+        binding.playButton.setIconState(IS_PAUSED)
     }
 
     override fun showPreparationState() {
@@ -315,6 +316,8 @@ class PlayerFragment : Fragment(), PlayerInterface {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 10L
+        val IS_PLAYING = PlayButtonImageView.IS_PLAYING
+        val IS_PAUSED = PlayButtonImageView.IS_PAUSED
     }
 
 }
