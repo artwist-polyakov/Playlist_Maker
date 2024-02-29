@@ -128,7 +128,8 @@ class PlayButtonImageView @JvmOverloads constructor(
 
     private fun processBitmap(targetBitmap: Bitmap?, canvas: Canvas) {
         if (targetBitmap != null) {
-            rect = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
+            rect.right = measuredWidth.toFloat()
+            rect.bottom = measuredHeight.toFloat()
             canvas.drawBitmap(targetBitmap, null, rect, null)
         }
     }
