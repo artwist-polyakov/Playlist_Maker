@@ -1,6 +1,9 @@
 package com.example.playlistmaker.player.ui.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,18 +12,19 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.Group
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.InternetCheckingFragment
+import com.example.playlistmaker.common.presentation.debounce
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.showCustomSnackbar
-import com.example.playlistmaker.common.presentation.debounce
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.player.data.MediaPlayerService
 import com.example.playlistmaker.player.presentation.PlayerInterface
@@ -29,6 +33,8 @@ import com.example.playlistmaker.player.ui.view_model.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.player.ui.views.PlayButtonImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class PlayerFragment :
     InternetCheckingFragment<FragmentPlayerBinding>(FragmentPlayerBinding::inflate),
@@ -40,12 +46,26 @@ class PlayerFragment :
     private lateinit var adapter: PlayerBottomSheetAdapter
     private lateinit var recyclerView: RecyclerView
 
+    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.d(TAG, "onReceive $intent")
+            viewModel.playPause()
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         super.onCreateView(inflater, container, savedInstanceState)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            receiver,
+            IntentFilter(MediaPlayerService.INTENT_FILTER_PAUSE_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
         return binding.root
     }
 
@@ -324,6 +344,7 @@ class PlayerFragment :
     }
 
     companion object {
+        private const val TAG = "PlayerFragment"
         private const val CLICK_DEBOUNCE_DELAY = 10L
         val IS_PLAYING = PlayButtonImageView.IS_PLAYING
         val IS_PAUSED = PlayButtonImageView.IS_PAUSED
