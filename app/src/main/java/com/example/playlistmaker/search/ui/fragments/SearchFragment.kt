@@ -1,20 +1,15 @@
 package com.example.playlistmaker.search.ui.fragments
 
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.InternetCheckingFragment
 import com.example.playlistmaker.common.presentation.InternetConnectionBroadcastReciever
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.common.presentation.debounce
@@ -31,16 +26,18 @@ enum class ResponseState {
     CLEAR
 }
 
-class SearchFragment : Fragment() {
+class SearchFragment :
+    InternetCheckingFragment<FragmentSearchBinding>(FragmentSearchBinding::inflate) {
     private val internetConnectionBroadcastReciever = InternetConnectionBroadcastReciever(
-        action = {
+        action_internet_unavailabla = {
             binding.root.showCustomSnackbar("Отсутствует подключение к интернету")
+        },
+        action_internet_available = {
+            binding.root.showCustomSnackbar("Подключение к интернету восстановлено")
         }
     )
 
     private val viewModel: SearchViewModel by viewModel()
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
@@ -53,30 +50,6 @@ class SearchFragment : Fragment() {
     )
 
     private lateinit var textWatcher: TextWatcher
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        ContextCompat.registerReceiver(
-            requireContext(),
-            internetConnectionBroadcastReciever,
-            IntentFilter(InternetConnectionBroadcastReciever.CONNECTIVITY_ACTION),
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
-    }
-
-    override fun onPause() {
-        super.onPause()
-        requireContext().unregisterReceiver(internetConnectionBroadcastReciever)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -134,8 +107,7 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        textWatcher?.let { binding.searchEditText.removeTextChangedListener(it) }
-        _binding = null
+        textWatcher.let { binding.searchEditText.removeTextChangedListener(it) }
     }
 
     private fun render(state: SearchState) {
