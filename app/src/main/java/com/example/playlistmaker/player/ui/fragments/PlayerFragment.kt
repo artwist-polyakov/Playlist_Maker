@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.Group
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.InternetCheckingFragment
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.showCustomSnackbar
@@ -28,10 +28,10 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.player.ui.views.PlayButtonImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-class PlayerFragment : Fragment(), PlayerInterface {
+class PlayerFragment :
+    InternetCheckingFragment<FragmentPlayerBinding>(FragmentPlayerBinding::inflate),
+    PlayerInterface {
     private val viewModel: PlayerViewModel by viewModel()
-    private var _binding: FragmentPlayerBinding? = null
-    private val binding get() = _binding!!
     private lateinit var currentTrack: TrackInformation
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private var onPlaylistClickDebounce: (PlaylistInformation) -> Unit = {}
@@ -42,8 +42,8 @@ class PlayerFragment : Fragment(), PlayerInterface {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        super.onCreateView(inflater, container, savedInstanceState)
         return binding.root
     }
 
@@ -77,11 +77,6 @@ class PlayerFragment : Fragment(), PlayerInterface {
         setupObservers()
 
         loadState()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun renderLikeState(isLiked: Boolean) {
