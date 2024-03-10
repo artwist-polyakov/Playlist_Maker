@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 
-class InternetConnectionBroadcastReciever : BroadcastReceiver() {
+class InternetConnectionBroadcastReciever (
+    val action: () -> Unit
+) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == CONNECTIVITY_ACTION) {
             context?.checkInternetReachability().let {
