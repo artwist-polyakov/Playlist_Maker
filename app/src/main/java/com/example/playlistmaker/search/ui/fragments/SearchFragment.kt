@@ -107,7 +107,7 @@ class SearchFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        textWatcher.let { binding.searchEditText.removeTextChangedListener(it) }
+//        textWatcher.let { binding.searchEditText.removeTextChangedListener(it) }
     }
 
     private fun render(state: SearchState) {

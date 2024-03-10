@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import com.example.playlistmaker.common.presentation.showCustomSnackbar
 import com.example.playlistmaker.common.presentation.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.player.data.MediaPlayerService
 import com.example.playlistmaker.player.presentation.PlayerInterface
 import com.example.playlistmaker.player.ui.view_model.PlayerBottomSheetState
 import com.example.playlistmaker.player.ui.view_model.PlayerState
@@ -220,11 +222,23 @@ class PlayerFragment :
                 }
 
                 PlayerState.Play -> {
+                    val intent = Intent(requireContext(), MediaPlayerService::class.java).apply {
+                        action = MediaPlayerService.ACTION_START_FOREGROUND
+                        viewModel.giveCurrentTrack()?.let {
+                            putExtra(MediaPlayerService.EXTRA_ARTIST, it.artistName)
+                            putExtra(MediaPlayerService.EXTRA_TITLE, it.trackName)
+                        }
+                    }
+                    requireContext().startService(intent)
+
                     binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Pause -> {
                     binding.playButton.setIconState(IS_PAUSED)
+                    val intent = Intent(context, MediaPlayerService::class.java)
+                    intent.action = MediaPlayerService.ACTION_STOP_FOREGROUND
+                    requireContext().startService(intent)
                 }
             }
         }
@@ -306,7 +320,7 @@ class PlayerFragment :
 
     override fun onPause() {
         super.onPause()
-        viewModel.makeItPause()
+//        viewModel.makeItPause()
     }
 
     companion object {
