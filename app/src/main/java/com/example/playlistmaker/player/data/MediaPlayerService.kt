@@ -5,10 +5,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.example.playlistmaker.root.ui.RootActivity
+import com.example.aidl.service.IAudioPlayerService
 
 
 class MediaPlayerService : Service() {
@@ -21,6 +21,8 @@ class MediaPlayerService : Service() {
         const val EXTRA_ARTIST = "EXTRA_ARTIST"
         const val EXTRA_TITLE = "EXTRA_TITLE"
     }
+
+    private var currentTitle: String? = null
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -39,6 +41,7 @@ class MediaPlayerService : Service() {
     }
 
     private fun createNotification(artist: String, title: String): Notification {
+        currentTitle = title
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).apply {
             setContentTitle(title)
             setContentText(artist)
@@ -62,7 +65,15 @@ class MediaPlayerService : Service() {
         return notificationBuilder.addAction(pauseAction).build()
     }
 
-    override fun onBind(intent: Intent): IBinder? = null
+    override fun onBind(intent: Intent): IBinder {
+        Log.d("AudioService", "Bind intent $intent")
+        return object : IAudioPlayerService.Stub() {
+            override fun getTrackTitle(): String {
+                return currentTitle!!
+            }
+
+        }
+    }
 
 
 }
