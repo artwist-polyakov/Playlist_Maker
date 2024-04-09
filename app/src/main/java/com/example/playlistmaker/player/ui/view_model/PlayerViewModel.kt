@@ -12,6 +12,7 @@ import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformationToTrackMapper
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
+import com.example.playlistmaker.player.domain.MusicServiceInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,7 +23,8 @@ class PlayerViewModel(
     private val trackStorageInteractor: TrackStorageInteractor,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val dbInteractor: TracksDbInteractor,
-    private val playlistsInteractor: PlaylistsDbInteractor
+    private val playlistsInteractor: PlaylistsDbInteractor,
+    private val musicServiceInteractor: MusicServiceInteractor
 ) : ViewModel(), MediaPlayerCallbackInterface {
 
     companion object {
@@ -48,6 +50,10 @@ class PlayerViewModel(
 
     // MediaPlayer
     private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
+
+    init {
+        musicServiceInteractor.configureAndLaunchService()
+    }
 
     // Функции для управления проигрыванием
     fun playPause() {
