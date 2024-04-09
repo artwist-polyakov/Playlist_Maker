@@ -15,6 +15,8 @@ import com.example.playlistmaker.media.domain.ImagesStorageInteractor
 import com.example.playlistmaker.player.data.MediaPlayerInteractorImpl
 import com.example.playlistmaker.player.data.TrackStorageInteractorImpl
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
+import com.example.playlistmaker.player.domain.MusicServiceInteractor
+import com.example.playlistmaker.player.domain.MusicServiceInteractorImpl
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
@@ -41,4 +43,5 @@ val domainModule = module {
     singleOf(::ImagesStorageInteractorImpl) bind ImagesStorageInteractor::class
     singleOf(::PlaylistsDbInteractorImpl) bind PlaylistsDbInteractor::class
     singleOf(::ImagesRepositoryInteractorImpl) bind ImagesRepositoryInteractor::class
+    factoryOf(::MusicServiceInteractorImpl) bind MusicServiceInteractor::class
 }
