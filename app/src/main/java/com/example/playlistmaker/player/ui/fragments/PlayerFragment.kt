@@ -109,13 +109,23 @@ class PlayerFragment :
         viewModel.restoreState().let {
             binding.time.text = it.second.toString()
             when (it.first) {
-                PlayerState.Play -> showPlayState()
-                PlayerState.Pause -> showPauseState()
                 PlayerState.Loading -> {
-                    showPreparationState()
+                    binding.playButton.isActive(false)
+                    binding.playButton.setIconState(IS_PLAYING)
                 }
 
-                PlayerState.Ready -> showReadyState()
+                PlayerState.Ready -> {
+                    binding.playButton.isActive(true)
+                    binding.playButton.setIconState(IS_PLAYING)
+                }
+
+                PlayerState.Play -> {
+                    binding.playButton.setIconState(IS_PLAYING)
+                }
+
+                PlayerState.Pause -> {
+                    binding.playButton.setIconState(IS_PAUSED)
+                }
                 else -> {
                     showPreparationState()
                     viewModel.initializePlayer()
@@ -231,10 +241,12 @@ class PlayerFragment :
             when (state) {
                 PlayerState.Loading -> {
                     binding.playButton.isActive(false)
+                    binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Ready -> {
                     binding.playButton.isActive(true)
+                    binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Play -> {
@@ -305,10 +317,12 @@ class PlayerFragment :
 
     override fun showPreparationState() {
         binding.playButton.isEnabled = false
+        binding.playButton.setIconState(IS_PLAYING)
     }
 
     override fun showReadyState() {
         binding.playButton.isEnabled = true
+        binding.playButton.setIconState(IS_PAUSED)
     }
 
     override fun setTime(time: String) {
