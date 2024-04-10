@@ -7,13 +7,26 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.media.RingtoneManager
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.playlistmaker.R
 
 internal class PlaylistMakerMusicService: Service() {
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val soundRunnable = object : Runnable {
+        override fun run() {
+            playNotificationSound()
+            // Планируем следующий запуск через 5 секунд
+            handler.postDelayed(this, 5000)
+        }
+    }
+
     override fun onBind(intent: Intent?): IBinder? {
         TODO("Not yet implemented")
         return null
@@ -26,11 +39,24 @@ internal class PlaylistMakerMusicService: Service() {
         startForegroundWithServiceType()
     }
 
+    override fun onDestroy() {
+        Log.d(LOG_TAG, "onDestroy")
+        handler.removeCallbacks(soundRunnable)
+        super.onDestroy()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(LOG_TAG, "onStartCommand | flags: $flags, startId: $startId")
         val url = intent?.getStringExtra(EXTRA_URL_TAG)
         Log.d(LOG_TAG, "onStartCommand | url: $url")
+        handler.post(soundRunnable)
         return START_NOT_STICKY
+    }
+
+    private fun playNotificationSound() {
+        val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
+        ringtone.play()
     }
 
     private fun createNotificationChannel() {
