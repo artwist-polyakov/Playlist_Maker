@@ -11,11 +11,6 @@ internal class PlaylistMakerMusicService: Service() {
         return null
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Log.d(LOG_TAG, "Service created")
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(LOG_TAG, "onStartCommand | flags: $flags, startId: $startId")
         val url = intent?.getStringExtra(EXTRA_URL_TAG)
