@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,9 +28,7 @@ class PlayerViewModel(
     private val musicServiceInteractor: MusicServiceInteractor
 ) : ViewModel(), MediaPlayerCallbackInterface {
 
-    companion object {
-        const val UPDATE_FREQUENCY = 250L
-    }
+
 
     private var timerJob: Job? = null
 
@@ -41,6 +40,8 @@ class PlayerViewModel(
     private val _likeState = MutableLiveData<Boolean>()
     val likeState: LiveData<Boolean> get() = _likeState
 
+    private var hasServicePermission = false
+
     private val _bottomSheetState = MutableLiveData<PlayerBottomSheetState>()
     val bottomSheetState: LiveData<PlayerBottomSheetState> get() = _bottomSheetState
 
@@ -51,8 +52,13 @@ class PlayerViewModel(
     // MediaPlayer
     private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
 
-    init {
-        musicServiceInteractor.configureAndLaunchService()
+    fun setPermissionsState(state: Boolean) {
+        hasServicePermission = state
+        if (state) {
+            musicServiceInteractor.configureAndLaunchService()
+        } else {
+           Log.d("PlayerViewModel", "No permission for service")
+        }
     }
 
     // Функции для управления проигрыванием
@@ -167,5 +173,9 @@ class PlayerViewModel(
 
     fun handleNewPlaylistTap() {
         _bottomSheetState.postValue(PlayerBottomSheetState.NewPlaylist)
+    }
+
+    companion object {
+        const val UPDATE_FREQUENCY = 250L
     }
 }
