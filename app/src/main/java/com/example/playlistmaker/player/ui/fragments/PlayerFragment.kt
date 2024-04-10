@@ -1,5 +1,7 @@
 package com.example.playlistmaker.player.ui.fragments
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -38,6 +41,19 @@ class PlayerFragment :
     private lateinit var adapter: PlayerBottomSheetAdapter
     private lateinit var recyclerView: RecyclerView
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            // Если выдали разрешение — запускаем сервис.
+            viewModel.setPermissionsState(true)
+        } else {
+            // Иначе просто покажем ошибку
+            viewModel.setPermissionsState(false)
+            binding.root.showCustomSnackbar(getString(R.string.permission_denied))
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,6 +70,8 @@ class PlayerFragment :
             }
         })
 
+
+        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.resetPlayer()
             findNavController().popBackStack()
