@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.media.RingtoneManager
+import android.os.Binder
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -17,7 +18,8 @@ import androidx.core.app.NotificationCompat
 import com.example.playlistmaker.R
 
 internal class PlaylistMakerMusicService: Service() {
-
+    private var songUrl = ""
+    private val binder = MusicServiceBinder()
     private val handler = Handler(Looper.getMainLooper())
     private val soundRunnable = object : Runnable {
         override fun run() {
@@ -27,16 +29,23 @@ internal class PlaylistMakerMusicService: Service() {
         }
     }
 
+    inner class MusicServiceBinder : Binder() {
+        fun getService(): PlaylistMakerMusicService = this@PlaylistMakerMusicService
+    }
+
     override fun onBind(intent: Intent?): IBinder? {
-        TODO("Not yet implemented")
-        return null
+        songUrl = intent?.getStringExtra(EXTRA_URL_TAG) ?: ""
+        Log.d(LOG_TAG, "onBind | url: $songUrl")
+        handler.post(soundRunnable)
+        createNotificationChannel()
+        startForegroundWithServiceType()
+        return binder
     }
 
     override fun onCreate() {
         super.onCreate()
         Log.d(LOG_TAG, "onCreate")
-        createNotificationChannel()
-        startForegroundWithServiceType()
+
     }
 
     override fun onDestroy() {
@@ -45,11 +54,12 @@ internal class PlaylistMakerMusicService: Service() {
         super.onDestroy()
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        Log.d(LOG_TAG, "onUnbind")
+        return super.onUnbind(intent)
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(LOG_TAG, "onStartCommand | flags: $flags, startId: $startId")
-        val url = intent?.getStringExtra(EXTRA_URL_TAG)
-        Log.d(LOG_TAG, "onStartCommand | url: $url")
-        handler.post(soundRunnable)
         return START_NOT_STICKY
     }
 
