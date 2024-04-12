@@ -17,9 +17,13 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.google.gson.Gson
 
 internal class PlaylistMakerMusicService: Service() {
+
+    private val playlistPlayer = MediaPlayerImpl()
+
     private var track: TrackInformation? = null
     private val binder = MusicServiceBinder()
     private val handler = Handler(Looper.getMainLooper())
@@ -99,8 +103,8 @@ internal class PlaylistMakerMusicService: Service() {
 
     private fun createServiceNotification(): Notification {
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setContentTitle("Music foreground service")
-            .setContentText("Our service is working right now!")
+            .setContentTitle(track?.trackName ?: "null")
+            .setContentText(track?.artistName ?: "null")
             .setSmallIcon(R.drawable.ic_media)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
