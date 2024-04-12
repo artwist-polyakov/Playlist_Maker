@@ -7,19 +7,36 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.playlistmaker.player.service.PlayerServiceState
 import com.example.playlistmaker.player.service.PlaylistMakerMusicService
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class MusicServiceInteractorImpl(
     val storage: TrackStorageInteractor,
     val context: Context
 ) : MusicServiceInteractor {
+    private val _musicServiceFlow = MutableSharedFlow<PlayerServiceState>(replay = 1)
+    val musicServiceFlow: SharedFlow<PlayerServiceState> =
+        _musicServiceFlow.asSharedFlow()
 
     private var musicService: PlaylistMakerMusicService? = null
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as PlaylistMakerMusicService.MusicServiceBinder
-            musicService = binder.getService()
+            musicService = binder.getService().also {
+                it.playerState.onEach { state ->
+                    _musicServiceFlow.emit(state)
+                }.launchIn(CoroutineScope(Dispatchers.IO))
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -39,7 +56,7 @@ class MusicServiceInteractorImpl(
         TODO("Not yet implemented")
     }
 
-    override fun configureAndLaunchService() {
+    override fun configureAndLaunchService(): SharedFlow<PlayerServiceState> {
         val intent = Intent(
             context,
             PlaylistMakerMusicService::class.java
@@ -55,6 +72,7 @@ class MusicServiceInteractorImpl(
             "Interactor launches service"
         )
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        return musicServiceFlow
     }
 
     override fun unBindService() {
