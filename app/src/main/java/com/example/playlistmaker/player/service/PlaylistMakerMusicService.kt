@@ -7,12 +7,9 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.media.RingtoneManager
 import android.os.Binder
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.playlistmaker.R
@@ -26,14 +23,7 @@ internal class PlaylistMakerMusicService: Service() {
 
     private var track: TrackInformation? = null
     private val binder = MusicServiceBinder()
-    private val handler = Handler(Looper.getMainLooper())
-    private val soundRunnable = object : Runnable {
-        override fun run() {
-            playNotificationSound()
-            // Планируем следующий запуск через 5 секунд
-            handler.postDelayed(this, 5000)
-        }
-    }
+
 
     inner class MusicServiceBinder : Binder() {
         fun getService(): PlaylistMakerMusicService = this@PlaylistMakerMusicService
@@ -50,7 +40,6 @@ internal class PlaylistMakerMusicService: Service() {
             null
         }
         Log.d(LOG_TAG, "onBind | url: ${track?.previewUrl ?: "null"}")
-        handler.post(soundRunnable)
         createNotificationChannel()
         startForegroundWithServiceType()
         return binder
@@ -64,7 +53,6 @@ internal class PlaylistMakerMusicService: Service() {
 
     override fun onDestroy() {
         Log.d(LOG_TAG, "onDestroy")
-        handler.removeCallbacks(soundRunnable)
         super.onDestroy()
     }
 
@@ -77,11 +65,6 @@ internal class PlaylistMakerMusicService: Service() {
         return START_NOT_STICKY
     }
 
-    private fun playNotificationSound() {
-        val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
-        ringtone.play()
-    }
 
     private fun createNotificationChannel() {
         // Создание каналов доступно только с Android 8.0
