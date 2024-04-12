@@ -19,6 +19,8 @@ import com.example.playlistmaker.R
 
 internal class PlaylistMakerMusicService: Service() {
     private var songUrl = ""
+    private var artistName = ""
+    private var songName = ""
     private val binder = MusicServiceBinder()
     private val handler = Handler(Looper.getMainLooper())
     private val soundRunnable = object : Runnable {
@@ -35,6 +37,8 @@ internal class PlaylistMakerMusicService: Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         songUrl = intent?.getStringExtra(EXTRA_URL_TAG) ?: ""
+        artistName = intent?.getStringExtra(EXTRA_ARTIST_NAME_TAG) ?: ""
+        songName = intent?.getStringExtra(EXTRA_SONG_NAME_TAG) ?: ""
         Log.d(LOG_TAG, "onBind | url: $songUrl")
         handler.post(soundRunnable)
         createNotificationChannel()
@@ -115,6 +119,8 @@ internal class PlaylistMakerMusicService: Service() {
 
     companion object   {
         const val EXTRA_URL_TAG = "trackUrl"
+        const val EXTRA_SONG_NAME_TAG = "songName"
+        const val EXTRA_ARTIST_NAME_TAG = "artistName"
         const val LOG_TAG = "PlaylistMakerMusicService"
         const val NOTIFICATION_CHANNEL_ID = "PlaylistMakerMusicServiceChannel"
         const val SERVICE_NOTIFICATION_ID = 100

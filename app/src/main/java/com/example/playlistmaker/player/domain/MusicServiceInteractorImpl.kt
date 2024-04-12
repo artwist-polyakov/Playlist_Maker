@@ -47,6 +47,14 @@ class MusicServiceInteractorImpl(
                 PlaylistMakerMusicService.EXTRA_URL_TAG,
                 storage.giveMeLastTrack().previewUrl
             )
+            putExtra(
+                PlaylistMakerMusicService.EXTRA_SONG_NAME_TAG,
+                storage.giveMeLastTrack().trackName
+            )
+            putExtra(
+                PlaylistMakerMusicService.EXTRA_ARTIST_NAME_TAG,
+                storage.giveMeLastTrack().artistName
+            )
         }
         Log.d(
             PlaylistMakerMusicService.LOG_TAG,
