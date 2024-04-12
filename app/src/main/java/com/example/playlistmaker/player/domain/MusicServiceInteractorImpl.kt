@@ -8,6 +8,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.playlistmaker.player.service.PlaylistMakerMusicService
+import com.google.gson.Gson
 
 class MusicServiceInteractorImpl(
     val storage: TrackStorageInteractor,
@@ -43,17 +44,10 @@ class MusicServiceInteractorImpl(
             context,
             PlaylistMakerMusicService::class.java
         ).apply {
+
             putExtra(
-                PlaylistMakerMusicService.EXTRA_URL_TAG,
-                storage.giveMeLastTrack().previewUrl
-            )
-            putExtra(
-                PlaylistMakerMusicService.EXTRA_SONG_NAME_TAG,
-                storage.giveMeLastTrack().trackName
-            )
-            putExtra(
-                PlaylistMakerMusicService.EXTRA_ARTIST_NAME_TAG,
-                storage.giveMeLastTrack().artistName
+                PlaylistMakerMusicService.EXTRA_TRACK_TAG,
+                Gson().toJson(storage.giveMeLastTrack())
             )
         }
         Log.d(

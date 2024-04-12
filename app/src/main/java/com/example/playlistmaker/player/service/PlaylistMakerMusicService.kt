@@ -16,11 +16,11 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.models.TrackInformation
+import com.google.gson.Gson
 
 internal class PlaylistMakerMusicService: Service() {
-    private var songUrl = ""
-    private var artistName = ""
-    private var songName = ""
+    private var track: TrackInformation? = null
     private val binder = MusicServiceBinder()
     private val handler = Handler(Looper.getMainLooper())
     private val soundRunnable = object : Runnable {
@@ -36,10 +36,16 @@ internal class PlaylistMakerMusicService: Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        songUrl = intent?.getStringExtra(EXTRA_URL_TAG) ?: ""
-        artistName = intent?.getStringExtra(EXTRA_ARTIST_NAME_TAG) ?: ""
-        songName = intent?.getStringExtra(EXTRA_SONG_NAME_TAG) ?: ""
-        Log.d(LOG_TAG, "onBind | url: $songUrl")
+
+        track = try {
+            Gson().fromJson(
+                intent?.getStringExtra(EXTRA_TRACK_TAG),
+                TrackInformation::class.java
+            )
+        } catch (e: Exception) {
+            null
+        }
+        Log.d(LOG_TAG, "onBind | url: ${track?.previewUrl ?: "null"}")
         handler.post(soundRunnable)
         createNotificationChannel()
         startForegroundWithServiceType()
@@ -118,9 +124,7 @@ internal class PlaylistMakerMusicService: Service() {
     }
 
     companion object   {
-        const val EXTRA_URL_TAG = "trackUrl"
-        const val EXTRA_SONG_NAME_TAG = "songName"
-        const val EXTRA_ARTIST_NAME_TAG = "artistName"
+        const val EXTRA_TRACK_TAG = "track"
         const val LOG_TAG = "PlaylistMakerMusicService"
         const val NOTIFICATION_CHANNEL_ID = "PlaylistMakerMusicServiceChannel"
         const val SERVICE_NOTIFICATION_ID = 100
