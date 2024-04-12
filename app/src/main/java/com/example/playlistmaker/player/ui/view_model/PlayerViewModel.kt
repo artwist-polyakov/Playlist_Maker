@@ -55,10 +55,16 @@ class PlayerViewModel(
     fun setPermissionsState(state: Boolean) {
         hasServicePermission = state
         if (state) {
-            musicServiceInteractor.configureAndLaunchService()
+            viewModelScope.launch {
+                Log.d("PlaylistMakerMusicService", "Permission for service coroutine launches")
+                musicServiceInteractor.configureAndLaunchService().collect {
+                    Log.d("PlaylistMakerMusicService", "Service state: $it")
+                }
+            }
         } else {
            Log.d("PlayerViewModel", "No permission for service")
         }
+        Log.d("PlaylistMakerMusicService", "Permission state: $state")
     }
 
     // Функции для управления проигрыванием
