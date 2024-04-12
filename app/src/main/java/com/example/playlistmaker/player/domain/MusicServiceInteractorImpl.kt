@@ -1,15 +1,31 @@
 package com.example.playlistmaker.player.domain
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.os.IBinder
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.playlistmaker.player.service.PlaylistMakerMusicService
 
-class MusicServiceInteractorImpl (
+class MusicServiceInteractorImpl(
     val storage: TrackStorageInteractor,
     val context: Context
-    ) : MusicServiceInteractor {
+) : MusicServiceInteractor {
+
+    private var musicService: PlaylistMakerMusicService? = null
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as PlaylistMakerMusicService.MusicServiceBinder
+            musicService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            musicService = null
+        }
+    }
+
     override fun play() {
         TODO("Not yet implemented")
     }
@@ -31,11 +47,23 @@ class MusicServiceInteractorImpl (
                 PlaylistMakerMusicService.EXTRA_URL_TAG,
                 storage.giveMeLastTrack().previewUrl
             )
+            putExtra(
+                PlaylistMakerMusicService.EXTRA_SONG_NAME_TAG,
+                storage.giveMeLastTrack().trackName
+            )
+            putExtra(
+                PlaylistMakerMusicService.EXTRA_ARTIST_NAME_TAG,
+                storage.giveMeLastTrack().artistName
+            )
         }
         Log.d(
             PlaylistMakerMusicService.LOG_TAG,
             "Interactor launches service"
         )
-        ContextCompat.startForegroundService(context, intent)
+        context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    override fun unBindService() {
+        context.unbindService(serviceConnection)
     }
 }

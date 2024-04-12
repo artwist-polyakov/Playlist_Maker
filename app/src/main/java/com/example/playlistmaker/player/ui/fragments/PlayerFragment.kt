@@ -74,6 +74,7 @@ class PlayerFragment :
         requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.resetPlayer()
+            viewModel.unBindService()
             findNavController().popBackStack()
         }
 
@@ -83,6 +84,7 @@ class PlayerFragment :
         }
         binding.returnButton.setOnClickListener {
             viewModel.resetPlayer()
+            viewModel.unBindService()
             findNavController().popBackStack()
         }
         // PLAYER INTERFACE

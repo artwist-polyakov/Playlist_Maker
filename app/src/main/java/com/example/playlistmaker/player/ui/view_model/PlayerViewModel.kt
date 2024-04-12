@@ -175,6 +175,10 @@ class PlayerViewModel(
         _bottomSheetState.postValue(PlayerBottomSheetState.NewPlaylist)
     }
 
+    fun unBindService() {
+        musicServiceInteractor.unBindService()
+    }
+
     companion object {
         const val UPDATE_FREQUENCY = 250L
     }

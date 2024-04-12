@@ -6,5 +6,6 @@ interface MusicServiceInteractor {
     fun pause()
     fun stop()
     fun configureAndLaunchService()
+    fun unBindService()
 
 }
