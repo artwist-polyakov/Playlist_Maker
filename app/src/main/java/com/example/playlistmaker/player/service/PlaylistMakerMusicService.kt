@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -14,16 +15,39 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackInformation
-import com.example.playlistmaker.player.data.MediaPlayerImpl
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 internal class PlaylistMakerMusicService: Service() {
 
-    private val playlistPlayer = MediaPlayerImpl()
+    private var playlistPlayer: MediaPlayer? = null
 
     private var track: TrackInformation? = null
     private val binder = MusicServiceBinder()
+    private val _playerState = MutableStateFlow<PlayerServiceState>(PlayerServiceState.Default())
+    val playerState = _playerState.asStateFlow()
+    private var timerJob: Job? = null
 
+    private fun startTimer() {
+        timerJob = CoroutineScope(Dispatchers.Default).launch {
+            while (playlistPlayer?.isPlaying == true) {
+                delay(300L)
+                _playerState.value = PlayerServiceState.Playing(getCurrentPlayerPosition())
+            }
+        }
+    }
+
+    private fun getCurrentPlayerPosition(): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(playlistPlayer?.currentPosition) ?: "00:00"
+    }
 
     inner class MusicServiceBinder : Binder() {
         fun getService(): PlaylistMakerMusicService = this@PlaylistMakerMusicService
@@ -42,14 +66,62 @@ internal class PlaylistMakerMusicService: Service() {
         Log.d(LOG_TAG, "onBind | url: ${track?.previewUrl ?: "null"}")
         createNotificationChannel()
         startForegroundWithServiceType()
+        initMediaPlayer()
         return binder
     }
 
     override fun onCreate() {
         super.onCreate()
+        playlistPlayer = MediaPlayer()
         Log.d(LOG_TAG, "onCreate")
 
     }
+
+    private fun initMediaPlayer() {
+        if (track == null) {
+            return
+        }
+        playlistPlayer?.apply {
+            Log.d(LOG_TAG, "initMediaPlayer with player")
+            setDataSource(track?.previewUrl)
+            prepareAsync()
+            setOnPreparedListener {
+                Log.d(LOG_TAG, "onPrepared")
+                _playerState.value = PlayerServiceState.Prepared()
+                startPlayer()
+            }
+            setOnCompletionListener {
+                Log.d(LOG_TAG, "onCompletion")
+                _playerState.value = PlayerServiceState.Prepared()
+            }
+        }
+        Log.d(LOG_TAG, "initMediaPlayer")
+
+    }
+
+    fun startPlayer() {
+        playlistPlayer?.start()
+        _playerState.value = PlayerServiceState.Playing(getCurrentPlayerPosition())
+        startTimer()
+    }
+
+    fun pausePlayer() {
+        playlistPlayer?.pause()
+        timerJob?.cancel()
+        _playerState.value = PlayerServiceState.Paused(getCurrentPlayerPosition())
+    }
+
+
+    private fun releasePlayer() {
+        playlistPlayer?.stop()
+        timerJob?.cancel()
+        _playerState.value = PlayerServiceState.Default()
+        playlistPlayer?.setOnPreparedListener(null)
+        playlistPlayer?.setOnCompletionListener(null)
+        playlistPlayer?.release()
+        playlistPlayer = null
+    }
+
 
     override fun onDestroy() {
         Log.d(LOG_TAG, "onDestroy")
@@ -58,6 +130,8 @@ internal class PlaylistMakerMusicService: Service() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         Log.d(LOG_TAG, "onUnbind")
+
+        releasePlayer()
         return super.onUnbind(intent)
     }
 
