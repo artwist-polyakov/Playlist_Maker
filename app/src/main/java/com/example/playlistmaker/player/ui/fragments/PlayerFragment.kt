@@ -114,7 +114,7 @@ class PlayerFragment :
             when (it.first) {
                 PlayerState.Loading -> {
                     binding.playButton.isActive(false)
-//                    binding.playButton.setIconState(IS_PAUSED)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Ready -> {

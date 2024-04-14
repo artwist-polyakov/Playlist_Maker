@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-internal class PlaylistMakerMusicService: Service() {
+internal class PlaylistMakerMusicService : Service() {
 
     private var playlistPlayer: MediaPlayer? = null
 
@@ -92,11 +92,12 @@ internal class PlaylistMakerMusicService: Service() {
             }
             setOnCompletionListener {
                 Log.d(LOG_TAG, "onCompletion")
+                pausePlayer()
                 _playerState.value = PlayerServiceState.Prepared()
+
+
             }
         }
-        Log.d(LOG_TAG, "initMediaPlayer")
-
     }
 
     fun startPlayer() {
@@ -154,7 +155,8 @@ internal class PlaylistMakerMusicService: Service() {
         channel.description = "Service for playing music"
 
         // Регистрируем канал уведомлений
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 
@@ -184,7 +186,7 @@ internal class PlaylistMakerMusicService: Service() {
         }
     }
 
-    companion object   {
+    companion object {
         const val EXTRA_TRACK_TAG = "track"
         const val LOG_TAG = "PlaylistMakerMusicService"
         const val NOTIFICATION_CHANNEL_ID = "PlaylistMakerMusicServiceChannel"

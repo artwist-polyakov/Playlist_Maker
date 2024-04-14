@@ -58,15 +58,15 @@ class PlayerViewModel(
             viewModelScope.launch {
                 musicServiceInteractor.configureAndLaunchService().collect {
                     when (it) {
-                        is PlayerServiceState.Playing -> {
-                            onMediaPlayerPlay()
-                            _timerState.postValue(TrackDurationTime(it.progress))
-                        }
+                        is PlayerServiceState.Playing -> _playerState.postValue(PlayerState.Play)
 
-                        is PlayerServiceState.Paused -> onMediaPlayerPause()
-                        is PlayerServiceState.Prepared -> onMediaPlayerReady()
+                        is PlayerServiceState.Paused -> _playerState.postValue(PlayerState.Pause)
+                        is PlayerServiceState.Prepared -> _playerState.postValue(PlayerState.Ready)
                         is PlayerServiceState.Default -> _playerState.postValue(PlayerState.Loading)
                     }
+                    _timerState.postValue(TrackDurationTime(it.progress))
+                    lastState = _playerState.value
+
                 }
             }
         } else {
@@ -93,7 +93,7 @@ class PlayerViewModel(
     override fun onMediaPlayerReady() {
         _playerState.value = PlayerState.Ready
         lastState = PlayerState.Ready
-        _timerState.postValue(TrackDurationTime(0))
+//        _timerState.postValue(TrackDurationTime(0))
     }
 
     override fun onMediaPlayerPause() {
