@@ -125,6 +125,7 @@
             android:layout_width="83dp"
             android:layout_height="83dp"
             android:layout_marginTop="38dp"
+            app:PlayerState="playing"
             android:contentDescription="@string/play_button_description"
             app:playButtonDrawable="@drawable/play_button"
             app:pauseButtonDrawable="@drawable/pause_button"
