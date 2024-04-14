@@ -49,6 +49,14 @@ class MusicServiceInteractorImpl(
         musicService?.pausePlayer()
     }
 
+    override fun showNotification() {
+        musicService?.startForegroundWithServiceType()
+    }
+
+    override fun hideNotification() {
+        musicService?.stopNotification()
+    }
+
 
     override fun configureAndLaunchService(): SharedFlow<PlayerServiceState> {
         val intent = Intent(

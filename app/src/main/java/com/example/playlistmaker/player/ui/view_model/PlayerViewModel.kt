@@ -90,6 +90,14 @@ class PlayerViewModel(
         musicServiceInteractor.unBindService()
     }
 
+    fun showNotification() {
+        musicServiceInteractor.showNotification()
+    }
+
+    fun hideNotification() {
+        musicServiceInteractor.hideNotification()
+    }
+
     override fun onMediaPlayerReady() {
         _playerState.value = PlayerState.Ready
         lastState = PlayerState.Ready

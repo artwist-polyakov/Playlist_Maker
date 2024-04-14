@@ -341,11 +341,13 @@ class PlayerFragment :
         viewModel.giveCurrentTrack()?.let {
             showTrackInfo(it)
         }
+        viewModel.hideNotification()
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.makeItPause()
+        viewModel.showNotification()
     }
 
     companion object {

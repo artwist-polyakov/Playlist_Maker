@@ -23,8 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
+
 
 internal class PlaylistMakerMusicService : Service() {
 
@@ -65,7 +64,7 @@ internal class PlaylistMakerMusicService : Service() {
         }
         Log.d(LOG_TAG, "onBind | url: ${track?.previewUrl ?: "null"}")
         createNotificationChannel()
-        startForegroundWithServiceType()
+//        startForegroundWithServiceType()
         initMediaPlayer()
         return binder
     }
@@ -94,10 +93,13 @@ internal class PlaylistMakerMusicService : Service() {
                 Log.d(LOG_TAG, "onCompletion")
                 pausePlayer()
                 _playerState.value = PlayerServiceState.Prepared()
-
-
+                stopNotification()
             }
         }
+    }
+
+    fun stopNotification() {
+        stopForeground(true)
     }
 
     fun startPlayer() {
@@ -170,7 +172,7 @@ internal class PlaylistMakerMusicService : Service() {
             .build()
     }
 
-    private fun startForegroundWithServiceType() {
+    fun startForegroundWithServiceType() {
         val notification = createServiceNotification()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
