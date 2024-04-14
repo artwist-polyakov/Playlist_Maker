@@ -23,10 +23,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-internal class PlaylistMakerMusicService: Service() {
+
+internal class PlaylistMakerMusicService : Service() {
 
     private var playlistPlayer: MediaPlayer? = null
 
@@ -45,8 +44,8 @@ internal class PlaylistMakerMusicService: Service() {
         }
     }
 
-    private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(playlistPlayer?.currentPosition) ?: "00:00"
+    private fun getCurrentPlayerPosition(): Int {
+        return playlistPlayer?.currentPosition ?: 0
     }
 
     inner class MusicServiceBinder : Binder() {
@@ -65,7 +64,7 @@ internal class PlaylistMakerMusicService: Service() {
         }
         Log.d(LOG_TAG, "onBind | url: ${track?.previewUrl ?: "null"}")
         createNotificationChannel()
-        startForegroundWithServiceType()
+//        startForegroundWithServiceType()
         initMediaPlayer()
         return binder
     }
@@ -88,15 +87,19 @@ internal class PlaylistMakerMusicService: Service() {
             setOnPreparedListener {
                 Log.d(LOG_TAG, "onPrepared")
                 _playerState.value = PlayerServiceState.Prepared()
-                startPlayer()
+//                startPlayer()
             }
             setOnCompletionListener {
                 Log.d(LOG_TAG, "onCompletion")
+                pausePlayer()
                 _playerState.value = PlayerServiceState.Prepared()
+                stopNotification()
             }
         }
-        Log.d(LOG_TAG, "initMediaPlayer")
+    }
 
+    fun stopNotification() {
+        stopForeground(true)
     }
 
     fun startPlayer() {
@@ -154,7 +157,8 @@ internal class PlaylistMakerMusicService: Service() {
         channel.description = "Service for playing music"
 
         // Регистрируем канал уведомлений
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 
@@ -168,7 +172,7 @@ internal class PlaylistMakerMusicService: Service() {
             .build()
     }
 
-    private fun startForegroundWithServiceType() {
+    fun startForegroundWithServiceType() {
         val notification = createServiceNotification()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
@@ -184,7 +188,7 @@ internal class PlaylistMakerMusicService: Service() {
         }
     }
 
-    companion object   {
+    companion object {
         const val EXTRA_TRACK_TAG = "track"
         const val LOG_TAG = "PlaylistMakerMusicService"
         const val NOTIFICATION_CHANNEL_ID = "PlaylistMakerMusicServiceChannel"

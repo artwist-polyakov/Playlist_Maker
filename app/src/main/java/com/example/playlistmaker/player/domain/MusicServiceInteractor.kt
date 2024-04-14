@@ -7,7 +7,11 @@ interface MusicServiceInteractor {
 
     fun play()
     fun pause()
-    fun stop()
+
+    fun showNotification()
+
+    fun hideNotification()
+
     fun configureAndLaunchService(): SharedFlow<PlayerServiceState>
     fun unBindService()
 

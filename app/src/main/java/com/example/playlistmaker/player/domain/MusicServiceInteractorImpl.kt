@@ -42,16 +42,21 @@ class MusicServiceInteractorImpl(
     }
 
     override fun play() {
-        TODO("Not yet implemented")
+        musicService?.startPlayer()
     }
 
     override fun pause() {
-        TODO("Not yet implemented")
+        musicService?.pausePlayer()
     }
 
-    override fun stop() {
-        TODO("Not yet implemented")
+    override fun showNotification() {
+        musicService?.startForegroundWithServiceType()
     }
+
+    override fun hideNotification() {
+        musicService?.stopNotification()
+    }
+
 
     override fun configureAndLaunchService(): SharedFlow<PlayerServiceState> {
         val intent = Intent(

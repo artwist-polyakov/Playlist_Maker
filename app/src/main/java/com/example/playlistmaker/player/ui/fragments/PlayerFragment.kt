@@ -70,7 +70,8 @@ class PlayerFragment :
             }
         })
 
-
+        binding.playButton.setIconState(IS_PAUSED)
+        binding.playButton.isActive(false)
         requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.resetPlayer()
@@ -83,7 +84,7 @@ class PlayerFragment :
             currentTrack = it
         }
         binding.returnButton.setOnClickListener {
-            viewModel.resetPlayer()
+//            viewModel.resetPlayer()
             viewModel.unBindService()
             findNavController().popBackStack()
         }
@@ -113,12 +114,12 @@ class PlayerFragment :
             when (it.first) {
                 PlayerState.Loading -> {
                     binding.playButton.isActive(false)
-                    binding.playButton.setIconState(IS_PLAYING)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Ready -> {
                     binding.playButton.isActive(true)
-                    binding.playButton.setIconState(IS_PLAYING)
+//                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Play -> {
@@ -130,7 +131,7 @@ class PlayerFragment :
                 }
                 else -> {
                     showPreparationState()
-                    viewModel.initializePlayer()
+//                    viewModel.initializePlayer()
                 }
             }
             renderBottomSheetState(it.third ?: PlayerBottomSheetState.Hidden)
@@ -242,20 +243,24 @@ class PlayerFragment :
         viewModel.playerState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 PlayerState.Loading -> {
+                    Log.d("PlayerFragment", "Loading")
                     binding.playButton.isActive(false)
-                    binding.playButton.setIconState(IS_PLAYING)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Ready -> {
+                    Log.d("PlayerFragment", "Ready")
                     binding.playButton.isActive(true)
-                    binding.playButton.setIconState(IS_PLAYING)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Play -> {
+                    Log.d("PlayerFragment", "Play")
                     binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Pause -> {
+                    Log.d("PlayerFragment", "Pause")
                     binding.playButton.setIconState(IS_PAUSED)
                 }
             }
@@ -319,7 +324,7 @@ class PlayerFragment :
 
     override fun showPreparationState() {
         binding.playButton.isEnabled = false
-        binding.playButton.setIconState(IS_PLAYING)
+        binding.playButton.setIconState(IS_PAUSED)
     }
 
     override fun showReadyState() {
@@ -336,11 +341,13 @@ class PlayerFragment :
         viewModel.giveCurrentTrack()?.let {
             showTrackInfo(it)
         }
+        viewModel.hideNotification()
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.makeItPause()
+        viewModel.showNotification()
     }
 
     companion object {
