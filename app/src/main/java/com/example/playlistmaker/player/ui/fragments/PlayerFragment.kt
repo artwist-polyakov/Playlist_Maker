@@ -70,7 +70,8 @@ class PlayerFragment :
             }
         })
 
-
+        binding.playButton.setIconState(IS_PAUSED)
+        binding.playButton.isActive(false)
         requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.resetPlayer()
@@ -244,7 +245,7 @@ class PlayerFragment :
                 PlayerState.Loading -> {
                     Log.d("PlayerFragment", "Loading")
                     binding.playButton.isActive(false)
-                    binding.playButton.setIconState(IS_PLAYING)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Ready -> {
@@ -323,7 +324,7 @@ class PlayerFragment :
 
     override fun showPreparationState() {
         binding.playButton.isEnabled = false
-        binding.playButton.setIconState(IS_PLAYING)
+        binding.playButton.setIconState(IS_PAUSED)
     }
 
     override fun showReadyState() {

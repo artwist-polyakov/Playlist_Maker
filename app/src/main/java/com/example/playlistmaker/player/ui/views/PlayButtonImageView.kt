@@ -57,10 +57,12 @@ class PlayButtonImageView @JvmOverloads constructor(
                     getDrawable(
                         R.styleable.PlayButtonImageView_pauseButtonDrawable
                     )?.toBitmap()
-                currentIconState = getInt(
-                    R.styleable.PlayButtonImageView_PlayerState,
-                    1
-                )
+//                currentIconState = getInt(
+//                    R.styleable.PlayButtonImageView_PlayerState,
+//                    1
+//                )
+
+                Log.d("PlayerFragment", "OnDraw init $currentIconState")
 
             } finally {
                 recycle()
@@ -121,6 +123,7 @@ class PlayButtonImageView @JvmOverloads constructor(
             }
 
             false -> {
+                currentIconState = IS_PAUSED
                 playIconBitmap?.apply {
                     alpha = .5f
                 }
