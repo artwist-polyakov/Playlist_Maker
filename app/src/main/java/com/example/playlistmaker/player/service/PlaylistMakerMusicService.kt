@@ -45,8 +45,8 @@ internal class PlaylistMakerMusicService: Service() {
         }
     }
 
-    private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(playlistPlayer?.currentPosition) ?: "00:00"
+    private fun getCurrentPlayerPosition(): Int {
+        return playlistPlayer?.currentPosition ?: 0
     }
 
     inner class MusicServiceBinder : Binder() {
@@ -88,7 +88,7 @@ internal class PlaylistMakerMusicService: Service() {
             setOnPreparedListener {
                 Log.d(LOG_TAG, "onPrepared")
                 _playerState.value = PlayerServiceState.Prepared()
-                startPlayer()
+//                startPlayer()
             }
             setOnCompletionListener {
                 Log.d(LOG_TAG, "onCompletion")

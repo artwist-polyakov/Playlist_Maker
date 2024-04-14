@@ -83,7 +83,7 @@ class PlayerFragment :
             currentTrack = it
         }
         binding.returnButton.setOnClickListener {
-            viewModel.resetPlayer()
+//            viewModel.resetPlayer()
             viewModel.unBindService()
             findNavController().popBackStack()
         }
@@ -113,12 +113,12 @@ class PlayerFragment :
             when (it.first) {
                 PlayerState.Loading -> {
                     binding.playButton.isActive(false)
-                    binding.playButton.setIconState(IS_PLAYING)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Ready -> {
                     binding.playButton.isActive(true)
-                    binding.playButton.setIconState(IS_PLAYING)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Play -> {
@@ -130,7 +130,7 @@ class PlayerFragment :
                 }
                 else -> {
                     showPreparationState()
-                    viewModel.initializePlayer()
+//                    viewModel.initializePlayer()
                 }
             }
             renderBottomSheetState(it.third ?: PlayerBottomSheetState.Hidden)
@@ -242,20 +242,24 @@ class PlayerFragment :
         viewModel.playerState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 PlayerState.Loading -> {
+                    Log.d("PlayerFragment", "Loading")
                     binding.playButton.isActive(false)
                     binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Ready -> {
+                    Log.d("PlayerFragment", "Ready")
                     binding.playButton.isActive(true)
-                    binding.playButton.setIconState(IS_PLAYING)
+                    binding.playButton.setIconState(IS_PAUSED)
                 }
 
                 PlayerState.Play -> {
+                    Log.d("PlayerFragment", "Play")
                     binding.playButton.setIconState(IS_PLAYING)
                 }
 
                 PlayerState.Pause -> {
+                    Log.d("PlayerFragment", "Pause")
                     binding.playButton.setIconState(IS_PAUSED)
                 }
             }

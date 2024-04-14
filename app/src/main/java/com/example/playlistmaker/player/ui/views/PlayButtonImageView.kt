@@ -26,7 +26,7 @@ class PlayButtonImageView @JvmOverloads constructor(
     private var rect = RectF(0f, 0f, 0f, 0f)
 
     // состояние иконки — пауза или проигрывание
-    private var currentIconState = IS_PAUSED
+    private var currentIconState = IS_PLAYING
         set(value) {
             field = value
             invalidate()
@@ -75,8 +75,8 @@ class PlayButtonImageView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
 
         when (currentIconState) {
-            IS_PLAYING -> processBitmap(playIconBitmap, canvas)
-            IS_PAUSED -> processBitmap(pauseIconBitmap, canvas)
+            IS_PAUSED -> processBitmap(playIconBitmap, canvas)
+            IS_PLAYING -> processBitmap(pauseIconBitmap, canvas)
         }
     }
 

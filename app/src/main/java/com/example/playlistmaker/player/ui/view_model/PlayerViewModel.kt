@@ -15,6 +15,7 @@ import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.MusicServiceInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
+import com.example.playlistmaker.player.service.PlayerServiceState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.take
@@ -27,7 +28,6 @@ class PlayerViewModel(
     private val playlistsInteractor: PlaylistsDbInteractor,
     private val musicServiceInteractor: MusicServiceInteractor
 ) : ViewModel(), MediaPlayerCallbackInterface {
-
 
 
     private var timerJob: Job? = null
@@ -56,24 +56,38 @@ class PlayerViewModel(
         hasServicePermission = state
         if (state) {
             viewModelScope.launch {
-                Log.d("PlaylistMakerMusicService", "Permission for service coroutine launches")
                 musicServiceInteractor.configureAndLaunchService().collect {
-                    Log.d("PlaylistMakerMusicService", "Service state: $it")
+                    when (it) {
+                        is PlayerServiceState.Playing -> {
+                            onMediaPlayerPlay()
+                            _timerState.postValue(TrackDurationTime(it.progress))
+                        }
+
+                        is PlayerServiceState.Paused -> onMediaPlayerPause()
+                        is PlayerServiceState.Prepared -> onMediaPlayerReady()
+                        is PlayerServiceState.Default -> _playerState.postValue(PlayerState.Loading)
+                    }
                 }
             }
         } else {
-           Log.d("PlayerViewModel", "No permission for service")
+            Log.d("PlayerViewModel", "No permission for service")
         }
-        Log.d("PlaylistMakerMusicService", "Permission state: $state")
     }
 
     // Функции для управления проигрыванием
     fun playPause() {
-        mediaPlayerInteractor.playPauseSwitcher()
+        if (!hasServicePermission) {
+            return
+        }
+        if (_playerState.value == PlayerState.Play) {
+            musicServiceInteractor.pause()
+            return
+        }
+        musicServiceInteractor.play()
     }
 
     fun resetPlayer() {
-        mediaPlayerInteractor.destroyPlayer()
+        musicServiceInteractor.unBindService()
     }
 
     override fun onMediaPlayerReady() {
@@ -85,13 +99,13 @@ class PlayerViewModel(
     override fun onMediaPlayerPause() {
         _playerState.value = PlayerState.Pause
         lastState = PlayerState.Pause
-        timerJob?.cancel()
+//        timerJob?.cancel()
     }
 
     override fun onMediaPlayerPlay() {
         _playerState.value = PlayerState.Play
         lastState = PlayerState.Play
-        startTimer()
+//        startTimer()
     }
 
     fun initializePlayer() {
