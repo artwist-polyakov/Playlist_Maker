@@ -187,6 +187,11 @@ class PlayerFragment :
         binding.root.showCustomSnackbar(text)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.unBindService()
+    }
+
     private fun setupBottomSheet() {
         val bottomSheetContainer = binding.bottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
