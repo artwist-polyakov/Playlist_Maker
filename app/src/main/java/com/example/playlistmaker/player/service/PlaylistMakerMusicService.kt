@@ -99,7 +99,7 @@ internal class PlaylistMakerMusicService : Service() {
     }
 
     fun stopNotification() {
-        stopForeground(true)
+        stopForeground(STOP_FOREGROUND_REMOVE)
     }
 
     fun startPlayer() {
