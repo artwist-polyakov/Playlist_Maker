@@ -23,6 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 
 internal class PlaylistMakerMusicService : Service() {
@@ -62,7 +63,6 @@ internal class PlaylistMakerMusicService : Service() {
         } catch (e: Exception) {
             null
         }
-        Log.d(LOG_TAG, "onBind | url: ${track?.previewUrl ?: "null"}")
         createNotificationChannel()
 //        startForegroundWithServiceType()
         initMediaPlayer()
@@ -72,7 +72,6 @@ internal class PlaylistMakerMusicService : Service() {
     override fun onCreate() {
         super.onCreate()
         playlistPlayer = MediaPlayer()
-        Log.d(LOG_TAG, "onCreate")
 
     }
 
@@ -81,16 +80,12 @@ internal class PlaylistMakerMusicService : Service() {
             return
         }
         playlistPlayer?.apply {
-            Log.d(LOG_TAG, "initMediaPlayer with player")
             setDataSource(track?.previewUrl)
             prepareAsync()
             setOnPreparedListener {
-                Log.d(LOG_TAG, "onPrepared")
                 _playerState.value = PlayerServiceState.Prepared()
-//                startPlayer()
             }
             setOnCompletionListener {
-                Log.d(LOG_TAG, "onCompletion")
                 pausePlayer()
                 _playerState.value = PlayerServiceState.Prepared()
                 stopNotification()
@@ -127,12 +122,10 @@ internal class PlaylistMakerMusicService : Service() {
 
 
     override fun onDestroy() {
-        Log.d(LOG_TAG, "onDestroy")
         super.onDestroy()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        Log.d(LOG_TAG, "onUnbind")
 
         releasePlayer()
         return super.onUnbind(intent)
@@ -163,9 +156,14 @@ internal class PlaylistMakerMusicService : Service() {
     }
 
     private fun createServiceNotification(): Notification {
+        val trackName = StringBuilder()
+            .append(track?.artistName ?: "Unknown artist")
+            .append(" - ")
+            .append(track?.trackName ?: "Unknown track")
+            .toString()
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setContentTitle(track?.trackName ?: "null")
-            .setContentText(track?.artistName ?: "null")
+            .setContentTitle("Playlist Maker")
+            .setContentText(trackName)
             .setSmallIcon(R.drawable.ic_media)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
