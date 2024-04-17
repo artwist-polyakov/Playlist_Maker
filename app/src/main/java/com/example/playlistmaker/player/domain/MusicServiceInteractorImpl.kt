@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.util.Log
 import com.example.playlistmaker.player.service.PlayerServiceState
 import com.example.playlistmaker.player.service.PlaylistMakerMusicService
 import com.google.gson.Gson
@@ -69,15 +68,15 @@ class MusicServiceInteractorImpl(
                 Gson().toJson(storage.giveMeLastTrack())
             )
         }
-        Log.d(
-            PlaylistMakerMusicService.LOG_TAG,
-            "Interactor launches service"
-        )
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         return musicServiceFlow
     }
 
     override fun unBindService() {
+        if (musicService == null) {
+            return
+        }
         context.unbindService(serviceConnection)
+        musicService = null
     }
 }
