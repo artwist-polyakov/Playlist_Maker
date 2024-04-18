@@ -13,6 +13,10 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackParameters
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.google.gson.Gson
@@ -23,12 +27,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.StringBuilder
 
 
 internal class PlaylistMakerMusicService : Service() {
 
-    private var playlistPlayer: MediaPlayer? = null
+    private var playlistPlayer: ExoPlayer? = null
 
     private var track: TrackInformation? = null
     private val binder = MusicServiceBinder()
@@ -36,8 +41,9 @@ internal class PlaylistMakerMusicService : Service() {
     val playerState = _playerState.asStateFlow()
     private var timerJob: Job? = null
 
+
     private fun startTimer() {
-        timerJob = CoroutineScope(Dispatchers.Default).launch {
+        timerJob = CoroutineScope(Dispatchers.Main).launch {
             while (playlistPlayer?.isPlaying == true) {
                 delay(300L)
                 _playerState.value = PlayerServiceState.Playing(getCurrentPlayerPosition())
@@ -46,7 +52,7 @@ internal class PlaylistMakerMusicService : Service() {
     }
 
     private fun getCurrentPlayerPosition(): Int {
-        return playlistPlayer?.currentPosition ?: 0
+        return playlistPlayer?.currentPosition?.toInt() ?: 0
     }
 
     inner class MusicServiceBinder : Binder() {
@@ -71,7 +77,25 @@ internal class PlaylistMakerMusicService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        playlistPlayer = MediaPlayer()
+        playlistPlayer = ExoPlayer.Builder(this).build()
+        playlistPlayer?.addListener(playerListener)
+
+    }
+
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            when (playbackState) {
+                ExoPlayer.STATE_READY -> {
+                    _playerState.value = PlayerServiceState.Prepared()
+                }
+
+                ExoPlayer.STATE_ENDED -> {
+                    pausePlayer()
+                    _playerState.value = PlayerServiceState.Prepared()
+                    stopNotification()
+                }
+            }
+        }
 
     }
 
@@ -80,16 +104,9 @@ internal class PlaylistMakerMusicService : Service() {
             return
         }
         playlistPlayer?.apply {
-            setDataSource(track?.previewUrl)
-            prepareAsync()
-            setOnPreparedListener {
-                _playerState.value = PlayerServiceState.Prepared()
-            }
-            setOnCompletionListener {
-                pausePlayer()
-                _playerState.value = PlayerServiceState.Prepared()
-                stopNotification()
-            }
+            val media = MediaItem.fromUri(track?.previewUrl ?: "")
+            setMediaItem(media)
+            prepare()
         }
     }
 
@@ -98,7 +115,7 @@ internal class PlaylistMakerMusicService : Service() {
     }
 
     fun startPlayer() {
-        playlistPlayer?.start()
+        playlistPlayer?.play()
         _playerState.value = PlayerServiceState.Playing(getCurrentPlayerPosition())
         startTimer()
     }
@@ -111,18 +128,15 @@ internal class PlaylistMakerMusicService : Service() {
 
 
     private fun releasePlayer() {
-        playlistPlayer?.stop()
+        playlistPlayer?.apply {
+            stop()
+            removeListener(playerListener)
+            release()
+            playlistPlayer = null
+
+        }
         timerJob?.cancel()
         _playerState.value = PlayerServiceState.Default()
-        playlistPlayer?.setOnPreparedListener(null)
-        playlistPlayer?.setOnCompletionListener(null)
-        playlistPlayer?.release()
-        playlistPlayer = null
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
