@@ -90,6 +90,7 @@ internal class PlaylistMakerMusicService : Service() {
                 }
 
                 ExoPlayer.STATE_ENDED -> {
+                    playlistPlayer?.seekTo(0)
                     pausePlayer()
                     _playerState.value = PlayerServiceState.Prepared()
                     stopNotification()
