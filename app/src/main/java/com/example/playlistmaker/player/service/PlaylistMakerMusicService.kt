@@ -10,12 +10,15 @@ import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
+import android.os.HandlerThread
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.models.TrackInformation
@@ -31,7 +34,7 @@ import kotlinx.coroutines.withContext
 import java.lang.StringBuilder
 
 
-internal class PlaylistMakerMusicService : Service() {
+@UnstableApi internal class PlaylistMakerMusicService : Service() {
 
     private var playlistPlayer: ExoPlayer? = null
 
@@ -40,10 +43,11 @@ internal class PlaylistMakerMusicService : Service() {
     private val _playerState = MutableStateFlow<PlayerServiceState>(PlayerServiceState.Default())
     val playerState = _playerState.asStateFlow()
     private var timerJob: Job? = null
-
+    private lateinit var playerThread: HandlerThread
+    private lateinit var playerLooper: Looper
 
     private fun startTimer() {
-        timerJob = CoroutineScope(Dispatchers.Main).launch {
+        timerJob = CoroutineScope(Dispatchers.IO).launch {
             while (playlistPlayer?.isPlaying == true) {
                 delay(300L)
                 _playerState.value = PlayerServiceState.Playing(getCurrentPlayerPosition())
@@ -77,7 +81,10 @@ internal class PlaylistMakerMusicService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        playlistPlayer = ExoPlayer.Builder(this).build()
+        playerThread = HandlerThread("ExoPlayerThread").apply { start() }
+        playerLooper = playerThread.looper
+        playlistPlayer = ExoPlayer.Builder(this).setLooper(playerLooper).build()
+
         playlistPlayer?.addListener(playerListener)
 
     }
