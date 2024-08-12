@@ -79,4 +79,5 @@
     <string name="edit_playlist">Редактировать</string>
     <string name="edit_save_button">Сохранить</string>
     <string name="empty_list_notification">В этом плейлисте нет треков</string>
+    <string name="permission_denied">Нет разрешения для запуска проигрывателя</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,9 @@ import com.example.playlistmaker.common.presentation.models.TrackInformation
 import com.example.playlistmaker.common.presentation.models.TrackInformationToTrackMapper
 import com.example.playlistmaker.player.domain.MediaPlayerCallbackInterface
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
+import com.example.playlistmaker.player.domain.MusicServiceInteractor
 import com.example.playlistmaker.player.domain.TrackStorageInteractor
+import com.example.playlistmaker.player.service.PlayerServiceState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.take
@@ -22,12 +25,10 @@ class PlayerViewModel(
     private val trackStorageInteractor: TrackStorageInteractor,
     private val mediaPlayerInteractor: MediaPlayerInteractor,
     private val dbInteractor: TracksDbInteractor,
-    private val playlistsInteractor: PlaylistsDbInteractor
+    private val playlistsInteractor: PlaylistsDbInteractor,
+    private val musicServiceInteractor: MusicServiceInteractor
 ) : ViewModel(), MediaPlayerCallbackInterface {
 
-    companion object {
-        const val UPDATE_FREQUENCY = 250L
-    }
 
     private var timerJob: Job? = null
 
@@ -39,6 +40,8 @@ class PlayerViewModel(
     private val _likeState = MutableLiveData<Boolean>()
     val likeState: LiveData<Boolean> get() = _likeState
 
+    private var hasServicePermission = false
+
     private val _bottomSheetState = MutableLiveData<PlayerBottomSheetState>()
     val bottomSheetState: LiveData<PlayerBottomSheetState> get() = _bottomSheetState
 
@@ -49,31 +52,68 @@ class PlayerViewModel(
     // MediaPlayer
     private var initializedTrack = trackStorageInteractor.giveMeLastTrack()
 
+    fun setPermissionsState(state: Boolean) {
+        hasServicePermission = state
+        if (state) {
+            viewModelScope.launch {
+                musicServiceInteractor.configureAndLaunchService().collect {
+                    when (it) {
+                        is PlayerServiceState.Playing -> _playerState.postValue(PlayerState.Play)
+
+                        is PlayerServiceState.Paused -> _playerState.postValue(PlayerState.Pause)
+                        is PlayerServiceState.Prepared -> _playerState.postValue(PlayerState.Ready)
+                        is PlayerServiceState.Default -> _playerState.postValue(PlayerState.Loading)
+                    }
+                    _timerState.postValue(TrackDurationTime(it.progress))
+                    lastState = _playerState.value
+
+                }
+            }
+        } else {
+            Log.d("PlayerViewModel", "No permission for service")
+        }
+    }
+
     // Функции для управления проигрыванием
     fun playPause() {
-        mediaPlayerInteractor.playPauseSwitcher()
+        if (!hasServicePermission) {
+            return
+        }
+        if (_playerState.value == PlayerState.Play) {
+            musicServiceInteractor.pause()
+            return
+        }
+        musicServiceInteractor.play()
     }
 
     fun resetPlayer() {
-        mediaPlayerInteractor.destroyPlayer()
+        musicServiceInteractor.unBindService()
+    }
+
+    fun showNotification() {
+        musicServiceInteractor.showNotification()
+    }
+
+    fun hideNotification() {
+        musicServiceInteractor.hideNotification()
     }
 
     override fun onMediaPlayerReady() {
         _playerState.value = PlayerState.Ready
         lastState = PlayerState.Ready
-        _timerState.postValue(TrackDurationTime(0))
+//        _timerState.postValue(TrackDurationTime(0))
     }
 
     override fun onMediaPlayerPause() {
         _playerState.value = PlayerState.Pause
         lastState = PlayerState.Pause
-        timerJob?.cancel()
+//        timerJob?.cancel()
     }
 
     override fun onMediaPlayerPlay() {
         _playerState.value = PlayerState.Play
         lastState = PlayerState.Play
-        startTimer()
+//        startTimer()
     }
 
     fun initializePlayer() {
@@ -161,5 +201,13 @@ class PlayerViewModel(
 
     fun handleNewPlaylistTap() {
         _bottomSheetState.postValue(PlayerBottomSheetState.NewPlaylist)
+    }
+
+    fun unBindService() {
+        musicServiceInteractor.unBindService()
+    }
+
+    companion object {
+        const val UPDATE_FREQUENCY = 250L
     }
 }

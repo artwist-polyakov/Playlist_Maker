@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.AttrRes
@@ -56,10 +57,12 @@ class PlayButtonImageView @JvmOverloads constructor(
                     getDrawable(
                         R.styleable.PlayButtonImageView_pauseButtonDrawable
                     )?.toBitmap()
-                currentIconState = getInt(
-                    R.styleable.PlayButtonImageView_PlayerState,
-                    0
-                )
+//                currentIconState = getInt(
+//                    R.styleable.PlayButtonImageView_PlayerState,
+//                    1
+//                )
+
+                Log.d("PlayerFragment", "OnDraw init $currentIconState")
 
             } finally {
                 recycle()
@@ -73,10 +76,10 @@ class PlayButtonImageView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-
+        Log.d("PlayerFragment", "onDraw $currentIconState")
         when (currentIconState) {
-            IS_PLAYING -> processBitmap(playIconBitmap, canvas)
-            IS_PAUSED -> processBitmap(pauseIconBitmap, canvas)
+            IS_PAUSED -> processBitmap(playIconBitmap, canvas)
+            IS_PLAYING -> processBitmap(pauseIconBitmap, canvas)
         }
     }
 
@@ -88,7 +91,7 @@ class PlayButtonImageView @JvmOverloads constructor(
 
             MotionEvent.ACTION_UP -> {
                 performClick()
-                currentIconState = (abs(currentIconState) + 1) % 2
+//                currentIconState = (abs(currentIconState) + 1) % 2
                 true
             }
 
@@ -120,6 +123,7 @@ class PlayButtonImageView @JvmOverloads constructor(
             }
 
             false -> {
+                currentIconState = IS_PAUSED
                 playIconBitmap?.apply {
                     alpha = .5f
                 }
