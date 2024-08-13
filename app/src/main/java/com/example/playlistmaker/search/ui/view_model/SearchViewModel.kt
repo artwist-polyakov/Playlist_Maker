@@ -36,6 +36,10 @@ class SearchViewModel(
     private var searchJob: Job? = null
     private var latestSearchText: String? = null
 
+    init {
+        loadHistoryTracks()
+    }
+
     fun updateSearchText(newText: String) {
         _searchText.value = newText
         searchDebounce(newText)
