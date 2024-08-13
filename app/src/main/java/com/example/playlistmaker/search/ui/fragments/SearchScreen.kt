@@ -59,7 +59,7 @@ fun CustomTextField(
     maxLength: Int = Int.MAX_VALUE,
     textStyle: TextStyle = TextStyle.Default,
     backgroundColor: Color = MaterialTheme.colors.primaryVariant,
-    contentColor: Color = MaterialTheme.colors.onPrimary
+    contentColor: Color = Color(0xFF1A1B22)
 ) {
     val shape = RoundedCornerShape(8.dp)
 
@@ -118,7 +118,7 @@ fun SearchTextField(
         placeholder = {
             Text(
                 "Поиск",
-                color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
+                color = MaterialTheme.colors.secondaryVariant,
                 fontSize = 16.sp
             )
         },
@@ -126,7 +126,7 @@ fun SearchTextField(
             Icon(
                 painter = painterResource(id = R.drawable.ic_search),
                 contentDescription = "Search",
-                tint = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f)
+                tint = MaterialTheme.colors.secondaryVariant
             )
         },
         trailingIcon = {
@@ -138,14 +138,14 @@ fun SearchTextField(
                     Icon(
                         painter = painterResource(id = R.drawable.clear_icon),
                         contentDescription = "Clear",
-                        tint = MaterialTheme.colors.onPrimary,
+                        tint = MaterialTheme.colors.secondaryVariant,
                         modifier = Modifier.size(40.dp)
                     )
                 }
             }
         },
         backgroundColor = MaterialTheme.colors.primaryVariant,
-        contentColor = MaterialTheme.colors.onPrimary,
+        contentColor = Color(0xFF1A1B22),
         textStyle = TextStyle(fontSize = 16.sp)
     )
 }
