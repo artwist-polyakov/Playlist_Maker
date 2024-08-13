@@ -2,6 +2,7 @@ package com.example.playlistmaker.search.ui.fragments
 
 import CustomSnackbar
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,10 +20,21 @@ import com.example.playlistmaker.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.common.presentation.ComposeInternetConnectionBroadcastReceiver
 import com.example.playlistmaker.common.presentation.InternetConnectionBroadcastReciever
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
@@ -30,6 +42,106 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
 import rememberCustomSnackbarState
 import rememberShowCustomSnackbar
+
+@Composable
+fun CustomTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
+    maxLines: Int = 1,
+    maxLength: Int = Int.MAX_VALUE,
+    textStyle: TextStyle = TextStyle.Default,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = MaterialTheme.colors.onSurface
+) {
+    val shape = RoundedCornerShape(8.dp)
+
+    BasicTextField(
+        value = value,
+        onValueChange = { if (it.length <= maxLength) onValueChange(it) },
+        modifier = modifier
+            .background(backgroundColor, shape)
+            .height(36.dp),
+        textStyle = textStyle.copy(color = contentColor, fontSize = 16.sp),
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        cursorBrush = SolidColor(contentColor),
+        decorationBox = { innerTextField ->
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (leadingIcon != null) {
+                    leadingIcon()
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Box(Modifier.weight(1f)) {
+                    if (value.isEmpty()) placeholder?.invoke()
+                    innerTextField()
+                }
+                if (trailingIcon != null) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    trailingIcon()
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun SearchTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    onClearClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    CustomTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier.fillMaxWidth(),
+        placeholder = {
+            Text(
+                "Поиск",
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                fontSize = 16.sp
+            )
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_search),
+                contentDescription = "Search",
+                tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+            )
+        },
+        trailingIcon = {
+            if (value.isNotEmpty()) {
+                IconButton(onClick = onClearClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.clear_icon),
+                        contentDescription = "Clear",
+                        tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+                    )
+                }
+            }
+        },
+        backgroundColor = MaterialTheme.colors.surface,
+        contentColor = MaterialTheme.colors.onSurface,
+        textStyle = TextStyle(fontSize = 16.sp),
+        singleLine = true,
+        maxLines = 1,
+        maxLength = 64
+    )
+}
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
@@ -67,31 +179,17 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            CustomTextField(
+            SearchTextField(
                 value = searchText,
                 onValueChange = {
                     searchText = it
                     viewModel.searchDebounce(it)
                 },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(stringResource(R.string.input_hint)) },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_search),
-                        contentDescription = "Search",
-                        tint = MaterialTheme.colors.secondaryVariant
-                    )
+                onClearClick = {
+                    searchText = ""
+                    viewModel.onClearButtonPressed()
                 },
-                trailingIcon = {
-                    if (searchText.isNotEmpty()) {
-                        IconButton(onClick = {
-                            searchText = ""
-                            viewModel.onClearButtonPressed()
-                        }) {
-                            Icon(painter = painterResource(id = R.drawable.clear_icon), contentDescription = "Clear")
-                        }
-                    }
-                }
+                modifier = Modifier.fillMaxWidth()
             )
 
             when (searchState) {
@@ -106,40 +204,6 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
     }
 }
 
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    placeholder: @Composable (() -> Unit)? = null,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
-) {
-    val shape = RoundedCornerShape(8.dp)
-    val colors = TextFieldDefaults.textFieldColors(
-        backgroundColor = MaterialTheme.colors.primaryVariant,
-        cursorColor = MaterialTheme.colors.onPrimary,
-        textColor = MaterialTheme.colors.onPrimary,
-        placeholderColor = MaterialTheme.colors.secondaryVariant,
-        focusedIndicatorColor = Color.Transparent,
-        unfocusedIndicatorColor = Color.Transparent
-    )
-
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier.height(36.dp),
-        placeholder = placeholder,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        singleLine = true,
-        maxLines = 1,
-        shape = shape,
-        colors = colors,
-        textStyle = MaterialTheme.typography.body1
-    )
-}
-
 
 @Composable
 fun SearchResults(tracks: List<Track>, viewModel: SearchViewModel, navController: NavController) {
@@ -147,7 +211,7 @@ fun SearchResults(tracks: List<Track>, viewModel: SearchViewModel, navController
         items(tracks) { track ->
             TrackItem(track) {
                 viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-                navController.navigate("player/${track.trackId}")
+                navController.navigate(R.id.action_searchFragment_to_playerFragment)
             }
         }
     }
@@ -250,20 +314,24 @@ fun TrackItem(track: Track, onClick: () -> Unit) {
         ) {
             Text(
                 text = track.trackName,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.onSurface  // Убедитесь, что цвет контрастирует с фоном
             )
             Row {
                 Text(
                     text = track.artistName,
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)  // Немного прозрачнее для подзаголовка
                 )
                 Text(
                     text = " • ",
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
                     text = track.trackTime,
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
                 )
             }
         }
