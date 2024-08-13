@@ -119,6 +119,8 @@ fun CustomTextField(
     val colors = TextFieldDefaults.textFieldColors(
         backgroundColor = MaterialTheme.colors.primaryVariant,
         cursorColor = MaterialTheme.colors.onPrimary,
+        textColor = MaterialTheme.colors.onPrimary,
+        placeholderColor = MaterialTheme.colors.secondaryVariant,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent
     )
@@ -134,7 +136,7 @@ fun CustomTextField(
         maxLines = 1,
         shape = shape,
         colors = colors,
-        textStyle = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onPrimary)
+        textStyle = MaterialTheme.typography.body1
     )
 }
 

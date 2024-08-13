@@ -16,6 +16,8 @@ import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.ResponseState
 import com.example.playlistmaker.search.ui.fragments.SearchState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,30 +31,25 @@ class SearchViewModel(
     private val _searchState = MutableStateFlow<SearchState>(SearchState.Virgin)
     val searchState: StateFlow<SearchState> = _searchState.asStateFlow()
 
-    private val stateLiveData = MutableLiveData<SearchState>()
-    private val _clearButtonPressed = MutableLiveData<Unit>()
-    val clearButtonPressed: LiveData<Unit> get() = _clearButtonPressed
-
+    private var searchJob: Job? = null
     private var latestSearchText: String? = null
-    private var lastState: SearchState? = null
-
-    private val searchDebounce =
-        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { text ->
-            searchRequest(text)
-        }
-
-    fun observeState(): LiveData<SearchState> = stateLiveData
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText != changedText) {
-            latestSearchText = changedText
-            searchDebounce(changedText)
+        searchJob?.cancel()
+        latestSearchText = changedText
+        if (changedText.isEmpty()) {
+            loadHistoryTracks()
+        } else {
+            searchJob = viewModelScope.launch {
+                delay(2000) // 2 seconds delay
+                searchRequest(changedText)
+            }
         }
     }
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            renderState(SearchState.Loading)
+            _searchState.value = SearchState.Loading
             viewModelScope.launch {
                 tracksInteractor
                     .searchTracks(newSearchText)
@@ -67,28 +64,18 @@ class SearchViewModel(
         val tracks = foundTracks?.map { TrackDtoToTrackMapper().invoke(it) } ?: emptyList()
 
         when {
-            errorMessage != null -> renderState(SearchState.Error(ResponseState.ERROR))
-            tracks.isEmpty() -> renderState(SearchState.Empty(ResponseState.NOTHING_FOUND))
-            else -> renderState(SearchState.Content(tracks))
+            errorMessage != null -> _searchState.value = SearchState.Error(ResponseState.ERROR)
+            tracks.isEmpty() -> _searchState.value = SearchState.Empty(ResponseState.NOTHING_FOUND)
+            else -> _searchState.value = SearchState.Content(tracks)
         }
     }
 
-    private fun renderState(state: SearchState) {
-        stateLiveData.postValue(state)
-        lastState = state
-    }
-
-    fun restoreLastState() {
-        lastState?.let { renderState(it) } ?: loadHistoryTracks()
-    }
-
     fun loadHistoryTracks() {
-        val historyTracks =
-            tracksStorage.takeHistory(reverse = true).map { TrackDtoToTrackMapper().invoke(it) }
+        val historyTracks = tracksStorage.takeHistory(reverse = true).map { TrackDtoToTrackMapper().invoke(it) }
         if (historyTracks.isNotEmpty()) {
-            renderState(SearchState.History(historyTracks))
+            _searchState.value = SearchState.History(historyTracks)
         } else {
-            renderState(SearchState.Virgin)
+            _searchState.value = SearchState.Virgin
         }
     }
 
@@ -99,18 +86,25 @@ class SearchViewModel(
 
     fun clearHistoryAndHide() {
         tracksStorage.clearHistory()
-        renderState(SearchState.Virgin)
+        _searchState.value = SearchState.Virgin
     }
 
     fun onClearButtonPressed() {
-        _clearButtonPressed.value = Unit
+        latestSearchText = ""
+        loadHistoryTracks()
     }
 
     fun retrySearch() {
         latestSearchText?.let { searchRequest(it) }
     }
 
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 300L
+    fun restoreLastState() {
+        latestSearchText?.let {
+            if (it.isNotEmpty()) {
+                searchRequest(it)
+            } else {
+                loadHistoryTracks()
+            }
+        } ?: loadHistoryTracks()
     }
 }
