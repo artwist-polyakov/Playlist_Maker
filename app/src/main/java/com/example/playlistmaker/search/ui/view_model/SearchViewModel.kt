@@ -30,9 +30,16 @@ class SearchViewModel(
 ) : AndroidViewModel(application) {
     private val _searchState = MutableStateFlow<SearchState>(SearchState.Virgin)
     val searchState: StateFlow<SearchState> = _searchState.asStateFlow()
+    private val _searchText = MutableStateFlow("")
+    val searchText: StateFlow<String> = _searchText.asStateFlow()
 
     private var searchJob: Job? = null
     private var latestSearchText: String? = null
+
+    fun updateSearchText(newText: String) {
+        _searchText.value = newText
+        searchDebounce(newText)
+    }
 
     fun searchDebounce(changedText: String) {
         searchJob?.cancel()
@@ -70,12 +77,16 @@ class SearchViewModel(
         }
     }
 
-    fun loadHistoryTracks() {
-        val historyTracks = tracksStorage.takeHistory(reverse = true).map { TrackDtoToTrackMapper().invoke(it) }
-        if (historyTracks.isNotEmpty()) {
-            _searchState.value = SearchState.History(historyTracks)
-        } else {
-            _searchState.value = SearchState.Virgin
+    private fun loadHistoryTracks() {
+        viewModelScope.launch {
+            val historyTracks = tracksStorage.takeHistory(reverse = true)
+            if (historyTracks.isNotEmpty()) {
+                _searchState.value = SearchState.History(tracks = historyTracks.map { it ->
+                    TrackDtoToTrackMapper().invoke(it)
+                })
+            } else {
+                _searchState.value = SearchState.Virgin
+            }
         }
     }
 
@@ -90,7 +101,7 @@ class SearchViewModel(
     }
 
     fun onClearButtonPressed() {
-        latestSearchText = ""
+        _searchText.value = ""
         loadHistoryTracks()
     }
 

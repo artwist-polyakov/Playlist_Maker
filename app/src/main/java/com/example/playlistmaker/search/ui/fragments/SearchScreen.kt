@@ -24,6 +24,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
@@ -57,45 +58,50 @@ fun CustomTextField(
     maxLines: Int = 1,
     maxLength: Int = Int.MAX_VALUE,
     textStyle: TextStyle = TextStyle.Default,
-    backgroundColor: Color = MaterialTheme.colors.surface,
-    contentColor: Color = MaterialTheme.colors.onSurface
+    backgroundColor: Color = MaterialTheme.colors.primaryVariant,
+    contentColor: Color = MaterialTheme.colors.onPrimary
 ) {
     val shape = RoundedCornerShape(8.dp)
 
-    BasicTextField(
-        value = value,
-        onValueChange = { if (it.length <= maxLength) onValueChange(it) },
+    Box(
         modifier = modifier
-            .background(backgroundColor, shape)
-            .height(36.dp),
-        textStyle = textStyle.copy(color = contentColor, fontSize = 16.sp),
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        singleLine = singleLine,
-        maxLines = maxLines,
-        cursorBrush = SolidColor(contentColor),
-        decorationBox = { innerTextField ->
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (leadingIcon != null) {
-                    leadingIcon()
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-                Box(Modifier.weight(1f)) {
-                    if (value.isEmpty()) placeholder?.invoke()
-                    innerTextField()
-                }
-                if (trailingIcon != null) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                    trailingIcon()
+            .height(36.dp)
+            .clip(shape)
+            .background(backgroundColor)
+    ) {
+        BasicTextField(
+            value = value,
+            onValueChange = { if (it.length <= maxLength) onValueChange(it) },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            textStyle = textStyle.copy(color = contentColor, fontSize = 16.sp),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            singleLine = singleLine,
+            maxLines = maxLines,
+            cursorBrush = SolidColor(contentColor),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (leadingIcon != null) {
+                        leadingIcon()
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    Box(Modifier.weight(1f)) {
+                        if (value.isEmpty()) placeholder?.invoke()
+                        innerTextField()
+                    }
+                    if (trailingIcon != null) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        trailingIcon()
+                    }
                 }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable
@@ -112,7 +118,7 @@ fun SearchTextField(
         placeholder = {
             Text(
                 "Поиск",
-                color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f),
                 fontSize = 16.sp
             )
         },
@@ -120,33 +126,34 @@ fun SearchTextField(
             Icon(
                 painter = painterResource(id = R.drawable.ic_search),
                 contentDescription = "Search",
-                tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+                tint = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f)
             )
         },
         trailingIcon = {
             if (value.isNotEmpty()) {
-                IconButton(onClick = onClearClick) {
+                IconButton(
+                    onClick = onClearClick,
+                    modifier = Modifier.size(40.dp)
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.clear_icon),
                         contentDescription = "Clear",
-                        tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+                        tint = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.size(40.dp)
                     )
                 }
             }
         },
-        backgroundColor = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.onSurface,
-        textStyle = TextStyle(fontSize = 16.sp),
-        singleLine = true,
-        maxLines = 1,
-        maxLength = 64
+        backgroundColor = MaterialTheme.colors.primaryVariant,
+        contentColor = MaterialTheme.colors.onPrimary,
+        textStyle = TextStyle(fontSize = 16.sp)
     )
 }
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
     val searchState by viewModel.searchState.collectAsState()
-    var searchText by remember { mutableStateOf("") }
+    val searchText by viewModel.searchText.collectAsState()
     val context = LocalContext.current
     val snackbarHostState = rememberCustomSnackbarState()
     val showCustomSnackbar = rememberShowCustomSnackbar(snackbarHostState)
@@ -181,14 +188,8 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
 
             SearchTextField(
                 value = searchText,
-                onValueChange = {
-                    searchText = it
-                    viewModel.searchDebounce(it)
-                },
-                onClearClick = {
-                    searchText = ""
-                    viewModel.onClearButtonPressed()
-                },
+                onValueChange = { viewModel.updateSearchText(it) },
+                onClearClick = { viewModel.onClearButtonPressed() },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -244,8 +245,16 @@ fun SearchHistory(tracks: List<Track>, viewModel: SearchViewModel, navController
 
 @Composable
 fun LoadingIndicator() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 50.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(44.dp),
+            color = MaterialTheme.colors.secondary // Предполагается, что это цвет main_screen_background_color
+        )
     }
 }
 
