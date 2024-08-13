@@ -1,6 +1,8 @@
 package com.example.playlistmaker.search.ui.view_model
 
 import android.app.Application
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -14,6 +16,11 @@ import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.fragments.ResponseState
 import com.example.playlistmaker.search.ui.fragments.SearchState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -21,130 +28,69 @@ class SearchViewModel(
     private val tracksInteractor: TracksInteractor,
     private val tracksStorage: TracksStorage
 ) : AndroidViewModel(application) {
+    private val _searchState = MutableStateFlow<SearchState>(SearchState.Virgin)
+    val searchState: StateFlow<SearchState> = _searchState.asStateFlow()
+    private val _searchText = MutableStateFlow("")
+    val searchText: StateFlow<String> = _searchText.asStateFlow()
 
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
-
-    private val musicSearchDebounce = debounce<String>(
-        SEARCH_DEBOUNCE_DELAY,
-        viewModelScope,
-        true
-    ) { text ->
-        searchRequest(text)
-    }
-
-    private val stateLiveData = MutableLiveData<SearchState>()
-
-    private val _clearButtonPressed = MutableLiveData<Unit>()
-    val clearButtonPressed: LiveData<Unit> get() = _clearButtonPressed
-
+    private var searchJob: Job? = null
     private var latestSearchText: String? = null
-    private var lastState: SearchState? = null
 
-    private val mediatorStateLiveData = MediatorLiveData<SearchState>().also { liveData ->
-        liveData.addSource(stateLiveData) { searchState ->
-            liveData.value = when (searchState) {
-                is SearchState.Content -> SearchState.Content(searchState.tracks)
-                is SearchState.Empty -> searchState
-                is SearchState.Error -> searchState
-                is SearchState.Loading -> searchState
-                is SearchState.History -> SearchState.History(searchState.tracks)
-                is SearchState.Virgin -> searchState
-            }
-        }
+    init {
+        loadHistoryTracks()
     }
 
-    fun observeState(): LiveData<SearchState> = mediatorStateLiveData
-
-    override fun onCleared() {
-        super.onCleared()
-        tracksStorage.saveHistory()
+    fun updateSearchText(newText: String) {
+        _searchText.value = newText
+        searchDebounce(newText)
     }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText != changedText) {
-            latestSearchText = changedText
-            musicSearchDebounce(changedText)
+        searchJob?.cancel()
+        latestSearchText = changedText
+        if (changedText.isEmpty()) {
+            loadHistoryTracks()
+        } else {
+            searchJob = viewModelScope.launch {
+                delay(2000) // 2 seconds delay
+                searchRequest(changedText)
+            }
         }
     }
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            renderState(SearchState.Loading)
+            _searchState.value = SearchState.Loading
             viewModelScope.launch {
                 tracksInteractor
                     .searchTracks(newSearchText)
                     .collect { pair ->
                         processResult(pair.first, pair.second)
-
                     }
             }
         }
     }
 
     private fun processResult(foundTracks: List<TrackDto>?, errorMessage: String?) {
-        val tracks = mutableListOf<Track>()
-        if (foundTracks != null) {
-            tracks.addAll(foundTracks.map { dto ->
-                TrackDtoToTrackMapper().invoke(dto)
-            })
-        }
+        val tracks = foundTracks?.map { TrackDtoToTrackMapper().invoke(it) } ?: emptyList()
 
         when {
-            errorMessage != null -> {
-                renderState(
-                    SearchState.Error(
-                        responseState = ResponseState.ERROR,
-                    )
-                )
-            }
-
-            tracks.isEmpty() -> {
-                renderState(
-                    SearchState.Empty(
-                        responseState = ResponseState.NOTHING_FOUND,
-                    )
-                )
-            }
-
-            else -> {
-                renderState(
-                    SearchState.Content(
-                        tracks = tracks,
-                    )
-                )
-            }
+            errorMessage != null -> _searchState.value = SearchState.Error(ResponseState.ERROR)
+            tracks.isEmpty() -> _searchState.value = SearchState.Empty(ResponseState.NOTHING_FOUND)
+            else -> _searchState.value = SearchState.Content(tracks)
         }
     }
 
-    private fun renderState(state: SearchState) {
-        stateLiveData.postValue(state)
-        lastState = state
-    }
-
-    fun restoreLastState() {
-        if (lastState != null) {
-            if (lastState is SearchState.History) {
-                val tracks = tracksStorage.takeHistory(reverse = true).map {
+    private fun loadHistoryTracks() {
+        viewModelScope.launch {
+            val historyTracks = tracksStorage.takeHistory(reverse = true)
+            if (historyTracks.isNotEmpty()) {
+                _searchState.value = SearchState.History(tracks = historyTracks.map { it ->
                     TrackDtoToTrackMapper().invoke(it)
-                }
-                renderState(SearchState.History(tracks))
+                })
             } else {
-                renderState(lastState!!)
+                _searchState.value = SearchState.Virgin
             }
-        } else {
-            loadHistoryTracks()
-        }
-    }
-
-    fun loadHistoryTracks() {
-        val historyTracksDto = tracksStorage.takeHistory(reverse = true)
-        val historyTracks = historyTracksDto.map { TrackDtoToTrackMapper().invoke(it) }
-        if (historyTracks.isNotEmpty()) {
-            renderState(SearchState.History(historyTracks))
-        } else {
-            renderState(SearchState.Virgin)
         }
     }
 
@@ -153,16 +99,27 @@ class SearchViewModel(
         tracksStorage.saveHistory()
     }
 
-    fun clearHistory() {
+    fun clearHistoryAndHide() {
         tracksStorage.clearHistory()
+        _searchState.value = SearchState.Virgin
     }
 
     fun onClearButtonPressed() {
-        _clearButtonPressed.value = Unit
+        _searchText.value = ""
+        loadHistoryTracks()
     }
 
-    fun clearHistoryAndHide() {
-        clearHistory()
-        renderState(SearchState.Virgin) // это будет прятать историю и результаты поиска
+    fun retrySearch() {
+        latestSearchText?.let { searchRequest(it) }
+    }
+
+    fun restoreLastState() {
+        latestSearchText?.let {
+            if (it.isNotEmpty()) {
+                searchRequest(it)
+            } else {
+                loadHistoryTracks()
+            }
+        } ?: loadHistoryTracks()
     }
 }
