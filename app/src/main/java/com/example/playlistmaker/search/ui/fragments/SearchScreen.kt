@@ -18,7 +18,9 @@ import coil.compose.rememberImagePainter
 import com.example.playlistmaker.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.LineHeightStyle
 import com.example.playlistmaker.common.presentation.ComposeInternetConnectionBroadcastReceiver
@@ -65,7 +67,7 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            TextField(
+            CustomTextField(
                 value = searchText,
                 onValueChange = {
                     searchText = it
@@ -73,7 +75,13 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
                 },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text(stringResource(R.string.input_hint)) },
-                singleLine = true,
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_search),
+                        contentDescription = "Search",
+                        tint = MaterialTheme.colors.secondaryVariant
+                    )
+                },
                 trailingIcon = {
                     if (searchText.isNotEmpty()) {
                         IconButton(onClick = {
@@ -96,6 +104,38 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
             }
         }
     }
+}
+
+@Composable
+fun CustomTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
+) {
+    val shape = RoundedCornerShape(8.dp)
+    val colors = TextFieldDefaults.textFieldColors(
+        backgroundColor = MaterialTheme.colors.primaryVariant,
+        cursorColor = MaterialTheme.colors.onPrimary,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent
+    )
+
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier.height(36.dp),
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        singleLine = true,
+        maxLines = 1,
+        shape = shape,
+        colors = colors,
+        textStyle = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onPrimary)
+    )
 }
 
 
