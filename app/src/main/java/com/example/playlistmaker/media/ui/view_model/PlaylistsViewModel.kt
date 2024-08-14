@@ -7,13 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.common.domain.db.PlaylistsDbInteractor
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(
     private val playlistsDb: PlaylistsDbInteractor,
 ) : ViewModel() {
-    private val _state = MutableLiveData<PlaylistsScreenState>()
-    val state: LiveData<PlaylistsScreenState> get() = _state
+    private val _state = MutableStateFlow<PlaylistsScreenState>(PlaylistsScreenState.Empty)
+    val state: StateFlow<PlaylistsScreenState> = _state
 
     init {
         fillData()
@@ -31,9 +33,9 @@ class PlaylistsViewModel(
 
     private fun processResult(playlists: List<PlaylistInformation>) {
         if (playlists.isEmpty()) {
-            _state.postValue(PlaylistsScreenState.Empty)
+            _state.value = PlaylistsScreenState.Empty
         } else {
-            _state.postValue(PlaylistsScreenState.Content(playlists))
+            _state.value = PlaylistsScreenState.Content(playlists)
         }
     }
 }
