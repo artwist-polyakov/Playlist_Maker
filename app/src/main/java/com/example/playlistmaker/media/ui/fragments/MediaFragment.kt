@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.presentation.PlaylistMakerTheme
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
+import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.databinding.FragmentMediaBinding
 import com.example.playlistmaker.media.ui.view_model.FavoritesViewModel
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
@@ -32,11 +33,9 @@ class MediaFragment : Fragment() {
                 val playlistsViewModel: PlaylistsViewModel = koinViewModel()
                 val onTrackClick = remember<(Track) -> Unit> {
                     { track ->
+                        favoritesViewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
                         findNavController().navigate(
-                            R.id.action_mediaFragment_to_playerFragment,
-                            Bundle().apply {
-                                putParcelable("track", track)
-                            }
+                            R.id.action_mediaFragment_to_playerFragment
                         )
                     }
                 }

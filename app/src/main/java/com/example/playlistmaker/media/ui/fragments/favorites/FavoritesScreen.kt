@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.TrackItem
 import com.example.playlistmaker.media.ui.view_model.FavoritesViewModel
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.FavoriteState
@@ -103,78 +104,5 @@ fun FavoritesList(favorites: List<Track>, onTrackClick: (Track) -> Unit) {
                 onTrackClick(track)
             }
         }
-    }
-}
-
-@Composable
-fun TrackItem(track: Track, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Card(
-            modifier = Modifier
-                .size(45.dp)
-                .clip(RoundedCornerShape(2.dp)),
-            elevation = 0.dp
-        ) {
-            Image(
-                painter = rememberImagePainter(
-                    data = track.artworkUrl60,
-                    builder = {
-                        crossfade(true)
-                        placeholder(R.drawable.song_cover_placeholder)
-                    }
-                ),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-        ) {
-            Text(
-                text = track.trackName,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colors.onSurface,
-                maxLines = 1
-            )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = track.artistName,
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                    maxLines = 1
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Box(
-                    modifier = Modifier
-                        .size(2.dp)
-                        .background(MaterialTheme.colors.onSurface.copy(alpha = 0.6f))
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = track.trackTime,
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
-                )
-            }
-        }
-
-        Image(
-            painter = painterResource(id = R.drawable.arrow_icon),
-            contentDescription = null,
-            modifier = Modifier
-                .size(24.dp)
-                .padding(end = 12.dp)
-        )
     }
 }
