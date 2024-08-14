@@ -73,7 +73,8 @@ fun MediaScreen(
     favoritesViewModel: FavoritesViewModel,
     playlistsViewModel: PlaylistsViewModel,
     onTrackClick: (Track) -> Unit,
-    onPlaylistClick: (PlaylistInformation) -> Unit
+    onPlaylistClick: (PlaylistInformation) -> Unit,
+    onCreatePlaylistClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -138,7 +139,7 @@ fun MediaScreen(
         ) { page ->
             when (page) {
                 0 -> FavoritesScreen(favoritesViewModel, onTrackClick)
-                1 -> PlaylistsScreen(playlistsViewModel, onPlaylistClick)
+                1 -> PlaylistsScreen(playlistsViewModel, onPlaylistClick, onCreatePlaylistClick)
             }
         }
     }

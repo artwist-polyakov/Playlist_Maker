@@ -42,11 +42,20 @@ class MediaFragment : Fragment() {
 
                 val onPlaylistClick = remember<(PlaylistInformation) -> Unit> {
                     { playlist ->
+                        val bundle = Bundle().apply {
+                            putString("arg_playlist_id", playlist.id.toString())
+                        }
                         findNavController().navigate(
                             R.id.action_mediaFragment_to_playlistFragment,
-                            Bundle().apply {
-                                putString("playlistId", playlist.id.toString())
-                            }
+                            bundle
+                        )
+                    }
+                }
+
+                val onCreatePlaylistClick = remember<() -> Unit> {
+                    {
+                        findNavController().navigate(
+                            R.id.action_mediaFragment_to_createPlaylistFragment
                         )
                     }
                 }
@@ -56,7 +65,8 @@ class MediaFragment : Fragment() {
                         favoritesViewModel = favoritesViewModel,
                         playlistsViewModel = playlistsViewModel,
                         onTrackClick = onTrackClick,
-                        onPlaylistClick = onPlaylistClick
+                        onPlaylistClick = onPlaylistClick,
+                        onCreatePlaylistClick = onCreatePlaylistClick
                     )
                 }
             }
