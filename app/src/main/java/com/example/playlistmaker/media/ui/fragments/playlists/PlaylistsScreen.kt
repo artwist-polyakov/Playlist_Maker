@@ -1,14 +1,18 @@
 package com.example.playlistmaker.media.ui.fragments.playlists
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -27,15 +31,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.YsDisplayFontFamily
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
 import com.example.playlistmaker.media.ui.view_model.states.PlaylistsScreenState
@@ -76,16 +89,22 @@ fun PlaylistsScreen(
                     )
                 }
 
-                // Displaying the list of playlists
-                PlaylistsList((currentState as PlaylistsScreenState.Content).content, onPlaylistClick)
+                PlaylistsList(
+                    (currentState as PlaylistsScreenState.Content).content,
+                    onPlaylistClick
+                )
             }
         }
-        is PlaylistsScreenState.Empty -> EmptyPlaylistsState()
+
+        is PlaylistsScreenState.Empty -> EmptyPlaylistsState(onCreatePlaylistClick)
     }
 }
 
 @Composable
-fun PlaylistsList(playlists: List<PlaylistInformation>, onPlaylistClick: (PlaylistInformation) -> Unit) {
+fun PlaylistsList(
+    playlists: List<PlaylistInformation>,
+    onPlaylistClick: (PlaylistInformation) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
@@ -99,6 +118,7 @@ fun PlaylistsList(playlists: List<PlaylistInformation>, onPlaylistClick: (Playli
         }
     }
 }
+
 
 @Composable
 fun PlaylistItem(playlist: PlaylistInformation, onClick: () -> Unit) {
@@ -116,19 +136,7 @@ fun PlaylistItem(playlist: PlaylistInformation, onClick: () -> Unit) {
             elevation = 0.dp,
             backgroundColor = Color.Transparent
         ) {
-            Image(
-                painter = rememberImagePainter(
-                    data = playlist.image,
-                    builder = {
-                        crossfade(true)
-                        placeholder(R.drawable.song_cover_placeholder_with_padding)
-                        error(R.drawable.song_cover_placeholder_with_padding)
-                    }
-                ),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+            PlaylistImage(playlist.image.toString())
         }
         Text(
             text = playlist.name,
@@ -146,25 +154,91 @@ fun PlaylistItem(playlist: PlaylistInformation, onClick: () -> Unit) {
             ),
             style = MaterialTheme.typography.caption,
             color = MaterialTheme.colors.onPrimary,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
 @Composable
-fun EmptyPlaylistsState() {
+fun PlaylistImage(imageUri: String?) {
+    val context = LocalContext.current
+
+    AsyncImage(
+        model = ImageRequest.Builder(context)
+            .data(imageUri)
+            .crossfade(true)
+            .placeholder(R.drawable.song_cover_placeholder_with_padding)
+            .error(R.drawable.song_cover_placeholder_with_padding)
+            .build(),
+        contentDescription = null,
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(8.dp)),
+        contentScale = ContentScale.Crop
+    )
+}
+
+
+@Composable
+fun EmptyPlaylistsState(onCreatePlaylistClick: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        Text(text = stringResource(R.string.no_playlists))
         Button(
-            onClick = { /* Handle create playlist */ },
-            modifier = Modifier.padding(top = 8.dp)
+            onClick = onCreatePlaylistClick,
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(vertical = 24.dp),
+            shape = RoundedCornerShape(54.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            )
         ) {
-            Text(text = stringResource(R.string.new_playlist))
+            Text(
+                text = stringResource(R.string.new_playlist),
+                style = MaterialTheme.typography.button.copy(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.W500
+                )
+            )
         }
+        Image(
+            painter = painterResource(id = R.drawable.nothing_found),
+            contentDescription = null,
+            modifier = Modifier.size(120.dp)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = stringResource(R.string.no_playlists),
+            style = MaterialTheme.typography.h6.copy(
+                fontFamily = YsDisplayFontFamily,
+                fontSize = 19.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onPrimary
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.empty_library),
+            style = MaterialTheme.typography.body1.copy(
+                fontFamily = YsDisplayFontFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f)
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
