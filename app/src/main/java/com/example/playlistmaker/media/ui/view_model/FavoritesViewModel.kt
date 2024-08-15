@@ -9,21 +9,23 @@ import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.storage.TracksStorage
 import com.example.playlistmaker.search.ui.view_model.FavoriteState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(
     private val favoritesInteractor: TracksDbInteractor,
     private val tracksStorage: TracksStorage
 ) : ViewModel() {
-    private val state = MutableLiveData<FavoriteState>()
-    fun observeState(): LiveData<FavoriteState> = state
+    private val _state = MutableStateFlow<FavoriteState>(FavoriteState.LOADING)
+    val state: StateFlow<FavoriteState> = _state
 
     init {
         fillData()
     }
 
     private fun fillData() {
-        state.postValue(FavoriteState.LOADING)
+        _state.value = FavoriteState.LOADING
         viewModelScope.launch {
             favoritesInteractor
                 .allLikedTracks()
@@ -35,9 +37,9 @@ class FavoritesViewModel(
 
     private fun processResult(favorites: List<Track>) {
         if (favorites.isEmpty()) {
-            state.postValue(FavoriteState.NOTHING_TO_SHOW)
+            _state.value = FavoriteState.NOTHING_TO_SHOW
         } else {
-            state.postValue(FavoriteState.FAVORITES(favorites))
+            _state.value = FavoriteState.FAVORITES(favorites)
         }
     }
 

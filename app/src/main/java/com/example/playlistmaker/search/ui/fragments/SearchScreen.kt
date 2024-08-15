@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -38,6 +40,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.common.presentation.ComposeInternetConnectionBroadcastReceiver
 import com.example.playlistmaker.common.presentation.InternetConnectionBroadcastReciever
+import com.example.playlistmaker.common.presentation.TrackItem
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.view_model.SearchViewModel
@@ -179,7 +182,10 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
     Scaffold(
         snackbarHost = { CustomSnackbar(snackbarHostState) }
     ) { paddingValues ->
-        Column(modifier = Modifier.fillMaxSize().padding(paddingValues).padding(16.dp)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+            .padding(16.dp)) {
             Text(
                 text = stringResource(R.string.search_str),
                 style = MaterialTheme.typography.h6,
@@ -194,11 +200,29 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
             )
 
             when (searchState) {
-                is SearchState.Content -> SearchResults((searchState as SearchState.Content).tracks, viewModel, navController)
-                is SearchState.History -> SearchHistory((searchState as SearchState.History).tracks, viewModel, navController)
+                is SearchState.Content -> SearchResults(
+                    (searchState as SearchState.Content).tracks,
+                    viewModel,
+                    navController
+                )
+
+                is SearchState.History -> SearchHistory(
+                    (searchState as SearchState.History).tracks,
+                    viewModel,
+                    navController
+                )
+
                 is SearchState.Loading -> LoadingIndicator()
-                is SearchState.Error -> ErrorState((searchState as SearchState.Error).responseState, viewModel)
-                is SearchState.Empty -> EmptyState((searchState as SearchState.Empty).responseState, viewModel)
+                is SearchState.Error -> ErrorState(
+                    (searchState as SearchState.Error).responseState,
+                    viewModel
+                )
+
+                is SearchState.Empty -> EmptyState(
+                    (searchState as SearchState.Empty).responseState,
+                    viewModel
+                )
+
                 is SearchState.Virgin -> {} // Ничего не отображаем
             }
         }
@@ -230,15 +254,32 @@ fun SearchHistory(tracks: List<Track>, viewModel: SearchViewModel, navController
             items(tracks) { track ->
                 TrackItem(track) {
                     viewModel.saveTrackToHistory(TrackToTrackDtoMapper().invoke(track))
-                    navController.navigate("player/${track.trackId}")
+                    navController.navigate(R.id.action_searchFragment_to_playerFragment)
                 }
             }
         }
         Button(
             onClick = { viewModel.clearHistoryAndHide() },
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp)
+            modifier = Modifier
+                .wrapContentSize()
+                .height(50.dp)
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 16.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            ),
+            shape = RoundedCornerShape(54.dp)
         ) {
-            Text(stringResource(R.string.clear_history_button_text))
+            Text(
+                text = stringResource(R.string.clear_history_button_text),
+                style = TextStyle(
+                    fontFamily = MaterialTheme.typography.body1.fontFamily,
+                    fontWeight = FontWeight.W500,
+                    fontSize = 12.sp
+                )
+            )
+
         }
     }
 }
@@ -294,60 +335,4 @@ fun ErrorState(responseState: ResponseState, viewModel: SearchViewModel) {
 @Composable
 fun EmptyState(responseState: ResponseState, viewModel: SearchViewModel) {
     ErrorState(responseState, viewModel)
-}
-
-@Composable
-fun TrackItem(track: Track, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = rememberImagePainter(
-                data = track.artworkUrl60,
-                builder = {
-                    crossfade(true)
-                    placeholder(R.drawable.song_cover_placeholder)
-                }
-            ),
-            contentDescription = null,
-            modifier = Modifier.size(45.dp)
-        )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-        ) {
-            Text(
-                text = track.trackName,
-                style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onSurface  // Убедитесь, что цвет контрастирует с фоном
-            )
-            Row {
-                Text(
-                    text = track.artistName,
-                    style = MaterialTheme.typography.caption,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)  // Немного прозрачнее для подзаголовка
-                )
-                Text(
-                    text = " • ",
-                    style = MaterialTheme.typography.caption,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
-                )
-                Text(
-                    text = track.trackTime,
-                    style = MaterialTheme.typography.caption,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
-                )
-            }
-        }
-        Image(
-            painter = painterResource(id = R.drawable.arrow_icon),
-            contentDescription = null,
-            modifier = Modifier.size(24.dp)
-        )
-    }
 }
