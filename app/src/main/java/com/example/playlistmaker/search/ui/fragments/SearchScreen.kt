@@ -294,7 +294,7 @@ fun LoadingIndicator() {
     ) {
         CircularProgressIndicator(
             modifier = Modifier.size(44.dp),
-            color = MaterialTheme.colors.secondary // Предполагается, что это цвет main_screen_background_color
+            color = MaterialTheme.colors.secondary 
         )
     }
 }

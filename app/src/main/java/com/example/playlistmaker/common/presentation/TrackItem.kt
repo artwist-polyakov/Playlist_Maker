@@ -42,13 +42,13 @@ fun TrackItem(track: Track, onClick: () -> Unit) {
             Text(
                 text = track.trackName,
                 style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onSurface  // Убедитесь, что цвет контрастирует с фоном
+                color = MaterialTheme.colors.onSurface
             )
             Row {
                 Text(
                     text = track.artistName,
                     style = MaterialTheme.typography.caption,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)  // Немного прозрачнее для подзаголовка
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
                     text = " • ",
