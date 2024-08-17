@@ -3,7 +3,6 @@ package com.example.playlistmaker.search.ui.fragments
 import CustomSnackbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
 import com.example.playlistmaker.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,23 +21,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.common.presentation.ComposeInternetConnectionBroadcastReceiver
-import com.example.playlistmaker.common.presentation.InternetConnectionBroadcastReciever
+import com.example.playlistmaker.common.presentation.PlaylistMakerButton
 import com.example.playlistmaker.common.presentation.TrackItem
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.search.domain.models.Track
@@ -258,29 +248,15 @@ fun SearchHistory(tracks: List<Track>, viewModel: SearchViewModel, navController
                 }
             }
         }
-        Button(
+        PlaylistMakerButton(
+            text = stringResource(R.string.clear_history_button_text),
             onClick = { viewModel.clearHistoryAndHide() },
             modifier = Modifier
                 .wrapContentSize()
                 .height(50.dp)
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 16.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.onPrimary
-            ),
-            shape = RoundedCornerShape(54.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.clear_history_button_text),
-                style = TextStyle(
-                    fontFamily = MaterialTheme.typography.body1.fontFamily,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 12.sp
-                )
-            )
-
-        }
+        )
     }
 }
 
@@ -322,12 +298,15 @@ fun ErrorState(responseState: ResponseState, viewModel: SearchViewModel) {
             modifier = Modifier.padding(top = 16.dp)
         )
         if (responseState == ResponseState.ERROR) {
-            Button(
+            PlaylistMakerButton(
+                text = stringResource(R.string.refresh_button_text),
                 onClick = { viewModel.retrySearch() },
-                modifier = Modifier.padding(top = 16.dp)
-            ) {
-                Text(stringResource(R.string.refresh_button_text))
-            }
+                modifier = Modifier
+                    .wrapContentSize()
+                    .height(50.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 16.dp),
+            )
         }
     }
 }
