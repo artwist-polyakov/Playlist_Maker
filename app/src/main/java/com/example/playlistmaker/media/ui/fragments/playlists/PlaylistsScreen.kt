@@ -48,6 +48,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.playlistmaker.R
+import com.example.playlistmaker.common.presentation.PlaylistMakerButton
 import com.example.playlistmaker.common.presentation.YsDisplayFontFamily
 import com.example.playlistmaker.common.presentation.models.PlaylistInformation
 import com.example.playlistmaker.media.ui.view_model.PlaylistsViewModel
@@ -68,26 +69,15 @@ fun PlaylistsScreen(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                Button(
+                PlaylistMakerButton(
+                    text = stringResource(R.string.new_playlist),
                     onClick = { onCreatePlaylistClick() },
                     modifier = Modifier
                         .wrapContentSize()
+                        .height(50.dp)
                         .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 24.dp),
-                    shape = RoundedCornerShape(50.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.primary,
-                        contentColor = MaterialTheme.colors.onPrimary
-                    )
-                ) {
-                    Text(
-                        text = stringResource(R.string.new_playlist),
-                        style = MaterialTheme.typography.button.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.W500
-                        )
-                    )
-                }
+                        .padding(top = 16.dp),
+                )
 
                 PlaylistsList(
                     (currentState as PlaylistsScreenState.Content).content,
@@ -188,25 +178,15 @@ fun EmptyPlaylistsState(onCreatePlaylistClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Button(
-            onClick = onCreatePlaylistClick,
+        PlaylistMakerButton(
+            text = stringResource(R.string.new_playlist),
+            onClick = { onCreatePlaylistClick() },
             modifier = Modifier
                 .wrapContentSize()
-                .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(54.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.onPrimary
-            )
-        ) {
-            Text(
-                text = stringResource(R.string.new_playlist),
-                style = MaterialTheme.typography.button.copy(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.W500
-                )
-            )
-        }
+                .height(50.dp)
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 16.dp),
+        )
         Image(
             painter = painterResource(id = R.drawable.nothing_found),
             contentDescription = null,
