@@ -172,10 +172,12 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
     Scaffold(
         snackbarHost = { CustomSnackbar(snackbarHostState) }
     ) { paddingValues ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
             Text(
                 text = stringResource(R.string.search_str),
                 style = MaterialTheme.typography.h6,
@@ -238,7 +240,9 @@ fun SearchHistory(tracks: List<Track>, viewModel: SearchViewModel, navController
         Text(
             text = stringResource(R.string.search_history_title),
             style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .align(Alignment.CenterHorizontally)
         )
         LazyColumn {
             items(tracks) { track ->
