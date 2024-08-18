@@ -110,7 +110,7 @@ fun SearchTextField(
         modifier = modifier.fillMaxWidth(),
         placeholder = {
             Text(
-                "Поиск",
+                stringResource(id = R.string.input_hint),
                 color = MaterialTheme.colors.secondaryVariant,
                 fontSize = 16.sp
             )
