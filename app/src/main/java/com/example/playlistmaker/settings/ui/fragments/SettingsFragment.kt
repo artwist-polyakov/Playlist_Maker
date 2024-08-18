@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.Observer
 import com.example.playlistmaker.common.presentation.PlaylistMakerTheme
 import com.example.playlistmaker.databinding.FragmentSettingsBinding
@@ -26,6 +27,7 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 PlaylistMakerTheme {
                     Surface(
