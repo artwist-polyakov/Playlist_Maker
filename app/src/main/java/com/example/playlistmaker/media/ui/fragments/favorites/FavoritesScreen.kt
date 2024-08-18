@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -99,7 +100,11 @@ fun FavoritesList(favorites: List<Track>, onTrackClick: (Track) -> Unit) {
             .fillMaxSize()
             .padding(top = 24.dp, start = 16.dp, end = 16.dp)
     ) {
-        itemsIndexed(favorites) { _, track ->
+        items(
+            items = favorites,
+            key = { track -> track.trackId },
+            contentType = { "track" }
+        ) { track ->
             TrackItem(track) {
                 onTrackClick(track)
             }

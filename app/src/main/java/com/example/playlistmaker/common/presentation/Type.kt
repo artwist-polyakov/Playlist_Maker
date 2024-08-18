@@ -25,5 +25,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         letterSpacing = 0.02.sp
+    ),
+    h6 = TextStyle(
+        fontFamily = YsDisplayFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 19.sp,
+        textAlign = androidx.compose.ui.text.style.TextAlign.Center
     )
 )

@@ -3,7 +3,6 @@ package com.example.playlistmaker.search.ui.fragments
 import CustomSnackbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
 import com.example.playlistmaker.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,23 +21,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.common.presentation.ComposeInternetConnectionBroadcastReceiver
-import com.example.playlistmaker.common.presentation.InternetConnectionBroadcastReciever
+import com.example.playlistmaker.common.presentation.PlaylistMakerButton
 import com.example.playlistmaker.common.presentation.TrackItem
 import com.example.playlistmaker.common.presentation.models.TrackToTrackDtoMapper
 import com.example.playlistmaker.search.domain.models.Track
@@ -77,7 +67,7 @@ fun CustomTextField(
             onValueChange = { if (it.length <= maxLength) onValueChange(it) },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = 12.dp),
             textStyle = textStyle.copy(color = contentColor, fontSize = 16.sp),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -90,16 +80,36 @@ fun CustomTextField(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (leadingIcon != null) {
-                        leadingIcon()
+                        Box(
+                            modifier = Modifier.size(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            leadingIcon()
+                        }
                         Spacer(modifier = Modifier.width(8.dp))
                     }
-                    Box(Modifier.weight(1f)) {
-                        if (value.isEmpty()) placeholder?.invoke()
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        if (value.isEmpty()) {
+                            Box(
+                                Modifier.align(Alignment.CenterStart)
+                            ) {
+                                placeholder?.invoke()
+                            }
+                        }
                         innerTextField()
                     }
                     if (trailingIcon != null) {
                         Spacer(modifier = Modifier.width(8.dp))
-                        trailingIcon()
+                        Box(
+                            modifier = Modifier.size(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            trailingIcon()
+                        }
                     }
                 }
             }
@@ -120,29 +130,30 @@ fun SearchTextField(
         modifier = modifier.fillMaxWidth(),
         placeholder = {
             Text(
-                "Поиск",
+                stringResource(id = R.string.input_hint),
                 color = MaterialTheme.colors.secondaryVariant,
                 fontSize = 16.sp
             )
         },
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_search),
+                painter = painterResource(id = R.drawable.search_second),
                 contentDescription = "Search",
-                tint = MaterialTheme.colors.secondaryVariant
+                tint = MaterialTheme.colors.secondaryVariant,
+                modifier = Modifier.size(24.dp)
             )
         },
         trailingIcon = {
             if (value.isNotEmpty()) {
                 IconButton(
                     onClick = onClearClick,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.clear_icon),
+                        painter = painterResource(id = R.drawable.clear_second),
                         contentDescription = "Clear",
                         tint = MaterialTheme.colors.secondaryVariant,
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
@@ -160,14 +171,21 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
     val context = LocalContext.current
     val snackbarHostState = rememberCustomSnackbarState()
     val showCustomSnackbar = rememberShowCustomSnackbar(snackbarHostState)
+    var previousConnectionState by remember { mutableStateOf<Boolean?>(null) }
 
     val internetReceiver = remember {
         ComposeInternetConnectionBroadcastReceiver(
             onInternetUnavailable = {
-                showCustomSnackbar("Отсутствует подключение к интернету")
+                if (previousConnectionState != false) {
+                    showCustomSnackbar("Отсутствует подключение к интернету")
+                }
+                previousConnectionState = false
             },
             onInternetAvailable = {
-                showCustomSnackbar("Подключение к интернету восстановлено")
+                if (previousConnectionState == false) {
+                    showCustomSnackbar("Подключение к интернету восстановлено")
+                }
+                previousConnectionState = true
             }
         )
     }
@@ -182,10 +200,12 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
     Scaffold(
         snackbarHost = { CustomSnackbar(snackbarHostState) }
     ) { paddingValues ->
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
             Text(
                 text = stringResource(R.string.search_str),
                 style = MaterialTheme.typography.h6,
@@ -248,7 +268,9 @@ fun SearchHistory(tracks: List<Track>, viewModel: SearchViewModel, navController
         Text(
             text = stringResource(R.string.search_history_title),
             style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .align(Alignment.CenterHorizontally)
         )
         LazyColumn {
             items(tracks) { track ->
@@ -258,29 +280,15 @@ fun SearchHistory(tracks: List<Track>, viewModel: SearchViewModel, navController
                 }
             }
         }
-        Button(
+        PlaylistMakerButton(
+            text = stringResource(R.string.clear_history_button_text),
             onClick = { viewModel.clearHistoryAndHide() },
             modifier = Modifier
                 .wrapContentSize()
                 .height(50.dp)
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 16.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.onPrimary
-            ),
-            shape = RoundedCornerShape(54.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.clear_history_button_text),
-                style = TextStyle(
-                    fontFamily = MaterialTheme.typography.body1.fontFamily,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 12.sp
-                )
-            )
-
-        }
+        )
     }
 }
 
@@ -322,12 +330,15 @@ fun ErrorState(responseState: ResponseState, viewModel: SearchViewModel) {
             modifier = Modifier.padding(top = 16.dp)
         )
         if (responseState == ResponseState.ERROR) {
-            Button(
+            PlaylistMakerButton(
+                text = stringResource(R.string.refresh_button_text),
                 onClick = { viewModel.retrySearch() },
-                modifier = Modifier.padding(top = 16.dp)
-            ) {
-                Text(stringResource(R.string.refresh_button_text))
-            }
+                modifier = Modifier
+                    .wrapContentSize()
+                    .height(50.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 16.dp),
+            )
         }
     }
 }
