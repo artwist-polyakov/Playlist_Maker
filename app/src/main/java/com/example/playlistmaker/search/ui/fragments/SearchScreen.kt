@@ -150,14 +150,21 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
     val context = LocalContext.current
     val snackbarHostState = rememberCustomSnackbarState()
     val showCustomSnackbar = rememberShowCustomSnackbar(snackbarHostState)
+    var previousConnectionState by remember { mutableStateOf<Boolean?>(null) }
 
     val internetReceiver = remember {
         ComposeInternetConnectionBroadcastReceiver(
             onInternetUnavailable = {
-                showCustomSnackbar("Отсутствует подключение к интернету")
+                if (previousConnectionState != false) {
+                    showCustomSnackbar("Отсутствует подключение к интернету")
+                }
+                previousConnectionState = false
             },
             onInternetAvailable = {
-                showCustomSnackbar("Подключение к интернету восстановлено")
+                if (previousConnectionState == false) {
+                    showCustomSnackbar("Подключение к интернету восстановлено")
+                }
+                previousConnectionState = true
             }
         )
     }
