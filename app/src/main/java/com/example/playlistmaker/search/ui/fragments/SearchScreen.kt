@@ -67,7 +67,7 @@ fun CustomTextField(
             onValueChange = { if (it.length <= maxLength) onValueChange(it) },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = 12.dp),
             textStyle = textStyle.copy(color = contentColor, fontSize = 16.sp),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -80,16 +80,36 @@ fun CustomTextField(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (leadingIcon != null) {
-                        leadingIcon()
+                        Box(
+                            modifier = Modifier.size(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            leadingIcon()
+                        }
                         Spacer(modifier = Modifier.width(8.dp))
                     }
-                    Box(Modifier.weight(1f)) {
-                        if (value.isEmpty()) placeholder?.invoke()
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        if (value.isEmpty()) {
+                            Box(
+                                Modifier.align(Alignment.CenterStart)
+                            ) {
+                                placeholder?.invoke()
+                            }
+                        }
                         innerTextField()
                     }
                     if (trailingIcon != null) {
                         Spacer(modifier = Modifier.width(8.dp))
-                        trailingIcon()
+                        Box(
+                            modifier = Modifier.size(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            trailingIcon()
+                        }
                     }
                 }
             }
@@ -119,20 +139,21 @@ fun SearchTextField(
             Icon(
                 painter = painterResource(id = R.drawable.search_second),
                 contentDescription = "Search",
-                tint = MaterialTheme.colors.secondaryVariant
+                tint = MaterialTheme.colors.secondaryVariant,
+                modifier = Modifier.size(24.dp)
             )
         },
         trailingIcon = {
             if (value.isNotEmpty()) {
                 IconButton(
                     onClick = onClearClick,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.clear_second),
                         contentDescription = "Clear",
                         tint = MaterialTheme.colors.secondaryVariant,
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
