@@ -117,7 +117,7 @@ fun SearchTextField(
         },
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_search),
+                painter = painterResource(id = R.drawable.search_second),
                 contentDescription = "Search",
                 tint = MaterialTheme.colors.secondaryVariant
             )
@@ -129,7 +129,7 @@ fun SearchTextField(
                     modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.clear_icon),
+                        painter = painterResource(id = R.drawable.clear_second),
                         contentDescription = "Clear",
                         tint = MaterialTheme.colors.secondaryVariant,
                         modifier = Modifier.size(40.dp)
